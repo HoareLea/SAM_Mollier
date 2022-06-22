@@ -18,15 +18,15 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
+            double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature, relativeHumidity);
             if(double.IsNaN(saturationVapourPressure))
             {
                 return double.NaN;
             }
 
-            saturationVapourPressure = saturationVapourPressure * relativeHumidity / 100;
+            //saturationVapourPressure = saturationVapourPressure * relativeHumidity / 100;
 
-            return 0.6222 * saturationVapourPressure / ((pressure * 0.01) - saturationVapourPressure);
+            return 0.6222 * saturationVapourPressure / (pressure - saturationVapourPressure);
         }
 
         /// <summary>

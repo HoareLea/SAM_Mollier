@@ -51,6 +51,7 @@
     <Compile Include="Query\DiagramTemperature.cs" />
     <Compile Include="Query\RelativeHumidity.cs" />
     <Compile Include="Query\HumidityRatio.cs" />
+    <Compile Include="Query\VapourPressure.cs" />
     <Compile Include="Query\SaturationVapourPressure.cs" />
   </ItemGroup>
   <ItemGroup>

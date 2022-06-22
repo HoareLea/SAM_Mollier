@@ -18,7 +18,7 @@
 
             double humidityRatio_Temp = humidityRatio * 1000;
 
-            double result = (humidityRatio_Temp * pressure / (0.6222 + humidityRatio_Temp)) / SaturationVapourPressure(dryBulbTemperature) * 100;
+            double result = (humidityRatio_Temp * pressure / (0.6222 + humidityRatio_Temp)) / VapourPressure(dryBulbTemperature) * 100;
 
             if(result < 0  || result > 100)
             {
