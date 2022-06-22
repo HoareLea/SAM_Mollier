@@ -45,6 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\DryBulbTemperature.cs" />
+    <Compile Include="Query\Density.cs" />
+    <Compile Include="Query\Enthalpy.cs" />
+    <Compile Include="Query\DiagramTemperature.cs" />
+    <Compile Include="Query\RelativeHumidity.cs" />
+    <Compile Include="Query\HumidityRatio.cs" />
+    <Compile Include="Query\SaturationVapourPressure.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\" />
@@ -53,7 +60,6 @@
     <Folder Include="Enums\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Modify\" />
-    <Folder Include="Query\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
