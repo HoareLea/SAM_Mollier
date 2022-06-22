@@ -2,7 +2,7 @@
 using System;
 using System.Drawing;
 
-namespace SAM.Analytical.Grasshopper.TMP
+namespace SAM.Core.Grasshopper.Mollier
 {
     public class AssemblyInfo : GH_AssemblyInfo
     {
@@ -10,7 +10,7 @@ namespace SAM.Analytical.Grasshopper.TMP
         {
             get
             {
-                return "SAM";
+                return "SAM Mollier";
             }
         }
 
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper.TMP
             get
             {
                 //Return a 24x24 pixel bitmap to represent this GHA library.
-                return Properties.Resources.SAM_Small; ;
+                return Properties.Resources.HL_Logo24;
             }
         }
 
@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper.TMP
             get
             {
                 //Return a 24x24 pixel bitmap to represent this GHA library.
-                return Properties.Resources.SAM_Small; ;
+                return Properties.Resources.HL_Logo24;
             }
         }
 
@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper.TMP
             get
             {
                 //Return a short string describing the purpose of this GHA library.
-                return "SAM Grashopper Toolkit, please explore";
+                return "SAM Mollier Grashopper Toolkit, please explore";
             }
         }
 
@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper.TMP
         {
             get
             {
-                return new Guid("1ae4f9c8-1b85-4407-814b-a74ada02d160");
+                return new Guid("c772150e-eaac-44c6-a7d7-c3714ef2c104");
             }
         }
 

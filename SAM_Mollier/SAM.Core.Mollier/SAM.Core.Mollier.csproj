@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E5550801-4863-4036-904D-7563C9722760}</ProjectGuid>
+    <ProjectGuid>{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Geometry.TMP</RootNamespace>
-    <AssemblyName>SAM.Geometry.TMP</AssemblyName>
+    <RootNamespace>SAM.Core.Mollier</RootNamespace>
+    <AssemblyName>SAM.Core.Mollier</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\build\SAM.Geometry.TMP.xml</DocumentationFile>
+    <DocumentationFile>..\..\build\SAM.Core.Mollier.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

@@ -1,8 +1,0 @@
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Geometry.TMP.xml
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Geometry.TMP.dll
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Geometry.TMP.pdb
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Geometry.TMP\obj\Debug\SAM.Geometry.TMP.csprojAssemblyReference.cache
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Geometry.TMP\obj\Debug\SAM.Geometry.TMP.csproj.CoreCompileInputs.cache
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Geometry.TMP\obj\Debug\SAM.Geometry.TMP.csproj.CopyComplete
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Geometry.TMP\obj\Debug\SAM.Geometry.TMP.dll
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Geometry.TMP\obj\Debug\SAM.Geometry.TMP.pdb

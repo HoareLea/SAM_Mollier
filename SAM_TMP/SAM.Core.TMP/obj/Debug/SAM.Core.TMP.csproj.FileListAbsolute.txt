@@ -1,8 +1,0 @@
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Core.TMP.xml
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Core.TMP.dll
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Core.TMP.pdb
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Core.TMP\obj\Debug\SAM.Core.TMP.csprojAssemblyReference.cache
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Core.TMP\obj\Debug\SAM.Core.TMP.csproj.CoreCompileInputs.cache
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Core.TMP\obj\Debug\SAM.Core.TMP.csproj.CopyComplete
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Core.TMP\obj\Debug\SAM.Core.TMP.dll
-C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Core.TMP\obj\Debug\SAM.Core.TMP.pdb
