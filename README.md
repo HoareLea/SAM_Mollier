@@ -1,4 +1,4 @@
-# SAM_Template
+# SAM_Mollier
 
 <a href="https://github.com/HoareLea/SAM_Excel"><img src="https://github.com/HoareLea/SAM/blob/master/Grasshopper/SAM.Core.Grasshopper/Resources/SAM_Small.png" align="left" hspace="10" vspace="6"></a>
 
