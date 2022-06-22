@@ -17,7 +17,7 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return dryBulbTemperature + relativeHumidity / 1000 * 1.86 * dryBulbTemperature
+            return dryBulbTemperature + relativeHumidity / 1000 * 1.86 * dryBulbTemperature;
         }
     }
 }
