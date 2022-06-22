@@ -1,0 +1,9 @@
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Analytical.TMP.dll.config
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Analytical.TMP.xml
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Analytical.TMP.dll
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\build\SAM.Analytical.TMP.pdb
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Analytical.TMP\obj\Debug\SAM.Analytical.TMP.csprojAssemblyReference.cache
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Analytical.TMP\obj\Debug\SAM.Analytical.TMP.csproj.CoreCompileInputs.cache
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Analytical.TMP\obj\Debug\SAM.Analytical.TMP.csproj.CopyComplete
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Analytical.TMP\obj\Debug\SAM.Analytical.TMP.dll
+C:\Users\DengusiakM\Documents\GitHub\SAM\SAM_Template\SAM_TMP\SAM.Analytical.TMP\obj\Debug\SAM.Analytical.TMP.pdb
