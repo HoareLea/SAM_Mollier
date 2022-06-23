@@ -12,7 +12,7 @@ namespace SAM.Core.Mollier
         /// <returns>Saturation Vapour Pressure [Pa]</returns>
         public static double SaturationVapourPressure(double dryBulbTemperature, double relativeHumidity)
         {
-            return VapourPressure(dryBulbTemperature) * relativeHumidity / 100;
+            return PartialVapourPressure(dryBulbTemperature) * relativeHumidity / 100;
         }
     }
 }

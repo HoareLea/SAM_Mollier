@@ -42,9 +42,9 @@
             }
 
             //double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
-            double vapourPressure = VapourPressure(dryBulbTemperature);
+            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature);
 
-            return 0.00348 * pressure / (273.15 + dryBulbTemperature) - 0.00217 * (vapourPressure * ((((humidityRatio * pressure / (0.6222 + humidityRatio)) / (vapourPressure))))) / (273.15 + dryBulbTemperature);
+            return 0.00348 * pressure / (273.15 + dryBulbTemperature) - 0.00217 * (partialVapourPressure * ((((humidityRatio * pressure / (0.6222 + humidityRatio)) / (partialVapourPressure))))) / (273.15 + dryBulbTemperature);
         }
 
         /// <summary>

@@ -5,11 +5,11 @@ namespace SAM.Core.Mollier
     public static partial class Query
     {
         /// <summary>
-        /// Saturation Vapour Pressure [Pa] for given dry-bulb temperature.
+        /// Partial Vapour Pressure [Pa] for given dry-bulb temperature.
         /// </summary>
         /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C]</param>
-        /// <returns>Saturation Vapour Pressure [Pa]</returns>
-        public static double VapourPressure(double dryBulbTemperature)
+        /// <returns>Partial Vapour Pressure [Pa]</returns>
+        public static double PartialVapourPressure(double dryBulbTemperature)
         {
             if (double.IsNaN(dryBulbTemperature))
             {
