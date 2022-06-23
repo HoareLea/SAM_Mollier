@@ -22,7 +22,7 @@
                 return double.NaN;
             }
 
-            return 0.00348 * Luftdruck / (273.15 + Temperatur) - 0.00132 * Dampfdruck / (273.15 + Temperatur)
+            return 0.00348 * pressure / (273.15 + dryBulbTemperature) - 0.00132 * saturationVapourPressure / (273.15 + dryBulbTemperature);
         }
 
         /// <summary>

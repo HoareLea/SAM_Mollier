@@ -31,13 +31,13 @@
             return result;
         }
 
-        public static double RelativeHumidity_ByWetBulbTemperature(double dryBulbTemperature, double wetBulbTemperature, double pressure)
-        {
-            double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, 100, pressure);
+        //public static double RelativeHumidity_ByWetBulbTemperature(double dryBulbTemperature, double wetBulbTemperature, double pressure)
+        //{
+        //    double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, 100, pressure);
 
 
-            double result = 100;
+        //    double result = 100;
 
-        }
+        //}
     }
 }
