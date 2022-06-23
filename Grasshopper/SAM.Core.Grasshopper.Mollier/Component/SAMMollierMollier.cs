@@ -150,7 +150,7 @@ namespace SAM.Analytical.Grasshopper
 
             vapourPressure = Core.Mollier.Query.SaturationVapourPressure(dryBulbTemperature, relativeHumidity);
             density = Core.Mollier.Query.Density(dryBulbTemperature, relativeHumidity, pressure);
-            specificVolume = 1 / density;
+            specificVolume = Core.Mollier.Query.SpecificVolume(dryBulbTemperature, humidityRatio, pressure);
             diagramTemperature = Core.Mollier.Query.DiagramTemperature(dryBulbTemperature, relativeHumidity);
 
 
