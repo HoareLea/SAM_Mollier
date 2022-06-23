@@ -16,9 +16,7 @@
                 return double.NaN;
             }
 
-            double humidityRatio_Temp = humidityRatio * 1000;
-
-            double result = (humidityRatio_Temp * pressure / (0.6222 + humidityRatio_Temp)) / PartialVapourPressure(dryBulbTemperature) * 100;
+            double result = (humidityRatio * pressure / (0.6222 + humidityRatio)) / PartialVapourPressure(dryBulbTemperature) * 100;
 
             if(result < 0  || result > 100)
             {
@@ -31,6 +29,15 @@
             }
 
             return result;
+        }
+
+        public static double RelativeHumidity_ByWetBulbTemperature(double dryBulbTemperature, double wetBulbTemperature, double pressure)
+        {
+            double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, 100, pressure);
+
+
+            double result = 100;
+
         }
     }
 }

@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\HeatCapacity.cs" />
+    <Compile Include="Query\WetBulbTemperature.cs" />
     <Compile Include="Query\DryBulbTemperature.cs" />
     <Compile Include="Query\Density.cs" />
     <Compile Include="Query\Enthalpy.cs" />

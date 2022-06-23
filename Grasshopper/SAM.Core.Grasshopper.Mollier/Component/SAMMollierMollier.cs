@@ -129,13 +129,13 @@ namespace SAM.Analytical.Grasshopper
 
             if(!double.IsNaN(relativeHumidity))
             {
-                enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, relativeHumidity, pressure);
+                enthalpy = Core.Mollier.Query.Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
                 humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
             }
             else if(!double.IsNaN(humidityRatio))
             {
                 relativeHumidity = Core.Mollier.Query.RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
-                enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, relativeHumidity, pressure);
+                enthalpy = Core.Mollier.Query.Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
             }
             else if(!double.IsNaN(enthalpy))
             {

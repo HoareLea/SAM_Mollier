@@ -15,6 +15,7 @@ namespace SAM.Core.Mollier
         {
             if (double.IsNaN(relativeHumidity) || relativeHumidity > 100 || relativeHumidity < 0 || double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure))
             {
+                //if RelativeHumidity is greater than 100 then mist
                 return double.NaN;
             }
 
@@ -26,7 +27,7 @@ namespace SAM.Core.Mollier
 
             //saturationVapourPressure = saturationVapourPressure * relativeHumidity / 100;
 
-            return 0.6222 * saturationVapourPressure / (pressure - saturationVapourPressure);
+            return 0.6222 * saturationVapourPressure / (pressure - saturationVapourPressure); //from Recknagel Sprenger
         }
 
         /// <summary>

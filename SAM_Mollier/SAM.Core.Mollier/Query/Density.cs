@@ -22,9 +22,7 @@
                 return double.NaN;
             }
 
-            //saturationVapourPressure = saturationVapourPressure * relativeHumidity / 100;
-
-            return 1 / 287.1 * pressure / (273.15 + dryBulbTemperature) + 1 / 461.4 * saturationVapourPressure / (273.15 + dryBulbTemperature);
+            return 0.00348 * Luftdruck / (273.15 + Temperatur) - 0.00132 * Dampfdruck / (273.15 + Temperatur)
         }
 
         /// <summary>

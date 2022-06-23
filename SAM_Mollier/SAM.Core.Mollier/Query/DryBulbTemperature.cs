@@ -17,7 +17,26 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return ((enthalpy / 1000) - 2501 * humidityRatio) / (1.005 + humidityRatio * 1.86);
+            double result = -25;
+            double enthalpy_Temp = double.NaN;
+            do
+            {
+                result += 1;
+                enthalpy_Temp = 1.01 * result + humidityRatio * (2501 + 1.86 * result);
+            }
+            while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp <= enthalpy && result <= 120);
+
+            int i = 0;
+            do
+            {
+                result -= 0.001;
+                enthalpy_Temp = 1.01 * result + humidityRatio * (2501 + 1.86 * result);
+                i++;
+            }
+            while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp > enthalpy && i <= 10000);
+
+            return result;
+            //return ((enthalpy / 1000) - 2501 * humidityRatio) / (1.005 + humidityRatio * 1.86);
         }
 
         /// <summary>
@@ -39,13 +58,13 @@ namespace SAM.Core.Mollier
             do
             {
                 result -= 0.1;
-                enthalpy_Temp = Enthalpy(result, relativeHumidity, pressure);
+                enthalpy_Temp = Enthalpy_ByRelativeHumidity(result, relativeHumidity, pressure);
             } while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp > enthalpy && result > -20);
 
             do
             {
                 result += 0.0005;
-                enthalpy_Temp = Enthalpy(result, relativeHumidity, pressure);
+                enthalpy_Temp = Enthalpy_ByRelativeHumidity(result, relativeHumidity, pressure);
             } while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp <= enthalpy && result <= 50);
 
             if (result > 100)

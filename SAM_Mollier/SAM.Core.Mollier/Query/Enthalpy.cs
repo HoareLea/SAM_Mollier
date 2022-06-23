@@ -8,7 +8,7 @@
         /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <returns>Enthalpy [J/kg]</returns>
-        public static double Enthalpy_ByHumidityRatio(double dryBulbTemperature, double humidityRatio)
+        public static double Enthalpy(double dryBulbTemperature, double humidityRatio)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio))
             {
@@ -22,7 +22,8 @@
 
             if(dryBulbTemperature < 100)
             {
-                return 1.005 * dryBulbTemperature + humidityRatio * (2501 + 1.86 * dryBulbTemperature);
+                return 1.005 * dryBulbTemperature + humidityRatio * (2501 + 1.86 * dryBulbTemperature) * 1000;
+                //From Recknagel Sprenger 07/08 page 133
             }
 
             return double.NaN;
@@ -35,7 +36,7 @@
         /// <param name="relativeHumidity">Relative humidity [%]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Enthalpy [J/kg]</returns>
-        public static double Enthalpy(double dryBulbTemperature, double relativeHumidity, double pressure)
+        public static double Enthalpy_ByRelativeHumidity(double dryBulbTemperature, double relativeHumidity, double pressure)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
             {
@@ -50,9 +51,10 @@
             if(dryBulbTemperature < 100)
             {
                 double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
-
-                double result =  1.005 * dryBulbTemperature + humidityRatio * (2501 + 1.86 * dryBulbTemperature);
-                return result * 1000;
+                if(!double.IsNaN(humidityRatio))
+                {
+                    return Enthalpy(dryBulbTemperature, humidityRatio);
+                }
             }
 
             return double.NaN;
