@@ -22,7 +22,9 @@
 
             if(dryBulbTemperature < 100)
             {
-                return 1.005 * dryBulbTemperature + humidityRatio * (2501 + 1.86 * dryBulbTemperature) * 1000;
+                double result = 1.005 * dryBulbTemperature + humidityRatio * (2501 + 1.86 * dryBulbTemperature);
+                result = result * 1000;
+                return result;
                 //From Recknagel Sprenger 07/08 page 133
             }
 
