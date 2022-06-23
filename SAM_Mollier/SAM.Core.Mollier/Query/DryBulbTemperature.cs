@@ -152,13 +152,13 @@ namespace SAM.Core.Mollier
             {
                 result -= 10;
                 density_Temp = Density(result, relativeHumidity, pressure);
-            } while (!double.IsNaN(density_Temp) && density_Temp > density && result > -20);
+            } while (!double.IsNaN(density_Temp) && density_Temp <= density && result > -20);
 
             do
             {
                 result += 0.005;
                 density_Temp = Density(result, relativeHumidity, pressure);
-            } while (!double.IsNaN(density_Temp) && density_Temp <= density && result <= 100);
+            } while (!double.IsNaN(density_Temp) && density_Temp > density && result <= 100);
 
             if (result > 100)
             {
