@@ -9,30 +9,33 @@
                 return double.NaN;
             }
 
-            double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
+            return Core.Query.Calculate((double x) => Enthalpy_ByRelativeHumidity(x, relativeHumidity, pressure), dryBulbTemperature, -50, 99.999);
 
-            double result = -4;
-            double enthaply_Temp = double.NaN;
-            do
-            {
-                result += 5;
-                enthaply_Temp = Enthalpy_ByRelativeHumidity(dryBulbTemperature, 100, pressure);
 
-            } while (!double.IsNaN(enthaply_Temp) && enthaply_Temp <= enthalpy);
+            //double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
 
-            do
-            {
-                result -= 0.01;
-                enthaply_Temp = Enthalpy_ByRelativeHumidity(dryBulbTemperature, 100, pressure);
+            //double result = -4;
+            //double enthaply_Temp = double.NaN;
+            //do
+            //{
+            //    result += 5;
+            //    enthaply_Temp = Enthalpy_ByRelativeHumidity(dryBulbTemperature, 100, pressure);
 
-            } while (!double.IsNaN(enthaply_Temp) && enthaply_Temp > enthalpy);
+            //} while (!double.IsNaN(enthaply_Temp) && enthaply_Temp <= enthalpy);
 
-            if(result < 0)
-            {
-                return double.NaN;
-            }
+            //do
+            //{
+            //    result -= 0.01;
+            //    enthaply_Temp = Enthalpy_ByRelativeHumidity(dryBulbTemperature, 100, pressure);
 
-            return result;
+            //} while (!double.IsNaN(enthaply_Temp) && enthaply_Temp > enthalpy);
+
+            //if(result < 0)
+            //{
+            //    return double.NaN;
+            //}
+
+            //return result;
         }
     }
 }
