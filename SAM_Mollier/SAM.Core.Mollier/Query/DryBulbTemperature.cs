@@ -178,7 +178,7 @@ namespace SAM.Core.Mollier
             }
 
 
-            return Core.Query.Calculate((double x) => Density(x, relativeHumidity, pressure), density, -50, 99.999);
+            return Core.Query.Calculate((double x) => Density(x, relativeHumidity, pressure), density, 0.001, 99.999);
 
             //double result = 100;
             //double density_Temp = double.NaN;
