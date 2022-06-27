@@ -48,6 +48,7 @@
             if(dryBulbTemperature < -50)
             {
                 return double.NaN;
+                //'it is too cold'
             }
 
             if(dryBulbTemperature < 100)

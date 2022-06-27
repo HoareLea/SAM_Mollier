@@ -9,7 +9,13 @@
                 return double.NaN;
             }
 
-            return Core.Query.Calculate((double x) => Enthalpy_ByRelativeHumidity(x, relativeHumidity, pressure), dryBulbTemperature, -50, 99.999);
+            double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
+            if(double.IsNaN(enthalpy))
+            {
+                return double.NaN;
+            }
+
+            return Core.Query.Calculate((double x) => Enthalpy_ByRelativeHumidity(x, 100, pressure), enthalpy, 0.01, 99.99);
 
 
             //double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
