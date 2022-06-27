@@ -18,7 +18,7 @@ namespace SAM.Core.Mollier
 
             if (dryBulbTemperature < 0)
             {
-                return Math.Pow( 4.689 * (1.486 + dryBulbTemperature / 100), 12.3);
+                return 4.689 * Math.Pow((1.486 + dryBulbTemperature / 100), 12.3);
             }
 
             if (dryBulbTemperature <= 100)
