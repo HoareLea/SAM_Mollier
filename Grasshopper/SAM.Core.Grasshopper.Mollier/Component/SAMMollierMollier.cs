@@ -197,19 +197,29 @@ namespace SAM.Analytical.Grasshopper
             {
                 relativeHumidity = Core.Mollier.Query.RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
             }
+            else if (double.IsNaN(relativeHumidity) && double.IsNaN(wetBulbTemperature) && !double.IsNaN(dewPointTemperature))
+            {
+                relativeHumidity = Core.Mollier.Query.RelativeHumidity_ByDewPointTemperature(dryBulbTemperature, dewPointTemperature);
+                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+            }
+            else if (double.IsNaN(relativeHumidity) && !double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature))
+            {
+                relativeHumidity = Core.Mollier.Query.RelativeHumidity_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure);
+                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+            }
             else
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            wetBulbTemperature = Core.Mollier.Query.WetBulbTemperature(dryBulbTemperature, relativeHumidity, pressure);
+            wetBulbTemperature = double.IsNaN(wetBulbTemperature) ? Core.Mollier.Query.WetBulbTemperature(dryBulbTemperature, relativeHumidity, pressure) : wetBulbTemperature;
             density = Core.Mollier.Query.Density(dryBulbTemperature, relativeHumidity, pressure);
             specificVolume = Core.Mollier.Query.SpecificVolume(dryBulbTemperature, humidityRatio, pressure);
             saturationVapourPressure = Core.Mollier.Query.SaturationVapourPressure(dryBulbTemperature);
             partialVapourPressure = Core.Mollier.Query.PartialVapourPressure(dryBulbTemperature, relativeHumidity);
             enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio);
-            dewPointTemperature = Core.Mollier.Query.DewPointTemperature(dryBulbTemperature, relativeHumidity);
+            dewPointTemperature = double.IsNaN(dewPointTemperature) ? Core.Mollier.Query.DewPointTemperature(dryBulbTemperature, relativeHumidity) : dewPointTemperature;
             partialDryAirPressure = Core.Mollier.Query.PartialDryAirPressure(pressure, partialVapourPressure);
             airHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature, humidityRatio);
             waterHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature);

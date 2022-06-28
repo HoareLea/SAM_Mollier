@@ -33,13 +33,37 @@
             return result;
         }
 
-        //public static double RelativeHumidity_ByWetBulbTemperature(double dryBulbTemperature, double wetBulbTemperature, double pressure)
-        //{
-        //    double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, 100, pressure);
+        /// <summary>
+        /// Calculates relative humidity from dry bulb temperature and dew point temperature.
+        /// </summary>
+        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dewPointTemperature">Dew Point Temperature [°C]</param>
+        /// <returns>Relative Humidity (0 - 100) [%]</returns>
+        public static double RelativeHumidity_ByDewPointTemperature(double dryBulbTemperature, double dewPointTemperature)
+        {
+            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(dewPointTemperature))
+            {
+                return double.NaN;
+            }
 
+            return Core.Query.Calculate((double x) => DewPointTemperature(dryBulbTemperature, x), dewPointTemperature, 0, 100);
+        }
 
-        //    double result = 100;
+        /// <summary>
+        /// Calculates relative humidity from dry bulb temperature, wet bulb temperature and pressure.
+        /// </summary>
+        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="wetBulbTemperature">Wet bulb temperature [°C]</param>
+        /// <param name="pressure">Atmospheric pressure [Pa]</param>
+        /// <returns>Relative Humidity (0 - 100) [%]</returns>
+        public static double RelativeHumidity_ByWetBulbTemperature(double dryBulbTemperature, double wetBulbTemperature, double pressure)
+        {
+            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(wetBulbTemperature))
+            {
+                return double.NaN;
+            }
 
-        //}
+            return Core.Query.Calculate((double x) => WetBulbTemperature(dryBulbTemperature, x, pressure), wetBulbTemperature, 0, 100);
+        }
     }
 }
