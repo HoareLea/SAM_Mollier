@@ -19,15 +19,15 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature, relativeHumidity);
-            if(double.IsNaN(saturationVapourPressure))
+            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity);
+            if(double.IsNaN(partialVapourPressure))
             {
                 return double.NaN;
             }
 
             //saturationVapourPressure = saturationVapourPressure * relativeHumidity / 100;
 
-            return 0.6222 * saturationVapourPressure / (pressure - saturationVapourPressure); //from Recknagel Sprenger
+            return 0.6222 * partialVapourPressure / (pressure - partialVapourPressure); //from Recknagel Sprenger
         }
 
         /// <summary>

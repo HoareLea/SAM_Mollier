@@ -15,13 +15,13 @@
                 return double.NaN;
             }
 
-            double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature, relativeHumidity / 100);
-            if(double.IsNaN(saturationVapourPressure))
+            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity / 100);
+            if(double.IsNaN(partialVapourPressure))
             {
                 return double.NaN;
             }
 
-            double v = System.Math.Log10(saturationVapourPressure / 6.1078);
+            double v = System.Math.Log10(partialVapourPressure / 6.1078);
             if(double.IsNaN(v))
             {
                 return double.NaN;
