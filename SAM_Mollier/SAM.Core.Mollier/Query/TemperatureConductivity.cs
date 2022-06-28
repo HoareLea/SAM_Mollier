@@ -30,7 +30,7 @@
             }
 
 
-            double heatCapacity = HeatCapacity(dryBulbTemperature);
+            double heatCapacity = HeatCapacity(dryBulbTemperature, humidityRatio);
             if(double.IsNaN(heatCapacity))
             {
                 return double.NaN;

@@ -16,6 +16,8 @@
                 return double.NaN;
             }
 
+            //double humidityRatio_Temp = humidityRatio / 1000;
+
             double result = (humidityRatio * pressure / (0.6222 + humidityRatio)) / SaturationVapourPressure(dryBulbTemperature) * 100;
 
             if(result < 0  || result > 100)
