@@ -64,7 +64,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "pressure", NickName = "pressure", Description = "Atmospheric pressure [Pa]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "waterHeatCapacity", NickName = "waterHeatCapacity", Description = "Heat Capacity of Water [kJ/kgK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "airHeatCapacity", NickName = "airHeatCapacity", Description = "Heat Capacity of Air [kJ/kgK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "thermalConductivity", NickName = "thermalConductivity", Description = "Thermal Conductivity [???]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "thermalConductivity", NickName = "thermalConductivity", Description = "Thermal Conductivity [W/(mK)]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dynamicViscosity", NickName = "dynamicViscosity", Description = "Dynamic Viscosity [Pa s]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -106,6 +107,7 @@ namespace SAM.Analytical.Grasshopper
             double waterHeatCapacity = double.NaN;
             double airHeatCapacity = double.NaN;
             double thermalConductivity = double.NaN;
+            double dynamicViscosity = double.NaN;
 
             index = Params.IndexOfInputParam("_dryBulbTemperature");
             if (!dataAccess.GetData(index, ref dryBulbTemperature) || double.IsNaN(dryBulbTemperature))
@@ -206,6 +208,7 @@ namespace SAM.Analytical.Grasshopper
             airHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature, humidityRatio);
             waterHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature);
             thermalConductivity = Core.Mollier.Query.ThermalConductivity(dryBulbTemperature, humidityRatio);
+            dynamicViscosity = Core.Mollier.Query.DynamicViscosity(dryBulbTemperature, humidityRatio);
 
             index = Params.IndexOfOutputParam("dryBulbTemperature");
             if (index != -1)
@@ -301,6 +304,12 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetData(index, thermalConductivity);
+            }
+
+            index = Params.IndexOfOutputParam("dynamicViscosity");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, dynamicViscosity);
             }
         }
     }

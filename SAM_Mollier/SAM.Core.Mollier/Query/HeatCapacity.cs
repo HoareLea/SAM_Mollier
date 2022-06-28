@@ -33,9 +33,7 @@
             double cLL = 1.0065 + 0.000005309587 * dryBulbTemperature + 0.0000004758596 * System.Math.Pow(dryBulbTemperature, 2) - 0.0000000001136145 * System.Math.Pow(dryBulbTemperature, 3);
             double cWL = 1.863 + 0.0002680862 * dryBulbTemperature + 0.0000006794704 * System.Math.Pow(dryBulbTemperature, 2) - 0.0000000002641422 * System.Math.Pow(dryBulbTemperature, 3);
 
-            double humidityRatio_Temp = humidityRatio * 1000;
-
-            return (cLL + humidityRatio_Temp * cWL) / (1 + humidityRatio_Temp);
+            return (cLL + humidityRatio * cWL) / (1 + humidityRatio);
         }
     }
 }
