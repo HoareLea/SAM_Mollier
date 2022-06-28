@@ -10,12 +10,12 @@
         /// <returns>Specific Volume [m3/kg]</returns>
         public static double DynamicViscosity(double dryBulbTemperature, double humidityRatio)
         {
-            if(double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
+            if(double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio))
             {
                 return double.NaN;
             }
 
-            return (humidityRatio + 0.622) * 461.53 * ((273.15 + dryBulbTemperature) / pressure);
+            return double.NaN;
         }
     }
 }
