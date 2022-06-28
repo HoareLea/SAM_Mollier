@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -62,7 +62,9 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "density", NickName = "density", Description = "Density [kg/m3]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "degreeSaturation", NickName = "degreeSaturation", Description = "Degree of saturation [unitless]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "pressure", NickName = "pressure", Description = "Atmospheric pressure [Pa]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "waterHeatCapacity", NickName = "waterHeatCapacity", Description = "Heat Capacity of Water [kJ/kgK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "airHeatCapacity", NickName = "airHeatCapacity", Description = "Heat Capacity of Air [kJ/kgK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "thermalConductivity", NickName = "thermalConductivity", Description = "Thermal Conductivity [???]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -101,6 +103,9 @@ namespace SAM.Analytical.Grasshopper
             double pressure = double.NaN;
             double density = double.NaN;
             double partialDryAirPressure = double.NaN;
+            double waterHeatCapacity = double.NaN;
+            double airHeatCapacity = double.NaN;
+            double thermalConductivity = double.NaN;
 
             index = Params.IndexOfInputParam("_dryBulbTemperature");
             if (!dataAccess.GetData(index, ref dryBulbTemperature) || double.IsNaN(dryBulbTemperature))
@@ -198,7 +203,9 @@ namespace SAM.Analytical.Grasshopper
             enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio);
             dewPointTemperature = Core.Mollier.Query.DewPointTemperature(dryBulbTemperature, relativeHumidity);
             partialDryAirPressure = Core.Mollier.Query.PartialDryAirPressure(pressure, partialVapourPressure);
-
+            airHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature, humidityRatio);
+            waterHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature);
+            thermalConductivity = Core.Mollier.Query.ThermalConductivity(dryBulbTemperature, humidityRatio);
 
             index = Params.IndexOfOutputParam("dryBulbTemperature");
             if (index != -1)
@@ -276,6 +283,24 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetData(index, pressure);
+            }
+
+            index = Params.IndexOfOutputParam("airHeatCapacity");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, airHeatCapacity);
+            }
+
+            index = Params.IndexOfOutputParam("waterHeatCapacity");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, waterHeatCapacity);
+            }
+
+            index = Params.IndexOfOutputParam("thermalConductivity");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, thermalConductivity);
             }
         }
     }

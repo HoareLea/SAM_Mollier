@@ -6,7 +6,7 @@
         /// Calculates specific volume from dry bulb temperature, relative humidity and pressure.
         /// </summary>
         /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
-        /// <param name="humidityRatio">Relative humidity (0 - 100) [%]</param>
+        /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Specific Volume [m3/kg]</returns>
         public static double SpecificVolume(double dryBulbTemperature, double humidityRatio, double pressure)
