@@ -191,6 +191,7 @@ namespace SAM.Analytical.Grasshopper
             specificVolume = Core.Mollier.Query.SpecificVolume(dryBulbTemperature, humidityRatio, pressure);
             saturationVapourPressure = Core.Mollier.Query.SaturationVapourPressure(dryBulbTemperature, relativeHumidity);
             enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio);
+            dewPointTemperature = Core.Mollier.Query.DewPointTemperature(dryBulbTemperature, relativeHumidity);
 
             index = Params.IndexOfOutputParam("dryBulbTemperature");
             if (index != -1)
