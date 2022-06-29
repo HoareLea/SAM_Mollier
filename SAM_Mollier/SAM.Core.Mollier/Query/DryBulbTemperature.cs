@@ -178,7 +178,7 @@ namespace SAM.Core.Mollier
             }
 
 
-            return Core.Query.Calculate((double x) => Density(x, relativeHumidity, pressure), density, 0.001, 99.999);
+            return Core.Query.Calculate((double x) => Density(x, relativeHumidity, pressure), density, -50, 99.999);
 
             //double result = 100;
             //double density_Temp = double.NaN;
@@ -200,6 +200,16 @@ namespace SAM.Core.Mollier
             //}
 
             //return result;
+        }
+
+        public static double DryBulbTemperature_ByWetBulbTemperature(double wetBulbTemperature, double relativeHumidity, double pressure)
+        {
+            if(double.IsNaN(wetBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+
+            return Core.Query.Calculate((double x) => WetBulbTemperature(x, relativeHumidity, pressure), wetBulbTemperature, 5, 95);
         }
     }
 }
