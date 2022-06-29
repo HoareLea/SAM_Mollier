@@ -113,6 +113,16 @@ namespace SAM.Core.Grasshopper.Mollier.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SAM_Mollier {
+            get {
+                object obj = ResourceManager.GetObject("SAM_Mollier", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SAM_Names {
             get {
                 object obj = ResourceManager.GetObject("SAM_Names", resourceCulture);
