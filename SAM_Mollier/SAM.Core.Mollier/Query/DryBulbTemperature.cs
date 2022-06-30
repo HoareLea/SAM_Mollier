@@ -61,28 +61,28 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return Core.Query.Calculate((double x) => Enthalpy_ByRelativeHumidity(x, relativeHumidity, pressure), enthalpy, -50, 99.999);
+            //return Core.Query.Calculate((double x) => Enthalpy_ByRelativeHumidity(x, relativeHumidity, pressure), enthalpy, -50, 99.999);
 
-            //double result = 50;
-            //double enthalpy_Temp = double.NaN;
-            //do
-            //{
-            //    result -= 0.1;
-            //    enthalpy_Temp = Enthalpy_ByRelativeHumidity(result, relativeHumidity, pressure);
-            //} while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp > enthalpy && result > -20);
+            double result = 50;
+            double enthalpy_Temp = double.NaN;
+            do
+            {
+                result -= 0.1;
+                enthalpy_Temp = Enthalpy_ByRelativeHumidity(result, relativeHumidity, pressure);
+            } while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp > enthalpy && result > -20);
 
-            //do
-            //{
-            //    result += 0.0005;
-            //    enthalpy_Temp = Enthalpy_ByRelativeHumidity(result, relativeHumidity, pressure);
-            //} while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp <= enthalpy && result <= 50);
+            do
+            {
+                result += 0.0005;
+                enthalpy_Temp = Enthalpy_ByRelativeHumidity(result, relativeHumidity, pressure);
+            } while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp <= enthalpy && result <= 50);
 
-            //if (result > 100)
-            //{
-            //    return double.NaN;
-            //}
+            if (result > 100)
+            {
+                return double.NaN;
+            }
 
-            //return result;
+            return result;
         }
 
         /// <summary>
