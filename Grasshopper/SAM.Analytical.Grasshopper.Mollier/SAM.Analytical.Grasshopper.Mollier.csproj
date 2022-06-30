@@ -77,38 +77,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\HL_Logo24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Explode.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_JSON.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Get.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Get.Filterpng.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Classes\" />
     <Folder Include="Convert\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Query\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Names.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grasshopper">
@@ -130,7 +102,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\SAM_Mollier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HL_Logo24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
