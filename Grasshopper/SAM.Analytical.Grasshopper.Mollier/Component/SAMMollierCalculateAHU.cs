@@ -145,7 +145,7 @@ namespace SAM.Analytical.Grasshopper
                 index = Params.IndexOfOutputParam("summerDesignDayName");
                 if (index != -1)
                 {
-                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignDayName, out string summerDesignDayName))
+                    if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignDayName, out string summerDesignDayName))
                     {
                         summerDesignDayName = null;
                     }
@@ -156,7 +156,7 @@ namespace SAM.Analytical.Grasshopper
                 index = Params.IndexOfOutputParam("summerDesignDayIndex");
                 if (index != -1)
                 {
-                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignDayIndex, out int summerDesignDayIndex))
+                    if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignDayIndex, out int summerDesignDayIndex))
                     {
                         summerDesignDayIndex = -1;
                     }
@@ -169,7 +169,7 @@ namespace SAM.Analytical.Grasshopper
                 index = Params.IndexOfOutputParam("supplyAirFlow");
                 if (index != -1)
                 {
-                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out supplyAirFlow))
+                    if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out supplyAirFlow))
                     {
                         supplyAirFlow = 0;
                     }
@@ -182,7 +182,7 @@ namespace SAM.Analytical.Grasshopper
                 index = Params.IndexOfOutputParam("outsideSupplyAirFlow");
                 if (index != -1)
                 {
-                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out outsideSupplyAirFlow))
+                    if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out outsideSupplyAirFlow))
                     {
                         outsideSupplyAirFlow = 0;
                     }
@@ -193,7 +193,7 @@ namespace SAM.Analytical.Grasshopper
                 index = Params.IndexOfOutputParam("exhaustAirFlow");
                 if (index != -1)
                 {
-                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.ExhaustAirFlow, out double exhaustAirFlow))
+                    if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.ExhaustAirFlow, out double exhaustAirFlow))
                     {
                         exhaustAirFlow = 0;
                     }
