@@ -53,6 +53,7 @@
     <Compile Include="Query\KinematicViscosity.cs" />
     <Compile Include="Query\PartialDryAirPressure.cs" />
     <Compile Include="Query\DynamicViscosity.cs" />
+    <Compile Include="Query\Pressure.cs" />
     <Compile Include="Query\ThermalConductivity.cs" />
     <Compile Include="Query\SpecificVolume.cs" />
     <Compile Include="Query\HeatCapacity.cs" />
