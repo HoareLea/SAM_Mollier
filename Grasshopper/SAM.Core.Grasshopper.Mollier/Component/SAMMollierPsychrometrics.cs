@@ -148,7 +148,7 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            humidityRatio = humidityRatio * 1000;
+            humidityRatio = humidityRatio / 1000;
 
             index = Params.IndexOfInputParam("_wetBulbTemperature_");
             if (index == -1 || !dataAccess.GetData(index, ref wetBulbTemperature) || double.IsNaN(wetBulbTemperature))
