@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry bulb temperature [°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_relativeHumidity_", NickName = "_relativeHumidity_", Description = "Relative humidity (0 - 100) [%] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatio_", NickName = "_humidityRatio_", Description = "Humidty Ratio [kg/kg]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatio_", NickName = "_humidityRatio_", Description = "Humidty Ratio [g/kg]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_wetBulbTemperature_", NickName = "_wetBulbTemperature_", Description = "Wet bulb temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dewPointTemperature_", NickName = "_dewPointTemperature_", Description = "Dew Point Temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
@@ -148,6 +148,7 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+            humidityRatio = humidityRatio * 1000;
 
             index = Params.IndexOfInputParam("_wetBulbTemperature_");
             if (index == -1 || !dataAccess.GetData(index, ref wetBulbTemperature) || double.IsNaN(wetBulbTemperature))
@@ -205,7 +206,7 @@ namespace SAM.Analytical.Grasshopper
             else if (double.IsNaN(relativeHumidity) && !double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature))
             {
                 relativeHumidity = Core.Mollier.Query.RelativeHumidity_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure);
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure)*1000;  //   change to g/kg
+                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);  
             }
             else
             {
@@ -218,7 +219,7 @@ namespace SAM.Analytical.Grasshopper
             specificVolume = Core.Mollier.Query.SpecificVolume(dryBulbTemperature, humidityRatio, pressure);
             saturationVapourPressure = Core.Mollier.Query.SaturationVapourPressure(dryBulbTemperature);
             partialVapourPressure = Core.Mollier.Query.PartialVapourPressure(dryBulbTemperature, relativeHumidity);
-            enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio)*1000; //   change to kJ/kg
+            enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio); 
             dewPointTemperature = double.IsNaN(dewPointTemperature) ? Core.Mollier.Query.DewPointTemperature(dryBulbTemperature, relativeHumidity) : dewPointTemperature;
             partialDryAirPressure = Core.Mollier.Query.PartialDryAirPressure(pressure, partialVapourPressure);
             airHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature, humidityRatio);
@@ -245,7 +246,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("humidityRatio");
             if (index != -1)
             {
-                dataAccess.SetData(index, humidityRatio);
+                dataAccess.SetData(index, humidityRatio*1000);//   change to g/kg
             }
 
             index = Params.IndexOfOutputParam("wetBulbTemperature");
@@ -281,7 +282,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("enthalpy");
             if (index != -1)
             {
-                dataAccess.SetData(index, enthalpy);
+                dataAccess.SetData(index, enthalpy*1000);//   change to kJ/kg
             }
 
             index = Params.IndexOfOutputParam("specificVolume");
