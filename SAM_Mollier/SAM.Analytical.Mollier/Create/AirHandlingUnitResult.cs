@@ -29,6 +29,7 @@ namespace SAM.Analytical.Mollier
 
             double sensibleHeatLoss = 0;
             double sensibleHeatGain = 0;
+            double supplyAirFlow = 0;
             if(spaces_Supply != null && spaces_Supply.Count != 0)
             {
                 foreach(Space space in spaces_Supply)
@@ -59,6 +60,12 @@ namespace SAM.Analytical.Mollier
 
                             }
                         }
+                    }
+
+                    double supplyAirFlow_Space = space.CalculatedSupplyAirFlow();
+                    if(!double.IsNaN(supplyAirFlow_Space))
+                    {
+                        supplyAirFlow += supplyAirFlow_Space;
                     }
                 }
 
@@ -121,7 +128,8 @@ namespace SAM.Analytical.Mollier
             result.SetValue(AirHandlingUnitResultParameter.SensibleHeatLoss, sensibleHeatLoss);
             result.SetValue(AirHandlingUnitResultParameter.SummerDesignTemperature, summerDesignTemperature);
             result.SetValue(AirHandlingUnitResultParameter.SummerDesignRelativeHumidity, summerDesignRelativeHumidity);
-            if(!string.IsNullOrWhiteSpace(summerDesignDayName))
+            result.SetValue(AirHandlingUnitResultParameter.SupplyAirFlow, supplyAirFlow);
+            if (!string.IsNullOrWhiteSpace(summerDesignDayName))
             {
                 result.SetValue(AirHandlingUnitResultParameter.SummerDesignDayName, summerDesignDayName);
             }
