@@ -282,7 +282,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("enthalpy");
             if (index != -1)
             {
-                dataAccess.SetData(index, enthalpy*1000);//   change to kJ/kg
+                dataAccess.SetData(index, enthalpy/1000);//   change to kJ/kg
             }
 
             index = Params.IndexOfOutputParam("specificVolume");
