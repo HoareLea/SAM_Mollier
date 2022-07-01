@@ -1,6 +1,5 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Mollier.Properties;
-using SAM.Analytical.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Core.Grasshopper;
@@ -18,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -51,6 +50,9 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "summerDesignDayName", NickName = "summerDesignDayName", Description = "Summer Design Day Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "summerDesignDayIndex", NickName = "summerDesignDayIndex", Description = "Summer Design Day Hour Index [0-23]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "supplyAirFlow", NickName = "supplyAirFlow", Description = "Supply Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "outsideSupplyAirFlow", NickName = "outsideSupplyAirFlow", Description = "Outside Supply Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "exhaustAirFlow", NickName = "exhaustAirFlow", Description = "Exhaust Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "recirculationAirFlow", NickName = "recirculationAirFlow", Description = "Recirculation Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -162,15 +164,48 @@ namespace SAM.Analytical.Grasshopper
                     dataAccess.SetData(index, summerDesignDayIndex);
                 }
 
+                double supplyAirFlow = 0;
+
                 index = Params.IndexOfOutputParam("supplyAirFlow");
                 if (index != -1)
                 {
-                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out double supplyAirFlow))
+                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out supplyAirFlow))
                     {
-                        supplyAirFlow = -1;
+                        supplyAirFlow = 0;
                     }
 
                     dataAccess.SetData(index, supplyAirFlow);
+                }
+
+                double outsideSupplyAirFlow = 0;
+
+                index = Params.IndexOfOutputParam("outsideSupplyAirFlow");
+                if (index != -1)
+                {
+                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out outsideSupplyAirFlow))
+                    {
+                        outsideSupplyAirFlow = 0;
+                    }
+
+                    dataAccess.SetData(index, outsideSupplyAirFlow);
+                }
+
+                index = Params.IndexOfOutputParam("exhaustAirFlow");
+                if (index != -1)
+                {
+                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.ExhaustAirFlow, out double exhaustAirFlow))
+                    {
+                        exhaustAirFlow = 0;
+                    }
+
+                    dataAccess.SetData(index, exhaustAirFlow);
+                }
+
+                index = Params.IndexOfOutputParam("recirculationAirFlow");
+                if (index != -1)
+                {
+                    double recirculationAirFlow = Math.Max(0, supplyAirFlow - outsideSupplyAirFlow);
+                    dataAccess.SetData(index, recirculationAirFlow);
                 }
             }
 
