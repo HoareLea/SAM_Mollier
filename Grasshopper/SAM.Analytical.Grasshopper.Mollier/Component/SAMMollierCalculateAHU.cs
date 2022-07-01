@@ -139,17 +139,6 @@ namespace SAM.Analytical.Grasshopper
                     dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.SummerDesignRelativeHumidity));
                 }
 
-                index = Params.IndexOfOutputParam("summerDesignRelativeHumidity");
-                if (index != -1)
-                {
-                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignDayName, out string summerDesignDayName))
-                    {
-                        summerDesignDayName = null;
-                    }
-
-                    dataAccess.SetData(index, summerDesignDayName);
-                }
-
                 index = Params.IndexOfOutputParam("summerDesignDayName");
                 if (index != -1)
                 {
