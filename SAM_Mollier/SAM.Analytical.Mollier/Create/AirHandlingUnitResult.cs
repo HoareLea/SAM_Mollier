@@ -67,35 +67,11 @@ namespace SAM.Analytical.Mollier
                     if (!double.IsNaN(supplyAirFlow_Space))
                     {
                         outsideSupplyAirFlow += supplyAirFlow_Space;
-                    }
 
-                    List<VentilationSystem> ventilationSystems = adjacencyCluster.GetRelatedObjects<VentilationSystem>(space);
-                    if (ventilationSystems != null && ventilationSystems.Count != 0)
-                    {
-                        VentilationSystem ventilationSystem = ventilationSystems.Find(x => x.Type != null);
-                        VentilationSystemType ventilationSystemType = ventilationSystem.Type as VentilationSystemType;
-                        if (ventilationSystemType.TryGetValue(VentilationSystemTypeParameter.AirSupplyMethod, out string airSupplyMethodString) && !string.IsNullOrWhiteSpace(airSupplyMethodString))
+                        supplyAirFlow_Space = adjacencyCluster.CalculatedSupplyAirFlow(space);
+                        if(!double.IsNaN(supplyAirFlow_Space))
                         {
-                            AirSupplyMethod airSupplyMethod = Core.Query.Enum<AirSupplyMethod>(airSupplyMethodString);
-                            switch (airSupplyMethod)
-                            {
-                                case AirSupplyMethod.Outside:
-                                    supplyAirFlow += supplyAirFlow_Space;
-                                    break;
-
-                                case AirSupplyMethod.Total:
-                                    if (space.TryGetValue(SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && space.TryGetValue(SpaceParameter.DesignCoolingLoad, out double designCoolingLoad))
-                                    {
-                                        if (ventilationSystemType.TryGetValue(VentilationSystemTypeParameter.TemperatureDifference, out double temperatureDifference))
-                                        {
-                                            double supplyAirFlow_Load = System.Math.Max(designCoolingLoad, designHeatingLoad) / 1.2 / 1.005 / temperatureDifference;
-
-                                            supplyAirFlow += System.Math.Max(supplyAirFlow_Space, supplyAirFlow_Load);
-                                        }
-                                    }
-
-                                    break;
-                            }
+                            supplyAirFlow += supplyAirFlow_Space;
                         }
                     }
                 }
@@ -109,7 +85,7 @@ namespace SAM.Analytical.Mollier
                     double exhaustAirFlow_Space = space.CalculatedExhaustAirFlow();
                     exhaustAirFlow_Space = double.IsNaN(exhaustAirFlow_Space) ? double.MinValue: exhaustAirFlow_Space;
 
-                    double supplyAirFlow_Space = space.CalculatedSupplyAirFlow();
+                    double supplyAirFlow_Space = adjacencyCluster.CalculatedSupplyAirFlow(space);
                     supplyAirFlow_Space = double.IsNaN(supplyAirFlow_Space) ? double.MinValue : supplyAirFlow_Space;
 
                     exhaustAirFlow_Space = System.Math.Max(exhaustAirFlow_Space, supplyAirFlow_Space);
