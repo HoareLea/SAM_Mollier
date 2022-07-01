@@ -1,5 +1,6 @@
 ﻿
 
+using SAM.Weather;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Mollier
@@ -64,8 +65,71 @@ namespace SAM.Analytical.Mollier
                 
             }
 
+            double pressure = 101325;
+
+            double summerDesignTemperature = double.NaN;
+            double summerDesignRelativeHumidity = double.NaN;
+            string summerDesignDayName = null;
+            int summerDesignDayIndex = -1;
+
+            double enthalpy_Max = double.NaN;
+
+            List<DesignDay> designDays = adjacencyCluster.GetObjects<DesignDay>();
+            if(designDays != null && designDays.Count != 0)
+            {
+                foreach (DesignDay designDay in designDays)
+                {
+                    if(!designDay.Contains(WeatherDataType.DryBulbTemperature)  || !designDay.Contains(WeatherDataType.RelativeHumidity))
+                    {
+                        continue;
+                    }
+
+                    for(int i = 0; i < 24; i++)
+                    {
+                        double dryBulbTemperature = designDay[WeatherDataType.DryBulbTemperature, i];
+                        double relativeHumidity = designDay[WeatherDataType.RelativeHumidity, i];
+
+                        double enthalpy = Core.Mollier.Query.Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
+                        if(double.IsNaN(enthalpy))
+                        {
+                            continue;
+                        }
+
+                        if(double.IsNaN(enthalpy_Max) || enthalpy > enthalpy_Max)
+                        {
+                            summerDesignTemperature = dryBulbTemperature;
+                            summerDesignRelativeHumidity = relativeHumidity;
+                            summerDesignDayName = designDay.Name;
+                            summerDesignDayIndex = i;
+                            enthalpy_Max = enthalpy;
+                        }
+                    }
+                }
+            }
+            if(double.IsNaN(summerDesignTemperature))
+            {
+                summerDesignTemperature = 32.1;
+            }
+
+            if (double.IsNaN(summerDesignRelativeHumidity))
+            {
+                summerDesignRelativeHumidity = 35.9;
+            }
+
+
             result.SetValue(AirHandlingUnitResultParameter.SensibleHeatGain, sensibleHeatGain);
             result.SetValue(AirHandlingUnitResultParameter.SensibleHeatLoss, sensibleHeatLoss);
+            result.SetValue(AirHandlingUnitResultParameter.SummerDesignTemperature, summerDesignTemperature);
+            result.SetValue(AirHandlingUnitResultParameter.SummerDesignRelativeHumidity, summerDesignRelativeHumidity);
+            if(!string.IsNullOrWhiteSpace(summerDesignDayName))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerDesignDayName, summerDesignDayName);
+            }
+
+            if(summerDesignDayIndex != -1)
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerDesignDayIndex, summerDesignDayIndex);
+            }
 
             adjacencyCluster.AddObject(result);
             adjacencyCluster.AddRelation(airHandlingUnit, result);

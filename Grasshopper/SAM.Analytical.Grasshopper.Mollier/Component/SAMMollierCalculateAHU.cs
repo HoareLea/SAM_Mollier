@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analytcailModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "AHU Name", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "AHU Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -46,6 +46,10 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatLoss", NickName = "sensibleHeatLoss", Description = "Sensible Heat Loss for connected Spaces [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatGain", NickName = "sensibleHeatGain", Description = "Sensible Heat Gain for connected Spaces [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerDesignTemperature", NickName = "summerDesignTemperature", Description = "Summer Design Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerDesignRelativeHumidity", NickName = "summerDesignRelativeHumidity", Description = "Summer Design Relative Humidity [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "summerDesignDayName", NickName = "summerDesignDayName", Description = "Summer Design Day Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "summerDesignDayIndex", NickName = "summerDesignDayIndex", Description = "Summer Design Day Hour Index [0-23]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -97,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
             if (adjacencyCluster != null)
             {
                 airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(adjacencyCluster, name, out AirHandlingUnit airHandlingUnit);
-                if(airHandlingUnitResult != null)
+                if (airHandlingUnitResult != null)
                 {
                     analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
                 }
@@ -109,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetData(index, analyticalModel);
             }
 
-            if(airHandlingUnitResult != null)
+            if (airHandlingUnitResult != null)
             {
                 index = Params.IndexOfOutputParam("sensibleHeatLoss");
                 if (index != -1)
@@ -122,7 +126,54 @@ namespace SAM.Analytical.Grasshopper
                 {
                     dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.SensibleHeatGain) / 1000);
                 }
+
+                index = Params.IndexOfOutputParam("summerDesignTemperature");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.SummerDesignTemperature));
+                }
+
+                index = Params.IndexOfOutputParam("summerDesignRelativeHumidity");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.SummerDesignRelativeHumidity));
+                }
+
+                index = Params.IndexOfOutputParam("summerDesignRelativeHumidity");
+                if (index != -1)
+                {
+                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignDayName, out string summerDesignDayName))
+                    {
+                        summerDesignDayName = null;
+                    }
+
+                    dataAccess.SetData(index, summerDesignDayName);
+                }
+
+                index = Params.IndexOfOutputParam("summerDesignDayName");
+                if (index != -1)
+                {
+                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignDayName, out string summerDesignDayName))
+                    {
+                        summerDesignDayName = null;
+                    }
+
+                    dataAccess.SetData(index, summerDesignDayName);
+                }
+
+                index = Params.IndexOfOutputParam("summerDesignDayIndex");
+                if (index != -1)
+                {
+                    if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignDayIndex, out int summerDesignDayIndex))
+                    {
+                        summerDesignDayIndex = -1;
+                    }
+
+                    dataAccess.SetData(index, summerDesignDayIndex);
+                }
             }
+
+
         }
     }
 }
