@@ -64,13 +64,13 @@
             }
 
             //Partial Vapour Pressure ratio
-            double partialVapourPressure = HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure) * pressure / (HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure) + 0.621945);
-            if (double.IsNaN(partialVapourPressure))
+            double pressureRatio = HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure) * pressure / (HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure) + 0.621945);
+            if (double.IsNaN(pressureRatio))
             {
                 return double.NaN;
             }
 
-            return System.Math.Min(1, partialVapourPressure / SaturationVapourPressure(dryBulbTemperature));
+            return System.Math.Min(1, pressureRatio / SaturationVapourPressure(dryBulbTemperature));
         }
     }
 }

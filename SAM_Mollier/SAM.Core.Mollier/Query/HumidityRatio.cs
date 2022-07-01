@@ -60,14 +60,14 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            double saturationHumidityRatio = 0.621945 * SaturationVapourPressure(wetBulbTemperature) / (pressure - SaturationVapourPressure(wetBulbTemperature));
+            double pressureRatio = 0.621945 * SaturationVapourPressure(wetBulbTemperature) / (pressure - SaturationVapourPressure(wetBulbTemperature));
 
             if (wetBulbTemperature >= 0)
             {
-                return ((2501 - 2.326 * wetBulbTemperature) * saturationHumidityRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2501 + 1.86 * dryBulbTemperature - 4.186 * wetBulbTemperature);
+                return ((2501 - 2.326 * wetBulbTemperature) * pressureRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2501 + 1.86 * dryBulbTemperature - 4.186 * wetBulbTemperature);
             }
 
-            return ((2830 - 0.24 * wetBulbTemperature) * saturationHumidityRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2830 + 1.86 * dryBulbTemperature - 2.1 * wetBulbTemperature);
+            return ((2830 - 0.24 * wetBulbTemperature) * pressureRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2830 + 1.86 * dryBulbTemperature - 2.1 * wetBulbTemperature);
         }
     }
 }

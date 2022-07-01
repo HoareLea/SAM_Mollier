@@ -211,5 +211,18 @@ namespace SAM.Core.Mollier
 
             return Core.Query.Calculate((double x) => WetBulbTemperature(x, relativeHumidity, pressure), wetBulbTemperature, 5, 95);
         }
+
+        public static double DryBulbTemperature_ByWetBulbTemperatureAndHumidityRatio(double wetBulbTemperature, double humidityRatio, double pressure)
+        {
+            if (double.IsNaN(wetBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+
+            double pressureRatio = 0.621945 * SaturationVapourPressure(wetBulbTemperature) / (pressure - SaturationVapourPressure(wetBulbTemperature));
+
+
+            return ((1093 - 0.556 * wetBulbTemperature) * pressureRatio + 0.240 * wetBulbTemperature - humidityRatio * (1093 - wetBulbTemperature)) / (0.444 * humidityRatio + 0.240);
+        }
     }
 }
