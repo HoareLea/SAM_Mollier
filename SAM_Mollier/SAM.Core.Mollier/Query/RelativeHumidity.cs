@@ -58,12 +58,19 @@
         /// <returns>Relative Humidity (0 - 100) [%]</returns>
         public static double RelativeHumidity_ByWetBulbTemperature(double dryBulbTemperature, double wetBulbTemperature, double pressure)
         {
-            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(wetBulbTemperature))
+            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(wetBulbTemperature) || double.IsNaN(pressure))
             {
                 return double.NaN;
             }
 
-            return Core.Query.Calculate((double x) => WetBulbTemperature(dryBulbTemperature, x, pressure), wetBulbTemperature, 0, 100);
+            //Partial Vapour Pressure ratio
+            double partialVapourPressure = HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure) * pressure / (HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure) + 0.621945);
+            if (double.IsNaN(partialVapourPressure))
+            {
+                return double.NaN;
+            }
+
+            return System.Math.Min(1, partialVapourPressure / SaturationVapourPressure(dryBulbTemperature));
         }
     }
 }

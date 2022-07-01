@@ -45,5 +45,29 @@ namespace SAM.Core.Mollier
 
             return ((enthalpy / 1000)- dryBulbTemperature) / (2501 + 1.86 * dryBulbTemperature);
         }
+
+        /// <summary>
+        /// Calculates humidity ratio from dry bulb temperature and enthalpy.
+        /// </summary>
+        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="wetBulbTemperature">Wet Bulb Temperature [°C]</param>
+        /// <param name="pressure">Pressure [Pa]</param>
+        /// <returns>Humidity Ratio [kg_waterVapor/kg_dryAir]</returns>
+        public static double HumidityRatio_ByWetBulbTemperature(double dryBulbTemperature, double wetBulbTemperature, double pressure)
+        {
+            if (double.IsNaN(wetBulbTemperature) || double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+
+            double saturationHumidityRatio = 0.621945 * SaturationVapourPressure(wetBulbTemperature) / (pressure - SaturationVapourPressure(wetBulbTemperature));
+
+            if (wetBulbTemperature >= 0)
+            {
+                return ((2501 - 2.326 * wetBulbTemperature) * saturationHumidityRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2501 + 1.86 * dryBulbTemperature - 4.186 * wetBulbTemperature);
+            }
+
+            return ((2830 - 0.24 * wetBulbTemperature) * saturationHumidityRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2830 + 1.86 * dryBulbTemperature - 2.1 * wetBulbTemperature);
+        }
     }
 }
