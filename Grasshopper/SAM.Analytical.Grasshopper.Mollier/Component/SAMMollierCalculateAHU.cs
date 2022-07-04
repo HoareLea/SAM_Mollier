@@ -62,6 +62,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerSpaceTemperature", NickName = "summerSpaceTemperature", Description = "Summer Space Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerSpaceHumidity", NickName = "summerSpaceHumidty", Description = "Summer Space Humidity [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerSupplyTemperature", NickName = "summerSupplyTemperature", Description = "Summer Supply Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterSupplyTemperature", NickName = "winterSupplyTemperature", Description = "Winter Supply Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -297,6 +298,17 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 dataAccess.SetData(index, summerSupplyTemperature);
+            }
+
+            index = Params.IndexOfOutputParam("winterSupplyTemperature");
+            if (index != -1)
+            {
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSupplyTemperature, out double winterSupplyTemperature))
+                {
+                    winterSupplyTemperature = double.NaN;
+                }
+
+                dataAccess.SetData(index, winterSupplyTemperature);
             }
         }
     }

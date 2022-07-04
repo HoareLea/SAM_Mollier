@@ -216,7 +216,7 @@ namespace SAM.Analytical.Mollier
                     winterSupplyTemperature = heatingDesignTemperatures.Min();
                     if(airSupplyMethod == AirSupplyMethod.Total)
                     {
-                        winterSupplyTemperature += sensibleHeatLoss / (supplyAirFlow * 1.2 * 1.005);
+                        winterSupplyTemperature += sensibleHeatLoss / (supplyAirFlow * 1.2 * 1.005) / 1000;
                     }
                 }
             }
