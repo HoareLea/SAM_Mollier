@@ -212,13 +212,18 @@ namespace SAM.Analytical.Mollier
             {
                 if (heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
                 {
+                    AirSupplyMethod airSupplyMethod = Analytical.Query.AirSupplyMethod(adjacencyCluster, airHandlingUnitName);
                     winterSupplyTemperature = heatingDesignTemperatures.Min();
+                    if(airSupplyMethod == AirSupplyMethod.Total)
+                    {
+                        winterSupplyTemperature += sensibleHeatLoss / (supplyAirFlow * 1.2 * 1.005);
+                    }
                 }
             }
 
             if(!double.IsNaN(winterSupplyTemperature))
             {
-                result.SetValue(AirHandlingUnitParameter.WinterSupplyTemperature, winterSupplyTemperature);
+                result.SetValue(AirHandlingUnitResultParameter.WinterSupplyTemperature, winterSupplyTemperature);
             }
 
             if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerSupplyTemperature, out double summerSupplyTemperature) && !double.IsNaN(summerSupplyTemperature))
