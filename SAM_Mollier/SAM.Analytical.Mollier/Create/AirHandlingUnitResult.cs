@@ -36,6 +36,8 @@ namespace SAM.Analytical.Mollier
             double supplyAirFlow = 0;
             List<double> coolingDesignTemperatures = new List<double>();
             List<double> heatingDesignTemperatures = new List<double>();
+            List<double> coolingDesignHumidities = new List<double>();
+            List<double> heatingDesignHumidities = new List<double>();
             if (spaces_Supply != null && spaces_Supply.Count != 0)
             {
                 foreach (Space space in spaces_Supply)
@@ -92,9 +94,11 @@ namespace SAM.Analytical.Mollier
                         }
                     }
 
-
                     coolingDesignTemperatures.Add(Analytical.Query.CoolingDesignTemperature(space, analyticalModel?.ProfileLibrary));
                     heatingDesignTemperatures.Add(Analytical.Query.HeatingDesignTemperature(space, analyticalModel?.ProfileLibrary));
+
+                    coolingDesignHumidities.Add(Analytical.Query.CoolingDesignHumidity(space, analyticalModel?.ProfileLibrary));
+                    heatingDesignHumidities.Add(Analytical.Query.HeatingDesignHumidity(space, analyticalModel?.ProfileLibrary));
                 }
             }
 
@@ -214,6 +218,15 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.SummerSpaceTemperature, coolingDesignTemperatures.Max());
             }
 
+            if (heatingDesignHumidities != null && heatingDesignHumidities.Count != 0)
+            {
+                result.SetValue(AirHandlingUnitResultParameter.WinterSpaceHumidty, heatingDesignHumidities.Min());
+            }
+
+            if (coolingDesignHumidities != null && coolingDesignHumidities.Count != 0)
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerSpaceHumidty, coolingDesignHumidities.Max());
+            }
 
             if (!string.IsNullOrWhiteSpace(summerDesignDayName))
             {
