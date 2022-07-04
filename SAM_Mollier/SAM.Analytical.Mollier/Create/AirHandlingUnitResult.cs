@@ -164,6 +164,7 @@ namespace SAM.Analytical.Mollier
                     }
                 }
             }
+            
             if(double.IsNaN(summerDesignTemperature))
             {
                 summerDesignTemperature = 32.1;
@@ -174,6 +175,15 @@ namespace SAM.Analytical.Mollier
                 summerDesignRelativeHumidity = 35.9;
             }
 
+            if (double.IsNaN(winterDesignTemperature))
+            {
+                winterDesignTemperature = -3;
+            }
+
+            if (double.IsNaN(winterDesignRelativeHumidity))
+            {
+                winterDesignRelativeHumidity = 86.9;
+            }
 
             result.SetValue(AirHandlingUnitResultParameter.SensibleHeatGain, sensibleHeatGain);
             result.SetValue(AirHandlingUnitResultParameter.SensibleHeatLoss, sensibleHeatLoss);
