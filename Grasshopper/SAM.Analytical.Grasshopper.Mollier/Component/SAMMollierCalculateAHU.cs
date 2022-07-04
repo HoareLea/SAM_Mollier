@@ -168,7 +168,7 @@ namespace SAM.Analytical.Grasshopper
                     dataAccess.SetData(index, summerDesignDayIndex);
                 }
 
-                index = Params.IndexOfOutputParam("WinterDesignTemperature");
+                index = Params.IndexOfOutputParam("winterDesignTemperature");
                 if (index != -1)
                 {
                     dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.WinterDesignTemperature));
