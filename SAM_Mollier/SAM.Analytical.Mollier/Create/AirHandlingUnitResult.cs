@@ -220,12 +220,24 @@ namespace SAM.Analytical.Mollier
 
             if (heatingDesignHumidities != null && heatingDesignHumidities.Count != 0)
             {
-                result.SetValue(AirHandlingUnitResultParameter.WinterSpaceHumidty, heatingDesignHumidities.Min());
+                double value = heatingDesignHumidities.Min();
+                if(Core.Query.AlmostEqual(value, 0))
+                {
+                    value = 20;
+                }
+
+                result.SetValue(AirHandlingUnitResultParameter.WinterSpaceHumidty, value);
             }
 
             if (coolingDesignHumidities != null && coolingDesignHumidities.Count != 0)
             {
-                result.SetValue(AirHandlingUnitResultParameter.SummerSpaceHumidty, coolingDesignHumidities.Max());
+                double value = coolingDesignHumidities.Max();
+                if (Core.Query.AlmostEqual(value, 100))
+                {
+                    value = 70;
+                }
+
+                result.SetValue(AirHandlingUnitResultParameter.SummerSpaceHumidty, value);
             }
 
             if (!string.IsNullOrWhiteSpace(summerDesignDayName))
