@@ -207,10 +207,30 @@ namespace SAM.Analytical.Mollier
             result.SetValue(AirHandlingUnitResultParameter.SupplyAirFlow, supplyAirFlow);
             result.SetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, outsideSupplyAirFlow);
             result.SetValue(AirHandlingUnitResultParameter.ExhaustAirFlow, exhaustAirFlow);
-            
-            if(heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
+
+            if(!airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterSupplyTemperature, out double winterSupplyTemperature) || double.IsNaN(winterSupplyTemperature))
             {
-                result.SetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, heatingDesignTemperatures.Min());
+                if (heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
+                {
+                    winterSupplyTemperature = heatingDesignTemperatures.Min();
+                }
+            }
+
+            if(!double.IsNaN(winterSupplyTemperature))
+            {
+                result.SetValue(AirHandlingUnitParameter.WinterSupplyTemperature, winterSupplyTemperature);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerSupplyTemperature, out double summerSupplyTemperature) && !double.IsNaN(summerSupplyTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, summerSupplyTemperature);
+            }
+
+            double heatingDesignTemperature = double.NaN;
+            if (heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
+            {
+                heatingDesignTemperature = heatingDesignTemperatures.Min();
+                result.SetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, heatingDesignTemperature);
             }
 
             if (coolingDesignTemperatures != null && coolingDesignTemperatures.Count != 0)

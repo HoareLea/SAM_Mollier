@@ -23,5 +23,7 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Summer Space Temperature", "Summer Space Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerSpaceTemperature,
         [ParameterProperties("Winter Space Humidity", "Winter Space Humidty [%]"), ParameterValue(Core.ParameterType.Double)] WinterSpaceHumidty,
         [ParameterProperties("Summer Space Humidity", "Summer Space Humidty [%]"), ParameterValue(Core.ParameterType.Double)] SummerSpaceHumidty,
+        [ParameterProperties("Summer Supply Temperature", "Summer Supply Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyTemperature,
+        [ParameterProperties("Winter Supply Temperature", "Winter Supply Temperature [C]"), ParameterValue(Core.ParameterType.Double)] WinterSupplyTemperature,
     }
 }
