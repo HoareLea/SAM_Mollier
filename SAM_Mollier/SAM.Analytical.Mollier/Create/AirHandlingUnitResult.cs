@@ -221,7 +221,7 @@ namespace SAM.Analytical.Mollier
             if (heatingDesignHumidities != null && heatingDesignHumidities.Count != 0)
             {
                 double value = heatingDesignHumidities.Min();
-                if(Core.Query.AlmostEqual(value, 0))
+                if(Core.Query.AlmostEqual(value, 100))
                 {
                     value = 20;
                 }
@@ -232,7 +232,7 @@ namespace SAM.Analytical.Mollier
             if (coolingDesignHumidities != null && coolingDesignHumidities.Count != 0)
             {
                 double value = coolingDesignHumidities.Max();
-                if (Core.Query.AlmostEqual(value, 100))
+                if (Core.Query.AlmostEqual(value, 0))
                 {
                     value = 70;
                 }
