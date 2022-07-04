@@ -108,9 +108,17 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Analytical.Mollier.AirHandlingUnitResult airHandlingUnitResult = null;
+            AirHandlingUnitResult airHandlingUnitResult = null;
 
             airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, name, out AirHandlingUnit airHandlingUnit);
+            if(airHandlingUnit != null && airHandlingUnitResult != null)
+            {
+                AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
+                adjacencyCluster.AddObject(airHandlingUnit);
+                adjacencyCluster.AddObject(airHandlingUnitResult);
+                adjacencyCluster.AddRelation(airHandlingUnit, airHandlingUnitResult);
+                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+            }
 
             index = Params.IndexOfOutputParam("analyticalModel");
             if (index != -1)

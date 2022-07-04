@@ -23,7 +23,6 @@ namespace SAM.Analytical.Mollier
             if(airHandlingUnit == null)
             {
                 airHandlingUnit = Analytical.Create.AirHandlingUnit(airHandlingUnitName);
-                adjacencyCluster.AddObject(airHandlingUnit);
             }
 
             AirHandlingUnitResult result = new AirHandlingUnitResult(airHandlingUnitName, Query.Source(), airHandlingUnit.Guid.ToString());
@@ -284,11 +283,6 @@ namespace SAM.Analytical.Mollier
             {
                 result.SetValue(AirHandlingUnitResultParameter.WinterDesignDayIndex, winterDesignDayIndex);
             }
-
-            adjacencyCluster.AddObject(result);
-            adjacencyCluster.AddRelation(airHandlingUnit, result);
-
-            analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
 
             return result;
         }
