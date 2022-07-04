@@ -278,7 +278,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("winterSpaceHumidity");
             if (index != -1)
             {
-                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceHumidty, out double winterSpaceHumidty))
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceRelativeHumidty, out double winterSpaceHumidty))
                 {
                     winterSpaceHumidty = double.NaN;
                 }
@@ -289,7 +289,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("summerSpaceHumidity");
             if (index != -1)
             {
-                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceHumidty, out double summerSpaceHumidty))
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceRelativeHumidty, out double summerSpaceHumidty))
                 {
                     summerSpaceHumidty = double.NaN;
                 }

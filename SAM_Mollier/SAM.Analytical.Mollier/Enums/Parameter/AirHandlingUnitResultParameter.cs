@@ -21,8 +21,8 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Exhaust Air Flow", "Exhaust Air Flow [m3/s]"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlow,
         [ParameterProperties("Winter Space Temperature", "Winter Space Temperature [C]"), ParameterValue(Core.ParameterType.Double)] WinterSpaceTemperature,
         [ParameterProperties("Summer Space Temperature", "Summer Space Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerSpaceTemperature,
-        [ParameterProperties("Winter Space Humidity", "Winter Space Humidty [%]"), ParameterValue(Core.ParameterType.Double)] WinterSpaceHumidty,
-        [ParameterProperties("Summer Space Humidity", "Summer Space Humidty [%]"), ParameterValue(Core.ParameterType.Double)] SummerSpaceHumidty,
+        [ParameterProperties("Winter Space Relative Humidity", "Winter Space Relative Humidty [%]"), ParameterValue(Core.ParameterType.Double)] WinterSpaceRelativeHumidty,
+        [ParameterProperties("Summer Space Relative Humidity", "Summer Space Relative Humidty [%]"), ParameterValue(Core.ParameterType.Double)] SummerSpaceRelativeHumidty,
         [ParameterProperties("Summer Supply Temperature", "Summer Supply Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyTemperature,
         [ParameterProperties("Winter Supply Temperature", "Winter Supply Temperature [C]"), ParameterValue(Core.ParameterType.Double)] WinterSupplyTemperature,
     }
