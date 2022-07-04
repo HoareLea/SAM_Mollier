@@ -36,7 +36,7 @@ namespace SAM.Analytical.Mollier
                 foreach (Space space in spaces_Supply)
                 {
                     List<SpaceSimulationResult> spaceSimulationResults = adjacencyCluster.GetResults<SpaceSimulationResult>(space);
-                    if (spaceSimulationResults != null)
+                    if (spaceSimulationResults != null && spaceSimulationResults.Count != 0)
                     {
                         foreach (SpaceSimulationResult spaceSimulationResult in spaceSimulationResults)
                         {
@@ -60,6 +60,18 @@ namespace SAM.Analytical.Mollier
                                     break;
 
                             }
+                        }
+                    }
+                    else
+                    {
+                        if(space.TryGetValue(SpaceParameter.DesignCoolingLoad, out double designCoolingLoad) && !double.IsNaN(designCoolingLoad))
+                        {
+                            sensibleHeatGain += designCoolingLoad;
+                        }
+
+                        if (space.TryGetValue(SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && !double.IsNaN(designHeatingLoad))
+                        {
+                            sensibleHeatLoss += designHeatingLoad;
                         }
                     }
 
