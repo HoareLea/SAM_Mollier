@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -49,6 +49,10 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerDesignRelativeHumidity", NickName = "summerDesignRelativeHumidity", Description = "Summer Design Relative Humidity [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "summerDesignDayName", NickName = "summerDesignDayName", Description = "Summer Design Day Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "summerDesignDayIndex", NickName = "summerDesignDayIndex", Description = "Summer Design Day Hour Index [0-23]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterDesignTemperature", NickName = "winterDesignTemperature", Description = "Winter Design Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterDesignRelativeHumidity", NickName = "winterDesignRelativeHumidity", Description = "Winter Design Relative Humidity [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "winterDesignDayName", NickName = "winterDesignDayName", Description = "Winter Design Day Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "winterDesignDayIndex", NickName = "winterDesignDayIndex", Description = "Winter Design Day Hour Index [0-23]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlow", NickName = "supplyAirFlow", Description = "Supply Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "outsideSupplyAirFlow", NickName = "outsideSupplyAirFlow", Description = "Outside Supply Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlow", NickName = "exhaustAirFlow", Description = "Exhaust Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -162,6 +166,40 @@ namespace SAM.Analytical.Grasshopper
                     }
 
                     dataAccess.SetData(index, summerDesignDayIndex);
+                }
+
+                index = Params.IndexOfOutputParam("WinterDesignTemperature");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.WinterDesignTemperature));
+                }
+
+                index = Params.IndexOfOutputParam("winterDesignRelativeHumidity");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.WinterDesignRelativeHumidity));
+                }
+
+                index = Params.IndexOfOutputParam("winterDesignDayName");
+                if (index != -1)
+                {
+                    if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterDesignDayName, out string winterDesignDayName))
+                    {
+                        winterDesignDayName = null;
+                    }
+
+                    dataAccess.SetData(index, winterDesignDayName);
+                }
+
+                index = Params.IndexOfOutputParam("winterDesignDayIndex");
+                if (index != -1)
+                {
+                    if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterDesignDayIndex, out int winterDesignDayIndex))
+                    {
+                        winterDesignDayIndex = -1;
+                    }
+
+                    dataAccess.SetData(index, winterDesignDayIndex);
                 }
 
                 double supplyAirFlow = 0;

@@ -103,7 +103,13 @@ namespace SAM.Analytical.Mollier
             string summerDesignDayName = null;
             int summerDesignDayIndex = -1;
 
+            double winterDesignTemperature = double.NaN;
+            double winterDesignRelativeHumidity = double.NaN;
+            string winterDesignDayName = null;
+            int winterDesignDayIndex = -1;
+
             double enthalpy_Max = double.NaN;
+            double enthalpy_Min = double.NaN;
 
             List<DesignDay> designDays = adjacencyCluster.GetObjects<DesignDay>();
             if(designDays != null && designDays.Count != 0)
@@ -134,6 +140,15 @@ namespace SAM.Analytical.Mollier
                             summerDesignDayIndex = i;
                             enthalpy_Max = enthalpy;
                         }
+
+                        if (double.IsNaN(enthalpy_Min) || enthalpy < enthalpy_Min)
+                        {
+                            winterDesignTemperature = dryBulbTemperature;
+                            winterDesignRelativeHumidity = relativeHumidity;
+                            winterDesignDayName = designDay.Name;
+                            winterDesignDayIndex = i;
+                            enthalpy_Min = enthalpy;
+                        }
                     }
                 }
             }
@@ -152,6 +167,8 @@ namespace SAM.Analytical.Mollier
             result.SetValue(AirHandlingUnitResultParameter.SensibleHeatLoss, sensibleHeatLoss);
             result.SetValue(AirHandlingUnitResultParameter.SummerDesignTemperature, summerDesignTemperature);
             result.SetValue(AirHandlingUnitResultParameter.SummerDesignRelativeHumidity, summerDesignRelativeHumidity);
+            result.SetValue(AirHandlingUnitResultParameter.WinterDesignTemperature, winterDesignTemperature);
+            result.SetValue(AirHandlingUnitResultParameter.WinterDesignRelativeHumidity, winterDesignRelativeHumidity);
             result.SetValue(AirHandlingUnitResultParameter.SupplyAirFlow, supplyAirFlow);
             result.SetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, outsideSupplyAirFlow);
             result.SetValue(AirHandlingUnitResultParameter.ExhaustAirFlow, exhaustAirFlow);
@@ -160,9 +177,19 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.SummerDesignDayName, summerDesignDayName);
             }
 
-            if(summerDesignDayIndex != -1)
+            if (!string.IsNullOrWhiteSpace(winterDesignDayName))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.WinterDesignDayName, winterDesignDayName);
+            }
+
+            if (summerDesignDayIndex != -1)
             {
                 result.SetValue(AirHandlingUnitResultParameter.SummerDesignDayIndex, summerDesignDayIndex);
+            }
+
+            if (winterDesignDayIndex != -1)
+            {
+                result.SetValue(AirHandlingUnitResultParameter.WinterDesignDayIndex, winterDesignDayIndex);
             }
 
             adjacencyCluster.AddObject(result);
