@@ -19,5 +19,7 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Supply Air Flow", "Supply Air Flow [m3/s]"), ParameterValue(Core.ParameterType.Double)] SupplyAirFlow,
         [ParameterProperties("Outside Supply Air Flow", "Outside Supply Air Flow [m3/s]"), ParameterValue(Core.ParameterType.Double)] OutsideSupplyAirFlow,
         [ParameterProperties("Exhaust Air Flow", "Exhaust Air Flow [m3/s]"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlow,
+        [ParameterProperties("Winter Space Temperature", "Winter Space Temperature"), ParameterValue(Core.ParameterType.Double)] WinterSpaceTemperature,
+        [ParameterProperties("Summer Space Temperature", "Summer Space Temperature"), ParameterValue(Core.ParameterType.Double)] SummerSpaceTemperature,
     }
 }

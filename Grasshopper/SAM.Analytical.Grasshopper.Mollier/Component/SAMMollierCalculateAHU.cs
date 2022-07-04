@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -57,6 +57,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "outsideSupplyAirFlow", NickName = "outsideSupplyAirFlow", Description = "Outside Supply Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlow", NickName = "exhaustAirFlow", Description = "Exhaust Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "recirculationAirFlow", NickName = "recirculationAirFlow", Description = "Recirculation Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterSpaceTemperature", NickName = "winterSpaceTemperature", Description = "Winter Space Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerSpaceTemperature", NickName = "summerSpaceTemperature", Description = "Summer Space Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -104,15 +106,7 @@ namespace SAM.Analytical.Grasshopper
 
             Analytical.Mollier.AirHandlingUnitResult airHandlingUnitResult = null;
 
-            AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-            if (adjacencyCluster != null)
-            {
-                airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(adjacencyCluster, name, out AirHandlingUnit airHandlingUnit);
-                if (airHandlingUnitResult != null)
-                {
-                    analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                }
-            }
+            airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, name, out AirHandlingUnit airHandlingUnit);
 
             index = Params.IndexOfOutputParam("analyticalModel");
             if (index != -1)
@@ -247,7 +241,27 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            index = Params.IndexOfOutputParam("winterSpaceTemperature");
+            if (index != -1)
+            {
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, out double winterSpaceTemperature))
+                {
+                    winterSpaceTemperature =double.NaN;
+                }
 
+                dataAccess.SetData(index, winterSpaceTemperature);
+            }
+
+            index = Params.IndexOfOutputParam("summerSpaceTemperature");
+            if (index != -1)
+            {
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceTemperature, out double summerSpaceTemperature))
+                {
+                    summerSpaceTemperature = double.NaN;
+                }
+
+                dataAccess.SetData(index, summerSpaceTemperature);
+            }
         }
     }
 }

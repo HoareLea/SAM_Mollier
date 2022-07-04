@@ -2,15 +2,18 @@
 
 using SAM.Weather;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Mollier
 {
     public static partial class Create
     {
-        public static AirHandlingUnitResult AirHandlingUnitResult(this AdjacencyCluster adjacencyCluster, string airHandlingUnitName, out AirHandlingUnit airHandlingUnit)
+        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName, out AirHandlingUnit airHandlingUnit)
         {
             airHandlingUnit = null;
 
+
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
             if (adjacencyCluster == null || string.IsNullOrWhiteSpace(airHandlingUnitName))
             {
                 return null;
@@ -31,6 +34,8 @@ namespace SAM.Analytical.Mollier
             double sensibleHeatGain = 0;
             double outsideSupplyAirFlow = 0;
             double supplyAirFlow = 0;
+            List<double> coolingDesignTemperatures = new List<double>();
+            List<double> heatingDesignTemperatures = new List<double>();
             if (spaces_Supply != null && spaces_Supply.Count != 0)
             {
                 foreach (Space space in spaces_Supply)
@@ -86,6 +91,10 @@ namespace SAM.Analytical.Mollier
                             supplyAirFlow += supplyAirFlow_Space;
                         }
                     }
+
+
+                    coolingDesignTemperatures.Add(Analytical.Query.CoolingDesignTemperature(space, analyticalModel?.ProfileLibrary));
+                    heatingDesignTemperatures.Add(Analytical.Query.HeatingDesignTemperature(space, analyticalModel?.ProfileLibrary));
                 }
             }
 
@@ -194,6 +203,18 @@ namespace SAM.Analytical.Mollier
             result.SetValue(AirHandlingUnitResultParameter.SupplyAirFlow, supplyAirFlow);
             result.SetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, outsideSupplyAirFlow);
             result.SetValue(AirHandlingUnitResultParameter.ExhaustAirFlow, exhaustAirFlow);
+            
+            if(heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
+            {
+                result.SetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, heatingDesignTemperatures.Min());
+            }
+
+            if (coolingDesignTemperatures != null && coolingDesignTemperatures.Count != 0)
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerSpaceTemperature, coolingDesignTemperatures.Max());
+            }
+
+
             if (!string.IsNullOrWhiteSpace(summerDesignDayName))
             {
                 result.SetValue(AirHandlingUnitResultParameter.SummerDesignDayName, summerDesignDayName);
@@ -216,6 +237,8 @@ namespace SAM.Analytical.Mollier
 
             adjacencyCluster.AddObject(result);
             adjacencyCluster.AddRelation(airHandlingUnit, result);
+
+            analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
 
             return result;
         }
