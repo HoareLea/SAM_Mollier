@@ -204,11 +204,12 @@ namespace SAM.Analytical.Mollier
             result.SetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, outsideSupplyAirFlow);
             result.SetValue(AirHandlingUnitResultParameter.ExhaustAirFlow, exhaustAirFlow);
 
-            if(!airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterSupplyTemperature, out double winterSupplyTemperature) || double.IsNaN(winterSupplyTemperature))
+            AirSupplyMethod airSupplyMethod = Analytical.Query.AirSupplyMethod(adjacencyCluster, airHandlingUnitName);
+
+            if (!airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterSupplyTemperature, out double winterSupplyTemperature) || double.IsNaN(winterSupplyTemperature))
             {
                 if (heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
                 {
-                    AirSupplyMethod airSupplyMethod = Analytical.Query.AirSupplyMethod(adjacencyCluster, airHandlingUnitName);
                     winterSupplyTemperature = heatingDesignTemperatures.Min();
                     if(airSupplyMethod == AirSupplyMethod.Total)
                     {
@@ -216,6 +217,7 @@ namespace SAM.Analytical.Mollier
                     }
                 }
             }
+
 
             if(!double.IsNaN(winterSupplyTemperature))
             {
@@ -257,6 +259,17 @@ namespace SAM.Analytical.Mollier
             {
                 heatingDesignTemperature = heatingDesignTemperatures.Min();
                 result.SetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, heatingDesignTemperature);
+            }
+
+            double heatingCoilSupplyTemperature = heatingDesignTemperature;
+            if(airSupplyMethod == AirSupplyMethod.Total)
+            {
+                heatingCoilSupplyTemperature += sensibleHeatLoss / (supplyAirFlow * 1.2 * 1.005) / 1000;
+            }
+
+            if(!double.IsNaN(heatingCoilSupplyTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.HeatingCoilSupplyTemperature, heatingCoilSupplyTemperature);
             }
 
             if (coolingDesignTemperatures != null && coolingDesignTemperatures.Count != 0)
