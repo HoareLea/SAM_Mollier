@@ -40,9 +40,9 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatRecoveryLatentEfficiency_", NickName = "heatRecoveryLatentEfficiency_", Description = "Heat Recovery Latent Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilOnTemperature_", NickName = "coolingCoilOnTemperature_", Description = "Cooling Coil On Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilOffTemperature_", NickName = "coolingCoilOffTemperature_", Description = "Cooling Coil Off Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidSupplyTemperature_", NickName = "coolingCoilFluidSupplyTemperature_", Description = "Cooling Coil Fluid Supply Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidFlowTemperature_", NickName = "coolingCoilFluidFlowTemperature_", Description = "Cooling Coil Fluid Flow Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidReturnTemperature_", NickName = "coolingCoilFluidReturnTemperature_", Description = "Cooling Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidSupplyTemperature_", NickName = "heatingCoilFluidSupplyTemperature_", Description = "Heating Coil Fluid Supply Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidFlowTemperature_", NickName = "heatingCoilFluidFlowTemperature_", Description = "Heating Coil Fluid Flow Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidReturnTemperature_", NickName = "heatingCoilFluidReturnTemperature_", Description = "Heating Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -170,11 +170,11 @@ namespace SAM.Analytical.Grasshopper
                 coolingCoilOffTemperature = value;
             }
 
-            double coolingCoilFluidSupplyTemperature = double.NaN;
-            index = Params.IndexOfInputParam("coolingCoilFluidSupplyTemperature_");
+            double coolingCoilFluidFluidTemperature = double.NaN;
+            index = Params.IndexOfInputParam("coolingCoilFluidFlowTemperature_");
             if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
             {
-                coolingCoilFluidSupplyTemperature = value;
+                coolingCoilFluidFluidTemperature = value;
             }
 
             double coolingCoilFluidReturnTemperature = double.NaN;
@@ -184,11 +184,11 @@ namespace SAM.Analytical.Grasshopper
                 coolingCoilFluidReturnTemperature = value;
             }
 
-            double heatingCoilFluidSupplyTemperature = double.NaN;
-            index = Params.IndexOfInputParam("heatingCoilFluidSupplyTemperature_");
+            double heatingCoilFluidFlowTemperature = double.NaN;
+            index = Params.IndexOfInputParam("heatingCoilFluidFlowTemperature_");
             if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
             {
-                heatingCoilFluidSupplyTemperature = value;
+                heatingCoilFluidFlowTemperature = value;
             }
 
             double heatingCoilFluidReturnTemperature = double.NaN;
@@ -249,9 +249,9 @@ namespace SAM.Analytical.Grasshopper
                 airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilOffTemperature, coolingCoilOffTemperature);
             }
 
-            if (!double.IsNaN(coolingCoilFluidSupplyTemperature))
+            if (!double.IsNaN(coolingCoilFluidFluidTemperature))
             {
-                airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilFluidFlowTemperature, coolingCoilFluidSupplyTemperature);
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilFluidFlowTemperature, coolingCoilFluidFluidTemperature);
             }
 
             if (!double.IsNaN(coolingCoilFluidReturnTemperature))
@@ -259,9 +259,9 @@ namespace SAM.Analytical.Grasshopper
                 airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilFluidReturnTemperature, coolingCoilFluidReturnTemperature);
             }
 
-            if (!double.IsNaN(heatingCoilFluidSupplyTemperature))
+            if (!double.IsNaN(heatingCoilFluidFlowTemperature))
             {
-                airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatingCoilFluidFlowTemperature, heatingCoilFluidSupplyTemperature);
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatingCoilFluidFlowTemperature, heatingCoilFluidFlowTemperature);
             }
 
             if (!double.IsNaN(heatingCoilFluidReturnTemperature))
