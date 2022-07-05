@@ -261,15 +261,15 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, heatingDesignTemperature);
             }
 
-            double heatingCoilSupplyTemperature = heatingDesignTemperature;
+            double winterHeatingCoilSupplyTemperature = heatingDesignTemperature;
             if(airSupplyMethod == AirSupplyMethod.Total)
             {
-                heatingCoilSupplyTemperature += sensibleHeatLoss / (supplyAirFlow * 1.2 * 1.005) / 1000;
+                winterHeatingCoilSupplyTemperature += sensibleHeatLoss / (supplyAirFlow * 1.2 * 1.005) / 1000;
             }
 
-            if(!double.IsNaN(heatingCoilSupplyTemperature))
+            if(!double.IsNaN(winterHeatingCoilSupplyTemperature))
             {
-                result.SetValue(AirHandlingUnitResultParameter.HeatingCoilSupplyTemperature, heatingCoilSupplyTemperature);
+                result.SetValue(AirHandlingUnitResultParameter.WinterHeatingCoilSupplyTemperature, winterHeatingCoilSupplyTemperature);
             }
 
             if (coolingDesignTemperatures != null && coolingDesignTemperatures.Count != 0)

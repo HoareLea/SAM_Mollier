@@ -30,6 +30,6 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Heat Recovery Latent Efficiency", "Heat Recovery Latent Efficiency [%]"), DoubleParameterValue(0, 100)] HeatRecoveryLatentEfficiency,
         [ParameterProperties("Cooling Coil Fluid Flow Temperature", "Cooling Coil Fluid Flow Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidFlowTemperature,
         [ParameterProperties("Cooling Coil Fluid Return Temperature", "Cooling Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidReturnTemperature,
-        [ParameterProperties("Heating Coil Supply Temperature", "Heating Coil Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilSupplyTemperature,
+        [ParameterProperties("Winter Heating Coil Supply Temperature", "Winter Heating Coil Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterHeatingCoilSupplyTemperature,
     }
 }
