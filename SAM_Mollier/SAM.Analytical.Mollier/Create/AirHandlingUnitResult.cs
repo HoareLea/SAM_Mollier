@@ -8,21 +8,18 @@ namespace SAM.Analytical.Mollier
 {
     public static partial class Create
     {
-        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName, out AirHandlingUnit airHandlingUnit)
+        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName)
         {
-            airHandlingUnit = null;
-
-
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
             if (adjacencyCluster == null || string.IsNullOrWhiteSpace(airHandlingUnitName))
             {
                 return null;
             }
 
-            airHandlingUnit = adjacencyCluster.GetObject((AirHandlingUnit x) => x.Name == airHandlingUnitName);
+            AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObject((AirHandlingUnit x) => x.Name == airHandlingUnitName);
             if(airHandlingUnit == null)
             {
-                airHandlingUnit = Analytical.Create.AirHandlingUnit(airHandlingUnitName);
+                return null;
             }
 
             AirHandlingUnitResult result = new AirHandlingUnitResult(airHandlingUnitName, Query.Source(), airHandlingUnit.Guid.ToString());
@@ -228,6 +225,31 @@ namespace SAM.Analytical.Mollier
             if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerSupplyTemperature, out double summerSupplyTemperature) && !double.IsNaN(summerSupplyTemperature))
             {
                 result.SetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, summerSupplyTemperature);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.FrostCoilOffTemperature, out double frostCoilOffTemperature) && !double.IsNaN(frostCoilOffTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, frostCoilOffTemperature);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.HeatRecoverySensibleEfficiency, out double heatRecoverySensibleEfficiency) && !double.IsNaN(heatRecoverySensibleEfficiency))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.HeatRecoverySensibleEfficiency, heatRecoverySensibleEfficiency);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.HeatRecoveryLatentEfficiency, out double heatRecoveryLatentEfficiency) && !double.IsNaN(heatRecoveryLatentEfficiency))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.HeatRecoveryLatentEfficiency, heatRecoveryLatentEfficiency);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.CoolingCoilFluidSupplyTemperature, out double coolingCoilFluidSupplyTemperature) && !double.IsNaN(coolingCoilFluidSupplyTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.CoolingCoilFluidSupplyTemperature, coolingCoilFluidSupplyTemperature);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.CoolingCoilFluidReturnTemperature, out double coolingCoilFluidReturnTemperature) && !double.IsNaN(coolingCoilFluidReturnTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.CoolingCoilFluidReturnTemperature, coolingCoilFluidReturnTemperature);
             }
 
             double heatingDesignTemperature = double.NaN;

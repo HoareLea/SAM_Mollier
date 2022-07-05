@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -33,6 +33,17 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analytcailModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "AHU Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterSupplyTemperature_", NickName = "winterSupplyTemperature_", Description = "Winter Supply Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerSupplyTemperature_", NickName = "summerSupplyTemperature_", Description = "Summer Supply Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "frostCoilOffTemperature_", NickName = "frostCoilOffTemperature_", Description = "Frost Coil Off Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatRecoverySensibleEfficiency_", NickName = "heatRecoverySensibleEfficiency_", Description = "Heat Recovery Sensible Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatRecoveryLatentEfficiency_", NickName = "heatRecoveryLatentEfficiency_", Description = "Heat Recovery Latent Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilOnTemperature_", NickName = "coolingCoilOnTemperature_", Description = "Cooling Coil On Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilOffTemperature_", NickName = "coolingCoilOffTemperature_", Description = "Cooling Coil Off Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidSupplyTemperature_", NickName = "coolingCoilFluidSupplyTemperature_", Description = "Cooling Coil Fluid Supply Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidReturnTemperature_", NickName = "coolingCoilFluidReturnTemperature_", Description = "Cooling Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidSupplyTemperature_", NickName = "heatingCoilFluidSupplyTemperature_", Description = "Heating Coil Fluid Supply Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidReturnTemperature_", NickName = "heatingCoilFluidReturnTemperature_", Description = "Heating Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -108,13 +119,164 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            double value = double.NaN;
+
+            double summerSupplyTemperature = double.NaN;
+            index = Params.IndexOfInputParam("summerSupplyTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                summerSupplyTemperature = value;
+            }
+
+            double winterSupplyTemperature = double.NaN;
+            index = Params.IndexOfInputParam("winterSupplyTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                winterSupplyTemperature = value;
+            }
+
+            double frostCoilOffTemperature = double.NaN;
+            index = Params.IndexOfInputParam("frostCoilOffTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                frostCoilOffTemperature = value;
+            }
+
+            double heatRecoverySensibleEfficiency = double.NaN;
+            index = Params.IndexOfInputParam("heatRecoverySensibleEfficiency_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                heatRecoverySensibleEfficiency = value;
+            }
+
+            double heatRecoveryLatentEfficiency = double.NaN;
+            index = Params.IndexOfInputParam("heatRecoveryLatentEfficiency_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                heatRecoveryLatentEfficiency = value;
+            }
+
+            double coolingCoilOnTemperature = double.NaN;
+            index = Params.IndexOfInputParam("coolingCoilOnTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                coolingCoilOnTemperature = value;
+            }
+
+            double coolingCoilOffTemperature = double.NaN;
+            index = Params.IndexOfInputParam("coolingCoilOffTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                coolingCoilOffTemperature = value;
+            }
+
+            double coolingCoilFluidSupplyTemperature = double.NaN;
+            index = Params.IndexOfInputParam("coolingCoilFluidSupplyTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                coolingCoilFluidSupplyTemperature = value;
+            }
+
+            double coolingCoilFluidReturnTemperature = double.NaN;
+            index = Params.IndexOfInputParam("coolingCoilFluidReturnTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                coolingCoilFluidReturnTemperature = value;
+            }
+
+            double heatingCoilFluidSupplyTemperature = double.NaN;
+            index = Params.IndexOfInputParam("heatingCoilFluidSupplyTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                heatingCoilFluidSupplyTemperature = value;
+            }
+
+            double heatingCoilFluidReturnTemperature = double.NaN;
+            index = Params.IndexOfInputParam("heatingCoilFluidReturnTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                heatingCoilFluidReturnTemperature = value;
+            }
+
             AirHandlingUnitResult airHandlingUnitResult = null;
 
-            airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, name, out AirHandlingUnit airHandlingUnit);
-            if(airHandlingUnit != null && airHandlingUnitResult != null)
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
+
+            AirHandlingUnit airHandlingUnit = adjacencyCluster?.GetObject((AirHandlingUnit x) => x.Name == name);
+            if (airHandlingUnit == null)
             {
-                AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-                adjacencyCluster.AddObject(airHandlingUnit);
+                airHandlingUnit = Create.AirHandlingUnit(name);
+            }
+
+            if(airHandlingUnit == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not find or create Air Handling Unit");
+                return;
+            }
+
+            if(!double.IsNaN(summerSupplyTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.SummerSupplyTemperature, summerSupplyTemperature);
+            }
+
+            if (!double.IsNaN(winterSupplyTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.WinterSupplyTemperature, winterSupplyTemperature);
+            }
+
+            if (!double.IsNaN(frostCoilOffTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.FrostCoilOffTemperature, frostCoilOffTemperature);
+            }
+
+            if (!double.IsNaN(heatRecoverySensibleEfficiency))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatRecoverySensibleEfficiency, heatRecoverySensibleEfficiency);
+            }
+
+            if (!double.IsNaN(heatRecoveryLatentEfficiency))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatRecoveryLatentEfficiency, heatRecoveryLatentEfficiency);
+            }
+
+            if (!double.IsNaN(coolingCoilOnTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilOnTemperature, coolingCoilOnTemperature);
+            }
+
+            if (!double.IsNaN(coolingCoilOffTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilOffTemperature, coolingCoilOffTemperature);
+            }
+
+            if (!double.IsNaN(coolingCoilFluidSupplyTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilFluidSupplyTemperature, coolingCoilFluidSupplyTemperature);
+            }
+
+            if (!double.IsNaN(coolingCoilFluidReturnTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilFluidReturnTemperature, coolingCoilFluidReturnTemperature);
+            }
+
+            if (!double.IsNaN(heatingCoilFluidSupplyTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatingCoilFluidSupplyTemperature, heatingCoilFluidSupplyTemperature);
+            }
+
+            if (!double.IsNaN(heatingCoilFluidReturnTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatingCoilFluidReturnTemperature, heatingCoilFluidReturnTemperature);
+            }
+
+            adjacencyCluster = analyticalModel.AdjacencyCluster;
+            adjacencyCluster.AddObject(airHandlingUnit);
+            analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+
+            airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, name);
+            if (airHandlingUnit != null && airHandlingUnitResult != null)
+            {
+                adjacencyCluster = analyticalModel.AdjacencyCluster;
                 adjacencyCluster.AddObject(airHandlingUnitResult);
                 adjacencyCluster.AddRelation(airHandlingUnit, airHandlingUnitResult);
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
@@ -258,7 +420,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, out double winterSpaceTemperature))
                 {
-                    winterSpaceTemperature =double.NaN;
+                    winterSpaceTemperature = double.NaN;
                 }
 
                 dataAccess.SetData(index, winterSpaceTemperature);
@@ -300,7 +462,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("summerSupplyTemperature");
             if (index != -1)
             {
-                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTemperature))
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out summerSupplyTemperature))
                 {
                     summerSupplyTemperature = double.NaN;
                 }
@@ -311,7 +473,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("winterSupplyTemperature");
             if (index != -1)
             {
-                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSupplyTemperature, out double winterSupplyTemperature))
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSupplyTemperature, out winterSupplyTemperature))
                 {
                     winterSupplyTemperature = double.NaN;
                 }

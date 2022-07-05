@@ -12,7 +12,7 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Summer Design Relative Humidity", "Summer Design Relative Humidity [%]"), ParameterValue(Core.ParameterType.Double)] SummerDesignRelativeHumidity,
         [ParameterProperties("Summer Design Day Name", "Summer Design Day Name"), ParameterValue(Core.ParameterType.String)] SummerDesignDayName,
         [ParameterProperties("Summer Design Day Index", "Summer Design Day Index"), ParameterValue(Core.ParameterType.Integer)] SummerDesignDayIndex,
-        [ParameterProperties("Winter Design Temperature", "Winter Design Temperature [C]"), ParameterValue(Core.ParameterType.Double)] WinterDesignTemperature,
+        [ParameterProperties("Winter Design Temperature", "Winter Design Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterDesignTemperature,
         [ParameterProperties("Winter Design Relative Humidity", "Winter Design Relative Humidity [%]"), ParameterValue(Core.ParameterType.Double)] WinterDesignRelativeHumidity,
         [ParameterProperties("Winter Design Day Name", "Winter Design Day Name"), ParameterValue(Core.ParameterType.String)] WinterDesignDayName,
         [ParameterProperties("Winter Design Day Index", "Winter Design Day Index"), ParameterValue(Core.ParameterType.Integer)] WinterDesignDayIndex,
@@ -23,7 +23,12 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Summer Space Temperature", "Summer Space Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerSpaceTemperature,
         [ParameterProperties("Winter Space Relative Humidity", "Winter Space Relative Humidty [%]"), ParameterValue(Core.ParameterType.Double)] WinterSpaceRelativeHumidty,
         [ParameterProperties("Summer Space Relative Humidity", "Summer Space Relative Humidty [%]"), ParameterValue(Core.ParameterType.Double)] SummerSpaceRelativeHumidty,
-        [ParameterProperties("Summer Supply Temperature", "Summer Supply Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyTemperature,
-        [ParameterProperties("Winter Supply Temperature", "Winter Supply Temperature [C]"), ParameterValue(Core.ParameterType.Double)] WinterSupplyTemperature,
+        [ParameterProperties("Summer Supply Temperature", "Summer Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyTemperature,
+        [ParameterProperties("Winter Supply Temperature", "Winter Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterSupplyTemperature,
+        [ParameterProperties("Frost Coil Off Temperature", "Frost Coil Off Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] FrostCoilOffTemperature,
+        [ParameterProperties("Heat Recovery Sensible Efficiency", "Heat Recovery Sensible Efficiency [%]"), DoubleParameterValue(0, 100)] HeatRecoverySensibleEfficiency,
+        [ParameterProperties("Heat Recovery Latent Efficiency", "Heat Recovery Latent Efficiency [%]"), DoubleParameterValue(0, 100)] HeatRecoveryLatentEfficiency,
+        [ParameterProperties("Cooling Coil Fluid Supply Temperature", "Cooling Coil Fluid Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidSupplyTemperature,
+        [ParameterProperties("Cooling Coil Fluid Return Temperature", "Cooling Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidReturnTemperature,
     }
 }
