@@ -251,7 +251,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (!double.IsNaN(coolingCoilFluidSupplyTemperature))
             {
-                airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilFluidSupplyTemperature, coolingCoilFluidSupplyTemperature);
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.CoolingCoilFluidFlowTemperature, coolingCoilFluidSupplyTemperature);
             }
 
             if (!double.IsNaN(coolingCoilFluidReturnTemperature))
@@ -261,7 +261,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (!double.IsNaN(heatingCoilFluidSupplyTemperature))
             {
-                airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatingCoilFluidSupplyTemperature, heatingCoilFluidSupplyTemperature);
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatingCoilFluidFlowTemperature, heatingCoilFluidSupplyTemperature);
             }
 
             if (!double.IsNaN(heatingCoilFluidReturnTemperature))
