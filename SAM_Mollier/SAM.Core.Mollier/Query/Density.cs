@@ -25,6 +25,16 @@
             return 0.00348 * pressure / (273.15 + dryBulbTemperature) - 0.00132 * partialVapourPressure / (273.15 + dryBulbTemperature);
         }
 
+        public static double Density(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return Density(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity, mollierPoint.Pressure);
+        }
+
         /// <summary>
         /// Calculates density from dry bulb temperature, humidity ratio and pressure.
         /// </summary>

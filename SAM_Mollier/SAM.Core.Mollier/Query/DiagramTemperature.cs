@@ -18,5 +18,15 @@ namespace SAM.Core.Mollier
 
             return dryBulbTemperature + humidityRatio * 1.86 * dryBulbTemperature;
         }
+
+        public static double DiagramTemperature(MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return DiagramTemperature(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio);
+        }
     }
 }

@@ -35,5 +35,15 @@
 
             return (cLL + humidityRatio * cWL) / (1 + humidityRatio);
         }
+
+        public static double HeatCapacity(MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return HeatCapacity(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio);
+        }
     }
 }

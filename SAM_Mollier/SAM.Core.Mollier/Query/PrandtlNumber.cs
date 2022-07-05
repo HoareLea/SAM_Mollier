@@ -42,5 +42,15 @@
 
             return dynamicViscosity * (heatCapacity * 1000) / thermalConductivity;
         }
+
+        public static double PrandtlNumber(this MollierPoint mollierPoint, double tolerance = Tolerance.Distance)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return PrandtlNumber(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure, tolerance);
+        }
     }
 }

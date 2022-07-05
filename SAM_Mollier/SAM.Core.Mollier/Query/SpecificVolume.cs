@@ -18,5 +18,15 @@
 
             return (humidityRatio + 0.622) * 461.53 * ((273.15 + dryBulbTemperature) / pressure);
         }
+
+        public static double SpecificVolume(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return SpecificVolume(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure);
+        }
     }
 }

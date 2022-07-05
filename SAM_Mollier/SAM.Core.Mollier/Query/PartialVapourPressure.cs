@@ -24,5 +24,15 @@ namespace SAM.Core.Mollier
 
             return SaturationVapourPressure(dryBulbTemperature) * relativeHumidity / 100;
         }
+
+        public static double PartialVapourPressure(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return PartialVapourPressure(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity);
+        }
     }
 }

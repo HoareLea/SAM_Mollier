@@ -22,5 +22,15 @@
 
             return (1 - PHIW) * lamL + PHIW * lamW;
         }
+
+        public static double ThermalConductivity(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return ThermalConductivity(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio);
+        }
     }
 }

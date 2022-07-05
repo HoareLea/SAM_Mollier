@@ -46,5 +46,15 @@
 
             return thermalConductivity / (heatCapacity * 1000) / density;
         }
+
+        public static double TemperatureConductivity(this MollierPoint mollierPoint, double tolerance = Tolerance.Distance)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return TemperatureConductivity(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure, tolerance);
+        }
     }
 }

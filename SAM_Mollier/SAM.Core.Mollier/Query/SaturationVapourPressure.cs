@@ -28,5 +28,15 @@ namespace SAM.Core.Mollier
 
             return double.NaN;
         }
+
+        public static double SaturationVapourPressure(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return SaturationVapourPressure(mollierPoint.DryBulbTemperature);
+        }
     }
 }

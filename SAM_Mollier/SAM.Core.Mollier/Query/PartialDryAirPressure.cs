@@ -42,5 +42,15 @@ namespace SAM.Core.Mollier
 
             return PartialDryAirPressure(pressure, partialVapourPressure); 
         }
+
+        public static double PartialDryAirPressure(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return PartialDryAirPressure(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity, mollierPoint.Pressure);
+        }
     }
 }

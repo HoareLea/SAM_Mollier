@@ -37,5 +37,15 @@
 
             return dynamicViscosity / density;
         }
+
+        public static double KinematicViscosity(this MollierPoint mollierPoint, double tolerance = Tolerance.Distance)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return KinematicViscosity(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure, tolerance);
+        }
     }
 }

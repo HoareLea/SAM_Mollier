@@ -38,5 +38,15 @@
 
             return result;
         }
+
+        public static double WetBulbTemperature(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return WetBulbTemperature(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity, mollierPoint.Pressure);
+        }
     }
 }

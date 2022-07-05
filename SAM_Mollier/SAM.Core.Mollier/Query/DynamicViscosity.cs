@@ -20,5 +20,15 @@
             double PHIW = humidityRatio / (0.6222 + humidityRatio);
             return (1 - PHIW) * etaL + PHIW * etaW;
         }
+
+        public static double DynamicViscosity(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return DynamicViscosity(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio);
+        }
     }
 }

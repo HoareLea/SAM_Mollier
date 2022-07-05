@@ -39,5 +39,15 @@
 
             return result;
         }
+
+        public static double DewPointTemperature(this MollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            return DewPointTemperature(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity);
+        }
     }
 }
