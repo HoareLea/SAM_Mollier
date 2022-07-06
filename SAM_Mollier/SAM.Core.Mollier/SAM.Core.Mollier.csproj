@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Cooling.cs" />
+    <Compile Include="Classes\MollierProcess.cs" />
+    <Compile Include="Classes\Heating.cs" />
+    <Compile Include="Create\Cooling.cs" />
+    <Compile Include="Create\Heating.cs" />
+    <Compile Include="Interfaces\IMollierProcess.cs" />
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,8 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Convert\" />
-    <Folder Include="Create\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Modify\" />
   </ItemGroup>
   <ItemGroup>
