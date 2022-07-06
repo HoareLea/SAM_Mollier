@@ -51,6 +51,7 @@
     <Compile Include="Classes\MollierProcess.cs" />
     <Compile Include="Classes\Heating.cs" />
     <Compile Include="Create\Cooling.cs" />
+    <Compile Include="Create\MollierPoint.cs" />
     <Compile Include="Create\Heating.cs" />
     <Compile Include="Interfaces\IMollierProcess.cs" />
     <Compile Include="Enums\ChartType.cs" />
