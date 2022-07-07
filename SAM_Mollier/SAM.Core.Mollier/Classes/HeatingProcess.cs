@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public class HeatingProcess : MollierProcess
     {
-        public HeatingProcess(MollierPoint start, MollierPoint end)
+        internal HeatingProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {
 

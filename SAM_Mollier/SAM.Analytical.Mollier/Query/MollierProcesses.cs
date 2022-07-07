@@ -27,9 +27,11 @@ namespace SAM.Analytical.Mollier
                 if (!double.IsNaN(winterFrostOffCoilTemperature) && winterFrostOffCoilTemperature > winterDesignTemperature)
                 {
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterFrostOffCoilTemperature);
-                    result.Add(heatingProcess);
-
-                    start = heatingProcess.End;
+                    if(heatingProcess != null)
+                    {
+                        result.Add(heatingProcess);
+                        start = heatingProcess.End;
+                    }
                 }
 
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, out double winterHeatRecoveryDryBulbTemperature);
@@ -52,28 +54,31 @@ namespace SAM.Analytical.Mollier
                     if(@return != null)
                     {
                         HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, @return, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
-                        result.Add(heatRecoveryProcess);
-
-                        start = heatRecoveryProcess.End;
+                        if (heatRecoveryProcess != null)
+                        {
+                            result.Add(heatRecoveryProcess);
+                            start = heatRecoveryProcess.End;
+                        }
                     }
                 }
 
-                //MIXING
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, out double winterSpaceTemperature);
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceRelativeHumidty, out double winterSpaceRelativeHumidity);
-                if(!double.IsNaN(winterSpaceTemperature) && !double.IsNaN(winterSpaceRelativeHumidity))
+
+                MollierPoint room = !double.IsNaN(winterSpaceTemperature) && !double.IsNaN(winterSpaceRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterSpaceTemperature, winterSpaceRelativeHumidity, pressure) : null;
+
+                //MIXING
+                if (room != null)
                 {
-                    MollierPoint room = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterSpaceTemperature, winterSpaceRelativeHumidity, pressure);
-                    if(room != null)
+                    airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out double outsideSupplyAirFlow);
+                    airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out double supplyAirFlow);
+
+                    if (!double.IsNaN(outsideSupplyAirFlow) && !double.IsNaN(supplyAirFlow))
                     {
-                        airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out double outsideSupplyAirFlow);
-                        airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out double supplyAirFlow);
-
-                        if (!double.IsNaN(outsideSupplyAirFlow) && !double.IsNaN(supplyAirFlow))
+                        MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room, outsideSupplyAirFlow, supplyAirFlow);
+                        if(mixingProcess != null)
                         {
-                            MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room, outsideSupplyAirFlow, supplyAirFlow);
                             result.Add(mixingProcess);
-
                             start = mixingProcess.End;
                         }
                     }
@@ -84,9 +89,22 @@ namespace SAM.Analytical.Mollier
                 if (!double.IsNaN(winterHeatingCoilSupplyTemperature))
                 {
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterHeatingCoilSupplyTemperature);
-                    result.Add(heatingProcess);
+                    if(heatingProcess != null)
+                    {
+                        result.Add(heatingProcess);
+                        start = heatingProcess.End;
+                    }
+                }
 
-                    start = heatingProcess.End;
+                //HUMIDIFICATION (STEAM HUMIDIFIER)
+                if (room != null)
+                {
+                    IsotermicHumidificationProcess isotermicHumidificationProcess = Core.Mollier.Create.IsotermicHumidificationProcess_ByRelativeHumidity(start, room.RelativeHumidity);
+                    if(isotermicHumidificationProcess != null)
+                    {
+                        result.Add(isotermicHumidificationProcess);
+                        start = isotermicHumidificationProcess.Start;
+                    }
                 }
             }
 

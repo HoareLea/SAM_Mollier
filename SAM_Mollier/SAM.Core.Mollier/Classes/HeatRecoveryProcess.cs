@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public class HeatRecoveryProcess : MollierProcess
     {
-        public HeatRecoveryProcess(MollierPoint start, MollierPoint end)
+        internal HeatRecoveryProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {
 
