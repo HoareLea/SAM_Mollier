@@ -60,6 +60,7 @@
     <Compile Include="Create\AirHandlingUnitResult.cs" />
     <Compile Include="Enums\Parameter\AirHandlingUnitResultParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\MollierProcesses.cs" />
     <Compile Include="Query\Source.cs" />
   </ItemGroup>
   <ItemGroup>

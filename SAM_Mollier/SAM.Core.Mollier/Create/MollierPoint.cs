@@ -29,5 +29,21 @@
 
             return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
         }
+
+        public static MollierPoint MollierPoint_ByRelativeHumidity(double dryBulbTemperature, double relativeHumidity, double pressure)
+        {
+            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
+            {
+                return null;
+            }
+
+            double humidityRatio = Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+            if(double.IsNaN(humidityRatio))
+            {
+                return null;
+            }
+
+            return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
+        }
     }
 }
