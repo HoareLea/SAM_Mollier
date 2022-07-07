@@ -234,14 +234,24 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, frostCoilOffTemperature);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.HeatRecoverySensibleEfficiency, out double heatRecoverySensibleEfficiency) && !double.IsNaN(heatRecoverySensibleEfficiency))
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoverySensibleEfficiency, out double winterHeatRecoverySensibleEfficiency) && !double.IsNaN(winterHeatRecoverySensibleEfficiency))
             {
-                result.SetValue(AirHandlingUnitResultParameter.HeatRecoverySensibleEfficiency, heatRecoverySensibleEfficiency);
+                result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoverySensibleEfficiency, winterHeatRecoverySensibleEfficiency);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.HeatRecoveryLatentEfficiency, out double heatRecoveryLatentEfficiency) && !double.IsNaN(heatRecoveryLatentEfficiency))
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoveryLatentEfficiency, out double winterHeatRecoveryLatentEfficiency) && !double.IsNaN(winterHeatRecoveryLatentEfficiency))
             {
-                result.SetValue(AirHandlingUnitResultParameter.HeatRecoveryLatentEfficiency, heatRecoveryLatentEfficiency);
+                result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryLatentEfficiency, winterHeatRecoveryLatentEfficiency);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatRecoverySensibleEfficiency, out double summerHeatRecoverySensibleEfficiency) && !double.IsNaN(summerHeatRecoverySensibleEfficiency))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoverySensibleEfficiency, summerHeatRecoverySensibleEfficiency);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatRecoveryLatentEfficiency, out double summerHeatRecoveryLatentEfficiency) && !double.IsNaN(summerHeatRecoveryLatentEfficiency))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryLatentEfficiency, summerHeatRecoveryLatentEfficiency);
             }
 
             if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.CoolingCoilFluidFlowTemperature, out double coolingCoilFluidSupplyTemperature) && !double.IsNaN(coolingCoilFluidSupplyTemperature))
