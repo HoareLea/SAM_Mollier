@@ -329,6 +329,42 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.WinterDesignDayIndex, winterDesignDayIndex);
             }
 
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoveryDryBulbTemperature, out double winterHeatRecoveryDryBulbTemperature) && !double.IsNaN(winterHeatRecoveryDryBulbTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, winterHeatRecoveryDryBulbTemperature);
+            }
+            else if (result.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, out double winterSpaceTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, winterSpaceTemperature - 1);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoveryRelativeHumidity, out double winterHeatRecoveryRelativeHumidity) && !double.IsNaN(winterHeatRecoveryRelativeHumidity))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryRelativeHumidity, winterHeatRecoveryRelativeHumidity);
+            }
+            else if (result.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceRelativeHumidty, out double winterSpaceRelativeHumidity))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryRelativeHumidity, winterSpaceRelativeHumidity);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatRecoveryDryBulbTemperature, out double summerHeatRecoveryDryBulbTemperature) && !double.IsNaN(summerHeatRecoveryDryBulbTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryDryBulbTemperature, summerHeatRecoveryDryBulbTemperature);
+            }
+            else if (result.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceTemperature, out double summerSpaceTemperature))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryDryBulbTemperature, summerSpaceTemperature + 1);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatRecoveryRelativeHumidity, out double summerHeatRecoveryRelativeHumidity) && !double.IsNaN(summerHeatRecoveryRelativeHumidity))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryRelativeHumidity, summerHeatRecoveryRelativeHumidity);
+            }
+            else if(result.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceRelativeHumidty, out double summerSpaceRelativeHumidity))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryRelativeHumidity, summerSpaceRelativeHumidity);
+            }
+
             return result;
         }
     }

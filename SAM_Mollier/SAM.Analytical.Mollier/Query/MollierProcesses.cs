@@ -12,20 +12,50 @@ namespace SAM.Analytical.Mollier
                 return null;
             }
 
+            double pressure = 101325;
+
             List<IMollierProcess> result = new List<IMollierProcess>();
 
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterDesignTemperature, out double winterDesignTemperature);
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterDesignRelativeHumidity, out double winterDesignRelativeHumidity);
-            airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, out double frostOffCoilTemperature);
-
-            if(frostOffCoilTemperature > winterDesignTemperature)
+            if(!double.IsNaN(winterDesignTemperature) && !double.IsNaN(winterDesignRelativeHumidity))
             {
-                MollierPoint start = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterDesignTemperature, winterDesignRelativeHumidity, 101325);
+                MollierPoint start = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterDesignTemperature, winterDesignRelativeHumidity, pressure);
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, out double winterFrostOffCoilTemperature);
 
-                Heating heating = Core.Mollier.Create.Heating(start, frostOffCoilTemperature);
-                result.Add(heating);
+                if (!double.IsNaN(winterFrostOffCoilTemperature) && winterFrostOffCoilTemperature > winterDesignTemperature)
+                {
+                    Heating heating = Core.Mollier.Create.Heating(start, winterFrostOffCoilTemperature);
+                    result.Add(heating);
+
+                    start = heating.End;
+                }
+
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, out double winterHeatRecoveryDryBulbTemperature);
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryRelativeHumidity, out double winterHeatRecoveryRelativeHumidity);
+
+                if(!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoverySensibleEfficiency, out double winterHeatRecoverySensibleEfficiency) || double.IsNaN(winterHeatRecoverySensibleEfficiency))
+                {
+                    winterHeatRecoverySensibleEfficiency = 0;
+                }
+
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryLatentEfficiency, out double winterHeatRecoveryLatentEfficiency) || double.IsNaN(winterHeatRecoveryLatentEfficiency))
+                {
+                    winterHeatRecoveryLatentEfficiency = 0;
+                }
+
+                if (!double.IsNaN(winterHeatRecoveryRelativeHumidity) && !double.IsNaN(winterHeatRecoveryDryBulbTemperature))
+                {
+                    MollierPoint @return = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterHeatRecoveryDryBulbTemperature, winterHeatRecoveryRelativeHumidity, pressure);
+                    if(@return != null)
+                    {
+                        HeatRecovery heatRecovery = Core.Mollier.Create.HeatRecovery(start, @return, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
+                        result.Add(heatRecovery);
+
+                        start = heatRecovery.End;
+                    }
+                }
             }
-
 
 
 

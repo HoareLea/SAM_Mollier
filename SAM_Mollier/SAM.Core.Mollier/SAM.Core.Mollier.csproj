@@ -48,8 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Cooling.cs" />
+    <Compile Include="Classes\HeatRecovery.cs" />
     <Compile Include="Classes\MollierProcess.cs" />
     <Compile Include="Classes\Heating.cs" />
+    <Compile Include="Create\HeatRecovery.cs" />
     <Compile Include="Create\Cooling.cs" />
     <Compile Include="Create\MollierPoint.cs" />
     <Compile Include="Create\Heating.cs" />

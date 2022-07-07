@@ -38,8 +38,12 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "frostCoilOffTemperature_", NickName = "frostCoilOffTemperature_", Description = "Frost Coil Off Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatRecoverySensibleEfficiency_", NickName = "winterHeatRecoverySensibleEfficiency_", Description = "Winter Heat Recovery Sensible Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatRecoveryLatentEfficiency_", NickName = "winterHeatRecoveryLatentEfficiency_", Description = "Winter Heat Recovery Latent Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatRecoveryDryBulbTemperature_", NickName = "winterHeatRecoveryDryBulbTemperature_", Description = "Winter Heat Recovery Dry BulbTemperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatRecoveryRelativeHumidity_", NickName = "winterHeatRecoveryRelativeHumidity_", Description = "Winter Heat Recovery Relative Humidity [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerHeatRecoverySensibleEfficiency_", NickName = "summerHeatRecoverySensibleEfficiency_", Description = "Summer Heat Recovery Sensible Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerHeatRecoveryLatentEfficiency_", NickName = "summerHeatRecoveryLatentEfficiency_", Description = "Summer Heat Recovery Latent Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerHeatRecoveryDryBulbTemperature_", NickName = "summerHeatRecoveryDryBulbTemperature_", Description = "Summer Heat Recovery Dry BulbTemperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerHeatRecoveryRelativeHumidity_", NickName = "summerHeatRecoveryRelativeHumidity_", Description = "Summer Heat Recovery Relative Humidity [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilOnTemperature_", NickName = "coolingCoilOnTemperature_", Description = "Cooling Coil On Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilOffTemperature_", NickName = "coolingCoilOffTemperature_", Description = "Cooling Coil Off Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidFlowTemperature_", NickName = "coolingCoilFluidFlowTemperature_", Description = "Cooling Coil Fluid Flow Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -158,6 +162,20 @@ namespace SAM.Analytical.Grasshopper
                 winterHeatRecoveryLatentEfficiency = value;
             }
 
+            double winterHeatRecoveryDryBulbTemperature = double.NaN;
+            index = Params.IndexOfInputParam("winterHeatRecoveryDryBulbTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                winterHeatRecoveryDryBulbTemperature = value;
+            }
+
+            double winterHeatRecoveryRelativeHumidity = double.NaN;
+            index = Params.IndexOfInputParam("winterHeatRecoveryRelativeHumidity_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                winterHeatRecoveryRelativeHumidity = value;
+            }
+
             double summerHeatRecoverySensibleEfficiency = double.NaN;
             index = Params.IndexOfInputParam("summerHeatRecoverySensibleEfficiency_");
             if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
@@ -170,6 +188,20 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
             {
                 summerHeatRecoveryLatentEfficiency = value;
+            }
+
+            double summerHeatRecoveryDryBulbTemperature = double.NaN;
+            index = Params.IndexOfInputParam("summerHeatRecoveryDryBulbTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                summerHeatRecoveryDryBulbTemperature = value;
+            }
+
+            double summerHeatRecoveryRelativeHumidity = double.NaN;
+            index = Params.IndexOfInputParam("summerHeatRecoveryRelativeHumidity_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                summerHeatRecoveryRelativeHumidity = value;
             }
 
             double coolingCoilOnTemperature = double.NaN;
@@ -243,6 +275,16 @@ namespace SAM.Analytical.Grasshopper
             if (!double.IsNaN(frostCoilOffTemperature))
             {
                 airHandlingUnit.SetValue(AirHandlingUnitParameter.FrostCoilOffTemperature, frostCoilOffTemperature);
+            }
+
+            if (!double.IsNaN(winterHeatRecoverySensibleEfficiency))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.WinterHeatRecoverySensibleEfficiency, winterHeatRecoverySensibleEfficiency);
+            }
+
+            if (!double.IsNaN(winterHeatRecoveryLatentEfficiency))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.WinterHeatRecoveryLatentEfficiency, winterHeatRecoveryLatentEfficiency);
             }
 
             if (!double.IsNaN(winterHeatRecoverySensibleEfficiency))
