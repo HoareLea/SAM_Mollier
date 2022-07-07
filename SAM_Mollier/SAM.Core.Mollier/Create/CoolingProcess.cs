@@ -2,7 +2,7 @@
 {
     public static partial class Create
     {
-        public static Cooling Cooling(this MollierPoint start, double dryBulbTemperature)
+        public static CoolingProcess CoolingProcess(this MollierPoint start, double dryBulbTemperature)
         {
             if (start == null || double.IsNaN(dryBulbTemperature))
             {
@@ -20,10 +20,10 @@
                 return null;
             }
 
-            return new Cooling(start, end);
+            return new CoolingProcess(start, end);
         }
 
-        public static Cooling Cooling_ByTemperatureDifference(this MollierPoint start, double temperatureDifference)
+        public static CoolingProcess CoolingProcess_ByTemperatureDifference(this MollierPoint start, double temperatureDifference)
         {
             if (start == null || double.IsNaN(temperatureDifference))
             {
@@ -37,10 +37,10 @@
                 return null;
             }
 
-            return new Cooling(start, end);
+            return new CoolingProcess(start, end);
         }
 
-        public static Cooling Cooling_ByEnthalpyDifference(this MollierPoint start, double enthalpyDifference)
+        public static CoolingProcess CoolingProcess_ByEnthalpyDifference(this MollierPoint start, double enthalpyDifference)
         {
             if (start == null || double.IsNaN(enthalpyDifference))
             {
@@ -53,10 +53,10 @@
                 return null;
             }
 
-            return new Cooling(start, end);
+            return new CoolingProcess(start, end);
         }
 
-        public static Cooling Cooling_ByMedium(this MollierPoint start, double efficiency, double flowTemperature, double returnTemperature)
+        public static CoolingProcess CoolingProcess_ByMedium(this MollierPoint start, double efficiency, double flowTemperature, double returnTemperature)
         {
             if(start == null || double.IsNaN(efficiency) || double.IsNaN(flowTemperature) || double.IsNaN(returnTemperature))
             {
@@ -74,7 +74,7 @@
                 return null;
             }
 
-            return new Cooling(start, end);
+            return new CoolingProcess(start, end);
         }
     }
 }

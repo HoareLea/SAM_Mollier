@@ -25,10 +25,10 @@ namespace SAM.Analytical.Mollier
 
                 if (!double.IsNaN(winterFrostOffCoilTemperature) && winterFrostOffCoilTemperature > winterDesignTemperature)
                 {
-                    Heating heating = Core.Mollier.Create.Heating(start, winterFrostOffCoilTemperature);
-                    result.Add(heating);
+                    HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterFrostOffCoilTemperature);
+                    result.Add(heatingProcess);
 
-                    start = heating.End;
+                    start = heatingProcess.End;
                 }
 
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, out double winterHeatRecoveryDryBulbTemperature);
@@ -49,10 +49,10 @@ namespace SAM.Analytical.Mollier
                     MollierPoint @return = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterHeatRecoveryDryBulbTemperature, winterHeatRecoveryRelativeHumidity, pressure);
                     if(@return != null)
                     {
-                        HeatRecovery heatRecovery = Core.Mollier.Create.HeatRecovery(start, @return, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
-                        result.Add(heatRecovery);
+                        HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, @return, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
+                        result.Add(heatRecoveryProcess);
 
-                        start = heatRecovery.End;
+                        start = heatRecoveryProcess.End;
                     }
                 }
             }

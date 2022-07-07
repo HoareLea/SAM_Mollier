@@ -47,14 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Cooling.cs" />
-    <Compile Include="Classes\HeatRecovery.cs" />
+    <Compile Include="Classes\CoolingProcess.cs" />
+    <Compile Include="Classes\HeatRecoveryProcess.cs" />
     <Compile Include="Classes\MollierProcess.cs" />
-    <Compile Include="Classes\Heating.cs" />
-    <Compile Include="Create\HeatRecovery.cs" />
-    <Compile Include="Create\Cooling.cs" />
+    <Compile Include="Classes\HeatingProcess.cs" />
+    <Compile Include="Create\HeatRecoveryProcess.cs" />
+    <Compile Include="Create\CoolingProcess.cs" />
     <Compile Include="Create\MollierPoint.cs" />
-    <Compile Include="Create\Heating.cs" />
+    <Compile Include="Create\HeatingProcess.cs" />
     <Compile Include="Interfaces\IMollierProcess.cs" />
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />

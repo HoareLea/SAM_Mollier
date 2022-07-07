@@ -1,17 +1,16 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 
 namespace SAM.Core.Mollier
 {
-    public class Cooling : MollierProcess
+    public class CoolingProcess : MollierProcess
     {
-        public Cooling(MollierPoint start, MollierPoint end)
+        public CoolingProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {
 
         }
 
-        public Cooling(JObject jObject)
+        public CoolingProcess(JObject jObject)
             :base(jObject)
         {
 

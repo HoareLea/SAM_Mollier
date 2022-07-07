@@ -2,15 +2,15 @@
 
 namespace SAM.Core.Mollier
 {
-    public class HeatRecovery : MollierProcess
+    public class HeatingProcess : MollierProcess
     {
-        public HeatRecovery(MollierPoint start, MollierPoint end)
+        public HeatingProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {
 
         }
 
-        public HeatRecovery(JObject jObject)
+        public HeatingProcess(JObject jObject)
             :base(jObject)
         {
 

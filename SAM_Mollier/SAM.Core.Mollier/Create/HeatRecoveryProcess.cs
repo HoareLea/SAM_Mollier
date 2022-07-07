@@ -2,7 +2,7 @@
 {
     public static partial class Create
     {
-        public static HeatRecovery HeatRecovery(this MollierPoint supply, MollierPoint @return, double sensibleHeatRecoveryEfficiency, double latentHeatRecoveryEfficiency)
+        public static HeatRecoveryProcess HeatRecoveryProcess(this MollierPoint supply, MollierPoint @return, double sensibleHeatRecoveryEfficiency, double latentHeatRecoveryEfficiency)
         {
             if (supply == null || @return == null || double.IsNaN(sensibleHeatRecoveryEfficiency) || double.IsNaN(latentHeatRecoveryEfficiency))
             {
@@ -27,7 +27,7 @@
                 return null;
             }
 
-            return new HeatRecovery(supply, end);
+            return new HeatRecoveryProcess(supply, end);
         }
     }
 }
