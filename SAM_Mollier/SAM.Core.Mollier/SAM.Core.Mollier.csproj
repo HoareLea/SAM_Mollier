@@ -48,9 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CoolingProcess.cs" />
+    <Compile Include="Classes\MixingProcess.cs" />
     <Compile Include="Classes\HeatRecoveryProcess.cs" />
     <Compile Include="Classes\MollierProcess.cs" />
     <Compile Include="Classes\HeatingProcess.cs" />
+    <Compile Include="Create\MixingProcess.cs" />
     <Compile Include="Create\HeatRecoveryProcess.cs" />
     <Compile Include="Create\CoolingProcess.cs" />
     <Compile Include="Create\MollierPoint.cs" />

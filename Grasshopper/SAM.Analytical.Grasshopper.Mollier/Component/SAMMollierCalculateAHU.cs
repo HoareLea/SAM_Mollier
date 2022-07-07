@@ -50,6 +50,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidReturnTemperature_", NickName = "coolingCoilFluidReturnTemperature_", Description = "Cooling Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidFlowTemperature_", NickName = "heatingCoilFluidFlowTemperature_", Description = "Heating Coil Fluid Flow Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidReturnTemperature_", NickName = "heatingCoilFluidReturnTemperature_", Description = "Heating Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatingCoilSupplyTemperature_", NickName = "winterHeatingCoilSupplyTemperature_", Description = "Winter Heating Coil Supply Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -246,6 +247,13 @@ namespace SAM.Analytical.Grasshopper
                 heatingCoilFluidReturnTemperature = value;
             }
 
+            double winterHeatingCoilSupplyTemperature = double.NaN;
+            index = Params.IndexOfInputParam("winterHeatingCoilSupplyTemperature_");
+            if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+            {
+                winterHeatingCoilSupplyTemperature = value;
+            }
+
             AirHandlingUnitResult airHandlingUnitResult = null;
 
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
@@ -335,6 +343,11 @@ namespace SAM.Analytical.Grasshopper
             if (!double.IsNaN(heatingCoilFluidReturnTemperature))
             {
                 airHandlingUnit.SetValue(AirHandlingUnitParameter.HeatingCoilFluidReturnTemperature, heatingCoilFluidReturnTemperature);
+            }
+
+            if (!double.IsNaN(winterHeatingCoilSupplyTemperature))
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.WinterHeatingCoilSupplyTemperature, winterHeatingCoilSupplyTemperature);
             }
 
             adjacencyCluster = analyticalModel.AdjacencyCluster;

@@ -23,6 +23,7 @@ namespace SAM.Analytical.Mollier
                 MollierPoint start = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterDesignTemperature, winterDesignRelativeHumidity, pressure);
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, out double winterFrostOffCoilTemperature);
 
+                //HEATING (FROST COIL)
                 if (!double.IsNaN(winterFrostOffCoilTemperature) && winterFrostOffCoilTemperature > winterDesignTemperature)
                 {
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterFrostOffCoilTemperature);
@@ -44,6 +45,7 @@ namespace SAM.Analytical.Mollier
                     winterHeatRecoveryLatentEfficiency = 0;
                 }
 
+                //HEAT RECOVERY
                 if (!double.IsNaN(winterHeatRecoveryRelativeHumidity) && !double.IsNaN(winterHeatRecoveryDryBulbTemperature))
                 {
                     MollierPoint @return = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterHeatRecoveryDryBulbTemperature, winterHeatRecoveryRelativeHumidity, pressure);
@@ -55,9 +57,38 @@ namespace SAM.Analytical.Mollier
                         start = heatRecoveryProcess.End;
                     }
                 }
+
+                //MIXING
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, out double winterSpaceTemperature);
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceRelativeHumidty, out double winterSpaceRelativeHumidity);
+                if(!double.IsNaN(winterSpaceTemperature) && !double.IsNaN(winterSpaceRelativeHumidity))
+                {
+                    MollierPoint room = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterSpaceTemperature, winterSpaceRelativeHumidity, pressure);
+                    if(room != null)
+                    {
+                        airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out double outsideSupplyAirFlow);
+                        airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out double supplyAirFlow);
+
+                        if (!double.IsNaN(outsideSupplyAirFlow) && !double.IsNaN(supplyAirFlow))
+                        {
+                            MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room, outsideSupplyAirFlow, supplyAirFlow);
+                            result.Add(mixingProcess);
+
+                            start = mixingProcess.End;
+                        }
+                    }
+                }
+
+                //HEATING (HEATING COIL)
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatingCoilSupplyTemperature, out double winterHeatingCoilSupplyTemperature);
+                if (!double.IsNaN(winterHeatingCoilSupplyTemperature))
+                {
+                    HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterHeatingCoilSupplyTemperature);
+                    result.Add(heatingProcess);
+
+                    start = heatingProcess.End;
+                }
             }
-
-
 
             return result;
         }
