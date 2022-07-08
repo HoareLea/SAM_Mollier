@@ -106,6 +106,29 @@ namespace SAM.Analytical.Mollier
                         start = isotermicHumidificationProcess.Start;
                     }
                 }
+
+                //HEATING (FAN)
+                double dryBulbTemperature_Fan = start.DryBulbTemperature + 1.2 / (start.Density() * 1.005);
+
+                HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
+                if(heatingProcess_Fan != null)
+                {
+                    result.Add(heatingProcess_Fan);
+                    start = heatingProcess_Fan.End;
+                }
+
+
+                //TO ROOM
+                if(room != null)
+                {
+                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room);
+                    if (undefinedProcess != null)
+                    {
+                        result.Add(undefinedProcess);
+                        start = undefinedProcess.End;
+                    }
+                }
+
             }
 
             return result;
