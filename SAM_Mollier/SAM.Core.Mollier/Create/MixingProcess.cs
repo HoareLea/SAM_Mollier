@@ -9,14 +9,15 @@
                 return null;
             }
 
-            double dryBulbTemperature = point_1.DryBulbTemperature + ((point_1.DryBulbTemperature + point_2.DryBulbTemperature) / 2 * ratio);
+
+            double dryBulbTemperature = ratio * point_1.DryBulbTemperature + (1 - ratio) * point_2.DryBulbTemperature;
             if(double.IsNaN(dryBulbTemperature))
             {
                 return null;
             }
 
 
-            double humidityRatio = point_1.HumidityRatio + ((point_1.HumidityRatio + point_2.HumidityRatio) / 2 * ratio);
+            double humidityRatio = ratio * point_1.HumidityRatio + (1 - ratio) * point_2.HumidityRatio;
             if (double.IsNaN(humidityRatio))
             {
                 return null;
