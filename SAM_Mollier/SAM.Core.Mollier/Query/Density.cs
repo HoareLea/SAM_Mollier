@@ -25,6 +25,11 @@
             return 0.00348 * pressure / (273.15 + dryBulbTemperature) - 0.00132 * partialVapourPressure / (273.15 + dryBulbTemperature);
         }
 
+        /// <summary>
+        /// Density for given MollierPoint.
+        /// </summary>
+        /// <param name="mollierPoint">MollierPoint</param>
+        /// <returns>Density [kg/m3]</returns>
         public static double Density(this MollierPoint mollierPoint)
         {
             if(mollierPoint == null)

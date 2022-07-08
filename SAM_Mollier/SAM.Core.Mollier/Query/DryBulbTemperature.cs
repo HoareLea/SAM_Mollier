@@ -207,6 +207,13 @@ namespace SAM.Core.Mollier
             //return result;
         }
 
+        /// <summary>
+        /// Calculates dry bulb temperature from wet bulb temperature, relative humidity and pressure
+        /// </summary>
+        /// <param name="relativeHumidity">Relative humidity [%]</param>
+        /// <param name="wetBulbTemperature">Wet Bulb Temperature [°C]</param>
+        /// <param name="pressure">Atmospheric pressure [Pa]</param>
+        /// <returns>Dry-bulb temperature [°C]</returns>
         public static double DryBulbTemperature_ByWetBulbTemperature(double wetBulbTemperature, double relativeHumidity, double pressure)
         {
             if(double.IsNaN(wetBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
@@ -217,6 +224,13 @@ namespace SAM.Core.Mollier
             return Core.Query.Calculate((double x) => WetBulbTemperature(x, relativeHumidity, pressure), wetBulbTemperature, 5, 95);
         }
 
+        /// <summary>
+        /// Calculates dry bulb temperature from wet bulb temperature, humidity ratio and pressure
+        /// </summary>
+        /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <param name="wetBulbTemperature">Wet Bulb Temperature [°C]</param>
+        /// <param name="pressure">Atmospheric pressure [Pa]</param>
+        /// <returns>Dry-bulb temperature [°C]</returns>
         public static double DryBulbTemperature_ByWetBulbTemperatureAndHumidityRatio(double wetBulbTemperature, double humidityRatio, double pressure)
         {
             if (double.IsNaN(wetBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
@@ -230,6 +244,13 @@ namespace SAM.Core.Mollier
             return ((1093 - 0.556 * wetBulbTemperature) * pressureRatio + 0.240 * wetBulbTemperature - humidityRatio * (1093 - wetBulbTemperature)) / (0.444 * humidityRatio + 0.240);
         }
 
+        /// <summary>
+        /// Calculates dry bulb temperature from relative humidity, specific volume and pressure
+        /// </summary>
+        /// <param name="relativeHumidity">Relative humidity [%]</param>
+        /// <param name="specificVolume">Specific Volume [m3/kg]</param>
+        /// <param name="pressure">Atmospheric pressure [Pa]</param>
+        /// <returns>Dry-bulb temperature [°C]</returns>
         public static double DryBulbTemperature_ByRelativeHumidityAndSpecificVolume(double relativeHumidity, double specificVolume, double pressure)
         {
             if (double.IsNaN(relativeHumidity) || double.IsNaN(specificVolume) || double.IsNaN(pressure))
