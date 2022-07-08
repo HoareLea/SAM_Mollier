@@ -99,9 +99,14 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
+            return Core.Query.Calculate_ByMaxStep((double x) => HumidityRatio(x, relativeHumidity, pressure), humidityRatio, -50, 50);
 
-            return Core.Query.Calculate((double x) => HumidityRatio(x, relativeHumidity, pressure), humidityRatio, -50, 99.999);
 
+            //OPTION 1
+            //return Core.Query.Calculate((double x) => HumidityRatio(x, relativeHumidity, pressure), humidityRatio, -50, 99.999);
+
+
+            //OPTION 2
             //double result = 50;
             //double humidityRatio_Temp = double.NaN;
             //do
@@ -223,6 +228,16 @@ namespace SAM.Core.Mollier
 
 
             return ((1093 - 0.556 * wetBulbTemperature) * pressureRatio + 0.240 * wetBulbTemperature - humidityRatio * (1093 - wetBulbTemperature)) / (0.444 * humidityRatio + 0.240);
+        }
+
+        public static double DryBulbTemperature_ByRelativeHumidityAndSpecificVolume(double relativeHumidity, double specificVolume, double pressure)
+        {
+            if (double.IsNaN(relativeHumidity) || double.IsNaN(specificVolume) || double.IsNaN(pressure))
+            {
+                return double.NaN; ;
+            }
+
+            return  Core.Query.Calculate_ByMaxStep((double x) => SpecificVolume(x, HumidityRatio(x, relativeHumidity, pressure), pressure), specificVolume, -50, 50);
         }
     }
 }
