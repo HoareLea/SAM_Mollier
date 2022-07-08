@@ -9,7 +9,7 @@
                 return null;
             }
 
-            return UndefinedProcess(start, stop);
+            return new UndefinedProcess(start, stop);
         }
     }
 }
