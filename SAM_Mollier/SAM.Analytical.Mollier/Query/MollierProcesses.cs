@@ -103,7 +103,7 @@ namespace SAM.Analytical.Mollier
                     if(isotermicHumidificationProcess != null)
                     {
                         result.Add(isotermicHumidificationProcess);
-                        start = isotermicHumidificationProcess.Start;
+                        start = isotermicHumidificationProcess.End;
                     }
                 }
 
