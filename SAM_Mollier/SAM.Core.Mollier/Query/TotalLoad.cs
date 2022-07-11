@@ -20,7 +20,7 @@
         }
 
         /// <summary>
-        /// Total load for given coolingProcess and airflow
+        /// Total load for given cooling process and airflow
         /// </summary>
         /// <param name="coolingProcess">Cooling process</param>
         /// <param name="airflow">Air flow [m3/s]</param>
@@ -32,7 +32,23 @@
                 return double.NaN;
             }
 
-            return SensibleLoad(coolingProcess.End, System.Math.Abs(coolingProcess.Start.Enthalpy - coolingProcess.End.Enthalpy), airflow);
+            return TotalLoad(coolingProcess.End, System.Math.Abs(coolingProcess.Start.Enthalpy - coolingProcess.End.Enthalpy), airflow);
+        }
+
+        /// <summary>
+        /// Total load for given heating process and airflow
+        /// </summary>
+        /// <param name="heatingProcess">Cooling process</param>
+        /// <param name="airflow">Air flow [m3/s]</param>
+        /// <returns>Total load [W]</returns>
+        public static double TotalLoad(this HeatingProcess heatingProcess, double airflow)
+        {
+            if (double.IsNaN(airflow) || heatingProcess == null)
+            {
+                return double.NaN;
+            }
+
+            return TotalLoad(heatingProcess.End, System.Math.Abs(heatingProcess.Start.Enthalpy - heatingProcess.End.Enthalpy), airflow);
         }
     }
 }
