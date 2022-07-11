@@ -36,7 +36,12 @@
             return (cLL + humidityRatio * cWL) / (1 + humidityRatio);
         }
 
-        public static double HeatCapacity(MollierPoint mollierPoint)
+        /// <summary>
+        /// Heat Capacity of Air
+        /// </summary>
+        /// <param name="mollierPoint">MollierPoint</param>
+        /// <returns>Heat Capacity of Air [kJ/kgK]</returns>
+        public static double HeatCapacity(this MollierPoint mollierPoint)
         {
             if(mollierPoint == null)
             {

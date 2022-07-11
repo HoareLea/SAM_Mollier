@@ -28,13 +28,5 @@ namespace SAM.Core.Mollier
 
             return System.Math.Abs(start.HumidityRatio - end.HumidityRatio);
         }
-
-        //public double EvaporatingTemperature(double tolerance = Tolerance.Distance)
-        //{
-        //    if (Core.Query.AlmostEqual(Start.HumidityRatio, End.HumidityRatio, tolerance))
-        //    {
-        //        return Query.DryBulbTemperature_ByHumidityRatio(Start.HumidityRatio, 100, Start.Pressure);
-        //    }
-        //}
     }
 }

@@ -191,6 +191,8 @@ namespace SAM.Analytical.Mollier
                 }
 
                 double contactFactor = double.NaN;
+                double sensibleLoad = double.NaN;
+                double totalLoad = double.NaN;
 
                 //COOLING (COOLING COIL)
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilFluidFlowTemperature, out double coolingCoilFluidFlowTemperature);
@@ -210,6 +212,12 @@ namespace SAM.Analytical.Mollier
                         }
 
                         contactFactor = coolingProcess.ContactFactor();
+
+                        if(airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out double supplyAirFlow) && !double.IsNaN(supplyAirFlow))
+                        {
+                            sensibleLoad = Core.Mollier.Query.SensibleLoad(coolingProcess, supplyAirFlow);
+                            totalLoad = Core.Mollier.Query.TotalLoad(coolingProcess, supplyAirFlow);
+                        }
                     }
 
                     //MollierPoint mollierPoint_ADP = Core.Mollier.Create.MollierPoint_ByRelativeHumidity((coolingCoilFluidFlowTemperature + coolingCoilFluidReturnTemperature) / 2, 100, pressure);
