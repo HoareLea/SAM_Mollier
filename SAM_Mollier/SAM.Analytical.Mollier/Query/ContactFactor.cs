@@ -7,19 +7,23 @@ namespace SAM.Analytical.Mollier
         /// <summary>
         /// Calculates Contact Factor
         /// </summary>
-        /// <param name="point_1"></param>
-        /// <param name="point_2"></param>
-        /// <returns></returns>
-        public static double ContactFactor(this MollierPoint point_1, MollierPoint point_2)
+        /// <param name="coolingProcess">Cooling Process</param>
+        /// <returns>Contact Factor </returns>
+        public static double ContactFactor(this CoolingProcess coolingProcess)
         {
-            if (point_1 == null || point_2 == null)
+            if (coolingProcess == null)
             {
                 return double.NaN;
             }
 
-            throw new System.NotImplementedException();
+            MollierPoint evaporatingPoint = coolingProcess.EvaporatingPoint();
+            if(evaporatingPoint == null)
+            {
+                return double.NaN;
+            }
 
-            //return sfp / (mollierPoint.Density() * Core.Mollier.Query.HeatCapacity(mollierPoint));
+            return (coolingProcess.Start.Enthalpy - coolingProcess.End.Enthalpy) / (coolingProcess.Start.Enthalpy - evaporatingPoint.Enthalpy);
+
         }
     }
 }

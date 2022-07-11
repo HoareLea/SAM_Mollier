@@ -61,9 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AirHandlingUnitResult.cs" />
+    <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Create\AirHandlingUnitResult.cs" />
+    <Compile Include="Create\PolynominalEquation.cs" />
     <Compile Include="Enums\Parameter\AirHandlingUnitResultParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\EvaporatingTemperature.cs" />
     <Compile Include="Query\ContactFactor.cs" />
     <Compile Include="Query\MollierProcesses.cs" />
     <Compile Include="Query\PickupTemperature.cs" />

@@ -48,6 +48,19 @@ namespace SAM.Core.Mollier
             }
         }
 
+        public double Pressure
+        {
+            get
+            {
+                if(start == null)
+                {
+                    return double.NaN;
+                }
+
+                return start.Pressure;
+            }
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)

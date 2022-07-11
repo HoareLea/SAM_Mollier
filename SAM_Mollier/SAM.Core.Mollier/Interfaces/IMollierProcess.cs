@@ -4,5 +4,6 @@
     {
         MollierPoint Start { get; }
         MollierPoint End { get; }
+        double Pressure { get; }
     }
 }

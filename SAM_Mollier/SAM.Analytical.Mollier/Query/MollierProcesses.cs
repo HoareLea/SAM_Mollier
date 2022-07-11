@@ -208,6 +208,8 @@ namespace SAM.Analytical.Mollier
                             result.Add(coolingProcess);
                             start = coolingProcess.End;
                         }
+
+                        contactFactor = coolingProcess.ContactFactor();
                     }
 
                     //MollierPoint mollierPoint_ADP = Core.Mollier.Create.MollierPoint_ByRelativeHumidity((coolingCoilFluidFlowTemperature + coolingCoilFluidReturnTemperature) / 2, 100, pressure);

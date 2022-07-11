@@ -4,30 +4,33 @@ namespace SAM.Analytical.Mollier
 {
     public static partial class Query
     {
-        public static double SaturatedAirPolynominalEquation(double pressure)
+        public static Math.PolynomialEquation SaturatedAirPolynominalEquation(double pressure, double temperature_Min = -20, double temperature_Max = 50, double step = 1.0)
         {
             if(double.IsNaN(pressure))
             {
-                return double.NaN;
+                return null;
             }
-
-            double temperature_Min = -20;
-            double temperature_Max = 50;
-
-            double step = 1;
 
             double temperature = temperature_Min;
 
+            List<double> temperatures = new List<double>();
+            List<double> humidityRatios = new List<double>();
             while(temperature < temperature_Max)
             {
                 double humidityRatio = Core.Mollier.Query.HumidityRatio(temperature, 100, pressure);
+
                 temperature += step;
+
+                if (double.IsNaN(humidityRatio))
+                {
+                    continue;
+                }
+
+                temperatures.Add(temperature);
+                humidityRatios.Add(humidityRatio);
             }
 
-            throw new System.NotImplementedException();
-
-
-            //SAM.Math.PolynomialEquation polynomialEquation = new Math.
+            return Math.Create.PolynomialEquation(humidityRatios, temperatures, 6);
         }
     }
 }
