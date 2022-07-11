@@ -63,7 +63,7 @@
     <Compile Include="Classes\AirHandlingUnitResult.cs" />
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Create\AirHandlingUnitResult.cs" />
-    <Compile Include="Create\PolynominalEquation.cs" />
+    <Compile Include="Query\LinearEquation.cs" />
     <Compile Include="Enums\Parameter\AirHandlingUnitResultParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\EvaporatingTemperature.cs" />

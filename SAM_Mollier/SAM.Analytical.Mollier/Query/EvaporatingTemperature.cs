@@ -19,8 +19,8 @@ namespace SAM.Analytical.Mollier
                 return null;
             }
 
-            Math.PolynomialEquation polynomialEquation = coolingProcess.PolynomialEquation();
-            if (polynomialEquation == null)
+            Math.LinearEquation linearEquation = coolingProcess.LinearEquation();
+            if (linearEquation == null)
             {
                 return null;
             }
@@ -32,7 +32,7 @@ namespace SAM.Analytical.Mollier
             }
 
 
-            List<Point2D> point2Ds = Geometry.Query.Intersections(polynomialEquation, polynomialEquation_SaturatedAir);
+            List<Point2D> point2Ds = Geometry.Query.Intersections(linearEquation, polynomialEquation_SaturatedAir);
             if (point2Ds == null || point2Ds.Count == 0)
             {
                 return null;
