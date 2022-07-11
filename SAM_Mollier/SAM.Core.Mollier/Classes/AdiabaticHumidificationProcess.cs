@@ -2,7 +2,7 @@
 
 namespace SAM.Core.Mollier
 {
-    public class AdiabaticHumidificationProcess : MollierProcess
+    public class AdiabaticHumidificationProcess : HumidificationProcess
     {
         internal AdiabaticHumidificationProcess(MollierPoint start, MollierPoint end)
             : base(start, end)

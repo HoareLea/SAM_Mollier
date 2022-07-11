@@ -2,7 +2,7 @@
 
 namespace SAM.Core.Mollier
 {
-    public class IsotermicHumidificationProcess : MollierProcess
+    public class IsotermicHumidificationProcess : HumidificationProcess
     {
         internal IsotermicHumidificationProcess(MollierPoint start, MollierPoint end)
             : base(start, end)

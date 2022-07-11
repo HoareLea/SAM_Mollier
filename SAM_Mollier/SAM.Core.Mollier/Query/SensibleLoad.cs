@@ -38,7 +38,7 @@
         /// <summary>
         /// Sensible load for given heating process and airflow
         /// </summary>
-        /// <param name="heatingProcess">Cooling process</param>
+        /// <param name="heatingProcess">Heating process</param>
         /// <param name="airflow">Air flow [m3/s]</param>
         /// <returns>Sensible load [W]</returns>
         public static double SensibleLoad(this HeatingProcess heatingProcess, double airflow)
@@ -49,6 +49,22 @@
             }
 
             return SensibleLoad(heatingProcess.End, System.Math.Abs(heatingProcess.Start.DryBulbTemperature - heatingProcess.End.DryBulbTemperature), airflow);
+        }
+
+        /// <summary>
+        /// Sensible load for given heating process and airflow
+        /// </summary>
+        /// <param name="heatRecoveryProcess">Heat recovery process</param>
+        /// <param name="airflow">Air flow [m3/s]</param>
+        /// <returns>Sensible load [W]</returns>
+        public static double SensibleLoad(this HeatRecoveryProcess heatRecoveryProcess, double airflow)
+        {
+            if (double.IsNaN(airflow) || heatRecoveryProcess == null)
+            {
+                return double.NaN;
+            }
+
+            return SensibleLoad(heatRecoveryProcess.End, System.Math.Abs(heatRecoveryProcess.Start.DryBulbTemperature - heatRecoveryProcess.End.DryBulbTemperature), airflow);
         }
     }
 }
