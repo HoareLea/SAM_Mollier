@@ -6,7 +6,7 @@ namespace SAM.Analytical.Mollier
 {
     public static partial class Query
     {
-        public static MollierPoint EvaporatingPoint(this CoolingProcess coolingProcess)
+        public static MollierPoint EvaporatingPoint(this CoolingProcess coolingProcess, double tolerance = Core.Tolerance.Distance)
         {
             if (coolingProcess == null)
             {
@@ -17,6 +17,17 @@ namespace SAM.Analytical.Mollier
             if (point2D == null)
             {
                 return null;
+            }
+
+            if(Core.Query.AlmostEqual(coolingProcess.Start.HumidityRatio, coolingProcess.End.HumidityRatio, tolerance))
+            {
+                double dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature_ByHumidityRatio(coolingProcess.End.HumidityRatio, 100, coolingProcess.Start.Pressure);
+                if(double.IsNaN(dryBulbTemperature))
+                {
+                    return null;
+                }
+
+                return new MollierPoint(dryBulbTemperature, coolingProcess.End.HumidityRatio, coolingProcess.Start.Pressure);
             }
 
             Math.LinearEquation linearEquation = coolingProcess.LinearEquation();
