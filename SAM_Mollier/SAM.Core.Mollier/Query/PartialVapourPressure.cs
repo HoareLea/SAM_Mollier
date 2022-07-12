@@ -25,6 +25,17 @@ namespace SAM.Core.Mollier
             return SaturationVapourPressure(dryBulbTemperature) * relativeHumidity / 100;
         }
 
+        /// <summary>
+        /// Partial Vapour Pressure pW [Pa] for given humidity ratio and pressure.
+        /// </summary>
+        /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <param name="pressure">Atmospheric pressure [Pa]</param>
+        /// <returns>Partial Vapour Pressure [Pa]</returns>
+        public static double PartialVapourPressure_ByHumidityRatio(double humidityRatio, double pressure)
+        {
+            return (humidityRatio / (0.6222 + humidityRatio)) * pressure;
+        }
+
         public static double PartialVapourPressure(this MollierPoint mollierPoint)
         {
             if(mollierPoint == null)
