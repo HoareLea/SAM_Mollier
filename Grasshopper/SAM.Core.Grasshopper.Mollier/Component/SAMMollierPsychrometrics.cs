@@ -3,6 +3,7 @@ using SAM.Core.Grasshopper.Mollier.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using SAM.Core.Mollier;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -37,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dewPointTemperature_", NickName = "_dewPointTemperature_", Description = "Dew Point Temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Atmospheric pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
-                param_Number.SetPersistentData(101325);
+                param_Number.SetPersistentData(Standard.Pressure);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -171,7 +172,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfInputParam("_pressure_");
             if (index == -1 || !dataAccess.GetData(index, ref pressure) || double.IsNaN(pressure))
             {
-                pressure = 101325;
+                pressure = Standard.Pressure;
             }
 
             if (!double.IsNaN(relativeHumidity) && double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature))

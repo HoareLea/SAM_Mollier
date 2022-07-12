@@ -69,5 +69,22 @@ namespace SAM.Core.Mollier
 
             return ((2830 - 0.24 * wetBulbTemperature) * pressureRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2830 + 1.86 * dryBulbTemperature - 2.1 * wetBulbTemperature);
         }
+
+        /// <summary>
+        /// Calculates dry bulb temperature
+        /// </summary>
+        /// <param name="mollierPoint">MollierPoint</param>
+        /// <param name="latentLoad">Latent Load [W]</param>
+        /// <param name="airFlow">Air Flow [m3/s]</param>
+        /// <returns></returns>
+        public static double HumidityRatio(this MollierPoint mollierPoint, double latentLoad, double airFlow)
+        {
+            if (mollierPoint == null || double.IsNaN(latentLoad) || double.IsNaN(airFlow))
+            {
+                return double.NaN;
+            }
+
+            return mollierPoint.HumidityRatio + (latentLoad / (airFlow * mollierPoint.Density() * 2450));
+        }
     }
 }

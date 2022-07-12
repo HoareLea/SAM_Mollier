@@ -37,5 +37,15 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Winter Heat Recovery Relative Humidity", "Winter Heat Recovery Relative Humidity [%]"), DoubleParameterValue(0, 100)] WinterHeatRecoveryRelativeHumidity,
         [ParameterProperties("Summer Heat Recovery Dry Bulb Temperature", "Summer Heat Recovery Dry Bulb Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] SummerHeatRecoveryDryBulbTemperature,
         [ParameterProperties("Summer Heat Recovery Relative Humidity", "Summer Heat Recovery Relative Humidity [%]"), DoubleParameterValue(0, 100)] SummerHeatRecoveryRelativeHumidity,
+        [ParameterProperties("Cooling Coil Contact Factor", "Cooling Coil Contact Factor [0-1]"), DoubleParameterValue(0, 1)] CoolingCoilContactFactor,
+        [ParameterProperties("Cooling Coil Sensible Load", "Cooling Coil Sensible Load [W]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilSensibleLoad,
+        [ParameterProperties("Cooling Coil Total Load", "Cooling Coil Total Load [W]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilTotalLoad,
+        [ParameterProperties("Heating Coil Sensible Load", "Heating Coil Sensible Load [W]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilSensibleLoad,
+        [ParameterProperties("Heating Coil Total Load", "Heating Coil Total Load [W]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilTotalLoad,
+        [ParameterProperties("Frost Coil Sensible Load", "Frost Coil Sensible Load [W]"), ParameterValue(Core.ParameterType.Double)] FrostCoilSensibleLoad,
+        [ParameterProperties("Frost Coil Total Load", "Frost Coil Total Load [W]"), ParameterValue(Core.ParameterType.Double)] FrostCoilTotalLoad,
+        [ParameterProperties("Humidification Duty", "Humidification Duty [kg]"), ParameterValue(Core.ParameterType.Double)] HumidificationDuty,
+        [ParameterProperties("Winter Supply Fan Temperature", "Winter Supply Fan Temperature [C]"), ParameterValue(Core.ParameterType.Double)] WinterSupplyFanTemperature,
+        [ParameterProperties("Winter Supply Fan Relative Humidity", "Winter Supply Fan Relative Humidty [%]"), ParameterValue(Core.ParameterType.Double)] WinterSupplyFanRelativeHumidty
     }
 }

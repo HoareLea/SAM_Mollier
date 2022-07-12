@@ -1,5 +1,6 @@
 ﻿
 
+using SAM.Core.Mollier;
 using SAM.Weather;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,7 +118,7 @@ namespace SAM.Analytical.Mollier
                 }
             }
 
-            double pressure = 101325;
+            double pressure = Standard.Pressure;
 
             double summerDesignTemperature = double.NaN;
             double summerDesignRelativeHumidity = double.NaN;
@@ -371,6 +372,8 @@ namespace SAM.Analytical.Mollier
             {
                 result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryRelativeHumidity, summerSpaceRelativeHumidity);
             }
+
+            result.UpdateMollierProcesses(out List<IMollierProcess> mollierProcesses);
 
             return result;
         }

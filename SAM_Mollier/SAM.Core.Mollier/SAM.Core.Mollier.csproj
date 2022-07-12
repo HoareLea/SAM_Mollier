@@ -90,6 +90,7 @@
     <Compile Include="Query\HumidityRatio.cs" />
     <Compile Include="Query\SaturationVapourPressure.cs" />
     <Compile Include="Query\PartialVapourPressure.cs" />
+    <Compile Include="Standard\Standard.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Convert\" />

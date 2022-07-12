@@ -260,5 +260,22 @@ namespace SAM.Core.Mollier
 
             return  Core.Query.Calculate_ByMaxStep((double x) => SpecificVolume(x, HumidityRatio(x, relativeHumidity, pressure), pressure), specificVolume, -50, 50);
         }
+
+        /// <summary>
+        /// Calculates dry bulb temperature
+        /// </summary>
+        /// <param name="mollierPoint">MollierPoint</param>
+        /// <param name="sensibleLoad">Sensible Load [W]</param>
+        /// <param name="airFlow">Air Flow [m3/s]</param>
+        /// <returns></returns>
+        public static double DryBulbTemperature(this MollierPoint mollierPoint, double sensibleLoad, double airFlow)
+        {
+            if(mollierPoint == null || double.IsNaN(sensibleLoad) || double.IsNaN(airFlow))
+            {
+                return double.NaN;
+            }
+
+            return mollierPoint.DryBulbTemperature + (sensibleLoad / (airFlow * mollierPoint.Density() * mollierPoint.HeatCapacity()));
+        }
     }
 }

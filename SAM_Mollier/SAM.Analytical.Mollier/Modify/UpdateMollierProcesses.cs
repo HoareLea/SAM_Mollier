@@ -3,30 +3,23 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Mollier
 {
-    public static partial class Query
+    public static partial class Modify
     {
-        public static List<IMollierProcess> MollierProcesses(this AirHandlingUnitResult airHandlingUnitResult)
+        public static bool UpdateMollierProcesses(this AirHandlingUnitResult airHandlingUnitResult, out List<IMollierProcess> mollierProcesses)
         {
+            mollierProcesses = null;
+
             if (airHandlingUnitResult == null)
             {
-                return null;
+                return false;
             }
 
-            double pressure = 101325;
+            double pressure = Standard.Pressure;
             double spf = 1.2;
 
-            List<IMollierProcess> result = new List<IMollierProcess>();
+            mollierProcesses = new List<IMollierProcess>();
 
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out double supplyAirFlow);
-
-            double coolingCoilContactFactor = double.NaN;
-            double coolingCoilSensibleLoad = double.NaN;
-            double coolingCoilTotalLoad = double.NaN;
-            double heatingCoilSensibleLoad = double.NaN;
-            double heatingCoilTotalLoad = double.NaN;
-            double frostCoilSensibleLoad = double.NaN;
-            double frostCoilTotalLoad = double.NaN;
-            double humidificationDuty = double.NaN;
 
             //WINTER
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterDesignTemperature, out double winterDesignTemperature);
@@ -42,14 +35,23 @@ namespace SAM.Analytical.Mollier
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterFrostOffCoilTemperature);
                     if (heatingProcess != null)
                     {
-                        result.Add(heatingProcess);
+                        mollierProcesses.Add(heatingProcess);
                         start = heatingProcess.End;
                     }
 
                     if (!double.IsNaN(supplyAirFlow))
                     {
-                        frostCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
-                        frostCoilTotalLoad = Core.Mollier.Query.TotalLoad(heatingProcess, supplyAirFlow);
+                        double frostCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
+                        if(!double.IsNaN(frostCoilSensibleLoad))
+                        {
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.FrostCoilSensibleLoad, frostCoilSensibleLoad);
+                        }
+                        
+                        double frostCoilTotalLoad = Core.Mollier.Query.TotalLoad(heatingProcess, supplyAirFlow);
+                        if(!double.IsNaN(frostCoilTotalLoad))
+                        {
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.FrostCoilTotalLoad, frostCoilTotalLoad);
+                        }
                     }
                 }
 
@@ -75,7 +77,7 @@ namespace SAM.Analytical.Mollier
                         HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, @return, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
                         if (heatRecoveryProcess != null)
                         {
-                            result.Add(heatRecoveryProcess);
+                            mollierProcesses.Add(heatRecoveryProcess);
                             start = heatRecoveryProcess.End;
                         }
                     }
@@ -96,7 +98,7 @@ namespace SAM.Analytical.Mollier
                         MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room, outsideSupplyAirFlow, supplyAirFlow);
                         if (mixingProcess != null)
                         {
-                            result.Add(mixingProcess);
+                            mollierProcesses.Add(mixingProcess);
                             start = mixingProcess.End;
                         }
                     }
@@ -109,14 +111,23 @@ namespace SAM.Analytical.Mollier
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterHeatingCoilSupplyTemperature);
                     if (heatingProcess != null)
                     {
-                        result.Add(heatingProcess);
+                        mollierProcesses.Add(heatingProcess);
                         start = heatingProcess.End;
                     }
 
                     if (!double.IsNaN(supplyAirFlow))
                     {
-                        heatingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
-                        heatingCoilTotalLoad = Core.Mollier.Query.TotalLoad(heatingProcess, supplyAirFlow);
+                        double heatingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
+                        if(!double.IsNaN(heatingCoilSensibleLoad))
+                        {
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.HeatingCoilSensibleLoad, heatingCoilSensibleLoad);
+                        }
+
+                        double heatingCoilTotalLoad = Core.Mollier.Query.TotalLoad(heatingProcess, supplyAirFlow);
+                        if(!double.IsNaN(heatingCoilTotalLoad))
+                        {
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.HeatingCoilTotalLoad, heatingCoilTotalLoad);
+                        }
                     }
                 }
 
@@ -126,23 +137,32 @@ namespace SAM.Analytical.Mollier
                     IsotermicHumidificationProcess isotermicHumidificationProcess = Core.Mollier.Create.IsotermicHumidificationProcess_ByRelativeHumidity(start, room.RelativeHumidity);
                     if (isotermicHumidificationProcess != null)
                     {
-                        result.Add(isotermicHumidificationProcess);
+                        mollierProcesses.Add(isotermicHumidificationProcess);
                         start = isotermicHumidificationProcess.End;
                     }
 
-                    humidificationDuty = Core.Mollier.Query.Duty(isotermicHumidificationProcess, supplyAirFlow);
+                    double humidificationDuty = Core.Mollier.Query.Duty(isotermicHumidificationProcess, supplyAirFlow);
+                    if(!double.IsNaN(humidificationDuty))
+                    {
+                        airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.HumidificationDuty, humidificationDuty);
+                    }
                 }
 
                 //HEATING (FAN)
-                double dryBulbTemperature_Fan = start.DryBulbTemperature + PickupTemperature(start, spf);
+                double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(start, spf);
 
                 HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
                 if (heatingProcess_Fan != null)
                 {
-                    result.Add(heatingProcess_Fan);
+                    mollierProcesses.Add(heatingProcess_Fan);
                     start = heatingProcess_Fan.End;
                 }
 
+                if(start != null)
+                {
+                    airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.WinterSupplyFanTemperature, start.DryBulbTemperature);
+                    airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.WinterSupplyFanRelativeHumidty, start.RelativeHumidity);
+                }
 
                 //TO ROOM
                 if (room != null)
@@ -150,7 +170,7 @@ namespace SAM.Analytical.Mollier
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room);
                     if (undefinedProcess != null)
                     {
-                        result.Add(undefinedProcess);
+                        mollierProcesses.Add(undefinedProcess);
                         start = undefinedProcess.End;
                     }
                 }
@@ -186,7 +206,7 @@ namespace SAM.Analytical.Mollier
                         HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, @return, summerHeatRecoverySensibleEfficiency, summerHeatRecoveryLatentEfficiency);
                         if (heatRecoveryProcess != null)
                         {
-                            result.Add(heatRecoveryProcess);
+                            mollierProcesses.Add(heatRecoveryProcess);
                             start = heatRecoveryProcess.End;
                         }
                     }
@@ -207,7 +227,7 @@ namespace SAM.Analytical.Mollier
                         MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room, outsideSupplyAirFlow, supplyAirFlow);
                         if (mixingProcess != null)
                         {
-                            result.Add(mixingProcess);
+                            mollierProcesses.Add(mixingProcess);
                             start = mixingProcess.End;
                         }
                     }
@@ -221,21 +241,34 @@ namespace SAM.Analytical.Mollier
                     airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTempearture);
                     if (!double.IsNaN(summerSupplyTempearture))
                     {
-                        double pickupTemperature = PickupTemperature(start, spf);
+                        double pickupTemperature = Query.PickupTemperature(start, spf);
 
                         CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, summerSupplyTempearture - pickupTemperature);
                         if (coolingProcess != null)
                         {
-                            result.Add(coolingProcess);
+                            mollierProcesses.Add(coolingProcess);
                             start = coolingProcess.End;
                         }
 
-                        coolingCoilContactFactor = coolingProcess.ContactFactor();
+                        double coolingCoilContactFactor = coolingProcess.ContactFactor();
+                        if(!double.IsNaN(coolingCoilContactFactor))
+                        {
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingCoilContactFactor);
+                        }
 
                         if(!double.IsNaN(supplyAirFlow))
                         {
-                            coolingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(coolingProcess, supplyAirFlow);
-                            coolingCoilTotalLoad = Core.Mollier.Query.TotalLoad(coolingProcess, supplyAirFlow);
+                            double coolingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(coolingProcess, supplyAirFlow);
+                            if(!double.IsNaN(coolingCoilSensibleLoad))
+                            {
+                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilSensibleLoad, coolingCoilSensibleLoad);
+                            }
+
+                            double coolingCoilTotalLoad = Core.Mollier.Query.TotalLoad(coolingProcess, supplyAirFlow);
+                            if (!double.IsNaN(coolingCoilTotalLoad))
+                            {
+                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilTotalLoad, coolingCoilTotalLoad);
+                            }
                         }
                     }
 
@@ -247,7 +280,7 @@ namespace SAM.Analytical.Mollier
                 }
             }
 
-            return result;
+            return true;
         }
     }
 }
