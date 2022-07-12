@@ -275,7 +275,7 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return mollierPoint.DryBulbTemperature + (sensibleLoad / (airFlow * mollierPoint.Density() * mollierPoint.HeatCapacity()));
+            return mollierPoint.DryBulbTemperature + ((sensibleLoad/ 1000) / (airFlow * mollierPoint.Density() * mollierPoint.HeatCapacity()));
         }
     }
 }

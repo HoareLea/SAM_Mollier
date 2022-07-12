@@ -84,7 +84,7 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return mollierPoint.HumidityRatio + (latentLoad / (airFlow * mollierPoint.Density() * 2450));
+            return mollierPoint.HumidityRatio + ((latentLoad /1000) / (airFlow * mollierPoint.Density() * 2450));
         }
     }
 }
