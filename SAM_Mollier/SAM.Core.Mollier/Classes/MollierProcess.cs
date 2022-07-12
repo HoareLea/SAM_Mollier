@@ -61,6 +61,19 @@ namespace SAM.Core.Mollier
             }
         }
 
+        public void Scale(double factor)
+        {
+            if(start == null || end == null)
+            {
+                return;
+            }
+
+            double dryBulbTemperatureDifference = start.DryBulbTemperature - end.DryBulbTemperature;
+            double humidityRatioDifference = start.HumidityRatio - end.HumidityRatio;
+
+            end = new MollierPoint(start.DryBulbTemperature + (dryBulbTemperatureDifference * factor), start.HumidityRatio + (humidityRatioDifference * factor), start.Pressure);
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)

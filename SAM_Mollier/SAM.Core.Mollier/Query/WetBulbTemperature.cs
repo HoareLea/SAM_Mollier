@@ -15,7 +15,7 @@
                 return double.NaN;
             }
 
-            //return Core.Query.Calculate((double x) => Enthalpy_ByRelativeHumidity(x, 100, pressure), enthalpy, 0.01, 99.99);
+            return Core.Query.Calculate_ByMaxStep((double x) => Enthalpy_ByRelativeHumidity(x, 100, pressure), enthalpy, -20, 50);
 
 
             //double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);

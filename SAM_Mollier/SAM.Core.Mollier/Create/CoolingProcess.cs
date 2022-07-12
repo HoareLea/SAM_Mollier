@@ -14,7 +14,9 @@
                 return null;
             }
 
-            MollierPoint end = new MollierPoint(dryBulbTemperature, start.HumidityRatio, start.Pressure);
+            double humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
+
+            MollierPoint end = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
             if (end == null)
             {
                 return null;
@@ -30,8 +32,10 @@
                 return null;
             }
 
+            double dryBulbTemperature = start.DryBulbTemperature - temperatureDifference;
+            double humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
 
-            MollierPoint end = new MollierPoint(start.DryBulbTemperature - temperatureDifference, start.HumidityRatio, start.Pressure);
+            MollierPoint end = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
             if (end == null)
             {
                 return null;
@@ -47,7 +51,12 @@
                 return null;
             }
 
-            MollierPoint end = MollierPoint_ByEnthalpy(start.Enthalpy - enthalpyDifference, start.HumidityRatio, start.Pressure);
+            double enthalpy = start.Enthalpy - enthalpyDifference;
+
+            double dryBulbTemperature = Query.DryBulbTemperature_ByEnthalpy(enthalpy, 100, start.Pressure);
+            double humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
+
+            MollierPoint end = MollierPoint_ByEnthalpy(dryBulbTemperature, humidityRatio, start.Pressure);
             if (end == null)
             {
                 return null;
@@ -56,7 +65,7 @@
             return new CoolingProcess(start, end);
         }
 
-        public static CoolingProcess CoolingProcess_ByMedium(this MollierPoint start, double efficiency, double flowTemperature, double returnTemperature)
+        public static CoolingProcess CoolingProcess_ByMedium(this MollierPoint start, double flowTemperature, double returnTemperature, double efficiency)
         {
             if(start == null || double.IsNaN(efficiency) || double.IsNaN(flowTemperature) || double.IsNaN(returnTemperature))
             {
