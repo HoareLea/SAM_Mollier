@@ -113,7 +113,7 @@ namespace SAM.Analytical.Mollier
                         start = heatingProcess.End;
                     }
 
-                    if (double.IsNaN(supplyAirFlow))
+                    if (!double.IsNaN(supplyAirFlow))
                     {
                         heatingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
                         heatingCoilTotalLoad = Core.Mollier.Query.TotalLoad(heatingProcess, supplyAirFlow);

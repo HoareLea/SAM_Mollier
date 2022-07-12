@@ -34,7 +34,9 @@ namespace SAM.Core.Mollier
                 pressure = mollierPoint.pressure;
             }
         }
-
+        /// <summary>
+        /// Enthalpy [J/kg]
+        /// </summary>
         public double Enthalpy
         {
             get

@@ -6,7 +6,7 @@
         /// Total load of the air
         /// </summary>
         /// <param name="mollierPoint"></param>
-        /// <param name="enthalpyDifference">Enthalpy difference [kJ/kg]</param>
+        /// <param name="enthalpyDifference">Enthalpy difference [J/kg]</param>
         /// <param name="airFlow">Flow rate of air[m3/s]</param>
         /// <returns></returns>
         public static double TotalLoad(this MollierPoint mollierPoint, double enthalpyDifference, double airFlow)
@@ -16,7 +16,7 @@
                 return double.NaN;
             }
 
-            return airFlow * mollierPoint.Density() * enthalpyDifference * 1000;
+            return airFlow * mollierPoint.Density() * enthalpyDifference;
         }
 
         /// <summary>
