@@ -243,7 +243,7 @@ namespace SAM.Analytical.Mollier
                     {
                         double pickupTemperature = Query.PickupTemperature(start, spf);
 
-                        double dryBulbTemperature_ADP = (coolingCoilFluidReturnTemperature - coolingCoilFluidFlowTemperature) / 2;
+                        double dryBulbTemperature_ADP = (coolingCoilFluidReturnTemperature + coolingCoilFluidFlowTemperature) / 2;
                         double humidityRatio_ADP = Core.Mollier.Query.HumidityRatio(dryBulbTemperature_ADP, 100, pressure);
 
                         MollierPoint mollierPoint_ADP = new MollierPoint(dryBulbTemperature_ADP, humidityRatio_ADP, start.Pressure);
