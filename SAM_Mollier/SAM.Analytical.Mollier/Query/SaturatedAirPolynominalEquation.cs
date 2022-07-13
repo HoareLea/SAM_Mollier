@@ -26,7 +26,7 @@ namespace SAM.Analytical.Mollier
                     continue;
                 }
 
-                temperatures.Add(temperature);
+                temperatures.Add(temperature - 1);
                 humidityRatios.Add(humidityRatio);
             }
 
