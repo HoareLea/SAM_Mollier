@@ -14,9 +14,20 @@
                 return null;
             }
 
-            double humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
+            MollierPoint end = null;
 
-            MollierPoint end = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
+            double dryBulbTemperature_Saturation = Query.DryBulbTemperature_ByHumidityRatio(start.HumidityRatio, 100, start.Pressure);
+            if(dryBulbTemperature_Saturation < dryBulbTemperature)
+            {
+                end = new MollierPoint(dryBulbTemperature, start.HumidityRatio, start.Pressure);
+            }
+            else
+            {
+                double humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
+
+                end = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
+            }
+
             if (end == null)
             {
                 return null;
@@ -32,16 +43,7 @@
                 return null;
             }
 
-            double dryBulbTemperature = start.DryBulbTemperature - temperatureDifference;
-            double humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
-
-            MollierPoint end = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
-            if (end == null)
-            {
-                return null;
-            }
-
-            return new CoolingProcess(start, end);
+            return CoolingProcess_ByTemperatureDifference(start, start.DryBulbTemperature - temperatureDifference);
         }
 
         public static CoolingProcess CoolingProcess_ByEnthalpyDifference(this MollierPoint start, double enthalpyDifference)
@@ -53,10 +55,21 @@
 
             double enthalpy = start.Enthalpy - enthalpyDifference;
 
-            double dryBulbTemperature = Query.DryBulbTemperature_ByEnthalpy(enthalpy, 100, start.Pressure);
-            double humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
+            double dryBulbTemperature = Query.DryBulbTemperature_ByEnthalpy(start.Enthalpy - enthalpyDifference, start.RelativeHumidity, start.Pressure);
 
-            MollierPoint end = MollierPoint_ByEnthalpy(dryBulbTemperature, humidityRatio, start.Pressure);
+            double dryBulbTemperature_Saturation = Query.DryBulbTemperature_ByEnthalpy(enthalpy, 100, start.Pressure);
+            double humidityRatio_Saturation = Query.HumidityRatio(dryBulbTemperature_Saturation, 100, start.Pressure);
+
+            MollierPoint end = null;
+            if (dryBulbTemperature_Saturation < dryBulbTemperature)
+            {
+                end = new MollierPoint(dryBulbTemperature, start.HumidityRatio, start.Pressure);
+            }
+            else
+            {
+                end = MollierPoint_ByEnthalpy(dryBulbTemperature_Saturation, humidityRatio_Saturation, start.Pressure);
+            }
+
             if (end == null)
             {
                 return null;
