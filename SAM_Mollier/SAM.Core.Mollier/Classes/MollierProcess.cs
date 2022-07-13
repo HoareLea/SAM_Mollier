@@ -71,7 +71,7 @@ namespace SAM.Core.Mollier
             double dryBulbTemperatureDifference = start.DryBulbTemperature - end.DryBulbTemperature;
             double humidityRatioDifference = start.HumidityRatio - end.HumidityRatio;
 
-            end = new MollierPoint(start.DryBulbTemperature + (dryBulbTemperatureDifference * factor), start.HumidityRatio + (humidityRatioDifference * factor), start.Pressure);
+            end = new MollierPoint(start.DryBulbTemperature - (dryBulbTemperatureDifference * factor), start.HumidityRatio - (humidityRatioDifference * factor), start.Pressure);
         }
 
         public bool FromJObject(JObject jObject)
