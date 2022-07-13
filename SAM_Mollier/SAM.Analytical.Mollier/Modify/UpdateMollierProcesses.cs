@@ -251,11 +251,12 @@ namespace SAM.Analytical.Mollier
                         double dewPointTemperature = start.DewPointTemperature();
 
                         double dryBulbTemperature = summerSupplyTempearture - pickupTemperature;
-                        double humidityRatio = dewPointTemperature < dryBulbTemperature_ADP ? start.HumidityRatio : humidityRatio_ADP * (dryBulbTemperature - start.DryBulbTemperature) - start.HumidityRatio * ((dryBulbTemperature - dryBulbTemperature_ADP) / (dryBulbTemperature_ADP - start.DryBulbTemperature));
+                        double humidityRatio = dewPointTemperature < dryBulbTemperature_ADP ? start.HumidityRatio : (humidityRatio_ADP * (dryBulbTemperature - start.DryBulbTemperature) - start.HumidityRatio * (dryBulbTemperature - dryBulbTemperature_ADP)) / (dryBulbTemperature_ADP - start.DryBulbTemperature);
 
                         MollierPoint mollierPoint_End = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
 
                         double coolingCoilContactFactor = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);//coolingProcess.ContactFactor();
+                        double coolingCoilContactFactor_2 = System.Math.Sqrt((System.Math.Pow(start.DryBulbTemperature - dryBulbTemperature, 2) + System.Math.Pow(start.HumidityRatio - humidityRatio, 2)) / (System.Math.Pow(start.DryBulbTemperature - dryBulbTemperature_ADP, 2) + System.Math.Pow(start.HumidityRatio - humidityRatio_ADP, 2)));
 
                         CoolingProcess coolingProcess =  Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature_ADP);
                         coolingProcess.Scale(coolingCoilContactFactor);
@@ -265,7 +266,9 @@ namespace SAM.Analytical.Mollier
                             start = coolingProcess.End;
                         }
 
-                        if(!double.IsNaN(coolingCoilContactFactor))
+                        double coolingCoilContactFactor_3 = coolingProcess.ContactFactor();
+
+                        if (!double.IsNaN(coolingCoilContactFactor))
                         {
                             airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingCoilContactFactor);
                         }
