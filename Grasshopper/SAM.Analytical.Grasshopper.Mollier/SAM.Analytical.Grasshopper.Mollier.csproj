@@ -67,6 +67,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component\SAMMollierCreateMollierPoint.cs" />
     <Compile Include="Component\SAMMollierCalculateAHU.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,6 +100,10 @@
     <ProjectReference Include="..\..\SAM_Mollier\SAM.Core.Mollier\SAM.Core.Mollier.csproj">
       <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
       <Name>SAM.Core.Mollier</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Core.Grasshopper.Mollier\SAM.Core.Grasshopper.Mollier.csproj">
+      <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
+      <Name>SAM.Core.Grasshopper.Mollier</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

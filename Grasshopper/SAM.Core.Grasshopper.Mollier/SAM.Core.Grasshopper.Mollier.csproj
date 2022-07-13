@@ -44,6 +44,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SAM.Core, Version=1.0.8228.21021, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SAM\build\SAM.Core.dll</HintPath>
+    </Reference>
     <Reference Include="SAM.Core.Grasshopper">
       <HintPath>..\..\..\SAM\build\SAM.Core.Grasshopper.dll</HintPath>
     </Reference>
@@ -56,6 +60,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooMollierPoint.cs" />
+    <Compile Include="Classes\GooMollierProcess.cs" />
     <Compile Include="Component\SAMMollierDryBulbTemperature.cs" />
     <Compile Include="Component\SAMMollierPsychrometrics.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
@@ -92,7 +98,6 @@
     <None Include="Resources\SAM_Get.Filterpng.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Classes\" />
     <Folder Include="Convert\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Query\" />
