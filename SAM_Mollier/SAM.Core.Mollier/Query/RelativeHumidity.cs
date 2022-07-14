@@ -70,7 +70,7 @@
                 return double.NaN;
             }
 
-            return System.Math.Min(1, pressureRatio / SaturationVapourPressure(dryBulbTemperature));
+            return System.Math.Min(1, pressureRatio / SaturationVapourPressure(dryBulbTemperature)) * 100;
         }
 
 
