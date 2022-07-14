@@ -68,7 +68,7 @@ namespace SAM.Weather.Mollier
 
         public static List<Core.Mollier.MollierPoint> MollierPoints(this WeatherYear weatherYear)
         {
-
+            throw new System.NotImplementedException();
         }
     }
 }
