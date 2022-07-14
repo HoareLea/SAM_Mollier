@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\WeatherMollierPoint.cs" />
+    <Compile Include="Query\WeatherMollierPoints.cs" />
     <Compile Include="Query\MollierPoints.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -53,6 +55,11 @@
       <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
       <Name>SAM.Core.Mollier</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

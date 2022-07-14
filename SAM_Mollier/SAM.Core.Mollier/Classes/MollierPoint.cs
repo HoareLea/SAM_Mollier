@@ -87,7 +87,7 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if(jObject == null)
             {
@@ -101,12 +101,12 @@ namespace SAM.Core.Mollier
             return true;
         }
 
-        public bool IsValid()
+        public virtual bool IsValid()
         {
             return !double.IsNaN(dryBulbTemperature) && !double.IsNaN(humidityRatio) && !double.IsNaN(pressure);
         }
 
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
