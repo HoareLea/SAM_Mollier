@@ -291,7 +291,7 @@ namespace SAM.Analytical.Mollier
 
                     if(airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, out bool summerHeatingCoil) && summerHeatingCoil)
                     {
-                        double temperatureDifference = start.DryBulbTemperature - summerSpaceTemperature;
+                        double temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature;
                         HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(start, temperatureDifference);
                         if (heatingProcess != null)
                         {
