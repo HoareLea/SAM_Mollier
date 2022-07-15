@@ -51,7 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SAM_Mollier\SAM.Core.Mollier\SAM.Core.Mollier.csproj">
+    <ProjectReference Include="..\SAM.Core.Mollier\SAM.Core.Mollier.csproj">
       <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
       <Name>SAM.Core.Mollier</Name>
     </ProjectReference>
