@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Mollier", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Grasshopper.Mollier", "Grasshopper\SAM.Analytical.Grasshopper.Mollier\SAM.Analytical.Grasshopper.Mollier.csproj", "{BFE81D91-D95F-4644-9B0B-2970B95FF8ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Mollier", "SAM.Weather.Mollier\SAM.Weather.Mollier.csproj", "{DE25EB52-8244-4052-90EE-71D9E9A0E773}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Mollier", "SAM_Mollier\SAM.Weather.Mollier\SAM.Weather.Mollier.csproj", "{DE25EB52-8244-4052-90EE-71D9E9A0E773}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
