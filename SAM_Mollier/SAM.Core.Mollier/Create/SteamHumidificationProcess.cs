@@ -62,6 +62,7 @@
             double heatCapacity = start_Temp.HeatCapacity();
             double heatCapacity_Saturation = start_Saturation.HeatCapacity();
 
+            //The small rise in dry-bulb temperature from a steam humidifier is due to the sensible heating effect of the steam.
             //https://www.sciencedirect.com/topics/engineering/steam-humidifier
             double temperatureDifference = (heatCapacity / heatCapacity_Saturation) * (end_Temp.HumidityRatio - start_Temp.HumidityRatio) * (100 - start_Temp.DryBulbTemperature);
 

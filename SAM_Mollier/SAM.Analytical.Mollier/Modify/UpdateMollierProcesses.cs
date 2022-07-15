@@ -134,14 +134,14 @@ namespace SAM.Analytical.Mollier
                 //HUMIDIFICATION (STEAM HUMIDIFIER)
                 if (room != null)
                 {
-                    IsotermicHumidificationProcess isotermicHumidificationProcess = Core.Mollier.Create.IsotermicHumidificationProcess_ByRelativeHumidity(start, room.RelativeHumidity);
-                    if (isotermicHumidificationProcess != null)
+                    SteamHumidificationProcess steamHumidificationProcess = Core.Mollier.Create.SteamHumidificationProcess_ByRelativeHumidity(start, room.RelativeHumidity);
+                    if (steamHumidificationProcess != null)
                     {
-                        mollierProcesses.Add(isotermicHumidificationProcess);
-                        start = isotermicHumidificationProcess.End;
+                        mollierProcesses.Add(steamHumidificationProcess);
+                        start = steamHumidificationProcess.End;
                     }
 
-                    double humidificationDuty = Core.Mollier.Query.Duty(isotermicHumidificationProcess, supplyAirFlow);
+                    double humidificationDuty = Core.Mollier.Query.Duty(steamHumidificationProcess, supplyAirFlow);
                     if(!double.IsNaN(humidificationDuty))
                     {
                         airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.HumidificationDuty, humidificationDuty);
