@@ -289,11 +289,55 @@ namespace SAM.Analytical.Mollier
                         }
                     }
 
-                    //MollierPoint mollierPoint_ADP = Core.Mollier.Create.MollierPoint_ByRelativeHumidity((coolingCoilFluidFlowTemperature + coolingCoilFluidReturnTemperature) / 2, 100, pressure);
-                    //if(mollierPoint_ADP != null)
-                    //{
+                    if(airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, out bool summerHeatingCoil) && summerHeatingCoil)
+                    {
+                        double temperatureDifference = start.DryBulbTemperature - summerSpaceTemperature;
+                        HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(start, temperatureDifference);
+                        if (heatingProcess != null)
+                        {
+                            mollierProcesses.Add(heatingProcess);
+                            start = heatingProcess.End;
 
-                    //}
+                            double heatingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
+                            if (!double.IsNaN(heatingCoilSensibleLoad))
+                            {
+                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoilSensibleLoad, heatingCoilSensibleLoad);
+                            }
+
+                            double heatingCoilTotalLoad = Core.Mollier.Query.TotalLoad(heatingProcess, supplyAirFlow);
+                            if (!double.IsNaN(heatingCoilTotalLoad))
+                            {
+                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoilTotalLoad, heatingCoilTotalLoad);
+                            }
+                        }
+                    }
+
+                    //HEATING (FAN)
+                    double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(start, spf);
+
+                    HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
+                    if (heatingProcess_Fan != null)
+                    {
+                        mollierProcesses.Add(heatingProcess_Fan);
+                        start = heatingProcess_Fan.End;
+                    }
+
+                    if (start != null)
+                    {
+                        airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerSupplyFanTemperature, start.DryBulbTemperature);
+                        airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerSupplyFanRelativeHumidty, start.RelativeHumidity);
+                    }
+
+                    //TO ROOM
+                    if (room != null)
+                    {
+                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room);
+                        if (undefinedProcess != null)
+                        {
+                            mollierProcesses.Add(undefinedProcess);
+                            start = undefinedProcess.End;
+                        }
+                    }
                 }
             }
 

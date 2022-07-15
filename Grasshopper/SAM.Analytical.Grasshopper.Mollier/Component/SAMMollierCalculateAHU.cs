@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.7";
+        public override string LatestComponentVersion => "1.0.8";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -53,6 +53,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidFlowTemperature_", NickName = "heatingCoilFluidFlowTemperature_", Description = "Heating Coil Fluid Flow Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidReturnTemperature_", NickName = "heatingCoilFluidReturnTemperature_", Description = "Heating Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatingCoilSupplyTemperature_", NickName = "winterHeatingCoilSupplyTemperature_", Description = "Winter Heating Coil Supply Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerHeatingCoil_", NickName = "summerHeatingCoil_", Description = "Summer Heating Coil (Yes or No)", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -291,7 +292,16 @@ namespace SAM.Analytical.Grasshopper
                 winterHeatingCoilSupplyTemperature = value;
             }
 
-            if(!double.IsNaN(summerSupplyTemperature))
+            bool @bool = false;
+
+            bool? summerHeatingCoil = null;
+            index = Params.IndexOfInputParam("summerHeatingCoil_");
+            if (index != -1 && dataAccess.GetData(index, ref @bool))
+            {
+                summerHeatingCoil = @bool;
+            }
+
+            if (!double.IsNaN(summerSupplyTemperature))
             {
                 airHandlingUnit.SetValue(AirHandlingUnitParameter.SummerSupplyTemperature, summerSupplyTemperature);
             }
@@ -369,6 +379,11 @@ namespace SAM.Analytical.Grasshopper
             if (!double.IsNaN(winterHeatingCoilSupplyTemperature))
             {
                 airHandlingUnit.SetValue(AirHandlingUnitParameter.WinterHeatingCoilSupplyTemperature, winterHeatingCoilSupplyTemperature);
+            }
+
+            if (summerHeatingCoil != null && summerHeatingCoil.HasValue)
+            {
+                airHandlingUnit.SetValue(AirHandlingUnitParameter.SummerHeatingCoil, summerHeatingCoil);
             }
 
             adjacencyCluster.AddObject(airHandlingUnit);

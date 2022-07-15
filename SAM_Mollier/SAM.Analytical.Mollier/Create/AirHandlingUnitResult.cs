@@ -219,10 +219,14 @@ namespace SAM.Analytical.Mollier
                 }
             }
 
-
-            if(!double.IsNaN(winterSupplyTemperature))
+            if (!double.IsNaN(winterSupplyTemperature))
             {
                 result.SetValue(AirHandlingUnitResultParameter.WinterSupplyTemperature, winterSupplyTemperature);
+            }
+
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatingCoil, out bool summerHeatingCoil))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, summerHeatingCoil);
             }
 
             if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerSupplyTemperature, out double summerSupplyTemperature) && !double.IsNaN(summerSupplyTemperature))
