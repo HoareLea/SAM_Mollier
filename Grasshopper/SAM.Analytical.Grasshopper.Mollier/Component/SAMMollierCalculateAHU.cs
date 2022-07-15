@@ -141,11 +141,20 @@ namespace SAM.Analytical.Grasshopper
             AirHandlingUnit airHandlingUnit = null;
             if (@object is string)
             {
-                airHandlingUnit = adjacencyCluster?.GetObjects((AirHandlingUnit x) => x.Name == (string)@object).FirstOrDefault();
+                string name = (string)@object;
+                airHandlingUnit = adjacencyCluster?.GetObjects((AirHandlingUnit x) => x.Name == name)?.FirstOrDefault();
+                if(airHandlingUnit == null)
+                {
+                    airHandlingUnit = Create.AirHandlingUnit(name);
+                }
             }
             else if(@object is AirHandlingUnit)
             {
                 airHandlingUnit = adjacencyCluster?.GetObject<AirHandlingUnit>(((AirHandlingUnit)@object).Guid);
+                if(airHandlingUnit == null)
+                {
+                    airHandlingUnit = (AirHandlingUnit)@object;
+                }
             }
 
             if (airHandlingUnit == null)
@@ -282,10 +291,6 @@ namespace SAM.Analytical.Grasshopper
                 winterHeatingCoilSupplyTemperature = value;
             }
 
-            AirHandlingUnitResult airHandlingUnitResult = null;
-
-
-
             if(!double.IsNaN(summerSupplyTemperature))
             {
                 airHandlingUnit.SetValue(AirHandlingUnitParameter.SummerSupplyTemperature, summerSupplyTemperature);
@@ -366,11 +371,10 @@ namespace SAM.Analytical.Grasshopper
                 airHandlingUnit.SetValue(AirHandlingUnitParameter.WinterHeatingCoilSupplyTemperature, winterHeatingCoilSupplyTemperature);
             }
 
-            adjacencyCluster = analyticalModel.AdjacencyCluster;
             adjacencyCluster.AddObject(airHandlingUnit);
             analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
 
-            airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, airHandlingUnit.Name);
+            AirHandlingUnitResult airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, airHandlingUnit.Name);
             if (airHandlingUnit != null && airHandlingUnitResult != null)
             {
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
