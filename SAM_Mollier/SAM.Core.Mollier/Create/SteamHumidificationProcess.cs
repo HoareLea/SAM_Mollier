@@ -25,7 +25,7 @@
                 return null;
             }
 
-            IsotermicHumidificationProcess isotermicHumidificationProcess = SteamHumidificationProcess_ByRelativeHumidity(start, relativeHumidity);
+            IsotermicHumidificationProcess isotermicHumidificationProcess = IsotermicHumidificationProcess_ByRelativeHumidity(start, relativeHumidity);
             if (isotermicHumidificationProcess == null)
             {
                 return null;
