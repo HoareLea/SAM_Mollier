@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using SAM.Core.Grasshopper;
 using SAM.Analytical.Mollier;
+using Grasshopper.Kernel.Types;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -32,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analytcailModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "AHU Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_airHandlingUnit", NickName = "_airHandlingUnit", Description = "SAM Analytical AirHandlingUnit or name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterSupplyTemperature_", NickName = "winterSupplyTemperature_", Description = "Winter Supply Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerSupplyTemperature_", NickName = "summerSupplyTemperature_", Description = "Summer Supply Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "frostCoilOffTemperature_", NickName = "frostCoilOffTemperature_", Description = "Frost Coil Off Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -114,16 +116,41 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_name");
+            index = Params.IndexOfInputParam("_airHandlingUnit");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            string name = null;
-            if (!dataAccess.GetData(index, ref name) || string.IsNullOrWhiteSpace(name))
+
+            GH_ObjectWrapper objectWrapper = null;
+            if (!dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            object @object = objectWrapper.Value;
+            if (@object is IGH_Goo)
+            {
+                @object = (@object as dynamic).Value;
+            }
+
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
+
+            AirHandlingUnit airHandlingUnit = null;
+            if (@object is string)
+            {
+                airHandlingUnit = adjacencyCluster?.GetObjects((AirHandlingUnit x) => x.Name == (string)@object).FirstOrDefault();
+            }
+            else if(@object is AirHandlingUnit)
+            {
+                airHandlingUnit = adjacencyCluster?.GetObject<AirHandlingUnit>(((AirHandlingUnit)@object).Guid);
+            }
+
+            if (airHandlingUnit == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not find or create Air Handling Unit");
                 return;
             }
 
@@ -257,19 +284,7 @@ namespace SAM.Analytical.Grasshopper
 
             AirHandlingUnitResult airHandlingUnitResult = null;
 
-            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
 
-            AirHandlingUnit airHandlingUnit = adjacencyCluster?.GetObject((AirHandlingUnit x) => x.Name == name);
-            if (airHandlingUnit == null)
-            {
-                airHandlingUnit = Create.AirHandlingUnit(name);
-            }
-
-            if(airHandlingUnit == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not find or create Air Handling Unit");
-                return;
-            }
 
             if(!double.IsNaN(summerSupplyTemperature))
             {
@@ -355,7 +370,7 @@ namespace SAM.Analytical.Grasshopper
             adjacencyCluster.AddObject(airHandlingUnit);
             analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
 
-            airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, name);
+            airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, airHandlingUnit.Name);
             if (airHandlingUnit != null && airHandlingUnitResult != null)
             {
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
