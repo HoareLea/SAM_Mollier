@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\SteamHumidificationProcess.cs" />
     <Compile Include="Classes\IsotermicHumidificationProcess.cs" />
     <Compile Include="Classes\CoolingProcess.cs" />
     <Compile Include="Classes\AdiabaticHumidificationProcess.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Classes\HeatRecoveryProcess.cs" />
     <Compile Include="Classes\MollierProcess.cs" />
     <Compile Include="Classes\HeatingProcess.cs" />
+    <Compile Include="Create\SteamHumidificationProcess.cs" />
     <Compile Include="Create\IsotermicHumidificationProcess.cs" />
     <Compile Include="Create\AdiabaticHumidificationProcess.cs" />
     <Compile Include="Create\UndefinedProcess.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\SaturationHumidityRatio.cs" />
+    <Compile Include="Query\SaturationMollierPoint.cs" />
     <Compile Include="Query\SaturationTemperature.cs" />
     <Compile Include="Query\Duty.cs" />
     <Compile Include="Query\TotalLoad.cs" />
