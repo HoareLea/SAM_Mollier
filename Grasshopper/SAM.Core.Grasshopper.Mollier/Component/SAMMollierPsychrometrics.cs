@@ -4,6 +4,7 @@ using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
+using SAM.Core.Grasshopper.Mollier;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -17,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,6 +51,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooMollierPointParam { Name = "mollierPoint", NickName = "mollierPoint", Description = "SAM Core Mollier MollierPoint", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dryBulbTemperature", NickName = "dryBulbTemperature", Description = "Dry bulb temperature t [°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "relativeHumidity", NickName = "relativeHumidity", Description = "Relative humidity (0 - 100) φ [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "humidityRatio", NickName = "humidityRatio", Description = "Humidty Ratio x [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -231,6 +233,11 @@ namespace SAM.Analytical.Grasshopper
             temperatureConductivity = Core.Mollier.Query.TemperatureConductivity(dryBulbTemperature, humidityRatio, pressure);
             prandtlNumber = Core.Mollier.Query.PrandtlNumber(dryBulbTemperature, humidityRatio, pressure);
 
+            index = Params.IndexOfOutputParam("mollierPoint");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooMollierPoint(new MollierPoint(dryBulbTemperature, humidityRatio, pressure)));
+            }
 
             index = Params.IndexOfOutputParam("dryBulbTemperature");
             if (index != -1)

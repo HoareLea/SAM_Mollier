@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Classes\GooMollierPoint.cs" />
     <Compile Include="Classes\GooMollierProcess.cs" />
+    <Compile Include="Component\SAMMollierCreateHeatingProcessByDryBulbTemperature.cs" />
     <Compile Include="Component\SAMMollierDryBulbTemperature.cs" />
     <Compile Include="Component\SAMMollierPsychrometrics.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
