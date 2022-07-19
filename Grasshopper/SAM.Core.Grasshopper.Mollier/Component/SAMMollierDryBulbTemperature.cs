@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
 
-namespace SAM.Analytical.Grasshopper
+namespace SAM.Core.Grasshopper.Mollier
 {
     public class SAMMollierDryBulbTemperature : GH_SAMVariableOutputParameterComponent
     {

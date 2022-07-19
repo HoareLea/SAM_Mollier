@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using SAM.Core.Mollier;
 using SAM.Core.Grasshopper.Mollier;
 
-namespace SAM.Analytical.Grasshopper
+namespace SAM.Core.Grasshopper.Mollier
 {
     public class SAMMollierCreateHeatingProcessByDryBulbTemperature : GH_SAMVariableOutputParameterComponent
     {
@@ -89,10 +89,10 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            HeatingProcess heatingProcess = SAM.Core.Mollier.Create.HeatingProcess(mollierPoint, dryBulbTemperature);
+            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(mollierPoint, dryBulbTemperature);
 
 
-            index = Params.IndexOfOutputParam("dryBulbTemperature");
+            index = Params.IndexOfOutputParam("heatingProcess");
             if (index != -1)
             {
                 dataAccess.SetData(index, new GooMollierProcess(heatingProcess));

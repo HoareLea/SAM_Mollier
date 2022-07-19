@@ -1,12 +1,10 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Mollier.Properties;
-using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
-using SAM.Core.Grasshopper.Mollier;
 
-namespace SAM.Analytical.Grasshopper
+namespace SAM.Core.Grasshopper.Mollier
 {
     public class SAMMollierPsychrometrics : GH_SAMVariableOutputParameterComponent
     {

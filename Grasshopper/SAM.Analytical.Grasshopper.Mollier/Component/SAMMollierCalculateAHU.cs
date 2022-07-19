@@ -7,7 +7,7 @@ using SAM.Analytical.Mollier;
 using Grasshopper.Kernel.Types;
 using System.Linq;
 
-namespace SAM.Analytical.Grasshopper
+namespace SAM.Analytical.Grasshopper.Mollier
 {
     public class SAMMollierCalculateAHU : GH_SAMVariableOutputParameterComponent
     {

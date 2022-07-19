@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Grasshopper.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Mollier", "SAM_Mollier\SAM.Weather.Mollier\SAM.Weather.Mollier.csproj", "{DE25EB52-8244-4052-90EE-71D9E9A0E773}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Grasshopper.Mollier", "Grasshopper\SAM.Weather.Grasshopper.Mollier\SAM.Weather.Grasshopper.Mollier.csproj", "{87230A44-B9F2-4FB9-9069-47471C45870E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{DE25EB52-8244-4052-90EE-71D9E9A0E773}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE25EB52-8244-4052-90EE-71D9E9A0E773}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE25EB52-8244-4052-90EE-71D9E9A0E773}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87230A44-B9F2-4FB9-9069-47471C45870E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87230A44-B9F2-4FB9-9069-47471C45870E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87230A44-B9F2-4FB9-9069-47471C45870E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87230A44-B9F2-4FB9-9069-47471C45870E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{0C3F9B06-7679-4E07-AF19-2023743C5B83} = {4FDEDAD6-FCEC-4426-9A3B-086BF3C99CC0}
 		{BFE81D91-D95F-4644-9B0B-2970B95FF8ED} = {B365D5A7-F4F1-4C45-9565-5F6CFC1134A4}
 		{DE25EB52-8244-4052-90EE-71D9E9A0E773} = {4FDEDAD6-FCEC-4426-9A3B-086BF3C99CC0}
+		{87230A44-B9F2-4FB9-9069-47471C45870E} = {B365D5A7-F4F1-4C45-9565-5F6CFC1134A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E0308FF-C8D5-4700-951A-859CB9D4FD09}

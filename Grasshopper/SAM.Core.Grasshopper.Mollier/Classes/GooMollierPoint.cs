@@ -25,7 +25,7 @@ namespace SAM.Core.Grasshopper.Mollier
         }
     }
 
-    public class GooMollierPointParam : GH_PersistentParam<GooMollierProcess>
+    public class GooMollierPointParam : GH_PersistentParam<GooMollierPoint>
     {
         public override Guid ComponentGuid => new Guid("0dbb3c67-374c-4534-b1c1-83d825566bc1");
 
@@ -36,12 +36,12 @@ namespace SAM.Core.Grasshopper.Mollier
         {
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GooMollierProcess> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooMollierPoint> values)
         {
             throw new NotImplementedException();
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooMollierProcess value)
+        protected override GH_GetterResult Prompt_Singular(ref GooMollierPoint value)
         {
             throw new NotImplementedException();
         }

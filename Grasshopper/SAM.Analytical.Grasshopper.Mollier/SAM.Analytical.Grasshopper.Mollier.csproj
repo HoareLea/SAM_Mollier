@@ -67,7 +67,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Component\SAMMollierCreateMollierPoint.cs" />
     <Compile Include="Component\SAMMollierCalculateAHU.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
