@@ -31,7 +31,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_temperatureDifference", NickName = "_t", Description = "TemperatureDifference [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_temperatureDifference", NickName = "_temperatureDifference", Description = "Temperature Difference [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -50,8 +50,8 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMMollierCreateHeatingProcessByDryBulbTemperature()
-          : base("SAMMollier.CreateHeatingProcessByDryBulbTemperature", "SAMMollier.CreateHeatingProcessByDryBulbTemperature",
+        public SAMMollierCreateHeatingProcessByTemperatureDifference()
+          : base("SAMMollier.CreateHeatingProcessByTemperatureDifference", "SAMMollier.CreateHeatingProcessByTemperatureDifference",
               "Creates HeatingProcess",
               "SAM", "Mollier")
         {
@@ -74,20 +74,20 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            index = Params.IndexOfInputParam("_dryBulbTemperature");
+            index = Params.IndexOfInputParam("_temperatureDifference");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            double dryBulbTemperature = double.NaN;
-            if (!dataAccess.GetData(index, ref dryBulbTemperature) || double.IsNaN(dryBulbTemperature))
+            double temperatureDifferencee = double.NaN;
+            if (!dataAccess.GetData(index, ref temperatureDifferencee) || double.IsNaN(temperatureDifferencee))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(mollierPoint, dryBulbTemperature);
+            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(mollierPoint, temperatureDifferencee);
 
 
             index = Params.IndexOfOutputParam("heatingProcess");

@@ -66,7 +66,10 @@
     <Compile Include="Component\SAMMollierCreateCoolingProcessByMedium.cs" />
     <Compile Include="Component\SAMMollierCreateCoolingProcessByEnthalpyDifference.cs" />
     <Compile Include="Component\SAMMollierCreateCoolingProcessByTemperatureDifference.cs" />
+    <Compile Include="Component\SAMMollierCreateHeatingProcessByEnthalpyDifference.cs" />
     <Compile Include="Component\SAMMollierCreateHeatingProcessByTemperatureDifference.cs" />
+    <Compile Include="Component\SAMMollierCreateIsotermicHumidificationProcessByRelativeHumidity.cs" />
+    <Compile Include="Component\SAMMollierCreateSteamHumidificationProcessByRelativeHumidity.cs" />
     <Compile Include="Component\SAMMollierCreateSteamHumidificationProcessByHumidityRatioDifference.cs" />
     <Compile Include="Component\SAMMollierCreateMixingProcess.cs" />
     <Compile Include="Component\SAMMollierCreateIsotermicHumidificationProcessByHumidityRatioDifference.cs" />
