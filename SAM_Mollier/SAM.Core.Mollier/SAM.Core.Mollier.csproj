@@ -70,6 +70,7 @@
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\Elevation.cs" />
     <Compile Include="Query\SaturationHumidityRatio.cs" />
     <Compile Include="Query\SaturationMollierPoint.cs" />
     <Compile Include="Query\SaturationTemperature.cs" />
