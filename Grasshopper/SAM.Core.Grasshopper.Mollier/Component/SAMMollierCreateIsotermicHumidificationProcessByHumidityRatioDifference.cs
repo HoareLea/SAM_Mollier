@@ -11,7 +11,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("99955776-44ad-43d6-b390-153420576325");
+        public override Guid ComponentGuid => new Guid("82eb0327-104c-43a5-81b6-334e953e6efe");
 
         /// <summary>
         /// The latest version of this component
