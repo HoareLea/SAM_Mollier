@@ -1,19 +1,17 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Mollier.Properties;
-using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
-using SAM.Core.Grasshopper.Mollier;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class SAMMollierCreateHeatingProcessByDryBulbTemperature : GH_SAMVariableOutputParameterComponent
+    public class SAMMollierCreateCoolingProcessByDryBulbTemperature : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("6ddcf61c-1acf-4f9a-a49a-0602dbd3895b");
+        public override Guid ComponentGuid => new Guid("5815e44d-341e-4516-b49e-e5e9499e2803");
 
         /// <summary>
         /// The latest version of this component
@@ -43,7 +41,7 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "heatingProcess", NickName = "heatingProcess", Description = "Heating Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "coolingProcess", NickName = "coolingProcess", Description = "Cooling Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -52,9 +50,9 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMMollierCreateHeatingProcessByDryBulbTemperature()
-          : base("SAMMollier.CreateHeatingProcessByDryBulbTemperature", "SAMMollier.CreateHeatingProcessByDryBulbTemperature",
-              "Creates HeatingProcess",
+        public SAMMollierCreateCoolingProcessByDryBulbTemperature()
+          : base("SAMMollier.CreateCoolingProcessByDryBulbTemperature", "SAMMollier.CreateCoolingProcessByDryBulbTemperature",
+              "Creates CoolingProcess",
               "SAM", "Mollier")
         {
         }
@@ -89,13 +87,13 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(mollierPoint, dryBulbTemperature);
+            CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(mollierPoint, dryBulbTemperature);
 
 
-            index = Params.IndexOfOutputParam("heatingProcess");
+            index = Params.IndexOfOutputParam("coolingProcess");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooMollierProcess(heatingProcess));
+                dataAccess.SetData(index, new GooMollierProcess(coolingProcess));
             }
         }
     }

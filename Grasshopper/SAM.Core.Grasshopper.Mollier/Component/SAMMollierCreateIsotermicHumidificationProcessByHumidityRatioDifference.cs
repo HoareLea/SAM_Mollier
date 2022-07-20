@@ -1,19 +1,17 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Mollier.Properties;
-using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
-using SAM.Core.Grasshopper.Mollier;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class SAMMollierCreateHeatingProcessByDryBulbTemperature : GH_SAMVariableOutputParameterComponent
+    public class SAMMollierCreateIsotermicHumidificationProcessByHumidityRatioDifference : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("6ddcf61c-1acf-4f9a-a49a-0602dbd3895b");
+        public override Guid ComponentGuid => new Guid("99955776-44ad-43d6-b390-153420576325");
 
         /// <summary>
         /// The latest version of this component
@@ -33,7 +31,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry Bulb Tempearture [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatioDifference", NickName = "_humidityRatioDifference", Description = "Humidity Ratio Difference", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -43,7 +41,7 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "heatingProcess", NickName = "heatingProcess", Description = "Heating Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "isotermicHumidificationProcess", NickName = "isotermicHumidificationProcess", Description = "IsotermicHumidificationProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -52,9 +50,9 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMMollierCreateHeatingProcessByDryBulbTemperature()
-          : base("SAMMollier.CreateHeatingProcessByDryBulbTemperature", "SAMMollier.CreateHeatingProcessByDryBulbTemperature",
-              "Creates HeatingProcess",
+        public SAMMollierCreateIsotermicHumidificationProcessByHumidityRatioDifference()
+          : base("SAMMollier.CreateIsotermicHumidificationProcessByHumidityRatioDifference", "SAMMollier.CreateIsotermicHumidificationProcessByHumidityRatioDifference",
+              "Creates IsotermicHumidificationProcess",
               "SAM", "Mollier")
         {
         }
@@ -76,26 +74,25 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            index = Params.IndexOfInputParam("_dryBulbTemperature");
+            index = Params.IndexOfInputParam("_humidityRatioDifference");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            double dryBulbTemperature = double.NaN;
-            if (!dataAccess.GetData(index, ref dryBulbTemperature) || double.IsNaN(dryBulbTemperature))
+            double humidityRatioDifference = double.NaN;
+            if (!dataAccess.GetData(index, ref humidityRatioDifference) || double.IsNaN(humidityRatioDifference))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(mollierPoint, dryBulbTemperature);
+            IsotermicHumidificationProcess isotermicHumidificationProcess = Core.Mollier.Create.IsotermicHumidificationProcess_ByHumidityRatioDifference(mollierPoint, humidityRatioDifference);
 
-
-            index = Params.IndexOfOutputParam("heatingProcess");
+            index = Params.IndexOfOutputParam("isotermicHumidificationProcess");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooMollierProcess(heatingProcess));
+                dataAccess.SetData(index, new GooMollierProcess(isotermicHumidificationProcess));
             }
         }
     }
