@@ -6,12 +6,12 @@ using SAM.Core.Mollier;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class SAMMollierCreateCoolingProcessByDryBulbTemperature : GH_SAMVariableOutputParameterComponent
+    public class SAMMollierCreateHeatingProcessByEnthalpyDifference : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("06cec1b1-efa9-46d6-a79b-547bb5546c78");
+        public override Guid ComponentGuid => new Guid("74709b81-c373-4821-88b1-3fbf815648f3");
 
         /// <summary>
         /// The latest version of this component
@@ -31,7 +31,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry Bulb Temperature [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_enthalpyDifference", NickName = "_enthalpyDifference", Description = "Enthalpy Difference []", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -41,7 +41,7 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "coolingProcess", NickName = "coolingProcess", Description = "Cooling Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "heatingProcess", NickName = "heatingProcess", Description = "Heating Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -50,9 +50,9 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMMollierCreateCoolingProcessByDryBulbTemperature()
-          : base("SAMMollier.CreateCoolingProcessByDryBulbTemperature", "SAMMollier.CreateCoolingProcessByDryBulbTemperature",
-              "Creates CoolingProcess",
+        public SAMMollierCreateHeatingProcessByEnthalpyDifference()
+          : base("SAMMollier.CreateHeatingProcessByEnthalpyDifference", "SAMMollier.CreateHeatingProcessByEnthalpyDifference",
+              "Creates HeatingProcess",
               "SAM", "Mollier")
         {
         }
@@ -74,26 +74,26 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            index = Params.IndexOfInputParam("_dryBulbTemperature");
+            index = Params.IndexOfInputParam("_enthalpyDifference");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            double dryBulbTemperature = double.NaN;
-            if (!dataAccess.GetData(index, ref dryBulbTemperature) || double.IsNaN(dryBulbTemperature))
+            double enthalpyDifference = double.NaN;
+            if (!dataAccess.GetData(index, ref enthalpyDifference) || double.IsNaN(enthalpyDifference))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(mollierPoint, dryBulbTemperature);
+            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByEnthalpyDifference(mollierPoint, enthalpyDifference);
 
 
-            index = Params.IndexOfOutputParam("coolingProcess");
+            index = Params.IndexOfOutputParam("heatingProcess");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooMollierProcess(coolingProcess));
+                dataAccess.SetData(index, new GooMollierProcess(heatingProcess));
             }
         }
     }

@@ -6,12 +6,12 @@ using SAM.Core.Mollier;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class SAMMollierCreateCoolingProcessByDryBulbTemperature : GH_SAMVariableOutputParameterComponent
+    public class SAMMollierCreateCoolingProcessByMedium : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("06cec1b1-efa9-46d6-a79b-547bb5546c78");
+        public override Guid ComponentGuid => new Guid("86a92a8e-c89a-45f4-97a5-9c2447543098");
 
         /// <summary>
         /// The latest version of this component
@@ -31,7 +31,10 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry Bulb Temperature [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() {Name = "_flowTemperature", NickName = "_flowTemperature", Description = "Flow Temperature [C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_returnTemperature", NickName = "_returnTemperature", Description = "Return Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_efficiency", NickName = "_efficiency", Description = "Efficiency [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -50,8 +53,8 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMMollierCreateCoolingProcessByDryBulbTemperature()
-          : base("SAMMollier.CreateCoolingProcessByDryBulbTemperature", "SAMMollier.CreateCoolingProcessByDryBulbTemperature",
+        public SAMMollierCreateCoolingProcessByMedium()
+          : base("SAMMollier.CreateCoolingProcessByMedium", "SAMMollier.CreateCoolingProcessByMedium",
               "Creates CoolingProcess",
               "SAM", "Mollier")
         {
@@ -74,20 +77,46 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            index = Params.IndexOfInputParam("_dryBulbTemperature");
+            index = Params.IndexOfInputParam("_flowTemperature");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            double dryBulbTemperature = double.NaN;
-            if (!dataAccess.GetData(index, ref dryBulbTemperature) || double.IsNaN(dryBulbTemperature))
+            double flowTemperature = double.NaN;
+            if (!dataAccess.GetData(index, ref flowTemperature) || double.IsNaN(flowTemperature))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(mollierPoint, dryBulbTemperature);
+            index = Params.IndexOfInputParam("_returnTemperature");
+            if (index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            double returnTemperature = double.NaN;
+            if (!dataAccess.GetData(index, ref returnTemperature) || double.IsNaN(returnTemperature))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            index = Params.IndexOfInputParam("_efficency");
+            if (index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            double efficiency = double.NaN;
+            if (!dataAccess.GetData(index, ref efficiency) || double.IsNaN(efficiency))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess_ByMedium(mollierPoint,flowTemperature, returnTemperature, efficiency);
 
 
             index = Params.IndexOfOutputParam("coolingProcess");

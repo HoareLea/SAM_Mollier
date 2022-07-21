@@ -6,12 +6,12 @@ using SAM.Core.Mollier;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class SAMMollierCreateCoolingProcessByDryBulbTemperature : GH_SAMVariableOutputParameterComponent
+    public class SAMMollierCreateAdiabaticHumidificationProcessByRelativeHumidity : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("06cec1b1-efa9-46d6-a79b-547bb5546c78");
+        public override Guid ComponentGuid => new Guid("4aaf217e-1bdb-4383-ac66-c199adc5dbfa");
 
         /// <summary>
         /// The latest version of this component
@@ -31,7 +31,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry Bulb Temperature [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_relativeHumidity", NickName = "_relativeHumidity", Description = "Relative Humidity []", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -41,7 +41,7 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "coolingProcess", NickName = "coolingProcess", Description = "Cooling Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "adiabaticHumidificationProcess", NickName = "adiabaticHumidificationProcess", Description = "AdiabaticHumidificationProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -50,9 +50,9 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMMollierCreateCoolingProcessByDryBulbTemperature()
-          : base("SAMMollier.CreateCoolingProcessByDryBulbTemperature", "SAMMollier.CreateCoolingProcessByDryBulbTemperature",
-              "Creates CoolingProcess",
+        public SAMMollierCreateAdiabaticHumidificationProcessByRelativeHumidity()
+          : base("SAMMollier.CreateAdiabaticHumidificationProcessByRelativeHumidity", "SAMMollier.CreateAdiabaticHumidificationProcessByRelativeHumidity",
+              "Creates AdiabaticHumidificationProcess",
               "SAM", "Mollier")
         {
         }
@@ -74,26 +74,26 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            index = Params.IndexOfInputParam("_dryBulbTemperature");
+            index = Params.IndexOfInputParam("_relativeHumidity");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            double dryBulbTemperature = double.NaN;
-            if (!dataAccess.GetData(index, ref dryBulbTemperature) || double.IsNaN(dryBulbTemperature))
+            double relativeHumidity = double.NaN;
+            if (!dataAccess.GetData(index, ref relativeHumidity) || double.IsNaN(relativeHumidity))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(mollierPoint, dryBulbTemperature);
+            AdiabaticHumidificationProcess adiabaticHumidificationProcess = Core.Mollier.Create.AdiabaticHumidificationProcess_ByRelativeHumidity(mollierPoint, relativeHumidity);
 
 
-            index = Params.IndexOfOutputParam("coolingProcess");
+            index = Params.IndexOfOutputParam("adiabaticHumidificationProcess");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooMollierProcess(coolingProcess));
+                dataAccess.SetData(index, new GooMollierProcess(adiabaticHumidificationProcess));
             }
         }
     }
