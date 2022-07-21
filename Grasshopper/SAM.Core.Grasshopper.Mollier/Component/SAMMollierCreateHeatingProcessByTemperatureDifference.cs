@@ -87,7 +87,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(mollierPoint, temperatureDifferencee);
+            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(mollierPoint, temperatureDifferencee);
 
 
             index = Params.IndexOfOutputParam("heatingProcess");
