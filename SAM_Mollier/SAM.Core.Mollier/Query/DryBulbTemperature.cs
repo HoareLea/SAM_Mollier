@@ -183,7 +183,7 @@ namespace SAM.Core.Mollier
             }
 
 
-            return Core.Query.Calculate_BinarySearch((double x) => Density(x, relativeHumidity, pressure), density, -50, 150);
+            return Core.Query.Calculate_BinarySearch((double x) => Density(x, relativeHumidity, pressure), density, -50, 150, true, 100, SAM.Core.Tolerance.Distance); ;
 
             //double result = 100;
             //double density_Temp = double.NaN;
@@ -221,7 +221,8 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return Core.Query.Calculate((double x) => WetBulbTemperature(x, relativeHumidity, pressure), wetBulbTemperature, 5, 95);
+            //return Core.Query.Calculate((double x) => WetBulbTemperature(x, relativeHumidity, pressure), wetBulbTemperature, 5, 95);
+            return Core.Query.Calculate_BinarySearch((double x) => WetBulbTemperature(x, relativeHumidity, pressure), wetBulbTemperature, -20, 100, false, 100, 0.005);
         }
 
         /// <summary>
