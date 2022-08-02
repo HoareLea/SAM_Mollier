@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\MollierZone.cs" />
     <Compile Include="Classes\SteamHumidificationProcess.cs" />
     <Compile Include="Classes\IsotermicHumidificationProcess.cs" />
     <Compile Include="Classes\CoolingProcess.cs" />
