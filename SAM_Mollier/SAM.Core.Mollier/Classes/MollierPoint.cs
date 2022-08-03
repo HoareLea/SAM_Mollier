@@ -13,6 +13,12 @@ namespace SAM.Core.Mollier
         private double humidityRatio;
         private double pressure;
 
+        /// <summary>
+        /// Create new MollierPoint
+        /// </summary>
+        /// <param name="dryBulbTemperature">Dry-bulb temperature [°C]</param>
+        /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <param name="pressure">Atmospheric pressure [Pa]</param>
         public MollierPoint(double dryBulbTemperature, double humidityRatio, double pressure)
         {
             this.dryBulbTemperature = dryBulbTemperature;

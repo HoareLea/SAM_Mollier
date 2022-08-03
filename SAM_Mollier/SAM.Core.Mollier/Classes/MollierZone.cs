@@ -10,6 +10,19 @@ namespace SAM.Core.Mollier
     public class MollierZone : IJSAMObject
     {
         private List<MollierPoint> mollierPoints;
+
+        public MollierZone(IEnumerable<MollierPoint> mollierPoints)
+        {
+            if (mollierPoints != null)
+            {
+                this.mollierPoints = new List<MollierPoint>();
+                foreach(MollierPoint mollierPoint in mollierPoints)
+                {
+                    this.mollierPoints.Add(mollierPoint.Clone());
+                }
+            }
+        }
+
         public MollierZone(MollierZone mollierZone)
         {
             //mollierPoints = mollierZone?.mollierPoints?.ConvertAll(x => new MollierPoint(x));
@@ -23,6 +36,14 @@ namespace SAM.Core.Mollier
         public MollierZone(JObject jObject)
         {
             FromJObject(jObject);
+        }
+
+        public List<MollierPoint> MollierPoints
+        {
+            get
+            {
+                return mollierPoints?.ConvertAll(x => new MollierPoint(x));
+            }
         }
 
         public bool FromJObject(JObject jObject)
