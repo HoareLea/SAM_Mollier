@@ -26,7 +26,7 @@ namespace SAM.Core.Mollier
         public MollierZone(MollierZone mollierZone)
         {
             //mollierPoints = mollierZone?.mollierPoints?.ConvertAll(x => new MollierPoint(x));
-
+            mollierPoints = new List<MollierPoint>();
             List<MollierPoint> points = mollierZone.mollierPoints;
             foreach(MollierPoint point in points)
             {
@@ -38,6 +38,25 @@ namespace SAM.Core.Mollier
             FromJObject(jObject);
         }
 
+        public MollierPoint GetCenter()
+        {
+            if (mollierPoints == null || mollierPoints.Count == 0)
+            {
+                return null;
+            }
+
+            double dryBulbTemperature = 0, humidityRatio = 0;
+            foreach(MollierPoint mollierPoint in mollierPoints)
+            {
+                dryBulbTemperature += mollierPoint.DryBulbTemperature;
+                humidityRatio += mollierPoint.HumidityRatio;
+            }
+            dryBulbTemperature /= mollierPoints.Count;
+            humidityRatio /= mollierPoints.Count;
+
+            return new MollierPoint(dryBulbTemperature, humidityRatio, mollierPoints[0].Pressure);
+        }
+
         public List<MollierPoint> MollierPoints
         {
             get
@@ -46,7 +65,7 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if(jObject == null)
             {
@@ -76,7 +95,7 @@ namespace SAM.Core.Mollier
             return true;
         }
 
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
