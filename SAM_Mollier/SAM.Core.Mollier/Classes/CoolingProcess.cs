@@ -28,5 +28,19 @@ namespace SAM.Core.Mollier
 
             return System.Math.Abs(start.HumidityRatio - end.HumidityRatio);
         }
+
+        /// <summary>
+        /// ApparatusDewPoint ADP ()
+        /// </summary>
+        /// <returns>ADP MollierPoint</returns>
+        public MollierPoint ApparatusDewPoint()
+        {
+            MollierPoint start = Start;
+            MollierPoint end = End;
+
+            throw new System.NotImplementedException();
+
+            return null;
+        }
     }
 }
