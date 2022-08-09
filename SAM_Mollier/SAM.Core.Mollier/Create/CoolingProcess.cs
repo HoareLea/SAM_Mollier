@@ -33,7 +33,7 @@
                 return null;
             }
 
-            return new CoolingProcess(start, end);
+            return new CoolingProcess(start, end, 1);
         }
 
         public static CoolingProcess CoolingProcess_ByTemperatureDifference(this MollierPoint start, double temperatureDifference)
@@ -75,7 +75,7 @@
                 return null;
             }
 
-            return new CoolingProcess(start, end);
+            return new CoolingProcess(start, end, 1);
         }
 
         public static CoolingProcess CoolingProcess_ByMedium(this MollierPoint start, double flowTemperature, double returnTemperature, double efficiency)
@@ -96,7 +96,7 @@
                 return null;
             }
 
-            return new CoolingProcess(start, end);
+            return new CoolingProcess(start, end, efficiency);
         }
     }
 }
