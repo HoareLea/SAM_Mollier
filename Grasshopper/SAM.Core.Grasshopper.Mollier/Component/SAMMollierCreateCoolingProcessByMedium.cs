@@ -103,7 +103,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            index = Params.IndexOfInputParam("_efficency");
+            index = Params.IndexOfInputParam("_efficiency");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
