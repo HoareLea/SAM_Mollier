@@ -4,16 +4,25 @@ namespace SAM.Core.Mollier
 {
     public class CoolingProcess : MollierProcess
     {
-        internal CoolingProcess(MollierPoint start, MollierPoint end)
+        private double efficiency = 1;
+        internal CoolingProcess(MollierPoint start, MollierPoint end, double efficiency)
             : base(start, end)
         {
-
+            this.efficiency = efficiency;
         }
 
         public CoolingProcess(JObject jObject)
             :base(jObject)
         {
 
+        }
+
+        public double Efficiency
+        {
+            get
+            {
+                return efficiency;
+            }
         }
 
         public double CondensationPrecipation()
@@ -38,37 +47,60 @@ namespace SAM.Core.Mollier
             MollierPoint start = Start;
             MollierPoint end = End;
 
-            //curve parameters
-            double a = (start.DryBulbTemperature - end.DryBulbTemperature) / (start.HumidityRatio - end.HumidityRatio);
-            double b = start.DryBulbTemperature - a * start.HumidityRatio;
-            double value = end.RelativeHumidity;
-            double hum_Temp = end.HumidityRatio;
-            while(100 - value < 0.01)
-            {
-                hum_Temp -= 0.01;
-                double dryBulBTemperature = linearFunction(a, b, hum_Temp);
-                value = Query.RelativeHumidity(dryBulBTemperature , hum_Temp, start.Pressure);
-                if(value == double.NaN)
-                {
-                    break;
-                }
-            }
-            MollierPoint mollierPoint = new MollierPoint(linearFunction(a, b, hum_Temp), hum_Temp, start.Pressure);
-            return mollierPoint;
+            double dewPointY = start.DryBulbTemperature - (start.DryBulbTemperature - end.DryBulbTemperature) / efficiency;
+            double dewPointX = start.HumidityRatio - (start.HumidityRatio - end.HumidityRatio) / efficiency;
+            MollierPoint DewPoint = new MollierPoint(dewPointY, dewPointX, Pressure);
+            return DewPoint;
         }
 
-        public MollierPoint XXXpoint()
+        public MollierPoint DownPoint(MollierPoint dewPoint)
         {
             MollierPoint start = Start;
             MollierPoint end = End;
 
-            throw new System.NotImplementedException();
+            double dryBulbTemperatureDew = start.DryBulbTemperature - efficiency * (start.DryBulbTemperature - Mollier.Query.DryBulbTemperature_ByHumidityRatio(start.HumidityRatio, 100, start.Pressure));
 
-            return null;
+            MollierPoint downPoint = new MollierPoint(dryBulbTemperatureDew, start.HumidityRatio, start.Pressure);
+            return downPoint;
         }
         public double linearFunction(double a, double b, double x)
         {
             return a * x + b;
+        }
+        public double CountDistance(MollierPoint start, MollierPoint end)
+        {
+            return System.Math.Sqrt((System.Math.Pow(start.DryBulbTemperature - end.DryBulbTemperature, 2)) + System.Math.Pow(start.HumidityRatio - end.HumidityRatio, 2));
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if(!base.FromJObject(jObject))
+            {
+                return false;
+            }
+
+            if(jObject.ContainsKey("Efficiency"))
+            {
+                efficiency = jObject.Value<double>("Efficiency");
+            }
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject result = base.ToJObject();
+            if(result == null)
+            {
+                return result;
+            }
+
+            if(!double.IsNaN(efficiency))
+            {
+                result.Add("Efficiency", efficiency);
+            }
+
+            return result;
         }
     }
 }

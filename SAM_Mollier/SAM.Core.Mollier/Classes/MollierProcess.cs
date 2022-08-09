@@ -74,7 +74,7 @@ namespace SAM.Core.Mollier
             end = new MollierPoint(start.DryBulbTemperature - (dryBulbTemperatureDifference * factor), start.HumidityRatio - (humidityRatioDifference * factor), start.Pressure);
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
             {
@@ -87,7 +87,7 @@ namespace SAM.Core.Mollier
             return true;
         }
 
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
