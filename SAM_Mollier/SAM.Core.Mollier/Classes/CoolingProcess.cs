@@ -46,10 +46,23 @@ namespace SAM.Core.Mollier
         {
             MollierPoint start = Start;
             MollierPoint end = End;
-
-            double dewPointY = start.DryBulbTemperature - (start.DryBulbTemperature - end.DryBulbTemperature) / efficiency;
-            double dewPointX = start.HumidityRatio - (start.HumidityRatio - end.HumidityRatio) / efficiency;
-            MollierPoint DewPoint = new MollierPoint(dewPointY, dewPointX, Pressure);
+            if(100 - end.RelativeHumidity < 0.05)//end point hit 100% and DewPoint might not follow straight line
+            {
+                double distance = start.Distance(end) / efficiency - start.Distance(end);//distance vetween end point and dew point
+                double dewPointDryBulbTemperature_Temp = end.DryBulbTemperature;
+                double dewPointHumidityRatio_Temp = end.HumidityRatio;
+                MollierPoint DewPointTemp = new MollierPoint(dewPointDryBulbTemperature_Temp, dewPointHumidityRatio_Temp, Pressure);
+                while (distance - end.Distance(DewPointTemp) > 0.01)
+                {
+                    dewPointHumidityRatio_Temp -= 0.00001;
+                    dewPointDryBulbTemperature_Temp = Query.DryBulbTemperature_ByHumidityRatio(dewPointHumidityRatio_Temp, 100, start.Pressure);
+                    DewPointTemp = new MollierPoint(dewPointDryBulbTemperature_Temp, dewPointHumidityRatio_Temp, Pressure);
+                }
+                return DewPointTemp;
+            }
+            double dewPointDryBulbTemperature = start.DryBulbTemperature - (start.DryBulbTemperature - end.DryBulbTemperature) / efficiency;
+            double dewPointHumidityRatio = start.HumidityRatio - (start.HumidityRatio - end.HumidityRatio) / efficiency;
+            MollierPoint DewPoint = new MollierPoint(dewPointDryBulbTemperature, dewPointHumidityRatio, Pressure);
             return DewPoint;
         }
 
@@ -63,15 +76,6 @@ namespace SAM.Core.Mollier
             MollierPoint downPoint = new MollierPoint(dryBulbTemperatureDew, start.HumidityRatio, start.Pressure);
             return downPoint;
         }
-        public double linearFunction(double a, double b, double x)
-        {
-            return a * x + b;
-        }
-        public double CountDistance(MollierPoint start, MollierPoint end)
-        {
-            return System.Math.Sqrt((System.Math.Pow(start.DryBulbTemperature - end.DryBulbTemperature, 2)) + System.Math.Pow(start.HumidityRatio - end.HumidityRatio, 2));
-        }
-
         public override bool FromJObject(JObject jObject)
         {
             if(!base.FromJObject(jObject))
