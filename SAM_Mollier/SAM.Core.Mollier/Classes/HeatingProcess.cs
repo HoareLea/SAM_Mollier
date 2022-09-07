@@ -15,5 +15,11 @@ namespace SAM.Core.Mollier
         {
 
         }
+
+        public HeatingProcess(HeatingProcess heatingProcess)
+            : base(heatingProcess)
+        {
+
+        }   
     }
 }

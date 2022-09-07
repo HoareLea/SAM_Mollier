@@ -19,5 +19,11 @@ namespace SAM.Core.Mollier
         {
 
         }
+
+        public SteamHumidificationProcess(SteamHumidificationProcess steamHumidificationProcess)
+            : base(steamHumidificationProcess)
+        {
+
+        }
     }
 }

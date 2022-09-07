@@ -15,5 +15,11 @@ namespace SAM.Core.Mollier
         {
 
         }
+
+        public IsotermicHumidificationProcess(IsotermicHumidificationProcess isotermicHumidificationProcess)
+            : base(isotermicHumidificationProcess)
+        {
+
+        }
     }
 }

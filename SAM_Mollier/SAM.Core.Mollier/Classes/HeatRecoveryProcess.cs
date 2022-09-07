@@ -15,5 +15,11 @@ namespace SAM.Core.Mollier
         {
 
         }
+
+        public HeatRecoveryProcess(HeatRecoveryProcess heatRecoveryProcess)
+            : base(heatRecoveryProcess)
+        {
+
+        }
     }
 }

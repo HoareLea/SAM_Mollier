@@ -4,6 +4,7 @@ using SAM.Core.Grasshopper.Mollier.Properties;
 using SAM.Core.Mollier;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
@@ -16,6 +17,11 @@ namespace SAM.Core.Grasshopper.Mollier
 
         public GooMollierProcess(IMollierProcess mollierProcess)
             : base(mollierProcess)
+        {
+        }
+
+        public GooMollierProcess(IMollierProcess mollierProcess, Color color)
+            : base(color == Color.Empty? mollierProcess : new UIMollierProcess(mollierProcess, color))
         {
         }
 

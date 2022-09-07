@@ -3,6 +3,7 @@ using SAM.Core.Grasshopper.Mollier.Properties;
 using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
+using System.Drawing;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
@@ -16,7 +17,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,6 +33,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_enthalpyDifference", NickName = "_enthalpyDifference", Description = "Enthalpy Difference []", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                global::Grasshopper.Kernel.Parameters.Param_Colour param_Colour = null;
+                param_Colour = new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "_color_", NickName = "_color_", Description = "Colour RGB", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Colour, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -42,6 +46,8 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "heatingProcess", NickName = "heatingProcess", Description = "Heating Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "end", NickName = "end", Description = "End", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "color", NickName = "color", Description = "Color", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -87,13 +93,36 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
+            Color color = Color.Empty;
+
+            index = Params.IndexOfInputParam("_color_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref color);
+            }
+
             HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByEnthalpyDifference(mollierPoint, enthalpyDifference);
 
 
             index = Params.IndexOfOutputParam("heatingProcess");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooMollierProcess(heatingProcess));
+                dataAccess.SetData(index, new GooMollierProcess(heatingProcess, color));
+            }
+            else
+            {
+                return;
+            }
+            MollierPoint end = new MollierPoint(heatingProcess.End);
+            index = Params.IndexOfOutputParam("end");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooMollierPoint(end));
+            }
+            index = Params.IndexOfOutputParam("color");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, color);
             }
         }
     }

@@ -32,13 +32,23 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatio", NickName = "_humidityRatio", Description = "Humidity Ratio [kg_waterVapor/kg_dryAir]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry Bulb Tempearture [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number = null;
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "_relativeHumidity_", NickName = "_relativeHumidity_", Description = "Relative Humidity [%]", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "_humidityRatio_", NickName = "_humidityRatio_", Description = "Humidity Ratio [kg_waterVapor/kg_dryAir]", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "_wetBulbTemperature_", NickName = "_wetBulbTemperature_", Description = "Wet Bulb Temperature[°C]", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
                 
-                global::Grasshopper.Kernel.Parameters.Param_Number param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(Standard.Pressure);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
-                
+
                 return result.ToArray();
             }
         }
@@ -81,18 +91,6 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            index = Params.IndexOfInputParam("_humidityRatio");
-            if (index == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-            double humidityRatio = double.NaN;
-            if (!dataAccess.GetData(index, ref humidityRatio) || double.IsNaN(humidityRatio))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
 
             index = Params.IndexOfInputParam("_pressure_");
             if (index == -1)
@@ -102,6 +100,44 @@ namespace SAM.Core.Grasshopper.Mollier
             }
             double pressure = double.NaN;
             if (!dataAccess.GetData(index, ref pressure) || double.IsNaN(pressure))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            double nan = 0;
+
+            index = Params.IndexOfInputParam("_humidityRatio_");
+            double humidityRatio = double.NaN;
+            if (index == -1 || !dataAccess.GetData(index, ref humidityRatio))
+            {
+                nan++;
+            }
+
+            index = Params.IndexOfInputParam("_relativeHumidity_");
+            double relativeHumidity = double.NaN;
+            if (index == -1 || !dataAccess.GetData(index, ref relativeHumidity))
+            {
+                nan++;
+            }
+            else
+            {
+                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+            }
+
+            index = Params.IndexOfInputParam("_wetBulbTemperature_");
+            double wetBulbTemperature = double.NaN;
+            if (index == -1 || !dataAccess.GetData(index, ref wetBulbTemperature))
+            {
+                nan++;
+            }
+            else
+            {
+                humidityRatio = Core.Mollier.Query.HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure);
+            }
+
+
+            if(nan != 2)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

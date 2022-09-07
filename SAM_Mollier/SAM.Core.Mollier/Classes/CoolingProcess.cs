@@ -17,6 +17,12 @@ namespace SAM.Core.Mollier
 
         }
 
+        public CoolingProcess(CoolingProcess coolingProcess)
+            : base(coolingProcess)
+        {
+
+        }
+
         public double Efficiency
         {
             get

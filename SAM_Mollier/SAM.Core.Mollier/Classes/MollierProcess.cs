@@ -8,6 +8,7 @@ namespace SAM.Core.Mollier
         private MollierPoint start;
         private MollierPoint end;
 
+
         internal MollierProcess(MollierPoint start, MollierPoint end)
         {
             this.start = start == null ? null : new MollierPoint(start);

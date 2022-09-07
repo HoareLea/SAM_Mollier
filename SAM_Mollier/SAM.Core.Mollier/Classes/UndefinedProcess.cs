@@ -15,5 +15,11 @@ namespace SAM.Core.Mollier
         {
 
         }
+
+        public UndefinedProcess(UndefinedProcess undefinedProcess)
+            : base(undefinedProcess)
+        {
+
+        }
     }
 }
