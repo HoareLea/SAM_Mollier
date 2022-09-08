@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\RoomProcess.cs" />
     <Compile Include="Classes\UIMollierPorcess.cs" />
     <Compile Include="Classes\MollierZone.cs" />
     <Compile Include="Classes\SteamHumidificationProcess.cs" />
@@ -59,12 +60,13 @@
     <Compile Include="Classes\HeatRecoveryProcess.cs" />
     <Compile Include="Classes\MollierProcess.cs" />
     <Compile Include="Classes\HeatingProcess.cs" />
+    <Compile Include="Create\HeatRecoveryProcess .cs" />
     <Compile Include="Create\SteamHumidificationProcess.cs" />
     <Compile Include="Create\IsotermicHumidificationProcess.cs" />
     <Compile Include="Create\AdiabaticHumidificationProcess.cs" />
     <Compile Include="Create\UndefinedProcess.cs" />
     <Compile Include="Create\MixingProcess.cs" />
-    <Compile Include="Create\HeatRecoveryProcess.cs" />
+    <Compile Include="Create\RoomProcess.cs" />
     <Compile Include="Create\CoolingProcess.cs" />
     <Compile Include="Create\MollierPoint.cs" />
     <Compile Include="Create\HeatingProcess.cs" />

@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -36,6 +36,16 @@ namespace SAM.Core.Grasshopper.Mollier
                 global::Grasshopper.Kernel.Parameters.Param_Colour param_Colour = null;
                 param_Colour = new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "_color_", NickName = "_color_", Description = "Colour RGB", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_Colour, ParamVisibility.Voluntary));
+                global::Grasshopper.Kernel.Parameters.Param_String param_Label = null;
+                param_Label = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "startLabel_", NickName = "startLabel_", Description = "Start Label", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Label, ParamVisibility.Voluntary));
+
+                param_Label = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "processLabel_", NickName = "processLabel_", Description = "Process Label", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Label, ParamVisibility.Voluntary));
+
+                param_Label = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "endLabel_", NickName = "endLabel_", Description = "End Label", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Label, ParamVisibility.Voluntary));
+
                 return result.ToArray();
             }
         }
@@ -101,13 +111,32 @@ namespace SAM.Core.Grasshopper.Mollier
                 dataAccess.GetData(index, ref color);
             }
 
+            string startLabel = null;
+            index = Params.IndexOfInputParam("startLabel_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref startLabel);
+            }
+            string processLabel = null;
+            index = Params.IndexOfInputParam("processLabel_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref processLabel);
+            }
+            string endLabel = null;
+            index = Params.IndexOfInputParam("endLabel_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref endLabel);
+            }
+
             CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess_ByEnthalpyDifference(mollierPoint, enthalpyDifference);
 
 
             index = Params.IndexOfOutputParam("coolingProcess");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooMollierProcess(coolingProcess, color));
+                dataAccess.SetData(index, new GooMollierProcess(coolingProcess, color, startLabel, processLabel, endLabel));
             }
             else
             {

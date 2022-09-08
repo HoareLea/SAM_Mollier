@@ -7,7 +7,9 @@ namespace SAM.Core.Mollier
     {
         private IMollierProcess mollierProcess;
         public Color Color { get; set; }
-
+        public string Start_Label { get; set; } = null;
+        public string Process_Label { get; set; } = null;
+        public string End_Label { get; set; } = null;
         public MollierPoint Start
         {
             get
@@ -68,7 +70,18 @@ namespace SAM.Core.Mollier
             {
                 mollierProcess = Core.Query.IJSAMObject(jObject.Value<JObject>("MollierProcess")) as IMollierProcess;
             }
-
+            if (jObject.ContainsKey("Start_Label"))
+            {
+                Start_Label = jObject.Value<string>("Start_Label");
+            }
+            if (jObject.ContainsKey("Process_Label"))
+            {
+                Process_Label = jObject.Value<string>("Process_Label");
+            }
+            if (jObject.ContainsKey("End_Label"))
+            {
+                End_Label = jObject.Value<string>("End_Label");
+            }
             if (jObject.ContainsKey("Color"))
             {
                 JObject jObject_Color = jObject.Value<JObject>("Color");
@@ -94,6 +107,19 @@ namespace SAM.Core.Mollier
             {
                 jObject.Add("MollierProcess", mollierProcess.ToJObject());
             }
+            if(Start_Label != null)
+            {
+                jObject.Add("Start_Label", Start_Label);
+            }
+            if (Process_Label != null)
+            {
+                jObject.Add("Process_Label", Process_Label);
+            }
+            if (End_Label != null)
+            {
+                jObject.Add("End_Label", End_Label);
+            }
+
             return jObject;
         }
 
