@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -68,7 +68,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         public SAMMollierCreateSteamHumidificationProcessByRelativeHumidity()
           : base("SAMMollier.CreateSteamHumidificationProcessByRelativeHumidity", "SAMMollier.CreateSteamHumidificationProcessByRelativeHumidity",
-              "Creates SteamHumidificationProcess",
+              "Creates SteamHumidificationProcess\nHumidification can generally divided into three physical methods: Vaporization, atomization and evaporation. Vaporization is an isothermal process while atomization and evaporation are adiabatic processes\nDepending on the system, a isothermal humidification process which uses stream can be controlled to a very precise degree. Such a process also shows an excellent level of hygiene quality because it uses a medium which is at a temperature above 100°C. A steam humidifier's mode of operation can be electrical or gas-fired.",
               "SAM", "Mollier")
         {
         }

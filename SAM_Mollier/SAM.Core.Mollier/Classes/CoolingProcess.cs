@@ -20,7 +20,10 @@ namespace SAM.Core.Mollier
         public CoolingProcess(CoolingProcess coolingProcess)
             : base(coolingProcess)
         {
-
+            if(coolingProcess != null)
+            {
+                efficiency = coolingProcess.efficiency;
+            }
         }
 
         public double Efficiency

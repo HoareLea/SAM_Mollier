@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -68,7 +68,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         public SAMMollierCreateAdiabaticHumidificationProcessByRelativeHumidity()
           : base("SAMMollier.CreateAdiabaticHumidificationProcessByRelativeHumidity", "SAMMollier.CreateAdiabaticHumidificationProcessByRelativeHumidity",
-              "Creates AdiabaticHumidificationProcess",
+              "Creates AdiabaticHumidificationProcess\nHumidification can generally divided into three physical methods: Vaporization, atomization and evaporation. Vaporization is an isothermal process while atomization and evaporation are adiabatic processes.\nIn adiabatic humidification, water is provided to air in liquid form and must therefore still achieve a gaseous state. Energy is required for this purpose, and is drawn from the surrounding air in the form of heat. Since a decrease in temperature also takes place in this case, the process is also called an adiabatic cooling effect.",
               "SAM", "Mollier")
         {
         }
