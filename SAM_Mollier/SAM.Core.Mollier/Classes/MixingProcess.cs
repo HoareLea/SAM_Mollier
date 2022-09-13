@@ -15,5 +15,11 @@ namespace SAM.Core.Mollier
         {
 
         }
+
+        public MixingProcess(MixingProcess mixingProcess)
+            : base(mixingProcess)
+        {
+
+        }
     }
 }
