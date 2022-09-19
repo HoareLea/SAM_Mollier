@@ -10,7 +10,7 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return System.Math.Sqrt((System.Math.Pow(mollierPoint_1.DryBulbTemperature - mollierPoint_2.DryBulbTemperature, 2)) + System.Math.Pow(mollierPoint_1.HumidityRatio - mollierPoint_2.HumidityRatio, 2));
+            return System.Math.Sqrt((System.Math.Pow(mollierPoint_1.DryBulbTemperature - mollierPoint_2.DryBulbTemperature, 2)) + System.Math.Pow(mollierPoint_1.HumidityRatio * 1000 - mollierPoint_2.HumidityRatio * 1000, 2));
         }
     }
 }
