@@ -52,6 +52,9 @@ namespace SAM.Core.Mollier
         {
             mollierProcess = uIMollierProcess?.MollierProcess;
             Color = uIMollierProcess == null ? Color.Empty : uIMollierProcess.Color;
+            Start_Label = uIMollierProcess.Start_Label;
+            Process_Label = uIMollierProcess.Process_Label;
+            End_Label = uIMollierProcess.End_Label;
         }
 
         public UIMollierProcess(JObject jObject)
@@ -99,6 +102,8 @@ namespace SAM.Core.Mollier
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
+            jObject.Add("_type", Core.Query.FullTypeName(this));
+
             if (Color != Color.Empty)
             {
                 jObject.Add("Color", (new SAMColor(Color)).ToJObject());
