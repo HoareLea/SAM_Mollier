@@ -1,6 +1,5 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Mollier.Properties;
-using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
