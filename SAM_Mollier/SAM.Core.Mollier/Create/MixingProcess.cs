@@ -10,14 +10,14 @@
             }
 
 
-            double dryBulbTemperature = ratio * point_1.DryBulbTemperature + (1 - ratio) * point_2.DryBulbTemperature;
+            double dryBulbTemperature = point_1.DryBulbTemperature + (point_2.DryBulbTemperature - point_1.DryBulbTemperature) * ratio;
             if(double.IsNaN(dryBulbTemperature))
             {
                 return null;
             }
 
 
-            double humidityRatio = ratio * point_1.HumidityRatio + (1 - ratio) * point_2.HumidityRatio;
+            double humidityRatio = point_1.HumidityRatio + (point_2.HumidityRatio - point_1.HumidityRatio) * ratio;
             if (double.IsNaN(humidityRatio))
             {
                 return null;
@@ -39,7 +39,7 @@
                 return null;
             }
 
-            return MixingProcess(point_1, point_2, flow_1 == 0 ? 0 : flow_2 / flow_1);
+            return MixingProcess(point_1, point_2, (flow_1 == 0 && flow_2 == 0) ? 0 : flow_1 / (flow_1 + flow_2));
         }
     }
 }
