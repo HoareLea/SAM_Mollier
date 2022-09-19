@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\RoomProcess.cs" />
-    <Compile Include="Classes\UIMollierPorcess.cs" />
+    <Compile Include="Classes\UIMollierProcess.cs" />
     <Compile Include="Classes\MollierZone.cs" />
     <Compile Include="Classes\SteamHumidificationProcess.cs" />
     <Compile Include="Classes\IsotermicHumidificationProcess.cs" />
