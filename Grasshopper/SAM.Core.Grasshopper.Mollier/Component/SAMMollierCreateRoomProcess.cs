@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class SAMMollierCreateRoomProcess : GH_SAMVariableOutputParameterComponent
+    public class SAMMollierCreateUndefinedProcess : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,7 +45,7 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "roomProcess", NickName = "roomProcess", Description = "Room Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "undefinedProcess", NickName = "undefinedProcess", Description = "Undefined Process", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 //result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "end", NickName = "end", Description = "End", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "color", NickName = "color", Description = "Color", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
 
@@ -56,9 +56,9 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMMollierCreateRoomProcess()
-          : base("SAMMollier.CreateRoomProcess", "SAMMollier.CreateRoomProcess",
-              "Creates RoomProcess",
+        public SAMMollierCreateUndefinedProcess()
+          : base("SAMMollier.CreateUndefinedProcess", "SAMMollier.CreateUndefinedProcess",
+              "Creates UndefinedProcess",
               "SAM", "Mollier")
         {
         }
@@ -101,24 +101,15 @@ namespace SAM.Core.Grasshopper.Mollier
                 dataAccess.GetData(index, ref color);
             }
 
-            RoomProcess roomProcess = Core.Mollier.Create.RoomProcess(start, end);
+            UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, end);
 
 
-            index = Params.IndexOfOutputParam("roomProcess");
+            index = Params.IndexOfOutputParam("undefinedProcess");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooMollierProcess(roomProcess, color));
+                dataAccess.SetData(index, new GooMollierProcess(undefinedProcess, color));
             }
-            //else
-            //{
-            //    return;
-            //}
-            //MollierPoint end = new MollierPoint(roomProcess.End);
-            //index = Params.IndexOfOutputParam("end");
-            //if (index != -1)
-            //{
-            //    dataAccess.SetData(index, new GooMollierPoint(end));
-            //}
+
             index = Params.IndexOfOutputParam("color");
             if (index != -1)
             {
