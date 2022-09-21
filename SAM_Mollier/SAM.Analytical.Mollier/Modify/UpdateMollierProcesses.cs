@@ -96,12 +96,18 @@ namespace SAM.Analytical.Mollier
 
                     if (!double.IsNaN(outsideSupplyAirFlow) && !double.IsNaN(supplyAirFlow))
                     {
-                        MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Winter, outsideSupplyAirFlow, supplyAirFlow);
-                        if (mixingProcess != null)
+                        double returnAirFlow = System.Math.Abs(supplyAirFlow - outsideSupplyAirFlow);
+                        if(returnAirFlow > Core.Tolerance.Distance)
                         {
-                            mollierProcesses.Add(mixingProcess);
-                            start = mixingProcess.End;
+                            MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Winter, supplyAirFlow, returnAirFlow);
+                            if (mixingProcess != null)
+                            {
+                                mollierProcesses.Add(mixingProcess);
+                                start = mixingProcess.End;
+                            }
                         }
+
+
                     }
                 }
 
@@ -223,9 +229,10 @@ namespace SAM.Analytical.Mollier
                 {
                     airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out double outsideSupplyAirFlow);
 
-                    if (!double.IsNaN(outsideSupplyAirFlow) && !double.IsNaN(supplyAirFlow))
+                    double returnAirFlow = System.Math.Abs(supplyAirFlow - outsideSupplyAirFlow);
+                    if (returnAirFlow > Core.Tolerance.Distance)
                     {
-                        MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Summer, outsideSupplyAirFlow, supplyAirFlow);
+                        MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Summer, supplyAirFlow, returnAirFlow);
                         if (mixingProcess != null)
                         {
                             mollierProcesses.Add(mixingProcess);
