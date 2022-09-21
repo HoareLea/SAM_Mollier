@@ -30,11 +30,12 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry bulb temperature [°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_relativeHumidity_", NickName = "_relativeHumidity_", Description = "Relative humidity (0 - 100) [%] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatio_", NickName = "_humidityRatio_", Description = "Humidty Ratio [g/kg]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_wetBulbTemperature_", NickName = "_wetBulbTemperature_", Description = "Wet bulb temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dewPointTemperature_", NickName = "_dewPointTemperature_", Description = "Dew Point Temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierpoint", NickName = "mollierpoint", Description = "MollierPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dryBulbTemperature", NickName = "dryBulbTemperature", Description = "Dry bulb temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "relativeHumidity", NickName = "relativeHumidity", Description = "Relative humidity (0 - 100) [%] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "humidityRatio", NickName = "humidityRatio", Description = "Humidty Ratio [g/kg]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "wetBulbTemperature", NickName = "wetBulbTemperature", Description = "Wet bulb temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dewPointTemperature", NickName = "dewPointTemperature", Description = "Dew Point Temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Atmospheric pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(Standard.Pressure);
@@ -88,18 +89,12 @@ namespace SAM.Core.Grasshopper.Mollier
         {
             int index;
 
-            index = Params.IndexOfInputParam("_dryBulbTemperature");
-            if (index == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            bool maximum_connected_nodes = false;//true wheter there is connected mollierpoint or dew point or 2 of other, otherwise false
 
             double dryBulbTemperature = double.NaN;
             double relativeHumidity = double.NaN;
             double humidityRatio = double.NaN;
             double wetBulbTemperature = double.NaN;
-            double dewPointTemperature = double.NaN;
             double saturationVapourPressure = double.NaN;
             double partialVapourPressure = double.NaN;
             double enthalpy = double.NaN;
@@ -115,105 +110,118 @@ namespace SAM.Core.Grasshopper.Mollier
             double kinematicViscosity = double.NaN;
             double temperatureConductivity = double.NaN;
             double prandtlNumber = double.NaN;
-
-            index = Params.IndexOfInputParam("_dryBulbTemperature");
-            if (!dataAccess.GetData(index, ref dryBulbTemperature) || double.IsNaN(dryBulbTemperature))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            index = Params.IndexOfInputParam("_relativeHumidity_");
-            if (index == -1 || !dataAccess.GetData(index, ref relativeHumidity) || double.IsNaN(relativeHumidity))
-            {
-                relativeHumidity = double.NaN;
-            }
-
-            if (!double.IsNaN(relativeHumidity))
-            {
-                if (relativeHumidity < 0 || relativeHumidity > 100)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
-                }
-            }
-
-            index = Params.IndexOfInputParam("_humidityRatio_");
-            if (index == -1 || !dataAccess.GetData(index, ref humidityRatio) || double.IsNaN(humidityRatio))
-            {
-                humidityRatio = double.NaN;
-            }
-
-            if (double.IsNaN(humidityRatio) && double.IsNaN(relativeHumidity))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-            humidityRatio = humidityRatio / 1000;
-
-            index = Params.IndexOfInputParam("_wetBulbTemperature_");
-            if (index == -1 || !dataAccess.GetData(index, ref wetBulbTemperature) || double.IsNaN(wetBulbTemperature))
-            {
-                wetBulbTemperature = double.NaN;
-            }
-
-            index = Params.IndexOfInputParam("_dewPointTemperature_");
-            if (index == -1 || !dataAccess.GetData(index, ref dewPointTemperature) || double.IsNaN(dewPointTemperature))
-            {
-                dewPointTemperature = double.NaN;
-            }
-
-            if (double.IsNaN(relativeHumidity) && double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature) && double.IsNaN(humidityRatio))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
+            MollierPoint mollierPoint = null;
+            double dewPointTemperature = double.NaN;
             index = Params.IndexOfInputParam("_pressure_");
             if (index == -1 || !dataAccess.GetData(index, ref pressure) || double.IsNaN(pressure))
             {
                 pressure = Standard.Pressure;
             }
 
-            if (!double.IsNaN(relativeHumidity) && double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature))
-            {
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
-            }
-            else if (double.IsNaN(relativeHumidity) && !double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature))
-            {
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
-            }
-            else if (double.IsNaN(relativeHumidity) && double.IsNaN(wetBulbTemperature) && !double.IsNaN(dewPointTemperature))
-            {
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
-            }
-            else if (!double.IsNaN(humidityRatio) && double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature))
-            {
-                relativeHumidity = Core.Mollier.Query.RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
-            }
-            else if (double.IsNaN(humidityRatio) && !double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature))
-            {
-                relativeHumidity = Core.Mollier.Query.RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
-            }
-            else if (double.IsNaN(humidityRatio) && double.IsNaN(wetBulbTemperature) && !double.IsNaN(dewPointTemperature))
-            {
-                relativeHumidity = Core.Mollier.Query.RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
-            }
-            else if (double.IsNaN(relativeHumidity) && double.IsNaN(wetBulbTemperature) && !double.IsNaN(dewPointTemperature))
-            {
-                relativeHumidity = Core.Mollier.Query.RelativeHumidity_ByDewPointTemperature(dryBulbTemperature, dewPointTemperature);
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
-            }
-            else if (double.IsNaN(relativeHumidity) && !double.IsNaN(wetBulbTemperature) && double.IsNaN(dewPointTemperature))
-            {
-                relativeHumidity = Core.Mollier.Query.RelativeHumidity_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure);
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);  
-            }
-            else
+            //mollierpoint check
+            index = Params.IndexOfInputParam("mollierpoint");
+            if(index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+            if (dataAccess.GetData(index, ref mollierPoint) && mollierPoint != null)
+            {
+                maximum_connected_nodes = true;
+            }
+            //dewpoint check
+            index = Params.IndexOfInputParam("dewPointTemperature");
+            if (index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            if (dataAccess.GetData(index, ref dewPointTemperature) && dewPointTemperature != double.NaN)
+            {
+                if (maximum_connected_nodes)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+                maximum_connected_nodes = true;
+            }
+
+            int numberOfConnected = maximum_connected_nodes ? 2 : 0;
+
+            //dry bulb temperature check
+            index = Params.IndexOfInputParam("dryBulbTemperature");
+            if (index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            if (dataAccess.GetData(index, ref dryBulbTemperature) && dryBulbTemperature != double.NaN)
+            {
+                if(numberOfConnected == 2)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+                numberOfConnected++;
+            }
+            //relative humidity check
+            index = Params.IndexOfInputParam("relativeHumidity");
+            if (index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            if (dataAccess.GetData(index, ref relativeHumidity) && relativeHumidity != double.NaN)
+            {
+                if (numberOfConnected == 2 || relativeHumidity > 100 || relativeHumidity < 0)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+                numberOfConnected++;
+            }
+            //humidity ratio check
+            index = Params.IndexOfInputParam("humidityRatio");
+            if (index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            if (dataAccess.GetData(index, ref humidityRatio) && humidityRatio != double.NaN)
+            {
+                if (numberOfConnected == 2 || humidityRatio < 0)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+                numberOfConnected++;
+            }
+            //wet bulb temperature check
+            index = Params.IndexOfInputParam("wetBulbTemperature");
+            if (index == -1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            if (dataAccess.GetData(index, ref wetBulbTemperature) && wetBulbTemperature != double.NaN)
+            {
+                if (numberOfConnected == 2)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+                numberOfConnected++;
+            }
+            if (numberOfConnected != 2)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid data, there should be connected mollier point or dew point or 2 of the other inputs");
+                return;
+            }
+            return;
+            
+
+
+           
 
             wetBulbTemperature = double.IsNaN(wetBulbTemperature) ? Core.Mollier.Query.WetBulbTemperature(dryBulbTemperature, relativeHumidity, pressure) : wetBulbTemperature;
             density = Core.Mollier.Query.Density(dryBulbTemperature, relativeHumidity, pressure);
@@ -261,6 +269,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 dataAccess.SetData(index, wetBulbTemperature);
             }
 
+            
             index = Params.IndexOfOutputParam("dewPointTemperature");
             if (index != -1)
             {
