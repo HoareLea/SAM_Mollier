@@ -24,6 +24,7 @@ namespace SAM.Analytical.Mollier
             //WINTER
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterDesignTemperature, out double winterDesignTemperature);
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterDesignRelativeHumidity, out double winterDesignRelativeHumidity);
+
             if (!double.IsNaN(winterDesignTemperature) && !double.IsNaN(winterDesignRelativeHumidity))
             {
                 MollierPoint start = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterDesignTemperature, winterDesignRelativeHumidity, pressure);
@@ -86,16 +87,16 @@ namespace SAM.Analytical.Mollier
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, out double winterSpaceTemperature);
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceRelativeHumidty, out double winterSpaceRelativeHumidity);
 
-                MollierPoint room = !double.IsNaN(winterSpaceTemperature) && !double.IsNaN(winterSpaceRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterSpaceTemperature, winterSpaceRelativeHumidity, pressure) : null;
+                MollierPoint room_Winter = !double.IsNaN(winterSpaceTemperature) && !double.IsNaN(winterSpaceRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterSpaceTemperature, winterSpaceRelativeHumidity, pressure) : null;
 
                 //MIXING
-                if (room != null)
+                if (room_Winter != null)
                 {
                     airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out double outsideSupplyAirFlow);
 
                     if (!double.IsNaN(outsideSupplyAirFlow) && !double.IsNaN(supplyAirFlow))
                     {
-                        MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room, outsideSupplyAirFlow, supplyAirFlow);
+                        MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Winter, outsideSupplyAirFlow, supplyAirFlow);
                         if (mixingProcess != null)
                         {
                             mollierProcesses.Add(mixingProcess);
@@ -132,9 +133,9 @@ namespace SAM.Analytical.Mollier
                 }
 
                 //HUMIDIFICATION (STEAM HUMIDIFIER)
-                if (room != null)
+                if (room_Winter != null)
                 {
-                    SteamHumidificationProcess steamHumidificationProcess = Core.Mollier.Create.SteamHumidificationProcess_ByRelativeHumidity(start, room.RelativeHumidity);
+                    SteamHumidificationProcess steamHumidificationProcess = Core.Mollier.Create.SteamHumidificationProcess_ByRelativeHumidity(start, room_Winter.RelativeHumidity);
                     if (steamHumidificationProcess != null)
                     {
                         mollierProcesses.Add(steamHumidificationProcess);
@@ -165,9 +166,9 @@ namespace SAM.Analytical.Mollier
                 }
 
                 //TO ROOM
-                if (room != null)
+                if (room_Winter != null)
                 {
-                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room);
+                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Winter);
                     if (undefinedProcess != null)
                     {
                         mollierProcesses.Add(undefinedProcess);
@@ -180,7 +181,7 @@ namespace SAM.Analytical.Mollier
             //SUMMER
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignTemperature, out double summerDesignTemperature);
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignRelativeHumidity, out double summerDesignRelativeHumidity);
-            if (!double.IsNaN(winterDesignTemperature) && !double.IsNaN(winterDesignRelativeHumidity))
+            if (!double.IsNaN(summerDesignTemperature) && !double.IsNaN(summerDesignRelativeHumidity))
             {
                 MollierPoint start = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(summerDesignTemperature, summerDesignRelativeHumidity, pressure);
 
@@ -215,16 +216,16 @@ namespace SAM.Analytical.Mollier
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceTemperature, out double summerSpaceTemperature);
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceRelativeHumidty, out double summerSpaceRelativeHumidity);
 
-                MollierPoint room = !double.IsNaN(summerSpaceTemperature) && !double.IsNaN(summerSpaceRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(summerSpaceTemperature, summerSpaceRelativeHumidity, pressure) : null;
+                MollierPoint room_Summer = !double.IsNaN(summerSpaceTemperature) && !double.IsNaN(summerSpaceRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(summerSpaceTemperature, summerSpaceRelativeHumidity, pressure) : null;
 
                 //MIXING
-                if (room != null)
+                if (room_Summer != null)
                 {
                     airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.OutsideSupplyAirFlow, out double outsideSupplyAirFlow);
 
                     if (!double.IsNaN(outsideSupplyAirFlow) && !double.IsNaN(supplyAirFlow))
                     {
-                        MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room, outsideSupplyAirFlow, supplyAirFlow);
+                        MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Summer, outsideSupplyAirFlow, supplyAirFlow);
                         if (mixingProcess != null)
                         {
                             mollierProcesses.Add(mixingProcess);
@@ -329,9 +330,9 @@ namespace SAM.Analytical.Mollier
                     }
 
                     //TO ROOM
-                    if (room != null)
+                    if (room_Summer != null)
                     {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room);
+                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Summer);
                         if (undefinedProcess != null)
                         {
                             mollierProcesses.Add(undefinedProcess);
