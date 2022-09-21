@@ -6,6 +6,7 @@ using SAM.Core.Grasshopper;
 using SAM.Analytical.Mollier;
 using Grasshopper.Kernel.Types;
 using System.Linq;
+using SAM.Core.Grasshopper.Mollier;
 
 namespace SAM.Analytical.Grasshopper.Mollier
 {
@@ -19,7 +20,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.9";
+        public override string LatestComponentVersion => "1.0.10";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -63,6 +64,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooAirHandlingUnitParam() { Name = "airHandlingUnit", NickName = "airHandlingUnit", Description = "SAM Analytical AirHandlingUnit", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "mollierProcesses", NickName = "mollierProcesses", Description = "Mollier Processes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatLoss", NickName = "sensibleHeatLoss", Description = "Sensible Heat Loss for connected Spaces [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatGain", NickName = "sensibleHeatGain", Description = "Sensible Heat Gain for connected Spaces [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerDesignTemperature", NickName = "summerDesignTemperature", Description = "Summer Design Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -363,7 +365,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
             adjacencyCluster.AddObject(airHandlingUnit);
             analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
 
-            AirHandlingUnitResult airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, airHandlingUnit.Name);
+            AirHandlingUnitResult airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, airHandlingUnit.Name, out List<Core.Mollier.IMollierProcess> mollierProcesses);
             if (airHandlingUnit != null && airHandlingUnitResult != null)
             {
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
@@ -371,6 +373,13 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 adjacencyCluster.AddRelation(airHandlingUnit, airHandlingUnitResult);
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }
+
+            index = Params.IndexOfOutputParam("mollierProcesses");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, mollierProcesses?.ConvertAll(x => new GooMollierProcess(x)));
+            }
+
 
             index = Params.IndexOfOutputParam("analyticalModel");
             if (index != -1)

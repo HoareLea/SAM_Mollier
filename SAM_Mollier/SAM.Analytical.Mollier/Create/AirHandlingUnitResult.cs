@@ -9,8 +9,10 @@ namespace SAM.Analytical.Mollier
 {
     public static partial class Create
     {
-        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName)
+        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName, out List<IMollierProcess> mollierProcesses)
         {
+            mollierProcesses = null;
+
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
             if (adjacencyCluster == null || string.IsNullOrWhiteSpace(airHandlingUnitName))
             {
@@ -377,7 +379,7 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryRelativeHumidity, summerSpaceRelativeHumidity);
             }
 
-            result.UpdateMollierProcesses(out List<IMollierProcess> mollierProcesses);
+            result.UpdateMollierProcesses(out mollierProcesses);
 
             return result;
         }
