@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Mollier Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_enthalpyDifference", NickName = "_enthalpyDifference", Description = "Enthalpy Difference []", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_enthalpyDifference", NickName = "_enthalpyDifference", Description = "Enthalpy Difference [kJ]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
                 global::Grasshopper.Kernel.Parameters.Param_Colour param_Colour = null;
                 param_Colour = new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "_color_", NickName = "_color_", Description = "Colour RGB", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_Colour, ParamVisibility.Voluntary));
@@ -130,7 +130,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 dataAccess.GetData(index, ref endLabel);
             }
 
-            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByEnthalpyDifference(mollierPoint, enthalpyDifference);
+            HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByEnthalpyDifference(mollierPoint, enthalpyDifference * 1000);
 
 
             index = Params.IndexOfOutputParam("heatingProcess");

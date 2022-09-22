@@ -132,6 +132,11 @@ namespace SAM.Core.Grasshopper.Mollier
 
             IsotermicHumidificationProcess isotermicHumidificationProcess = Core.Mollier.Create.IsotermicHumidificationProcess_ByHumidityRatioDifference(mollierPoint, humidityRatioDifference/1000);
 
+            if (isotermicHumidificationProcess != null && double.IsNaN(isotermicHumidificationProcess.End.RelativeHumidity))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Your target RH is above 100%, range for Relative Humidity is 0 - 100%");
+            }
+
             index = Params.IndexOfOutputParam("isotermicHumidificationProcess");
             if (index != -1)
             {

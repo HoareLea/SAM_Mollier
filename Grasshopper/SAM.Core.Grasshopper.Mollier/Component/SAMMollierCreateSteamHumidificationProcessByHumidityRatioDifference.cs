@@ -132,6 +132,11 @@ namespace SAM.Core.Grasshopper.Mollier
 
             SteamHumidificationProcess steamHumidificationProcess = Core.Mollier.Create.SteamHumidificationProcess_ByHumidityRatioDifference(mollierPoint, humidityRatioDifference/1000);
 
+            if (steamHumidificationProcess != null && double.IsNaN(steamHumidificationProcess.End.RelativeHumidity))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Your target RH is above 100%, range for Relative Humidity is 0 - 100%");
+            }
+
             index = Params.IndexOfOutputParam("steamHumidificationProcess");
             if (index != -1)
             {

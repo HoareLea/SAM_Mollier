@@ -74,7 +74,7 @@ namespace SAM.Core.Mollier
             MollierPoint DewPoint = new MollierPoint(dewPointDryBulbTemperature, dewPointHumidityRatio, Pressure);
             return DewPoint;
         }
-
+        
         public MollierPoint DownPoint(MollierPoint dewPoint)
         {
             MollierPoint start = Start;
