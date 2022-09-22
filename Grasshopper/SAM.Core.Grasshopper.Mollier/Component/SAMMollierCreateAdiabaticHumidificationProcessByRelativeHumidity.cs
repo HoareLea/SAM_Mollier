@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Mollier Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_relativeHumidity", NickName = "_relativeHumidity", Description = "Relative Humidity []", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_relativeHumidity", NickName = "_relativeHumidity", Description = "Relative Humidity RH[0-100]%", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
                 global::Grasshopper.Kernel.Parameters.Param_Colour param_Colour = null;
                 param_Colour = new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "_color_", NickName = "_color_", Description = "Colour RGB", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_Colour, ParamVisibility.Voluntary));
@@ -83,8 +83,8 @@ namespace SAM.Core.Grasshopper.Mollier
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            MollierPoint mollierPoint = null;
-            if (!dataAccess.GetData(index, ref mollierPoint) || mollierPoint == null)
+            MollierPoint start = null;
+            if (!dataAccess.GetData(index, ref start) || start == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -130,8 +130,17 @@ namespace SAM.Core.Grasshopper.Mollier
                 dataAccess.GetData(index, ref endLabel);
             }
 
-            AdiabaticHumidificationProcess adiabaticHumidificationProcess = Core.Mollier.Create.AdiabaticHumidificationProcess_ByRelativeHumidity(mollierPoint, relativeHumidity);
+            if (relativeHumidity > 100)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Your target RH is above 100%, range for Relative Humidity is 0-100 %");
+            }
 
+            AdiabaticHumidificationProcess adiabaticHumidificationProcess = Core.Mollier.Create.AdiabaticHumidificationProcess_ByRelativeHumidity(start, relativeHumidity);
+
+            if (relativeHumidity < start.RelativeHumidity)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Your target RH is below starting, Please increaste RH to be higher than start point RH");
+            }
 
             index = Params.IndexOfOutputParam("adiabaticHumidificationProcess");
             if (index != -1)
@@ -142,12 +151,17 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 return;
             }
-            MollierPoint end = new MollierPoint(adiabaticHumidificationProcess.End);
-            index = Params.IndexOfOutputParam("end");
-            if (index != -1)
+            
+            if(adiabaticHumidificationProcess != null)
             {
-                dataAccess.SetData(index, new GooMollierPoint(end));
+                MollierPoint end = new MollierPoint(adiabaticHumidificationProcess.End);
+                index = Params.IndexOfOutputParam("end");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, new GooMollierPoint(end));
+                }
             }
+
             index = Params.IndexOfOutputParam("color");
             if (index != -1)
             {
