@@ -63,6 +63,7 @@
     <Compile Include="Classes\GooMollierPoint.cs" />
     <Compile Include="Classes\GooMollierProcess.cs" />
     <Compile Include="Component\SAMMollierCreateAdiabaticHumidificationProcessByRelativeHumidity.cs" />
+    <Compile Include="Component\SAMMollierCreateCoolingProcessByMediumAndDryBulbTemperature.cs" />
     <Compile Include="Component\SAMMollierCreateCoolingProcessByMedium.cs" />
     <Compile Include="Component\SAMMollierCreateCoolingProcessByEnthalpyDifference.cs" />
     <Compile Include="Component\SAMMollierCreateCoolingProcessByTemperatureDifference.cs" />
