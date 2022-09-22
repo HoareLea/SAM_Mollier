@@ -68,6 +68,20 @@
             return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
         }
 
+        public static MollierPoint MollierPoint_ByFactor(MollierPoint mollierPoint_1, MollierPoint mollierPoint_2, double factor)
+        {
+            if(mollierPoint_1 == null || mollierPoint_2 == null)
+            {
+                return null;
+            }
+
+            double dryBulbTemperature = mollierPoint_1.DryBulbTemperature + (factor * (mollierPoint_2.DryBulbTemperature - mollierPoint_1.DryBulbTemperature));
+            double humidityRatio = mollierPoint_1.HumidityRatio + (factor * (mollierPoint_2.HumidityRatio - mollierPoint_1.HumidityRatio));
+            double pressure = mollierPoint_1.Pressure;
+
+            return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
+        }
+
 
     }
 }

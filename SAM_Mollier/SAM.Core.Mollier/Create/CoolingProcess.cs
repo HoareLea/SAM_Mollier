@@ -1,39 +1,41 @@
-﻿namespace SAM.Core.Mollier
+﻿using System;
+
+namespace SAM.Core.Mollier
 {
     public static partial class Create
     {
-        public static CoolingProcess CoolingProcess(this MollierPoint start, double dryBulbTemperature)
-        {
-            if (start == null || double.IsNaN(dryBulbTemperature))
-            {
-                return null;
-            }
+        //public static CoolingProcess CoolingProcess(this MollierPoint start, double dryBulbTemperature)
+        //{
+        //    if (start == null || double.IsNaN(dryBulbTemperature))
+        //    {
+        //        return null;
+        //    }
 
-            if (dryBulbTemperature > start.DryBulbTemperature)
-            {
-                return null;
-            }
+        //    if (dryBulbTemperature > start.DryBulbTemperature)
+        //    {
+        //        return null;
+        //    }
 
-            MollierPoint end = null;
-            double dryBulbTemperature_Start_Saturation = Query.DryBulbTemperature_ByHumidityRatio(start.HumidityRatio, 100, start.Pressure);
+        //    MollierPoint end = null;
+        //    double dryBulbTemperature_Start_Saturation = Query.DryBulbTemperature_ByHumidityRatio(start.HumidityRatio, 100, start.Pressure);
 
-            if (dryBulbTemperature_Start_Saturation < dryBulbTemperature)
-            {
-                end = new MollierPoint(dryBulbTemperature, start.HumidityRatio, start.Pressure);
-            }
-            else
-            {
-                double humidityRatio_Saturation = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
-                end = new MollierPoint(dryBulbTemperature, humidityRatio_Saturation, start.Pressure);
-            }
+        //    if (dryBulbTemperature_Start_Saturation < dryBulbTemperature)
+        //    {
+        //        end = new MollierPoint(dryBulbTemperature, start.HumidityRatio, start.Pressure);
+        //    }
+        //    else
+        //    {
+        //        double humidityRatio_Saturation = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
+        //        end = new MollierPoint(dryBulbTemperature, humidityRatio_Saturation, start.Pressure);
+        //    }
 
-            if (end == null)
-            {
-                return null;
-            }
+        //    if (end == null)
+        //    {
+        //        return null;
+        //    }
 
-            return new CoolingProcess(start, end, 1);
-        }
+        //    return new CoolingProcess(start, end, 1);
+        //}
 
         public static CoolingProcess CoolingProcess_ByTemperatureDifference(this MollierPoint start, double temperatureDifference)
         {
@@ -70,6 +72,10 @@
             double humidityRatioDifference = start.HumidityRatio - Query.HumidityRatio(averageTemperature, 100, start.Pressure);
 
             MollierPoint end = new MollierPoint(start.DryBulbTemperature - (temperatureDifference * efficiency), start.HumidityRatio - (humidityRatioDifference * efficiency), start.Pressure);
+            if(end == null)
+            {
+                return null;
+            }
 
             if (double.IsNaN(end.RelativeHumidity))
             {
@@ -78,17 +84,17 @@
                 end = new MollierPoint(temperature_Temp, humidityRatio_Temp, start.Pressure);
                 MollierPoint ADP = new MollierPoint(temperature_Temp, humidityRatio_Temp, start.Pressure);
 
-                while (CountDistance(start, end) - (CountDistance(start, end) + CountDistance(end, ADP)) * efficiency > 0.01)
+                Func<MollierPoint, MollierPoint, double> calculateDistance = new Func<MollierPoint, MollierPoint, double>((MollierPoint start_Temp, MollierPoint end_Temp) => 
+                { 
+                    return Math.Sqrt((Math.Pow(start.DryBulbTemperature - end.DryBulbTemperature, 2)) + Math.Pow(start.HumidityRatio - end.HumidityRatio, 2));
+                });
+
+                while (calculateDistance.Invoke(start, end) - (calculateDistance.Invoke(start, end) + calculateDistance.Invoke(end, ADP)) * efficiency > 0.01)
                 {
                     humidityRatio_Temp += 0.00001;
                     temperature_Temp = Query.DryBulbTemperature_ByHumidityRatio(humidityRatio_Temp, 100, start.Pressure);
                     end = new MollierPoint(temperature_Temp, humidityRatio_Temp, start.Pressure);
                 }
-            }
-
-            if (end == null)
-            {
-                return null;
             }
 
             return new CoolingProcess(start, end, efficiency);
@@ -120,9 +126,69 @@
             return CoolingProcess_ByMedium(start, flowTemperature, returnTemperature, efficiency);
         }
 
-        public static double CountDistance(MollierPoint start, MollierPoint end)
+        public static CoolingProcess CoolingProcess(this MollierPoint start, double dryBulbTemperature, double efficiency = 1)
         {
-            return System.Math.Sqrt((System.Math.Pow(start.DryBulbTemperature - end.DryBulbTemperature, 2)) + System.Math.Pow(start.HumidityRatio - end.HumidityRatio, 2)); 
+            if (start == null || double.IsNaN(dryBulbTemperature))
+            {
+                return null;
+            }
+
+            if (dryBulbTemperature > start.DryBulbTemperature)
+            {
+                return null;
+            }
+
+            MollierPoint end = null;
+            double dryBulbTemperature_Start_Saturation = Query.DryBulbTemperature_ByHumidityRatio(start.HumidityRatio, 100, start.Pressure);
+
+            if (dryBulbTemperature_Start_Saturation < dryBulbTemperature)
+            {
+                end = new MollierPoint(dryBulbTemperature, start.HumidityRatio, start.Pressure);
+            }
+            else if(efficiency == 1)
+            {
+                double humidityRatio_Saturation = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
+                end = new MollierPoint(dryBulbTemperature, humidityRatio_Saturation, start.Pressure);
+            }
+            else
+            {
+                Func<double, double> func = new Func<double, double>((double dryBulbTemperature_Temp) =>
+                {
+                    double humidityRatio_ADP_Temp = Query.HumidityRatio(dryBulbTemperature_Temp, 100, start.Pressure);
+                    if (double.IsNaN(humidityRatio_ADP_Temp))
+                    {
+                        return double.NaN;
+                    }
+
+
+                    MollierPoint molierPoint_ADP_Temp = new MollierPoint(dryBulbTemperature_Temp, humidityRatio_ADP_Temp, start.Pressure);
+                    if (molierPoint_ADP_Temp == null)
+                    {
+                        return double.NaN;
+                    }
+
+                    MollierPoint mollierPoint_Temp = MollierPoint_ByFactor(molierPoint_ADP_Temp, start, efficiency);
+                    if (mollierPoint_Temp == null)
+                    {
+                        return double.NaN;
+                    }
+
+                    return mollierPoint_Temp.DryBulbTemperature;
+                });
+
+                double dryBulbTemperature_ADP = Core.Query.Calculate(func, dryBulbTemperature, 0, start.DryBulbTemperature);
+                if (double.IsNaN(dryBulbTemperature_ADP))
+                {
+                    return null;
+                }
+
+                double humidityRatio_ADP = Query.HumidityRatio(dryBulbTemperature_ADP, 100, start.Pressure);
+                MollierPoint mollierPoint_ADP = new MollierPoint(dryBulbTemperature, humidityRatio_ADP, start.Pressure);
+
+                end = MollierPoint_ByFactor(mollierPoint_ADP, start, efficiency);
+            }
+
+            return new CoolingProcess(start, end, efficiency);
         }
     }
 }

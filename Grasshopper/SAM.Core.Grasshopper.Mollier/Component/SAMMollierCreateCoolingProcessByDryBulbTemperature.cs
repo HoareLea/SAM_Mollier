@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,11 +32,23 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Mollier Point for MollierProcess", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry Bulb Temperature [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number = null;
+                
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dryBulbTemperature", NickName = "_dryBulbTemperature", Description = "Dry Bulb Temperature [°C]", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_efficiency_", NickName = "_efficiency_", Description = "Efficiency [0-1]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(1.0);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+
                 global::Grasshopper.Kernel.Parameters.Param_Colour param_Colour = null;
+                
                 param_Colour = new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "_color_", NickName = "_color_", Description = "Colour RGB", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_Colour, ParamVisibility.Voluntary));
+                
                 global::Grasshopper.Kernel.Parameters.Param_String param_Label = null;
+                
                 param_Label = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "startLabel_", NickName = "startLabel_", Description = "Start Label", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_Label, ParamVisibility.Voluntary));
 
@@ -130,8 +142,17 @@ namespace SAM.Core.Grasshopper.Mollier
                 dataAccess.GetData(index, ref endLabel);
             }
 
-            CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(mollierPoint, dryBulbTemperature);
+            double efficiency = 1;
+            index = Params.IndexOfInputParam("_efficiency_");
+            if (index != -1)
+            {
+                if(!dataAccess.GetData(index, ref efficiency))
+                {
+                    efficiency = 1;
+                }
+            }
 
+            CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(mollierPoint, dryBulbTemperature, efficiency);
 
             index = Params.IndexOfOutputParam("coolingProcess");
             if (index != -1)
