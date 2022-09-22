@@ -374,6 +374,14 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }
 
+            if(airHandlingUnitResult != null)
+            {
+                if(!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, out double coolingCoilContactFactor))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Supply temperture is below ADP, consider lowering medium supply and return temperature");
+                }
+            }
+
             index = Params.IndexOfOutputParam("mollierProcesses");
             if (index != -1)
             {

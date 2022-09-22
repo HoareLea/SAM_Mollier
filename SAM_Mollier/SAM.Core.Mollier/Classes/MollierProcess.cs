@@ -61,7 +61,7 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public void Scale(double factor)
+        public virtual void Scale(double factor)
         {
             if(start == null || end == null)
             {

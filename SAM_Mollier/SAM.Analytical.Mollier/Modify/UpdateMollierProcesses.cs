@@ -249,36 +249,18 @@ namespace SAM.Analytical.Mollier
                     airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTempearture);
                     if (!double.IsNaN(summerSupplyTempearture))
                     {
-                        double pickupTemperature = Query.PickupTemperature(start, spf);
+                        double dryBulbTemperature = summerSupplyTempearture - Query.PickupTemperature(start, spf);
 
-                        double dryBulbTemperature_ADP = (coolingCoilFluidReturnTemperature + coolingCoilFluidFlowTemperature) / 2;
-                        double humidityRatio_ADP = Core.Mollier.Query.HumidityRatio(dryBulbTemperature_ADP, 100, pressure);
-
-                        MollierPoint mollierPoint_ADP = new MollierPoint(dryBulbTemperature_ADP, humidityRatio_ADP, start.Pressure);
-                        
-                        double dewPointTemperature = start.DewPointTemperature();
-
-                        double dryBulbTemperature = summerSupplyTempearture - pickupTemperature;
-                        double humidityRatio = dewPointTemperature < dryBulbTemperature_ADP ? start.HumidityRatio : (humidityRatio_ADP * (dryBulbTemperature - start.DryBulbTemperature) - start.HumidityRatio * (dryBulbTemperature - dryBulbTemperature_ADP)) / (dryBulbTemperature_ADP - start.DryBulbTemperature);
-
-                        MollierPoint mollierPoint_End = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
-
-                        double coolingCoilContactFactor = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);//coolingProcess.ContactFactor();
-                        double coolingCoilContactFactor_2 = System.Math.Sqrt((System.Math.Pow(start.DryBulbTemperature - dryBulbTemperature, 2) + System.Math.Pow(start.HumidityRatio - humidityRatio, 2)) / (System.Math.Pow(start.DryBulbTemperature - dryBulbTemperature_ADP, 2) + System.Math.Pow(start.HumidityRatio - humidityRatio_ADP, 2)));
-
-                        CoolingProcess coolingProcess =  Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature_ADP);
-                        coolingProcess.Scale(coolingCoilContactFactor);
+                        CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess_ByMediumAndDryBulbTemperature(start, coolingCoilFluidFlowTemperature, coolingCoilFluidReturnTemperature, dryBulbTemperature);
                         if (coolingProcess != null)
                         {
                             mollierProcesses.Add(coolingProcess);
                             start = coolingProcess.End;
-                        }
 
-                        double coolingCoilContactFactor_3 = coolingProcess.ContactFactor();
-
-                        if (!double.IsNaN(coolingCoilContactFactor))
-                        {
-                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingCoilContactFactor);
+                            if (!double.IsNaN(coolingProcess.Efficiency))
+                            {
+                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingProcess.Efficiency);
+                            }
                         }
 
                         if(!double.IsNaN(supplyAirFlow))
