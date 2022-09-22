@@ -132,7 +132,10 @@ namespace SAM.Core.Grasshopper.Mollier
 
             AdiabaticHumidificationProcess adiabaticHumidificationProcess = Core.Mollier.Create.AdiabaticHumidificationProcess_ByHumidityRatioDifference(mollierPoint, humidityRatioDifference / 1000);
 
-
+            if(adiabaticHumidificationProcess != null && double.IsNaN(adiabaticHumidificationProcess.End.RelativeHumidity))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Your target RH is above 100%, range for Relative Humidity is 0 - 100%");
+            }
             index = Params.IndexOfOutputParam("adiabaticHumidificationProcess");
             if (index != -1)
             {
