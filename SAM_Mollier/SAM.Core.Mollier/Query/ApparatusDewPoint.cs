@@ -12,7 +12,7 @@ namespace SAM.Core.Mollier
         /// <returns>Apparatus Dew Point (ADP)</returns>
         public static MollierPoint ApparatusDewPoint(this MollierPoint start, MollierPoint end)
         {
-            if(start == null || end == null)
+            if (start == null || end == null)
             {
                 return null;
             }
@@ -26,7 +26,7 @@ namespace SAM.Core.Mollier
                 return mollierPoint_Project.Enthalpy;
             });
 
-            double dryBulbTemperature_ADP = Core.Query.Calculate(func, end.Enthalpy, -20, start.DryBulbTemperature);
+            double dryBulbTemperature_ADP = Core.Query.Calculate_BinarySearch(func, end.Enthalpy, -30, start.DryBulbTemperature, false);
             if (double.IsNaN(dryBulbTemperature_ADP))
             {
                 return null;
