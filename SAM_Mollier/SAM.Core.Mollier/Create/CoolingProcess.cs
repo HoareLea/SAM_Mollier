@@ -143,7 +143,7 @@ namespace SAM.Core.Mollier
                     return mollierPoint_Temp.DryBulbTemperature;
                 });
 
-                double dryBulbTemperature_ADP = Core.Query.Calculate(func, dryBulbTemperature, 0, start.DryBulbTemperature);
+                double dryBulbTemperature_ADP = Core.Query.Calculate(func, dryBulbTemperature, -20, start.DryBulbTemperature);
                 if (double.IsNaN(dryBulbTemperature_ADP))
                 {
                     return null;
