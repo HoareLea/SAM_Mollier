@@ -48,13 +48,14 @@ namespace SAM.Core.Mollier
         }
 
         /// <summary>
-        /// ApparatusDewPoint ADP ()
+        /// Calculates Apparatus Dew Point (ADP)
         /// </summary>
         /// <returns>ADP MollierPoint</returns>
         public MollierPoint ApparatusDewPoint()
         {
             MollierPoint start = Start;
             MollierPoint end = End;
+
             if(100 - end.RelativeHumidity < 0.05)//end point hit 100% and DewPoint might not follow straight line
             {
                 double distance = start.Distance(end) / efficiency - start.Distance(end);//distance vetween end point and dew point
@@ -69,22 +70,25 @@ namespace SAM.Core.Mollier
                 }
                 return DewPointTemp;
             }
+
             double dewPointDryBulbTemperature = start.DryBulbTemperature - (start.DryBulbTemperature - end.DryBulbTemperature) / efficiency;
             double dewPointHumidityRatio = start.HumidityRatio - (start.HumidityRatio - end.HumidityRatio) / efficiency;
-            MollierPoint DewPoint = new MollierPoint(dewPointDryBulbTemperature, dewPointHumidityRatio, Pressure);
-            return DewPoint;
+            
+            return new MollierPoint(dewPointDryBulbTemperature, dewPointHumidityRatio, Pressure);
         }
-        
-        public MollierPoint DownPoint(MollierPoint dewPoint)
-        {
-            MollierPoint start = Start;
-            MollierPoint end = End;
 
-            double dryBulbTemperatureDew = start.DryBulbTemperature - efficiency * (start.DryBulbTemperature - Mollier.Query.DryBulbTemperature_ByHumidityRatio(start.HumidityRatio, 100, start.Pressure));
+        //public MollierPoint DownPoint()
+        //{
+        //    return Query.DewPointMollierPoint(Start, efficiency);
 
-            MollierPoint downPoint = new MollierPoint(dryBulbTemperatureDew, start.HumidityRatio, start.Pressure);
-            return downPoint;
-        }
+        //    //MollierPoint start = Start;
+
+        //    //double dryBulbTemperatureDew = start.DryBulbTemperature - efficiency * (start.DryBulbTemperature - Query.DryBulbTemperature_ByHumidityRatio(start.HumidityRatio, 100, start.Pressure));
+
+        //    //MollierPoint downPoint = new MollierPoint(dryBulbTemperatureDew, start.HumidityRatio, start.Pressure);
+        //    //return downPoint;
+        //}
+
         public override bool FromJObject(JObject jObject)
         {
             if(!base.FromJObject(jObject))
