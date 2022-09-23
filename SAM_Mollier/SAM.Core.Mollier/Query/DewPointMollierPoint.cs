@@ -4,11 +4,12 @@
     {
         public static MollierPoint DewPointMollierPoint(this MollierPoint mollierPoint, double efficiency = 1)
         {
-            double dryBulbTemperature = mollierPoint.DryBulbTemperature;
-            if(efficiency != 1)
+            if(mollierPoint == null)
             {
-                dryBulbTemperature -= efficiency * (mollierPoint.DryBulbTemperature - DryBulbTemperature_ByHumidityRatio(mollierPoint.HumidityRatio, 100, mollierPoint.Pressure));
+                return null;
             }
+
+            double dryBulbTemperature = mollierPoint.DryBulbTemperature - efficiency * (mollierPoint.DryBulbTemperature - DryBulbTemperature_ByHumidityRatio(mollierPoint.HumidityRatio, 100, mollierPoint.Pressure));
 
             return new MollierPoint(dryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure);
         }
