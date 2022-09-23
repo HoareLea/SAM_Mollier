@@ -124,7 +124,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 dataAccess.GetData(index, ref processLabel);
             }
-            string endLabel = null;
+            string endLabel = "ROOM";
             index = Params.IndexOfInputParam("endLabel_");
             if (index != -1)
             {
