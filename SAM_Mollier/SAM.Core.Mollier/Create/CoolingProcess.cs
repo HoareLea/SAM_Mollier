@@ -4,39 +4,6 @@ namespace SAM.Core.Mollier
 {
     public static partial class Create
     {
-        //public static CoolingProcess CoolingProcess(this MollierPoint start, double dryBulbTemperature)
-        //{
-        //    if (start == null || double.IsNaN(dryBulbTemperature))
-        //    {
-        //        return null;
-        //    }
-
-        //    if (dryBulbTemperature > start.DryBulbTemperature)
-        //    {
-        //        return null;
-        //    }
-
-        //    MollierPoint end = null;
-        //    double dryBulbTemperature_Start_Saturation = Query.DryBulbTemperature_ByHumidityRatio(start.HumidityRatio, 100, start.Pressure);
-
-        //    if (dryBulbTemperature_Start_Saturation < dryBulbTemperature)
-        //    {
-        //        end = new MollierPoint(dryBulbTemperature, start.HumidityRatio, start.Pressure);
-        //    }
-        //    else
-        //    {
-        //        double humidityRatio_Saturation = Query.HumidityRatio(dryBulbTemperature, 100, start.Pressure);
-        //        end = new MollierPoint(dryBulbTemperature, humidityRatio_Saturation, start.Pressure);
-        //    }
-
-        //    if (end == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    return new CoolingProcess(start, end, 1);
-        //}
-
         public static CoolingProcess CoolingProcess_ByTemperatureDifference(this MollierPoint start, double temperatureDifference)
         {
             if (start == null || double.IsNaN(temperatureDifference))
@@ -167,7 +134,7 @@ namespace SAM.Core.Mollier
                         return double.NaN;
                     }
 
-                    MollierPoint mollierPoint_Temp = MollierPoint_ByFactor(molierPoint_ADP_Temp, start, efficiency);
+                    MollierPoint mollierPoint_Temp = MollierPoint_ByFactor(start, molierPoint_ADP_Temp, efficiency);
                     if (mollierPoint_Temp == null)
                     {
                         return double.NaN;
@@ -183,9 +150,9 @@ namespace SAM.Core.Mollier
                 }
 
                 double humidityRatio_ADP = Query.HumidityRatio(dryBulbTemperature_ADP, 100, start.Pressure);
-                MollierPoint mollierPoint_ADP = new MollierPoint(dryBulbTemperature, humidityRatio_ADP, start.Pressure);
+                MollierPoint mollierPoint_ADP = new MollierPoint(dryBulbTemperature_ADP, humidityRatio_ADP, start.Pressure);
 
-                end = MollierPoint_ByFactor(mollierPoint_ADP, start, efficiency);
+                end = MollierPoint_ByFactor(start, mollierPoint_ADP, efficiency);
             }
 
             return new CoolingProcess(start, end, efficiency);

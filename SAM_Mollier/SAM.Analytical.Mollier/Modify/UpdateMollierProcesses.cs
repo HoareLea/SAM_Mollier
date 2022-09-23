@@ -242,91 +242,87 @@ namespace SAM.Analytical.Mollier
                 }
 
                 //COOLING (COOLING COIL)
-                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilFluidFlowTemperature, out double coolingCoilFluidFlowTemperature);
-                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilFluidReturnTemperature, out double coolingCoilFluidReturnTemperature);
-                if (!double.IsNaN(coolingCoilFluidReturnTemperature) && !double.IsNaN(coolingCoilFluidFlowTemperature))
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTempearture);
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilPerformance, out double coolingCoilPerformance);
+                if (!double.IsNaN(summerSupplyTempearture) && !double.IsNaN(coolingCoilPerformance))
                 {
-                    airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTempearture);
-                    if (!double.IsNaN(summerSupplyTempearture))
+                    double dryBulbTemperature = summerSupplyTempearture - Query.PickupTemperature(start, spf);
+
+                    CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature, coolingCoilPerformance / 100);
+                    if (coolingProcess != null)
                     {
-                        double dryBulbTemperature = summerSupplyTempearture - Query.PickupTemperature(start, spf);
+                        mollierProcesses.Add(coolingProcess);
+                        start = coolingProcess.End;
 
-                        CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess_ByMediumAndDryBulbTemperature(start, coolingCoilFluidFlowTemperature, coolingCoilFluidReturnTemperature, dryBulbTemperature);
-                        if (coolingProcess != null)
+                        if (!double.IsNaN(coolingProcess.Efficiency))
                         {
-                            mollierProcesses.Add(coolingProcess);
-                            start = coolingProcess.End;
-
-                            if (!double.IsNaN(coolingProcess.Efficiency))
-                            {
-                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingProcess.Efficiency);
-                            }
-                        }
-
-                        if(!double.IsNaN(supplyAirFlow))
-                        {
-                            double coolingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(coolingProcess, supplyAirFlow);
-                            if(!double.IsNaN(coolingCoilSensibleLoad))
-                            {
-                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilSensibleLoad, coolingCoilSensibleLoad);
-                            }
-
-                            double coolingCoilTotalLoad = Core.Mollier.Query.TotalLoad(coolingProcess, supplyAirFlow);
-                            if (!double.IsNaN(coolingCoilTotalLoad))
-                            {
-                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilTotalLoad, coolingCoilTotalLoad);
-                            }
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingProcess.Efficiency);
                         }
                     }
 
-                    if(airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, out bool summerHeatingCoil) && summerHeatingCoil)
+                    if (!double.IsNaN(supplyAirFlow))
                     {
-                        double temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature;
-                        HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(start, temperatureDifference);
-                        if (heatingProcess != null)
+                        double coolingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(coolingProcess, supplyAirFlow);
+                        if (!double.IsNaN(coolingCoilSensibleLoad))
                         {
-                            mollierProcesses.Add(heatingProcess);
-                            start = heatingProcess.End;
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilSensibleLoad, coolingCoilSensibleLoad);
+                        }
 
-                            double heatingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
-                            if (!double.IsNaN(heatingCoilSensibleLoad))
-                            {
-                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoilSensibleLoad, heatingCoilSensibleLoad);
-                            }
-
-                            double heatingCoilTotalLoad = Core.Mollier.Query.TotalLoad(heatingProcess, supplyAirFlow);
-                            if (!double.IsNaN(heatingCoilTotalLoad))
-                            {
-                                airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoilTotalLoad, heatingCoilTotalLoad);
-                            }
+                        double coolingCoilTotalLoad = Core.Mollier.Query.TotalLoad(coolingProcess, supplyAirFlow);
+                        if (!double.IsNaN(coolingCoilTotalLoad))
+                        {
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilTotalLoad, coolingCoilTotalLoad);
                         }
                     }
+                }
 
-                    //HEATING (FAN)
-                    double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(start, spf);
-
-                    HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
-                    if (heatingProcess_Fan != null)
+                if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, out bool summerHeatingCoil) && summerHeatingCoil)
+                {
+                    double temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature;
+                    HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(start, temperatureDifference);
+                    if (heatingProcess != null)
                     {
-                        mollierProcesses.Add(heatingProcess_Fan);
-                        start = heatingProcess_Fan.End;
-                    }
+                        mollierProcesses.Add(heatingProcess);
+                        start = heatingProcess.End;
 
-                    if (start != null)
-                    {
-                        airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerSupplyFanTemperature, start.DryBulbTemperature);
-                        airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerSupplyFanRelativeHumidty, start.RelativeHumidity);
-                    }
-
-                    //TO ROOM
-                    if (room_Summer != null)
-                    {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Summer);
-                        if (undefinedProcess != null)
+                        double heatingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
+                        if (!double.IsNaN(heatingCoilSensibleLoad))
                         {
-                            mollierProcesses.Add(undefinedProcess);
-                            start = undefinedProcess.End;
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoilSensibleLoad, heatingCoilSensibleLoad);
                         }
+
+                        double heatingCoilTotalLoad = Core.Mollier.Query.TotalLoad(heatingProcess, supplyAirFlow);
+                        if (!double.IsNaN(heatingCoilTotalLoad))
+                        {
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoilTotalLoad, heatingCoilTotalLoad);
+                        }
+                    }
+                }
+
+                //HEATING (FAN)
+                double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(start, spf);
+
+                HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
+                if (heatingProcess_Fan != null)
+                {
+                    mollierProcesses.Add(heatingProcess_Fan);
+                    start = heatingProcess_Fan.End;
+                }
+
+                if (start != null)
+                {
+                    airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerSupplyFanTemperature, start.DryBulbTemperature);
+                    airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerSupplyFanRelativeHumidty, start.RelativeHumidity);
+                }
+
+                //TO ROOM
+                if (room_Summer != null)
+                {
+                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Summer);
+                    if (undefinedProcess != null)
+                    {
+                        mollierProcesses.Add(undefinedProcess);
+                        start = undefinedProcess.End;
                     }
                 }
             }

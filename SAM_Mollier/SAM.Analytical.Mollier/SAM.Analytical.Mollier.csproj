@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SAM.Analytical">
+    <Reference Include="SAM.Analytical, Version=1.0.8300.24985, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SAM\build\SAM.Analytical.dll</HintPath>
     </Reference>
     <Reference Include="SAM.Core, Version=1.0.8213.17243, Culture=neutral, processorArchitecture=MSIL">

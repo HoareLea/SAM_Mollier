@@ -246,6 +246,11 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoverySensibleEfficiency, winterHeatRecoverySensibleEfficiency);
             }
 
+            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.CoolingCoilPerformance, out double coolingCoilPerformance) && !double.IsNaN(coolingCoilPerformance))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.CoolingCoilPerformance, coolingCoilPerformance);
+            }
+
             if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoveryLatentEfficiency, out double winterHeatRecoveryLatentEfficiency) && !double.IsNaN(winterHeatRecoveryLatentEfficiency))
             {
                 result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryLatentEfficiency, winterHeatRecoveryLatentEfficiency);

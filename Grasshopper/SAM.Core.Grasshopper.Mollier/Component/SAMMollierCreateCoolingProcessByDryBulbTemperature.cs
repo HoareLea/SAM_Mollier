@@ -163,12 +163,14 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 return;
             }
-            MollierPoint end = new MollierPoint(coolingProcess.End);
+
+            MollierPoint end = coolingProcess?.End;
             index = Params.IndexOfOutputParam("end");
             if (index != -1)
             {
                 dataAccess.SetData(index, new GooMollierPoint(end));
             }
+
             index = Params.IndexOfOutputParam("color");
             if (index != -1)
             {
