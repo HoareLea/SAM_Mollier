@@ -71,7 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\EvaporatingPoint.cs" />
     <Compile Include="Query\ContactFactor.cs" />
-    <Compile Include="Modify\UpdateMollierProcesses.cs" />
+    <Compile Include="Modify\UpdateProcesses.cs" />
     <Compile Include="Query\PickupTemperature.cs" />
     <Compile Include="Query\SaturatedAirPolynominalEquation.cs" />
     <Compile Include="Query\Source.cs" />

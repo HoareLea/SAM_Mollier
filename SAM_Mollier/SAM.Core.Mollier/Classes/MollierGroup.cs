@@ -56,6 +56,16 @@ namespace SAM.Core.Mollier
             return result;
         }
 
+        public List<IMollierProcess> GetMollierProcesses()
+        {
+            return GetObjects<IMollierProcess>(true);
+        }
+
+        public List<IMollierPoint> GetMollierPoints()
+        {
+            return GetObjects<IMollierPoint>(true);
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if(jObject == null)

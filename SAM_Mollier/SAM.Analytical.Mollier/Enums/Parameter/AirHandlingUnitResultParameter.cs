@@ -53,5 +53,6 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Summer Heating Coil Total Load", "Summer Heating Coil Total Load [W]"), ParameterValue(Core.ParameterType.Double)] SummerHeatingCoilTotalLoad,
         [ParameterProperties("Summer Supply Fan Temperature", "Summer Supply Fan Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyFanTemperature,
         [ParameterProperties("summer Supply Fan Relative Humidity", "Summer Supply Fan Relative Humidty [%]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyFanRelativeHumidty,
+        [ParameterProperties("Processes", "Processes"), SAMObjectParameterValue(typeof(Core.Mollier.MollierGroup))] Processes,
     }
 }

@@ -384,7 +384,7 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryRelativeHumidity, summerSpaceRelativeHumidity);
             }
 
-            result.UpdateMollierProcesses(out mollierProcesses);
+            result.UpdateProcesses();
 
             return result;
         }

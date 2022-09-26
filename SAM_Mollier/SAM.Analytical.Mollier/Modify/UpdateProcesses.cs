@@ -1,23 +1,20 @@
 ﻿using SAM.Core.Mollier;
-using System.Collections.Generic;
 
 namespace SAM.Analytical.Mollier
 {
     public static partial class Modify
     {
-        public static bool UpdateMollierProcesses(this AirHandlingUnitResult airHandlingUnitResult, out List<IMollierProcess> mollierProcesses)
+        public static MollierGroup UpdateProcesses(this AirHandlingUnitResult airHandlingUnitResult)
         {
-            mollierProcesses = null;
-
             if (airHandlingUnitResult == null)
             {
-                return false;
+                return null;
             }
 
             double pressure = Standard.Pressure;
             double spf = 1.2;
 
-            mollierProcesses = new List<IMollierProcess>();
+            MollierGroup mollierGroup_Winter = new MollierGroup("Winter");
 
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SupplyAirFlow, out double supplyAirFlow);
 
@@ -36,7 +33,7 @@ namespace SAM.Analytical.Mollier
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterFrostOffCoilTemperature);
                     if (heatingProcess != null)
                     {
-                        mollierProcesses.Add(heatingProcess);
+                        mollierGroup_Winter.Add(heatingProcess);
                         start = heatingProcess.End;
                     }
 
@@ -78,7 +75,7 @@ namespace SAM.Analytical.Mollier
                         HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, @return, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
                         if (heatRecoveryProcess != null)
                         {
-                            mollierProcesses.Add(heatRecoveryProcess);
+                            mollierGroup_Winter.Add(heatRecoveryProcess);
                             start = heatRecoveryProcess.End;
                         }
                     }
@@ -102,7 +99,7 @@ namespace SAM.Analytical.Mollier
                             MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Winter, supplyAirFlow, returnAirFlow);
                             if (mixingProcess != null)
                             {
-                                mollierProcesses.Add(mixingProcess);
+                                mollierGroup_Winter.Add(mixingProcess);
                                 start = mixingProcess.End;
                             }
                         }
@@ -118,7 +115,7 @@ namespace SAM.Analytical.Mollier
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterHeatingCoilSupplyTemperature);
                     if (heatingProcess != null)
                     {
-                        mollierProcesses.Add(heatingProcess);
+                        mollierGroup_Winter.Add(heatingProcess);
                         start = heatingProcess.End;
                     }
 
@@ -144,7 +141,7 @@ namespace SAM.Analytical.Mollier
                     SteamHumidificationProcess steamHumidificationProcess = Core.Mollier.Create.SteamHumidificationProcess_ByRelativeHumidity(start, room_Winter.RelativeHumidity);
                     if (steamHumidificationProcess != null)
                     {
-                        mollierProcesses.Add(steamHumidificationProcess);
+                        mollierGroup_Winter.Add(steamHumidificationProcess);
                         start = steamHumidificationProcess.End;
                     }
 
@@ -161,7 +158,7 @@ namespace SAM.Analytical.Mollier
                 HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
                 if (heatingProcess_Fan != null)
                 {
-                    mollierProcesses.Add(heatingProcess_Fan);
+                    mollierGroup_Winter.Add(heatingProcess_Fan);
                     start = heatingProcess_Fan.End;
                 }
 
@@ -177,12 +174,14 @@ namespace SAM.Analytical.Mollier
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Winter);
                     if (undefinedProcess != null)
                     {
-                        mollierProcesses.Add(undefinedProcess);
+                        mollierGroup_Winter.Add(undefinedProcess);
                         start = undefinedProcess.End;
                     }
                 }
 
             }
+
+            MollierGroup mollierGroup_Summer = new MollierGroup("Summer");
 
             //SUMMER
             airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerDesignTemperature, out double summerDesignTemperature);
@@ -213,7 +212,7 @@ namespace SAM.Analytical.Mollier
                         HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, @return, summerHeatRecoverySensibleEfficiency, summerHeatRecoveryLatentEfficiency);
                         if (heatRecoveryProcess != null)
                         {
-                            mollierProcesses.Add(heatRecoveryProcess);
+                            mollierGroup_Summer.Add(heatRecoveryProcess);
                             start = heatRecoveryProcess.End;
                         }
                     }
@@ -235,7 +234,7 @@ namespace SAM.Analytical.Mollier
                         MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Summer, supplyAirFlow, returnAirFlow);
                         if (mixingProcess != null)
                         {
-                            mollierProcesses.Add(mixingProcess);
+                            mollierGroup_Summer.Add(mixingProcess);
                             start = mixingProcess.End;
                         }
                     }
@@ -251,7 +250,7 @@ namespace SAM.Analytical.Mollier
                     CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature, coolingCoilPerformance / 100);
                     if (coolingProcess != null)
                     {
-                        mollierProcesses.Add(coolingProcess);
+                        mollierGroup_Summer.Add(coolingProcess);
                         start = coolingProcess.End;
 
                         if (!double.IsNaN(coolingProcess.Efficiency))
@@ -282,7 +281,7 @@ namespace SAM.Analytical.Mollier
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(start, temperatureDifference);
                     if (heatingProcess != null)
                     {
-                        mollierProcesses.Add(heatingProcess);
+                        mollierGroup_Summer.Add(heatingProcess);
                         start = heatingProcess.End;
 
                         double heatingCoilSensibleLoad = Core.Mollier.Query.SensibleLoad(heatingProcess, supplyAirFlow);
@@ -305,7 +304,7 @@ namespace SAM.Analytical.Mollier
                 HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
                 if (heatingProcess_Fan != null)
                 {
-                    mollierProcesses.Add(heatingProcess_Fan);
+                    mollierGroup_Summer.Add(heatingProcess_Fan);
                     start = heatingProcess_Fan.End;
                 }
 
@@ -321,13 +320,19 @@ namespace SAM.Analytical.Mollier
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Summer);
                     if (undefinedProcess != null)
                     {
-                        mollierProcesses.Add(undefinedProcess);
+                        mollierGroup_Summer.Add(undefinedProcess);
                         start = undefinedProcess.End;
                     }
                 }
             }
 
-            return true;
+            MollierGroup result = new MollierGroup(airHandlingUnitResult.Name);
+            result.Add(mollierGroup_Winter);
+            result.Add(mollierGroup_Summer);
+
+            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.Processes, result);
+
+            return result;
         }
     }
 }
