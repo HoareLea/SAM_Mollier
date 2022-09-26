@@ -1,6 +1,6 @@
 ﻿namespace SAM.Core.Mollier
 {
-    public interface IMollierProcess : IMollierObject
+    public interface IMollierProcess : IMollierGroupable
     {
         MollierPoint Start { get; }
         MollierPoint End { get; }

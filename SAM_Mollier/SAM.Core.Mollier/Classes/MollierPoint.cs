@@ -2,7 +2,7 @@
 
 namespace SAM.Core.Mollier
 {
-    public class MollierPoint : IMollierObject
+    public class MollierPoint : IMollierPoint
     {
         private double dryBulbTemperature;
         private double humidityRatio;

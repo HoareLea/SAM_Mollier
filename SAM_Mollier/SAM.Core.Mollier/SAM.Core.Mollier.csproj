@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\MollierGroup.cs" />
     <Compile Include="Classes\UIMollierProcess.cs" />
     <Compile Include="Classes\MollierZone.cs" />
     <Compile Include="Classes\SteamHumidificationProcess.cs" />
@@ -69,7 +70,10 @@
     <Compile Include="Create\CoolingProcess.cs" />
     <Compile Include="Create\MollierPoint.cs" />
     <Compile Include="Create\HeatingProcess.cs" />
+    <Compile Include="Interfaces\IMollierGroupable.cs" />
     <Compile Include="Interfaces\IMollierObject.cs" />
+    <Compile Include="Interfaces\IMollierGroup.cs" />
+    <Compile Include="Interfaces\IMollierPoint.cs" />
     <Compile Include="Interfaces\IMollierProcess.cs" />
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
