@@ -32,7 +32,7 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Summer Heat Recovery Latent Efficiency", "Summer Heat Recovery Latent Efficiency [%]"), DoubleParameterValue(0, 100)] SummerHeatRecoveryLatentEfficiency,
         [ParameterProperties("Cooling Coil Fluid Flow Temperature", "Cooling Coil Fluid Flow Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidFlowTemperature,
         [ParameterProperties("Cooling Coil Fluid Return Temperature", "Cooling Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidReturnTemperature,
-        [ParameterProperties("Cooling Coil Performance", "Cooling Coil Performance [%]"), DoubleParameterValue(0, 100)] CoolingCoilPerformance,
+        //[ParameterProperties("Cooling Coil Performance", "Cooling Coil Performance [%]"), DoubleParameterValue(0, 100)] CoolingCoilPerformance,
         [ParameterProperties("Winter Heating Coil Supply Temperature", "Winter Heating Coil Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterHeatingCoilSupplyTemperature,
         [ParameterProperties("Winter Heat Recovery Dry Bulb Temperature", "Winter Heat Recovery Dry Bulb Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterHeatRecoveryDryBulbTemperature,
         [ParameterProperties("Winter Heat Recovery Relative Humidity", "Winter Heat Recovery Relative Humidity [%]"), DoubleParameterValue(0, 100)] WinterHeatRecoveryRelativeHumidity,
@@ -52,7 +52,7 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Summer Heating Coil Sensible Load", "Summer Heating Coil Sensible Load [W]"), ParameterValue(Core.ParameterType.Double)] SummerHeatingCoilSensibleLoad,
         [ParameterProperties("Summer Heating Coil Total Load", "Summer Heating Coil Total Load [W]"), ParameterValue(Core.ParameterType.Double)] SummerHeatingCoilTotalLoad,
         [ParameterProperties("Summer Supply Fan Temperature", "Summer Supply Fan Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyFanTemperature,
-        [ParameterProperties("summer Supply Fan Relative Humidity", "Summer Supply Fan Relative Humidty [%]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyFanRelativeHumidty,
+        [ParameterProperties("Summer Supply Fan Relative Humidity", "Summer Supply Fan Relative Humidty [%]"), ParameterValue(Core.ParameterType.Double)] SummerSupplyFanRelativeHumidty,
         [ParameterProperties("Processes", "Processes"), SAMObjectParameterValue(typeof(Core.Mollier.MollierGroup))] Processes,
     }
 }

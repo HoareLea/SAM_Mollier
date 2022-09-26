@@ -242,12 +242,12 @@ namespace SAM.Analytical.Mollier
 
                 //COOLING (COOLING COIL)
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTempearture);
-                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilPerformance, out double coolingCoilPerformance);
-                if (!double.IsNaN(summerSupplyTempearture) && !double.IsNaN(coolingCoilPerformance))
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, out double coolingCoilContactFactor);
+                if (!double.IsNaN(summerSupplyTempearture) && !double.IsNaN(coolingCoilContactFactor))
                 {
                     double dryBulbTemperature = summerSupplyTempearture - Query.PickupTemperature(start, spf);
 
-                    CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature, coolingCoilPerformance / 100);
+                    CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature, coolingCoilContactFactor);
                     if (coolingProcess != null)
                     {
                         mollierGroup_Summer.Add(coolingProcess);
