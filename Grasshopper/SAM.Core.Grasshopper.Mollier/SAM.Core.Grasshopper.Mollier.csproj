@@ -60,6 +60,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooMollierGroup.cs" />
     <Compile Include="Classes\GooMollierPoint.cs" />
     <Compile Include="Classes\GooMollierProcess.cs" />
     <Compile Include="Component\SAMMollierCreateAdiabaticHumidificationProcessByRelativeHumidity.cs" />

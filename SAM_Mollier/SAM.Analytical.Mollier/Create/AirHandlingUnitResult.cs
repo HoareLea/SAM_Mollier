@@ -9,10 +9,8 @@ namespace SAM.Analytical.Mollier
 {
     public static partial class Create
     {
-        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName, out List<IMollierProcess> mollierProcesses)
+        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName)
         {
-            mollierProcesses = null;
-
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
             if (adjacencyCluster == null || string.IsNullOrWhiteSpace(airHandlingUnitName))
             {

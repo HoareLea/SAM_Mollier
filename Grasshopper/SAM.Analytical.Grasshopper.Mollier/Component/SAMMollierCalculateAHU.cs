@@ -7,6 +7,7 @@ using SAM.Analytical.Mollier;
 using Grasshopper.Kernel.Types;
 using System.Linq;
 using SAM.Core.Grasshopper.Mollier;
+using SAM.Core.Mollier;
 
 namespace SAM.Analytical.Grasshopper.Mollier
 {
@@ -365,13 +366,17 @@ namespace SAM.Analytical.Grasshopper.Mollier
             adjacencyCluster.AddObject(airHandlingUnit);
             analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
 
-            AirHandlingUnitResult airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, airHandlingUnit.Name, out List<Core.Mollier.IMollierProcess> mollierProcesses);
+            MollierGroup mollierGroup = null;
+
+            AirHandlingUnitResult airHandlingUnitResult = Analytical.Mollier.Create.AirHandlingUnitResult(analyticalModel, airHandlingUnit.Name);
             if (airHandlingUnit != null && airHandlingUnitResult != null)
             {
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
                 adjacencyCluster.AddObject(airHandlingUnitResult);
                 adjacencyCluster.AddRelation(airHandlingUnit, airHandlingUnitResult);
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+
+                mollierGroup = airHandlingUnitResult.GetValue<MollierGroup>(AirHandlingUnitResultParameter.Processes);
             }
 
             if(airHandlingUnitResult != null)
@@ -385,7 +390,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("mollierProcesses");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, mollierProcesses?.ConvertAll(x => new GooMollierProcess(x)));
+                dataAccess.SetDataList(index, mollierGroup?.GetMollierProcesses()?.ConvertAll(x => new GooMollierProcess(x)));
             }
 
 
