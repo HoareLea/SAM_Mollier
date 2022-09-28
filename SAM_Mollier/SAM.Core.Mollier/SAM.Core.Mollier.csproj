@@ -70,6 +70,7 @@
     <Compile Include="Create\CoolingProcess.cs" />
     <Compile Include="Create\MollierPoint.cs" />
     <Compile Include="Create\HeatingProcess.cs" />
+    <Compile Include="Enums\MollierProcessType.cs" />
     <Compile Include="Interfaces\IMollierGroupable.cs" />
     <Compile Include="Interfaces\IMollierObject.cs" />
     <Compile Include="Interfaces\IMollierGroup.cs" />
