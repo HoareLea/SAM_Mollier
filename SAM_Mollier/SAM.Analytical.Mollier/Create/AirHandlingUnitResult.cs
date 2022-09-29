@@ -1,6 +1,4 @@
-﻿
-
-using SAM.Core.Mollier;
+﻿using SAM.Core.Mollier;
 using SAM.Weather;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +8,11 @@ namespace SAM.Analytical.Mollier
     public static partial class Create
     {
         public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName)
+        {
+            return AirHandlingUnitResult(analyticalModel, airHandlingUnitName, null);
+        }
+
+        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName, Space space)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
             if (adjacencyCluster == null || string.IsNullOrWhiteSpace(airHandlingUnitName))
@@ -25,7 +28,12 @@ namespace SAM.Analytical.Mollier
 
             AirHandlingUnitResult result = new AirHandlingUnitResult(airHandlingUnitName, Query.Source(), airHandlingUnit.Guid.ToString());
 
-            List<Space> spaces = Analytical.Query.Spaces(adjacencyCluster, airHandlingUnitName, out List<Space> spaces_Supply, out List<Space> spaces_Exhaust);
+            Analytical.Query.Spaces(adjacencyCluster, airHandlingUnitName, out List<Space> spaces_Supply, out List<Space> spaces_Exhaust);
+            if(space != null)
+            {
+                spaces_Supply?.RemoveAll(x => x.Guid != space.Guid);
+                spaces_Exhaust?.RemoveAll(x => x.Guid != space.Guid);
+            }
 
             double sensibleHeatLoss = 0;
             double sensibleHeatGain = 0;
@@ -37,9 +45,9 @@ namespace SAM.Analytical.Mollier
             List<double> heatingDesignRelativeHumidities = new List<double>();
             if (spaces_Supply != null && spaces_Supply.Count != 0)
             {
-                foreach (Space space in spaces_Supply)
+                foreach (Space space_Supply in spaces_Supply)
                 {
-                    List<SpaceSimulationResult> spaceSimulationResults = adjacencyCluster.GetResults<SpaceSimulationResult>(space);
+                    List<SpaceSimulationResult> spaceSimulationResults = adjacencyCluster.GetResults<SpaceSimulationResult>(space_Supply);
                     if (spaceSimulationResults != null && spaceSimulationResults.Count != 0)
                     {
                         foreach (SpaceSimulationResult spaceSimulationResult in spaceSimulationResults)
@@ -68,46 +76,46 @@ namespace SAM.Analytical.Mollier
                     }
                     else
                     {
-                        if(space.TryGetValue(SpaceParameter.DesignCoolingLoad, out double designCoolingLoad) && !double.IsNaN(designCoolingLoad))
+                        if(space_Supply.TryGetValue(SpaceParameter.DesignCoolingLoad, out double designCoolingLoad) && !double.IsNaN(designCoolingLoad))
                         {
                             sensibleHeatGain += designCoolingLoad;
                         }
 
-                        if (space.TryGetValue(SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && !double.IsNaN(designHeatingLoad))
+                        if (space_Supply.TryGetValue(SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && !double.IsNaN(designHeatingLoad))
                         {
                             sensibleHeatLoss += designHeatingLoad;
                         }
                     }
 
-                    double supplyAirFlow_Space = space.CalculatedSupplyAirFlow();
+                    double supplyAirFlow_Space = space_Supply.CalculatedSupplyAirFlow();
                     if (!double.IsNaN(supplyAirFlow_Space))
                     {
                         outsideSupplyAirFlow += supplyAirFlow_Space;
 
-                        supplyAirFlow_Space = adjacencyCluster.CalculatedSupplyAirFlow(space);
+                        supplyAirFlow_Space = adjacencyCluster.CalculatedSupplyAirFlow(space_Supply);
                         if(!double.IsNaN(supplyAirFlow_Space))
                         {
                             supplyAirFlow += supplyAirFlow_Space;
                         }
                     }
 
-                    coolingDesignTemperatures.Add(Analytical.Query.CoolingDesignTemperature(space, analyticalModel?.ProfileLibrary));
-                    heatingDesignTemperatures.Add(Analytical.Query.HeatingDesignTemperature(space, analyticalModel?.ProfileLibrary));
+                    coolingDesignTemperatures.Add(Analytical.Query.CoolingDesignTemperature(space_Supply, analyticalModel?.ProfileLibrary));
+                    heatingDesignTemperatures.Add(Analytical.Query.HeatingDesignTemperature(space_Supply, analyticalModel?.ProfileLibrary));
 
-                    coolingDesignRelativeHumidities.Add(Analytical.Query.CoolingDesignRelativeHumidity(space, analyticalModel?.ProfileLibrary));
-                    heatingDesignRelativeHumidities.Add(Analytical.Query.HeatingDesignRelativeHumidity(space, analyticalModel?.ProfileLibrary));
+                    coolingDesignRelativeHumidities.Add(Analytical.Query.CoolingDesignRelativeHumidity(space_Supply, analyticalModel?.ProfileLibrary));
+                    heatingDesignRelativeHumidities.Add(Analytical.Query.HeatingDesignRelativeHumidity(space_Supply, analyticalModel?.ProfileLibrary));
                 }
             }
 
             double exhaustAirFlow = 0;
             if(spaces_Exhaust != null && spaces_Exhaust.Count != 0)
             {
-                foreach (Space space in spaces_Exhaust)
+                foreach (Space space_Exhaust in spaces_Exhaust)
                 {
-                    double exhaustAirFlow_Space = space.CalculatedExhaustAirFlow();
+                    double exhaustAirFlow_Space = space_Exhaust.CalculatedExhaustAirFlow();
                     exhaustAirFlow_Space = double.IsNaN(exhaustAirFlow_Space) ? double.MinValue: exhaustAirFlow_Space;
 
-                    double supplyAirFlow_Space = adjacencyCluster.CalculatedSupplyAirFlow(space);
+                    double supplyAirFlow_Space = adjacencyCluster.CalculatedSupplyAirFlow(space_Exhaust);
                     supplyAirFlow_Space = double.IsNaN(supplyAirFlow_Space) ? double.MinValue : supplyAirFlow_Space;
 
                     exhaustAirFlow_Space = System.Math.Max(exhaustAirFlow_Space, supplyAirFlow_Space);
