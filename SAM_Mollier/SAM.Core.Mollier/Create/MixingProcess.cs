@@ -39,7 +39,7 @@
                 return null;
             }
 
-            return MixingProcess(point_1, point_2, (flow_1 == 0 && flow_2 == 0) ? 0 : flow_1 / (flow_1 + flow_2));
+            return MixingProcess(point_1, point_2, (flow_1 == 0 && flow_2 == 0) ? 0 : flow_2 / (flow_1 + flow_2));
         }
     }
 }
