@@ -112,7 +112,9 @@ namespace SAM.Analytical.Mollier
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatingCoilSupplyTemperature, out double winterHeatingCoilSupplyTemperature);
                 if (!double.IsNaN(winterHeatingCoilSupplyTemperature))
                 {
-                    HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterHeatingCoilSupplyTemperature);
+                    double dryBulbTemperature = winterHeatingCoilSupplyTemperature - Query.PickupTemperature(winterHeatingCoilSupplyTemperature, spf);
+
+                    HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature);
                     if (heatingProcess != null)
                     {
                         mollierGroup_Winter.Add(heatingProcess);
@@ -138,14 +140,14 @@ namespace SAM.Analytical.Mollier
                 //HUMIDIFICATION (STEAM HUMIDIFIER)
                 if (room_Winter != null)
                 {
-                    SteamHumidificationProcess steamHumidificationProcess = Core.Mollier.Create.SteamHumidificationProcess_ByRelativeHumidity(start, room_Winter.RelativeHumidity);
-                    if (steamHumidificationProcess != null)
+                    IsotermicHumidificationProcess isotermicHumidificationProcess = Core.Mollier.Create.IsotermicHumidificationProcess_ByRelativeHumidity(start, room_Winter.RelativeHumidity);
+                    if (isotermicHumidificationProcess != null)
                     {
-                        mollierGroup_Winter.Add(steamHumidificationProcess);
-                        start = steamHumidificationProcess.End;
+                        mollierGroup_Winter.Add(isotermicHumidificationProcess);
+                        start = isotermicHumidificationProcess.End;
                     }
 
-                    double humidificationDuty = Core.Mollier.Query.Duty(steamHumidificationProcess, supplyAirFlow);
+                    double humidificationDuty = Core.Mollier.Query.Duty(isotermicHumidificationProcess, supplyAirFlow);
                     if(!double.IsNaN(humidificationDuty))
                     {
                         airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.HumidificationDuty, humidificationDuty);
@@ -153,7 +155,7 @@ namespace SAM.Analytical.Mollier
                 }
 
                 //HEATING (FAN)
-                double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(start, spf);
+                double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(winterHeatingCoilSupplyTemperature, spf);
 
                 HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
                 if (heatingProcess_Fan != null)
