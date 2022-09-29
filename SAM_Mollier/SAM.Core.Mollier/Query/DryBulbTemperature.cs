@@ -254,11 +254,22 @@
         {
             if (double.IsNaN(relativeHumidity) || double.IsNaN(specificVolume) || double.IsNaN(pressure))
             {
-                return double.NaN; ;
+                return double.NaN;
             }
 
             return  Core.Query.Calculate_ByMaxStep((double x) => SpecificVolume(x, HumidityRatio(x, relativeHumidity, pressure), pressure), specificVolume, -50, 50);
         }
+
+        public static double DryBulbTemperature_ByDiagramTemperature(double diagramTemperature, double humidityRatio)
+        {
+            if (double.IsNaN(diagramTemperature))
+            {
+                return double.NaN;
+            }
+
+            return Core.Query.Calculate_BinarySearch((double x) => DiagramTemperature(x, humidityRatio), diagramTemperature, -30, 80, increasing: false);
+        }
+
 
         /// <summary>
         /// Calculates dry bulb temperature
@@ -276,5 +287,6 @@
 
             return mollierPoint.DryBulbTemperature + ((sensibleLoad/ 1000) / (airFlow * mollierPoint.Density() * mollierPoint.HeatCapacity()));
         }
+
     }
 }
