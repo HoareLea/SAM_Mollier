@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Mollier
 {
@@ -26,8 +27,15 @@ namespace SAM.Core.Mollier
                 return mollierPoint_Project.Enthalpy;
             });
 
-            double dryBulbTemperature_ADP = Core.Query.Calculate_BinarySearch(func, end.Enthalpy, -30, start.DryBulbTemperature, false);
+            double temperature_Temp = 2.27275;
+
+            double dryBulbTemperature_ADP = Core.Query.Calculate_ByDivision(func, end.Enthalpy, temperature_Temp, start.DryBulbTemperature);
             if (double.IsNaN(dryBulbTemperature_ADP))
+            {
+                dryBulbTemperature_ADP = Core.Query.Calculate_ByDivision(func, end.Enthalpy, -273.15, temperature_Temp);
+            }
+
+            if(double.IsNaN(dryBulbTemperature_ADP))
             {
                 return null;
             }

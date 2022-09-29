@@ -19,5 +19,15 @@ namespace SAM.Analytical.Mollier
 
             return sfp / (mollierPoint.Density() * Core.Mollier.Query.HeatCapacity(mollierPoint));
         }
+
+        public static double PickupTemperature(this double dryBulbTemperature, double sfp)
+        {
+            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(sfp))
+            {
+                return double.NaN;
+            }
+
+            return sfp / 1.2 * 1.005;
+        }
     }
 }
