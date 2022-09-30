@@ -1,5 +1,6 @@
 ﻿using SAM.Core.Mollier;
 using SAM.Weather;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,72 @@ namespace SAM.Analytical.Mollier
         }
 
         public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName, Space space)
+        {
+            if (analyticalModel == null || string.IsNullOrEmpty(airHandlingUnitName))
+            {
+                return null;
+            }
+
+            if (space == null)
+            {
+                return AirHandlingUnitResult(analyticalModel, airHandlingUnitName, null, null);
+            }
+
+            AirHandlingUnitCalculationMethod airHandlingUnitCalculationMethod = AirHandlingUnitCalculationMethod.FixedSupplyTemperature;
+            if (space.TryGetValue(SpaceParameter.AirHandlingUnitCalculationMethod, out string airHandlingUnitCalculationMethodString) && !string.IsNullOrEmpty(airHandlingUnitCalculationMethodString))
+            {
+                AirHandlingUnitCalculationMethod airHandlingUnitCalculationMethod_Temp = Core.Query.Enum<AirHandlingUnitCalculationMethod>(airHandlingUnitCalculationMethodString);
+                if (airHandlingUnitCalculationMethod_Temp != AirHandlingUnitCalculationMethod.Undefined)
+                {
+                    airHandlingUnitCalculationMethod = airHandlingUnitCalculationMethod_Temp;
+                }
+            }
+
+            if (airHandlingUnitCalculationMethod == AirHandlingUnitCalculationMethod.Undefined)
+            {
+                airHandlingUnitCalculationMethod = AirHandlingUnitCalculationMethod.FixedSupplyTemperature;
+            }
+
+            AirHandlingUnitResult result = AirHandlingUnitResult(analyticalModel, airHandlingUnitName, space, null);
+
+            Func<double, double> func = new Func<double, double>((double summerSupplyTemperature_Temp) => 
+            {
+                AirHandlingUnitResult airHandlingUnitResult = AirHandlingUnitResult(analyticalModel, airHandlingUnitName, space, summerSupplyTemperature_Temp);
+                if(airHandlingUnitResult == null)
+                {
+                    return double.NaN;
+                }
+
+                double supplyFanRelativeHumidity = airHandlingUnitResult.SummerSupplyFanRelativeHumidity();
+
+                return supplyFanRelativeHumidity;
+            });
+
+            double summerSupplyTemperature= double.NaN;
+
+            switch (airHandlingUnitCalculationMethod)
+            {
+                case AirHandlingUnitCalculationMethod.HumidityRatio:
+                    summerSupplyTemperature = Core.Query.Calculate_ByDivision(func, result.SummerSpaceRelativeHumidity(), 0, 50);
+                    if (!double.IsNaN(summerSupplyTemperature))
+                    {
+                        return AirHandlingUnitResult(analyticalModel, airHandlingUnitName, space, summerSupplyTemperature);
+                    }
+                    break;
+
+                case AirHandlingUnitCalculationMethod.HumidityRatioAndChilledWaterTemperature:
+                    summerSupplyTemperature = Core.Query.Calculate_ByDivision(func, result.SummerSpaceRelativeHumidity(), 0, 50);
+                    if (!double.IsNaN(summerSupplyTemperature))
+                    {
+                        return AirHandlingUnitResult(analyticalModel, airHandlingUnitName, space, summerSupplyTemperature);
+                    }
+                    break;
+            }
+
+            return result;
+        }
+
+        public static AirHandlingUnitResult AirHandlingUnitResult(this AnalyticalModel analyticalModel, string airHandlingUnitName, Space space, double? summerSupplyTemperature)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
             if (adjacencyCluster == null || string.IsNullOrWhiteSpace(airHandlingUnitName))
@@ -76,12 +143,12 @@ namespace SAM.Analytical.Mollier
                     }
                     else
                     {
-                        if(space_Supply.TryGetValue(SpaceParameter.DesignCoolingLoad, out double designCoolingLoad) && !double.IsNaN(designCoolingLoad))
+                        if(space_Supply.TryGetValue(Analytical.SpaceParameter.DesignCoolingLoad, out double designCoolingLoad) && !double.IsNaN(designCoolingLoad))
                         {
                             sensibleHeatGain += designCoolingLoad;
                         }
 
-                        if (space_Supply.TryGetValue(SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && !double.IsNaN(designHeatingLoad))
+                        if (space_Supply.TryGetValue(Analytical.SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && !double.IsNaN(designHeatingLoad))
                         {
                             sensibleHeatLoss += designHeatingLoad;
                         }
@@ -237,9 +304,22 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, summerHeatingCoil);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerSupplyTemperature, out double summerSupplyTemperature) && !double.IsNaN(summerSupplyTemperature))
+            double summerSupplyTemperature_Temp = double.NaN;
+            if(summerSupplyTemperature != null && summerSupplyTemperature.HasValue && !double.IsNaN(summerSupplyTemperature.Value))
             {
-                result.SetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, summerSupplyTemperature);
+                summerSupplyTemperature_Temp = summerSupplyTemperature.Value;
+            }
+            else
+            {
+                if (!airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerSupplyTemperature, out summerSupplyTemperature_Temp) || double.IsNaN(summerSupplyTemperature_Temp))
+                {
+                    summerSupplyTemperature_Temp = double.NaN;
+                }
+            }
+
+            if(!double.IsNaN(summerSupplyTemperature_Temp))
+            {
+                result.SetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, summerSupplyTemperature_Temp);
             }
 
             if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.FrostCoilOffTemperature, out double frostCoilOffTemperature) && !double.IsNaN(frostCoilOffTemperature))

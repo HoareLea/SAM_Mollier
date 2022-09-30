@@ -261,6 +261,8 @@ namespace SAM.Analytical.Mollier
                         {
                             airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingProcess.Efficiency);
                         }
+
+                        airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilOffTemperature, coolingProcess.End.DryBulbTemperature);
                     }
 
                     if (!double.IsNaN(supplyAirFlow))
