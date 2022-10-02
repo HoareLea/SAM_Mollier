@@ -262,6 +262,12 @@ namespace SAM.Analytical.Mollier
                             airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingProcess.Efficiency);
                         }
 
+                        MollierPoint mollierPoint_ApparatusDewPoint = coolingProcess.ApparatusDewPoint();
+                        if(mollierPoint_ApparatusDewPoint != null)
+                        {
+                            airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilApparatusDewPoint, mollierPoint_ApparatusDewPoint);
+                        }
+
                         airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.CoolingCoilOffTemperature, coolingProcess.End.DryBulbTemperature);
                     }
 

@@ -33,6 +33,7 @@ namespace SAM.Analytical.Mollier
         [ParameterProperties("Cooling Coil Fluid Flow Temperature", "Cooling Coil Fluid Flow Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidFlowTemperature,
         [ParameterProperties("Cooling Coil Fluid Return Temperature", "Cooling Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidReturnTemperature,
         [ParameterProperties("Cooling Coil Off Temperature", "Cooling Coil Off Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilOffTemperature,
+        [ParameterProperties("Cooling Coil Apparatus Dew Point", "Cooling Coil Apparatus Dew Point"), SAMObjectParameterValue(typeof(Core.Mollier.MollierPoint))] CoolingCoilApparatusDewPoint,
         //[ParameterProperties("Cooling Coil Performance", "Cooling Coil Performance [%]"), DoubleParameterValue(0, 100)] CoolingCoilPerformance,
         [ParameterProperties("Winter Heating Coil Supply Temperature", "Winter Heating Coil Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterHeatingCoilSupplyTemperature,
         [ParameterProperties("Winter Heat Recovery Dry Bulb Temperature", "Winter Heat Recovery Dry Bulb Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterHeatRecoveryDryBulbTemperature,

@@ -50,6 +50,22 @@ namespace SAM.Analytical.Mollier
                     return double.NaN;
                 }
 
+                if (airHandlingUnitCalculationMethod == AirHandlingUnitCalculationMethod.HumidityRatioAndChilledWaterTemperature)
+                {
+                    double summerSupplyFanTemperature = airHandlingUnitResult.SummerSupplyFanTemperature();
+                    if(!double.IsNaN(summerSupplyFanTemperature))
+                    {
+                        MollierPoint mollierPoint_ApparatusDewPoint = airHandlingUnitResult.ApparatusDewPoint();
+                        if (mollierPoint_ApparatusDewPoint != null)
+                        {
+                            if(mollierPoint_ApparatusDewPoint.DryBulbTemperature > summerSupplyFanTemperature)
+                            {
+                                return double.NaN;
+                            }
+                        }
+                    }
+                }
+
                 double supplyFanRelativeHumidity = airHandlingUnitResult.SummerSupplyFanRelativeHumidity();
 
                 return supplyFanRelativeHumidity;

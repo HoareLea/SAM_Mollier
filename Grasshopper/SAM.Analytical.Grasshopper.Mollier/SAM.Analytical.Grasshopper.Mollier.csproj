@@ -67,6 +67,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component\SAMMollierAirHandlingUnitCalculationMethod.cs" />
     <Compile Include="Component\SAMMollierAddMechanicalSystems.cs" />
     <Compile Include="Component\SAMMollierCalculateAHU.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
