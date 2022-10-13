@@ -47,9 +47,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 param_Number.SetPersistentData(35);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
                 global::Grasshopper.Kernel.Parameters.Param_Boolean param_Bool = null;
-                //param_Bool = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_chartType_", NickName = "_chartType_", Description = "Type of the chart: true - Mollier Chart, false - Psychrometric Chart", Access = GH_ParamAccess.item, Optional = true };
-                //param_Bool.SetPersistentData(true);
-                //result.Add(new GH_SAMParam(param_Bool, ParamVisibility.Binding));
+                param_Bool = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_chartType_", NickName = "_chartType_", Description = "Type of the chart: true - Mollier Chart, false - Psychrometric Chart", Access = GH_ParamAccess.item, Optional = true };
+                param_Bool.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Bool, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
