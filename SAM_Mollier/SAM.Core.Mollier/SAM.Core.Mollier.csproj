@@ -79,6 +79,12 @@
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\DiagramTemperatureLine.cs" />
+    <Compile Include="Query\RelativeHumidityLine.cs" />
+    <Compile Include="Query\WetBulbTemperatureLine.cs" />
+    <Compile Include="Query\SpecificVolumeLine.cs" />
+    <Compile Include="Query\EnthalpyLine.cs" />
+    <Compile Include="Query\DensityLine.cs" />
     <Compile Include="Query\Project.cs" />
     <Compile Include="Query\DewPoint.cs" />
     <Compile Include="Query\TemperatureDifference.cs" />
@@ -110,6 +116,7 @@
     <Compile Include="Query\HumidityRatio.cs" />
     <Compile Include="Query\SaturationVapourPressure.cs" />
     <Compile Include="Query\PartialVapourPressure.cs" />
+    <Compile Include="Standard\Default.cs" />
     <Compile Include="Standard\Standard.cs" />
   </ItemGroup>
   <ItemGroup>
