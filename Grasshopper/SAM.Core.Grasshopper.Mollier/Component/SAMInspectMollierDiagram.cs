@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
 using Grasshopper;
+using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 
 namespace SAM.Core.Grasshopper.Mollier
@@ -18,7 +19,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -34,16 +35,16 @@ namespace SAM.Core.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
                 global::Grasshopper.Kernel.Parameters.Param_Number param_Number = null;
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_temperature_Min_", NickName = "_temperature_Min_", Description = "Minimal value of temperature axis", Access = GH_ParamAccess.item, Optional = true };
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_temperature_Min_", NickName = "_temperature_Min_", Description = "Minimal value of temperature axis - [°C]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(-20);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_temperature_Max_", NickName = "_temperature_Max_", Description = "Maximal value of temperature axis", Access = GH_ParamAccess.item, Optional = true };
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_temperature_Max_", NickName = "_temperature_Max_", Description = "Maximal value of temperature axis - [°C]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(50);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatio_Min_", NickName = "_humidityRatio_Min_", Description = "Minimal value of humidity ratio axis", Access = GH_ParamAccess.item, Optional = true };
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatio_Min_", NickName = "_humidityRatio_Min_", Description = "Minimal value of humidity ratio axis - [g/kg]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(0);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatio_Max_", NickName = "_humidityRatio_Max_", Description = "Maximal value of humidity ratio axis", Access = GH_ParamAccess.item, Optional = true };
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityRatio_Max_", NickName = "_humidityRatio_Max_", Description = "Maximal value of humidity ratio axis - [g/kg]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(35);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
                 global::Grasshopper.Kernel.Parameters.Param_Boolean param_Bool = null;
@@ -61,23 +62,29 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "relativeHumidities", NickName = "relativeHumidities", Description = "TODO", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "relativeHumidityPoints", NickName = "realtiveHumidityPoints", Description = "TODO", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Curve() { Name = "Relative Humidity Lines", NickName = "relativeHumidityLines", Description = "Contains relative humidity lines as curves", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Relative Humidity Values", NickName = "relativeHumidities", Description = "Values of relative humidity lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Relative Humidity Points", NickName = "relativeHumidityPoints", Description = "MollierPoints used to create relative humidity lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "diagramTemperatures", NickName = "diagramTemperatures", Description = "TODO", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "diagramTemperaturePoints", NickName = "diagramTemperaturePoints", Description = "TODO", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Curve() { Name = "Diagram Temperature Lines", NickName = "DiagramTemperatureLines", Description = "Contains diagram temperature lines as curves", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Diagram Temperature Values", NickName = "diagramTemperatures", Description = "Values of diagram temperature lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Diagram Temperature Points", NickName = "diagramTemperaturePoints", Description = "MollierPoints used to create diagram temperature lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "densities", NickName = "densities", Description = "TODO", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "densityPoints", NickName = "densityPoints", Description = "TODO", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Curve() { Name = "Density Lines", NickName = "densityLines", Description = "Contains density lines as curves", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Density Values", NickName = "densities", Description = "Values of density lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Density Points", NickName = "densityPoints", Description = "MollierPoints used to create density lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "enthalpies", NickName = "enthalpies", Description = "TODO", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "enthalpyPoints", NickName = "enthalpyPoints", Description = "TODO", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-               
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "specificVolumes", NickName = "specificVolumes", Description = "TODO", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "specificVolumePoints", NickName = "specificVolumePoints", Description = "TODO", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "wetBulbTemperatures", NickName = "wetBulbTemperatures", Description = "TODO", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "wetBulbTemperaturePoints", NickName = "wetBulbTemperaturePoints", Description = "TODO", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Curve() { Name = "Enthalpy Lines", NickName = "enthalpyLines", Description = "Contains enthalpy lines as curves", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Enthalpy Values", NickName = "enthalpies", Description = "Values of enthalpy lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Enthalpy Points", NickName = "enthalpyPoints", Description = "MollierPoints used to create enthalpy lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Curve() { Name = "Specific Volume Lines", NickName = "specificVolumeLines", Description = "Contains specific volume lines as curves", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Specific Volume Values", NickName = "specificVolumes", Description = "Values of specific volume lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Specific Volume Points", NickName = "specificVolumePoints", Description = "MollierPoints used to create specific volume lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Curve() { Name = "Wet Bulb Temperature Lines", NickName = "wetBulbTemperatureLines", Description = "Contains wet bulb temperature lines as curves", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Wet Bulb Temperature Values", NickName = "wetBulbTemperatures", Description = "Values of wet bulb temperature lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Wet Bulb Temperature Points", NickName = "wetBulbTemperaturePoints", Description = "MollierPoints used to create wet bulb temperature lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
 
                 return result.ToArray();
@@ -96,6 +103,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            //PROCESSING INPUT
             int index;
 
             double temperature_Min = double.NaN;
@@ -105,7 +113,6 @@ namespace SAM.Core.Grasshopper.Mollier
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
             double temperature_Max = double.NaN;
             index = Params.IndexOfInputParam("_temperature_Max_");
             if (index == -1 || !dataAccess.GetData(index, ref temperature_Max) || double.IsNaN(temperature_Max))
@@ -113,7 +120,6 @@ namespace SAM.Core.Grasshopper.Mollier
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
             double humidityRatio_Min = double.NaN;
             index = Params.IndexOfInputParam("_humidityRatio_Min_");
             if (index == -1 || !dataAccess.GetData(index, ref humidityRatio_Min) || double.IsNaN(humidityRatio_Min))
@@ -121,7 +127,6 @@ namespace SAM.Core.Grasshopper.Mollier
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
             double humidityRatio_Max = double.NaN;
             index = Params.IndexOfInputParam("_humidityRatio_Max_");
             if (index == -1 || !dataAccess.GetData(index, ref humidityRatio_Max) || double.IsNaN(humidityRatio_Max))
@@ -129,7 +134,6 @@ namespace SAM.Core.Grasshopper.Mollier
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
             bool chartType = true;
             index = Params.IndexOfInputParam("_chartType_");
             if (index == -1 || !dataAccess.GetData(index, ref chartType) || chartType == null)
@@ -139,224 +143,263 @@ namespace SAM.Core.Grasshopper.Mollier
             }
             ChartType ChartType = chartType == true ? ChartType.Mollier : ChartType.Psychrometric;
 
-            Dictionary<double, List<MollierPoint>> dictionary_Density = Core.Mollier.Query.DensityLine();
-
+            //CREATING DENSITY OUTPUT
+            Dictionary<double, List<MollierPoint>> dictionary_Density = Core.Mollier.Query.DensityLine(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> densities = new List<double>(dictionary_Density.Keys);
-            ////TODO: Maciek to fill densities
 
             DataTree<GooMollierPoint> dataTree_Densities = new DataTree<GooMollierPoint>();
+            DataTree<GH_Line> dataTree_DensityLines = new DataTree<GH_Line>();
             for (int i = 0; i < densities.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
-
                 List<MollierPoint> mollierPoints = dictionary_Density[densities[i]];
-                mollierPoints = CutLine(mollierPoints, ChartType, humidityRatio_Min, humidityRatio_Max, temperature_Max, temperature_Min);
+                
                 mollierPoints?.ForEach(x => dataTree_Densities.Add(new GooMollierPoint(x), path));
+
+                Rhino.Geometry.Line line = new Rhino.Geometry.Line();
+                if(mollierPoints != null)
+                {
+                    double x1 = ChartType == ChartType.Mollier ? mollierPoints[0].HumidityRatio * 1000 : mollierPoints[0].DryBulbTemperature;
+                    double y1 = ChartType == ChartType.Mollier ? mollierPoints[0].DryBulbTemperature : mollierPoints[0].HumidityRatio * 1000;
+                    double x2 = ChartType == ChartType.Mollier ? mollierPoints[1].HumidityRatio * 1000 : mollierPoints[1].DryBulbTemperature;
+                    double y2 = ChartType == ChartType.Mollier ? mollierPoints[1].DryBulbTemperature : mollierPoints[1].HumidityRatio * 1000;
+
+                    line = new Rhino.Geometry.Line(x1, y1, 0, x2, y2, 0);
+                }
+                dataTree_DensityLines.Add(new GH_Line(line));
+            }
+            index = Params.IndexOfOutputParam("Density Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_Densities);
+            }
+            index = Params.IndexOfOutputParam("Density Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, densities);
+            }
+            index = Params.IndexOfOutputParam("Density Lines");
+            if(index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_DensityLines);
             }
 
-            Dictionary<double, List<MollierPoint>> dictionary_Enthalpy = Core.Mollier.Query.EnthalpyLine(chartType: ChartType);
-
+            //CREATING ENTHALPY OUTPUT
+            Dictionary<double, List<MollierPoint>> dictionary_Enthalpy = Core.Mollier.Query.EnthalpyLine(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> enthalpies = new List<double>(dictionary_Enthalpy.Keys);
-            ////TODO: Maciek to fill densities
 
             DataTree<GooMollierPoint> dataTree_Enthalpies = new DataTree<GooMollierPoint>();
+            DataTree<GH_Curve> dataTree_EnthalpyLines = new DataTree<GH_Curve>();
             for (int i = 0; i < enthalpies.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
-
                 List<MollierPoint> mollierPoints = dictionary_Enthalpy[enthalpies[i]];
-                mollierPoints = CutLine(mollierPoints, ChartType, humidityRatio_Min, humidityRatio_Max, temperature_Max, temperature_Min);
 
                 mollierPoints?.ForEach(x => dataTree_Enthalpies.Add(new GooMollierPoint(x), path));
+
+                if (mollierPoints != null)
+                {
+                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    foreach (MollierPoint mollierPoint in mollierPoints)
+                    {
+                        double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
+                        double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
+                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        polyLine.Add(point3D);
+                    }
+                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    dataTree_EnthalpyLines.Add(new GH_Curve(polyLineCurve));
+                }
+            }
+            index = Params.IndexOfOutputParam("Enthalpy Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_Enthalpies);
+            }
+            index = Params.IndexOfOutputParam("Enthalpy Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, enthalpies);
+            }
+            index = Params.IndexOfOutputParam("Enthalpy Lines");
+            if(index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_EnthalpyLines);
             }
 
-            Dictionary<double, List<MollierPoint>> dictionary_SpecificVolume = Core.Mollier.Query.SpecificVolumeLine();
-
+            //CREATING SPECIFIC VOLUME OUTPUT
+            Dictionary<double, List<MollierPoint>> dictionary_SpecificVolume = Core.Mollier.Query.SpecificVolumeLine(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> specificVolumes = new List<double>(dictionary_SpecificVolume.Keys);
-            ////TODO: Maciek to fill densities
 
             DataTree<GooMollierPoint> dataTree_SpecificVolumes = new DataTree<GooMollierPoint>();
+            DataTree<GH_Curve> dataTree_SpecificVolumeLines = new DataTree<GH_Curve>();
             for (int i = 0; i < specificVolumes.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
-
                 List<MollierPoint> mollierPoints = dictionary_SpecificVolume[specificVolumes[i]];
-                mollierPoints = CutLine(mollierPoints, ChartType, humidityRatio_Min, humidityRatio_Max, temperature_Max, temperature_Min);
 
                 mollierPoints?.ForEach(x => dataTree_SpecificVolumes.Add(new GooMollierPoint(x), path));
+
+                if (mollierPoints != null)
+                {
+                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    foreach (MollierPoint mollierPoint in mollierPoints)
+                    {
+                        double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
+                        double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
+                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        polyLine.Add(point3D);
+                    }
+                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    dataTree_SpecificVolumeLines.Add(new GH_Curve(polyLineCurve));
+                }
+            }
+            index = Params.IndexOfOutputParam("Specific Volume Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_SpecificVolumes);
+            }
+            index = Params.IndexOfOutputParam("Specific Volume Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, specificVolumes);
+            }
+            index = Params.IndexOfOutputParam("Specific Volume Lines");
+            if(index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_SpecificVolumeLines);
             }
 
-            Dictionary<double, List<MollierPoint>> dictionary_WetBulbTemperature = Core.Mollier.Query.WetBulbTemperatureLine();
-
+            //CREATING WET BULB TEMPERATURE OUTPUT
+            Dictionary<double, List<MollierPoint>> dictionary_WetBulbTemperature = Core.Mollier.Query.WetBulbTemperatureLine(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> wetBulbTemperatures = new List<double>(dictionary_WetBulbTemperature.Keys);
 
             DataTree<GooMollierPoint> dataTree_WetBulbTemperature = new DataTree<GooMollierPoint>();
+            DataTree<GH_Curve> dataTree_WetBulbTemperatureLines = new DataTree<GH_Curve>();
             for (int i = 0; i < wetBulbTemperatures.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
-
                 List<MollierPoint> mollierPoints = dictionary_WetBulbTemperature[wetBulbTemperatures[i]];
-                mollierPoints = CutLine(mollierPoints, ChartType, humidityRatio_Min, humidityRatio_Max, temperature_Max, temperature_Min);
 
                 mollierPoints?.ForEach(x => dataTree_WetBulbTemperature.Add(new GooMollierPoint(x), path));
+
+                if (mollierPoints != null)
+                {
+                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    foreach (MollierPoint mollierPoint in mollierPoints)
+                    {
+                        double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
+                        double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
+                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        polyLine.Add(point3D);
+                    }
+                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    dataTree_WetBulbTemperatureLines.Add(new GH_Curve(polyLineCurve));
+                }
+            }
+            index = Params.IndexOfOutputParam("Wet Bulb Temperature Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_WetBulbTemperature);
+            }
+            index = Params.IndexOfOutputParam("Wet Bulb Temperature Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, wetBulbTemperatures);
+            }
+            index = Params.IndexOfOutputParam("Wet Bulb Temperature Lines");
+            if(index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_WetBulbTemperatureLines);
             }
 
-            Dictionary<double, List<MollierPoint>> dictionary_relativeHumidity = Core.Mollier.Query.RelativeHumidityLine(-20, 50, Standard.Pressure);
-
+            //CREATING RELATIVE HUMIDITY OUTPUT
+            Dictionary<double, List<MollierPoint>> dictionary_relativeHumidity = Core.Mollier.Query.RelativeHumidityLine((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max); ;
             List<double> relativeHumidities = new List<double>(dictionary_relativeHumidity.Keys);
 
-            DataTree<GooMollierPoint> dataTree_RelativeHumidity= new DataTree<GooMollierPoint>();
+            DataTree<GooMollierPoint> dataTree_RelativeHumidity = new DataTree<GooMollierPoint>();
+            DataTree<GH_Curve> dataTree_RelativeHumidityLines = new DataTree<GH_Curve>();
             for (int i = 0; i < relativeHumidities.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
 
                 List<MollierPoint> mollierPoints = dictionary_relativeHumidity[relativeHumidities[i]];
                 mollierPoints?.ForEach(x => dataTree_RelativeHumidity.Add(new GooMollierPoint(x), path));
+
+                if(mollierPoints != null)
+                {
+                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    foreach(MollierPoint mollierPoint in mollierPoints)
+                    {
+                        double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
+                        double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
+                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        polyLine.Add(point3D);
+                    }
+                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    dataTree_RelativeHumidityLines.Add(new GH_Curve(polyLineCurve));
+                }
             }
-
-            Dictionary<double, List<MollierPoint>> dictionary_diagramTemperature = Core.Mollier.Query.DiagramTemperatureLine((int)temperature_Min, (int)temperature_Max, Standard.Pressure);
-
+            index = Params.IndexOfOutputParam("Relative Humidity Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_RelativeHumidity);
+            }
+            index = Params.IndexOfOutputParam("Relative Humidity Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, relativeHumidities);
+            }
+            index = Params.IndexOfOutputParam("Relative Humidity Lines");
+            if(index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_RelativeHumidityLines);
+            }
+            
+            //CREATING DIAGRAM TEMPERATURE OUTPUT
+            Dictionary<double, List<MollierPoint>> dictionary_diagramTemperature = Core.Mollier.Query.DiagramTemperatureLine((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max);
             List<double> diagramTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
 
             DataTree<GooMollierPoint> dataTree_DiagramTemperature = new DataTree<GooMollierPoint>();
+            DataTree<GH_Curve> dataTree_DiagramTemperatureLines = new DataTree<GH_Curve>();
             for (int i = 0; i < diagramTemperatures.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
 
                 List<MollierPoint> mollierPoints = dictionary_diagramTemperature[diagramTemperatures[i]];
                 mollierPoints?.ForEach(x => dataTree_DiagramTemperature.Add(new GooMollierPoint(x), path));
+
+                if (mollierPoints != null)
+                {
+                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    foreach (MollierPoint mollierPoint in mollierPoints)
+                    {
+                        double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
+                        double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
+                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        polyLine.Add(point3D);
+                    }
+                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    dataTree_DiagramTemperatureLines.Add(new GH_Curve(polyLineCurve));
+                }
             }
 
-
-
-            index = Params.IndexOfOutputParam("densityPoints");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_Densities);
-            }
-            index = Params.IndexOfOutputParam("densities");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, densities);
-            }
-            index = Params.IndexOfOutputParam("enthalpyPoints");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_Enthalpies);
-            }
-            index = Params.IndexOfOutputParam("enthalpies");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, enthalpies);
-            }
-            index = Params.IndexOfOutputParam("specificVolumePoints");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_SpecificVolumes);
-            }
-            index = Params.IndexOfOutputParam("specificVolumes");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, specificVolumes);
-            }
-            index = Params.IndexOfOutputParam("wetBulbTemperaturePoints");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_WetBulbTemperature);
-            }
-            index = Params.IndexOfOutputParam("wetBulbTemperatures");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, wetBulbTemperatures);
-            }
-            index = Params.IndexOfOutputParam("relativeHumidityPoints");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_RelativeHumidity);
-            }
-            index = Params.IndexOfOutputParam("relativeHumidities");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, relativeHumidities);
-            }
-            index = Params.IndexOfOutputParam("diagramTemperaturePoints");
-            if (index != -1)
+            index = Params.IndexOfOutputParam("Diagram Temperature Points");
+            if (index != -1 && ChartType == ChartType.Mollier)
             {
                 dataAccess.SetDataTree(index, dataTree_DiagramTemperature);
             }
-            index = Params.IndexOfOutputParam("diagramTemperatures");
-            if (index != -1)
+            index = Params.IndexOfOutputParam("Diagram Temperature Values");
+            if (index != -1 && ChartType == ChartType.Mollier)
             {
                 dataAccess.SetDataList(index, diagramTemperatures);
             }
+            index = Params.IndexOfOutputParam("Diagram Temperature Lines");
+            if (index != -1 && ChartType == ChartType.Mollier)
+            {
+                dataAccess.SetDataTree(index, dataTree_DiagramTemperatureLines);
+            }
         }
 
-        private List<MollierPoint> CutLine(List<MollierPoint> mollierPoints, ChartType chartType, double humidityRatio_Min, double humidityRatio_Max, double temperature_Max, double temperature_Min)
-        {
-            if(mollierPoints == null || mollierPoints.Count < 2)
-            {
-                return null;
-            }
-            List<MollierPoint> result = new List<MollierPoint>();
-            //MollierPoint point_1 = new MollierPoint(mollierPoints[0].DryBulbTemperature, mollierPoints[0].HumidityRatio * 1000, mollierPoints[0].Pressure);
-            //MollierPoint point_2 = new MollierPoint(mollierPoints[1].DryBulbTemperature, mollierPoints[1].HumidityRatio * 1000, mollierPoints[1].Pressure);
-            ////tu stworz wzor - a i b z y = ax + b
-            ///
-            MollierPoint point_1 = mollierPoints[0];
-            MollierPoint point_2 = mollierPoints[1];
-            humidityRatio_Max /= 1000;
-            humidityRatio_Min /= 1000;
-            double a = 0;
-            double b = 0;
-            if(chartType == ChartType.Mollier)
-            {
-                a = (point_1.DryBulbTemperature - point_2.DryBulbTemperature)/(point_1.HumidityRatio - point_2.HumidityRatio);
-                b = point_1.DryBulbTemperature - a * point_1.HumidityRatio;
-                if(point_1.HumidityRatio < humidityRatio_Min)
-                {
-                    point_1 = new MollierPoint(a * humidityRatio_Min + b, humidityRatio_Min, point_1.Pressure);
-                }
-                else if(point_1.HumidityRatio > humidityRatio_Max)
-                {
-                    point_1 = new MollierPoint(a * humidityRatio_Max + b, humidityRatio_Max, point_1.Pressure);
-                }
-                if(point_1.DryBulbTemperature < temperature_Min)
-                {
-                    point_1 = new MollierPoint(temperature_Min, (temperature_Min - b) / a, point_1.Pressure);
-                }
-                else if (point_1.DryBulbTemperature > temperature_Max)
-                {
-                    point_1 = new MollierPoint(temperature_Max, (temperature_Max - b) / a, point_1.Pressure);
-                }
-
-                if (point_2.HumidityRatio < humidityRatio_Min)
-                {
-                    point_2 = new MollierPoint(a * humidityRatio_Min + b, humidityRatio_Min, point_2.Pressure);
-                }
-                else if (point_2.HumidityRatio > humidityRatio_Max)
-                {
-                    point_2 = new MollierPoint(a * humidityRatio_Max + b, humidityRatio_Max, point_2.Pressure);
-                }
-                if (point_2.DryBulbTemperature < temperature_Min)
-                {
-                    point_2 = new MollierPoint(temperature_Min, (temperature_Min - b) / a, point_2.Pressure);
-                }
-                else if (point_2.DryBulbTemperature > temperature_Max)
-                {
-                    point_2 = new MollierPoint(temperature_Max, (temperature_Max - b) / a, point_2.Pressure);
-                }
-            }
-            else
-            {
-                a = (point_1.HumidityRatio - point_2.HumidityRatio) / (point_1.DryBulbTemperature - point_2.DryBulbTemperature);
-                b = point_1.HumidityRatio - a * point_1.DryBulbTemperature;
-            }
-
-
-            result.Add(point_1);
-            result.Add(point_2);
-
-            return result;
-        }
     }
 }

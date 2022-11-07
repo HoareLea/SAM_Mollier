@@ -5,7 +5,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
-        public static Dictionary<double, List<MollierPoint>> DiagramTemperatureLine(int temperature_Min, int temperature_Max, double pressure)
+        public static Dictionary<double, List<MollierPoint>> DiagramTemperatureLine(int temperature_Min, int temperature_Max, double pressure, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
         {
             Dictionary<double, List<MollierPoint>> result = new Dictionary<double, List<MollierPoint>>();
 
@@ -13,11 +13,12 @@ namespace SAM.Core.Mollier
             {
                 List<MollierPoint> pointList = new List<MollierPoint>();
                 MollierPoint mollierPoint_1 = new MollierPoint(i, 0, pressure);
-                pointList.Add(mollierPoint_1); 
 
                 MollierPoint mollierPoint_2 = new MollierPoint(i, HumidityRatio(i, 100, pressure), pressure);
-                pointList.Add(mollierPoint_2);
 
+                List<MollierPoint> points = ShortenLineByEndPoints(mollierPoint_1, mollierPoint_2, humidityRatio_Min, humidityRatio_Max, temperature_Min, temperature_Max);
+                pointList.Add(points[0]);
+                pointList.Add(points[1]);
                 result.Add(i, pointList);
             }
             return result;
