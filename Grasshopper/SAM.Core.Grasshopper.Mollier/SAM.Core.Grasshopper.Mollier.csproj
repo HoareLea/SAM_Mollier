@@ -63,7 +63,8 @@
     <Compile Include="Classes\GooMollierGroup.cs" />
     <Compile Include="Classes\GooMollierPoint.cs" />
     <Compile Include="Classes\GooMollierProcess.cs" />
-    <Compile Include="Component\SAMInspectMollierDiagram.cs" />
+    <Compile Include="Component\SAMGeometry.cs" />
+    <Compile Include="Component\SAMCreateMollierDiagram.cs" />
     <Compile Include="Component\SAMMollierCreateAdiabaticHumidificationProcessByRelativeHumidity.cs" />
     <Compile Include="Component\SAMMollierApparatusDewPoint.cs" />
     <Compile Include="Component\SAMMollierCreateCoolingProcessByMediumAndDryBulbTemperature.cs" />
