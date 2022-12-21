@@ -60,6 +60,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GH_MollierGeometry.cs" />
+    <Compile Include="Classes\GooMollierGeometry.cs" />
     <Compile Include="Classes\GooMollierGroup.cs" />
     <Compile Include="Classes\GooMollierPoint.cs" />
     <Compile Include="Classes\GooMollierProcess.cs" />
