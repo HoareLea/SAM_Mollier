@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -145,7 +145,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 processesLines.Add(new GooMollierGeometry(new GH_MollierGeometry(new Rhino.Geometry.PolylineCurve(polyLine), color)));
             }
 
-            DataTree<GH_Point> dataTree_Points = new DataTree<GH_Point>();
+            List<GooMollierGeometry> points_list = new List<GooMollierGeometry>();
             foreach (MollierPoint mollierPoint in points)
             {
                 if (mollierPoint == null)
@@ -153,21 +153,13 @@ namespace SAM.Core.Grasshopper.Mollier
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
                 }
+                System.Drawing.Color color = System.Drawing.Color.Black;
                 double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature; ;
                 double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                GH_Point point = new GH_Point(new Rhino.Geometry.Point3d(X, Y, 0));
-                dataTree_Points.Add(point);
+                List<Rhino.Geometry.Point3d> point = new List<Rhino.Geometry.Point3d>();
+                point.Add(new Rhino.Geometry.Point3d(X, Y, 0));
+                points_list.Add(new GooMollierGeometry(new GH_MollierGeometry(point, color)));
             }
-            //List<GooMollierGeometry> curvesList = new List<GooMollierGeometry>();
-            //foreach (GH_MollierGeometry curve in curves)
-            //{
-            //    if (curve == null)
-            //    {
-            //        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-            //        return;
-            //    }
-            //    curvesList.Add(new GooMollierGeometry(curve));
-            //}
 
 
             index = Params.IndexOfOutputParam("MollierGeometry");
@@ -175,7 +167,7 @@ namespace SAM.Core.Grasshopper.Mollier
             if (index != -1)
             {
                 dataAccess.SetDataList(index, curves);
-               // dataAccess.SetDataTree(index, dataTree_Points);
+                dataAccess.SetDataList(index, points_list);
                 dataAccess.SetDataList(index, processesLines);
             }
 

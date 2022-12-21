@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -61,8 +61,6 @@ namespace SAM.Core.Grasshopper.Mollier
             {
 
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-
-                result.Add(new GH_SAMParam(new GooMollierGeometryParam() { Name = "test", NickName = "test", Description = "Contains relative humidity lines as curves", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooMollierGeometryParam() { Name = "Relative Humidity Lines", NickName = "relativeHumidityLines", Description = "Contains relative humidity lines as curves", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Relative Humidity Values", NickName = "relativeHumidities", Description = "Values of relative humidity lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
@@ -389,7 +387,6 @@ namespace SAM.Core.Grasshopper.Mollier
 
             DataTree<GooMollierPoint> dataTree_DiagramTemperature = new DataTree<GooMollierPoint>();
             List<GooMollierGeometry> diagramTemperatureLines = new List<GooMollierGeometry>();
-            GH_MollierGeometry curve_test = null;
             for (int i = 0; i < diagramTemperatures.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
@@ -411,14 +408,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
                     Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
                     diagramTemperatureLines.Add(new GooMollierGeometry(new GH_MollierGeometry(polyLineCurve, color)));
-                    curve_test = new GH_MollierGeometry(polyLineCurve, System.Drawing.Color.Blue);
                 }
-            }
-
-            index = Params.IndexOfOutputParam("test");
-            if(index != -1)
-            {
-                dataAccess.SetData(index, new GooMollierGeometry(curve_test));
             }
 
             index = Params.IndexOfOutputParam("Diagram Temperature Points");
