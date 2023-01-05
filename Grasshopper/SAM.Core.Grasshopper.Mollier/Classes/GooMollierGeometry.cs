@@ -272,7 +272,7 @@ namespace SAM.Core.Grasshopper.Mollier
             //Menu_AppendItem(menu, "Bake By Type", Menu_BakeByGH_CurveType, VolatileData.AllData(true).Any());
             //Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
             //Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, VolatileData.AllData(true).Any());
-            //Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
 
             //Menu_AppendSeparator(menu);
 
@@ -281,7 +281,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
         private void Menu_SaveAs(object sender, EventArgs e)
         {
-            Core.Grasshopper.Query.SaveAs(VolatileData);
+            Query.SaveAs(VolatileData);
         }
         public override bool Write(GH_IWriter writer)
         {

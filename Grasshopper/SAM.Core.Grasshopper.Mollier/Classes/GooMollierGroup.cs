@@ -4,6 +4,8 @@ using SAM.Core.Grasshopper.Mollier.Properties;
 using SAM.Core.Mollier;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
@@ -44,6 +46,20 @@ namespace SAM.Core.Grasshopper.Mollier
         protected override GH_GetterResult Prompt_Singular(ref GooMollierPoint value)
         {
             throw new NotImplementedException();
+        }
+
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+
+            //Menu_AppendSeparator(menu);
+
+            base.AppendAdditionalMenuItems(menu);
+        }
+
+        private void Menu_SaveAs(object sender, EventArgs e)
+        {
+            Core.Grasshopper.Query.SaveAs(VolatileData);
         }
     }
 }
