@@ -36,7 +36,7 @@ namespace SAM.Core.Mollier
             double averageTemperature = (flowTemperature + returnTemperature) / 2;
 
             double temperatureDifference = start.DryBulbTemperature - averageTemperature;
-            double humidityRatioDifference = start.HumidityRatio - Query.HumidityRatio(averageTemperature, 100, start.Pressure);
+            double humidityRatioDifference = Math.Max(0, start.HumidityRatio - Query.HumidityRatio(averageTemperature, 100, start.Pressure));
 
             MollierPoint end = new MollierPoint(start.DryBulbTemperature - (temperatureDifference * efficiency), start.HumidityRatio - (humidityRatioDifference * efficiency), start.Pressure);
             if(end == null)
