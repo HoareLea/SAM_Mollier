@@ -104,7 +104,7 @@ namespace SAM.Core.Mollier
 
         public virtual bool IsValid()
         {
-            return !double.IsNaN(dryBulbTemperature) && !double.IsNaN(humidityRatio) && !double.IsNaN(pressure);
+            return !double.IsNaN(dryBulbTemperature) && !double.IsNaN(humidityRatio) && !double.IsNaN(pressure) && !double.IsInfinity(dryBulbTemperature) && !double.IsInfinity(humidityRatio) && !double.IsInfinity(pressure);
         }
 
         public virtual JObject ToJObject()

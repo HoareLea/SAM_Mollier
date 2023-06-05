@@ -13,11 +13,31 @@ namespace SAM.Core.Mollier
                 result[specific_volume_Min] = new List<MollierPoint>();
 
                 MollierPoint mollierPoint_1 = Create.MollierPoint_ByRelativeHumidityAndSpecificVolume(0, specific_volume_Min, pressure);
+                if(mollierPoint_1 == null || !mollierPoint_1.IsValid())
+                {
+                    specific_volume_Min += specificVolumeStep;
+                    continue;
+                }
+
                 MollierPoint mollierPoint_2 = Create.MollierPoint_ByRelativeHumidityAndSpecificVolume(100, specific_volume_Min, pressure);
+                if (mollierPoint_2 == null || !mollierPoint_2.IsValid())
+                {
+                    specific_volume_Min += specificVolumeStep;
+                    continue;
+                }
+
+                
 
                 List<MollierPoint> points = ShortenLineByEndPoints(mollierPoint_1, mollierPoint_2, humidityRatio_Min, humidityRatio_Max, dryBulbTemperature_Min, dryBulbTemperature_Max);
+                if(points == null || points.Count < 2)
+                {
+                    specific_volume_Min += specificVolumeStep;
+                    continue;
+                }
+                
                 result[specific_volume_Min].Add(points[0]);
                 result[specific_volume_Min].Add(points[1]);
+
                 specific_volume_Min += specificVolumeStep;
             }
 

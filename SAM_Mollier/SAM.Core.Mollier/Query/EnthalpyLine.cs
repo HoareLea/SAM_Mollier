@@ -25,7 +25,7 @@ namespace SAM.Core.Mollier
 
                     double v = 0.0006;
                     double humidityRatio = mollierPoint_2.HumidityRatio + v;
-                    double a = (humidityRatio_1 - humidityRatio_2)/(temperature_1 - temperature_2);
+                    double a = (humidityRatio_1 - humidityRatio_2) / (temperature_1 - temperature_2);
                     double b = humidityRatio_2 - a * temperature_2;
                     double temperature = (humidityRatio - b) / a;
 
@@ -36,8 +36,11 @@ namespace SAM.Core.Mollier
                     mollierPoint_2 = new MollierPoint(temperature_2, humidityRatio_2, pressure);
                 }
                 List<MollierPoint> points = ShortenLineByEndPoints(mollierPoint_1, mollierPoint_2, humidityRatio_Min, humidityRatio_Max, dryBulbTemperature_Min, dryBulbTemperature_Max);
-                result[enthalpy_Min].Add(points[0]);
-                result[enthalpy_Min].Add(points[1]);
+                if (points != null && points.Count > 1)
+                {
+                    result[enthalpy_Min].Add(points[0]);
+                    result[enthalpy_Min].Add(points[1]);
+                }
                 enthalpy_Min += enthalpyStep;
             }
             return result;

@@ -19,8 +19,12 @@ namespace SAM.Core.Mollier
                 MollierPoint mollierPoint_2 = new MollierPoint(temperature_2, humidityRatio_2, pressure);
 
                 List<MollierPoint> points = ShortenLineByEndPoints(mollierPoint_1, mollierPoint_2, humidityRatio_Min, humidityRatio_Max, dryBulbTemperature_Min, dryBulbTemperature_Max);
-                result[density_Min].Add(points[0]);
-                result[density_Min].Add(points[1]);
+                if(points != null && points.Count > 1)
+                {
+                    result[density_Min].Add(points[0]);
+                    result[density_Min].Add(points[1]);
+                }
+
                 density_Min += densityStep;
             }
             return result;

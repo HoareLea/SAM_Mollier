@@ -17,9 +17,12 @@ namespace SAM.Core.Mollier
                 MollierPoint mollierPoint_2 = new MollierPoint(i, HumidityRatio(i, 100, pressure), pressure);
 
                 List<MollierPoint> points = ShortenLineByEndPoints(mollierPoint_1, mollierPoint_2, humidityRatio_Min, humidityRatio_Max, temperature_Min, temperature_Max);
-                pointList.Add(points[0]);
-                pointList.Add(points[1]);
-                result.Add(i, pointList);
+                if (points != null && points.Count > 1)
+                {
+                    pointList.Add(points[0]);
+                    pointList.Add(points[1]);
+                    result.Add(i, pointList);
+                }
             }
             return result;
         }
