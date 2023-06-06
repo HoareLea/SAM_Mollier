@@ -57,7 +57,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         public SAMMollierDryBulbTemperature()
           : base("SAMMollier.DryBulbTemperature", "SAMMollier.DryBulbTemperature",
-              "Utility function to calculate Dry Bulb Temperature",
+              "Utility function to calculate Dry Bulb Temperature from Density and RH",
               "SAM", "Mollier")
         {
         }
