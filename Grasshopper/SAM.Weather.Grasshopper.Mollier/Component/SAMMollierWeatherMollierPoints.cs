@@ -16,7 +16,7 @@ namespace SAM.Weather.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,7 +31,7 @@ namespace SAM.Weather.Grasshopper.Mollier
         public SAMWeatherMollierPoints()
           : base("SAMWeather.MollierPoints", "SAMWeather.MollierPoints",
               "Gets WeatherMollierPoints from WeatherData",
-              "SAM", "Analytical")
+              "SAM", "Mollier")
         {
         }
 
