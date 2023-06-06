@@ -81,7 +81,5 @@
 
             return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
         }
-
-
     }
 }
