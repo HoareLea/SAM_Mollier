@@ -52,7 +52,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         public SAMMollierApparatusDewPoint()
           : base("SAMMollier.ApparatusDewPoint ", "SAMMollier.ApparatusDewPoint ",
-              "Calculates apparatus dew point",
+              "Calculates apparatus dew point (ADP)",
               "SAM", "Mollier")
         {
         }
