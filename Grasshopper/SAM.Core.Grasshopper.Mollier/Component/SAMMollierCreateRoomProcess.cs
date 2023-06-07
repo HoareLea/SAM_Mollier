@@ -38,10 +38,10 @@ namespace SAM.Core.Grasshopper.Mollier
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airFlow", NickName = "_airflow", Description = "AirFlow [m3/s]", Access = GH_ParamAccess.item, Optional = false};
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_sensibleLoad", NickName = "_sensibleLoad", Description = "Sensible Load [W]", Access = GH_ParamAccess.item, Optional = false };
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_sensibleLoad", NickName = "_sensibleLoad", Description = "Sensible Load [kW]", Access = GH_ParamAccess.item, Optional = false };
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_latentLoad", NickName = "_latentLoad", Description = "Latent Load [W]", Access = GH_ParamAccess.item, Optional = false };
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_latentLoad", NickName = "_latentLoad", Description = "Latent Load [kW]", Access = GH_ParamAccess.item, Optional = false };
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -128,7 +128,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, airFlow, sensibleLoad, latentLoad);
+            UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, airFlow, sensibleLoad * 1000, latentLoad * 1000);
             index = Params.IndexOfOutputParam("roomProcess");
             if (index != -1)
             {
