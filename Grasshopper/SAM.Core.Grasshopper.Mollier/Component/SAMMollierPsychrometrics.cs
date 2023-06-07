@@ -194,6 +194,8 @@ namespace SAM.Core.Grasshopper.Mollier
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
                 }
+                //2023-06-07 Special case when we load in g/kg as whole engine in kg/kg
+                humidityRatio = humidityRatio / 1000;
                 numberOfConnected++;
             }
             //wet bulb temperature check
