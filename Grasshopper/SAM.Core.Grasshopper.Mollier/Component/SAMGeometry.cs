@@ -166,9 +166,9 @@ namespace SAM.Core.Grasshopper.Mollier
 
             if (index != -1)
             {
-                dataAccess.SetDataList(index, curves);
-                dataAccess.SetDataList(index, points_list);
                 dataAccess.SetDataList(index, processesLines);
+                dataAccess.SetDataList(index, points_list);
+                dataAccess.SetDataList(index, curves);
             }
 
         }

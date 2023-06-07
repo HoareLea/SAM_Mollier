@@ -32,7 +32,7 @@
                 return null;
             }
 
-            double dryBulbTemperature = start.DryBulbTemperature + (sensibleLoad / (airFlow * Query.HeatCapacity(start) * Query.Density(start)));
+            double dryBulbTemperature = start.DryBulbTemperature + ((sensibleLoad / 1000) / (airFlow * Query.HeatCapacity(start) * Query.Density(start)));
             if(double.IsNaN(dryBulbTemperature))
             {
                 return null;
