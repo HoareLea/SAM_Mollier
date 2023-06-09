@@ -35,6 +35,7 @@ namespace SAM.Core.Mollier
                 pressure = mollierPoint.pressure;
             }
         }
+
         /// <summary>
         /// Enthalpy [J/kg]
         /// </summary>
@@ -51,6 +52,9 @@ namespace SAM.Core.Mollier
             }
         }
 
+        /// <summary>
+        /// Dry Bulb Temperature [C]
+        /// </summary>
         public double DryBulbTemperature
         {
             get
@@ -59,6 +63,9 @@ namespace SAM.Core.Mollier
             }
         }
 
+        /// <summary>
+        /// Humidity Ratio [kg/kg]
+        /// </summary>
         public double HumidityRatio
         {
             get
@@ -67,6 +74,9 @@ namespace SAM.Core.Mollier
             }
         }
 
+        /// <summary>
+        /// Pressure [Pa]
+        /// </summary>
         public double Pressure
         {
             get
@@ -75,6 +85,9 @@ namespace SAM.Core.Mollier
             }
         }
 
+        /// <summary>
+        /// Relative Humidity [%]
+        /// </summary>
         public double RelativeHumidity
         {
             get
