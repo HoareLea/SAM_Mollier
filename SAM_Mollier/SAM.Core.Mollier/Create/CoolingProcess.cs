@@ -21,9 +21,28 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            MollierPoint end = MollierPoint_ByEnthalpy(start.Enthalpy - enthalpyDifference, start.HumidityRatio, start.Pressure);
+            MollierPoint mollierPoint_Saturation = start.SaturationMollierPoint();
+            if(mollierPoint_Saturation == null)
+            {
+                return null;
+            }
 
-            return CoolingProcess(start, end.DryBulbTemperature);
+            double enthalpy_End = start.Enthalpy - enthalpyDifference;
+
+            if(mollierPoint_Saturation.Enthalpy <= enthalpy_End)
+            {
+                MollierPoint end = MollierPoint_ByEnthalpy(enthalpy_End, start.HumidityRatio, start.Pressure);
+
+                return CoolingProcess(start, end.DryBulbTemperature);
+            }
+
+            double dryBulbTemperature = Query.DryBulbTemperature_ByEnthalpy(enthalpy_End, 100, start.Pressure);
+            double humidityRatio = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature, enthalpy_End);
+
+
+            MollierPoint mollierPoint_End = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
+
+            return new CoolingProcess(start, mollierPoint_End, 1);
         }
 
         public static CoolingProcess CoolingProcess_ByMedium(this MollierPoint start, double flowTemperature, double returnTemperature, double efficiency)
