@@ -75,7 +75,6 @@
     <Compile Include="Component\SAMMollierCreateCoolingProcessByTemperatureDifference.cs" />
     <Compile Include="Component\SAMMollierCreateHeatingProcessByEnthalpyDifference.cs" />
     <Compile Include="Component\SAMMollierCreateHeatingProcessByTemperatureDifference.cs" />
-    <Compile Include="Component\SAMMollierCreateRoomProcess.cs" />
     <Compile Include="Component\SAMMollierCreateIsotermicHumidificationProcessByRelativeHumidity.cs" />
     <Compile Include="Component\SAMMollierCreateUndefinedProcess.cs" />
     <Compile Include="Component\SAMMollierCreateSteamHumidificationProcessByRelativeHumidity.cs" />

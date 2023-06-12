@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -46,6 +46,10 @@ namespace SAM.Core.Grasshopper.Mollier
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(Standard.Pressure);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevation_", NickName = "_elevation_", Description = "Elevation [m]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(double.NaN);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -89,18 +93,22 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-
-            index = Params.IndexOfInputParam("_pressure_");
-            if (index == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
             double pressure = double.NaN;
-            if (!dataAccess.GetData(index, ref pressure) || double.IsNaN(pressure))
+            index = Params.IndexOfInputParam("_pressure_");
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref pressure);
+            }
+
+            
+            index = Params.IndexOfInputParam("_elevation_");
+            if (index != -1)
+            {
+                double elevation = double.NaN;
+                if(dataAccess.GetData(index, ref elevation) && !double.IsNaN(elevation))
+                {
+                    pressure = Core.Mollier.Query.Pressure(elevation);
+                }
             }
 
             double nan = 0;

@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.6";
+        public override string LatestComponentVersion => "1.0.7";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,8 +37,14 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "wetBulbTemperature", NickName = "wetBulbTemperature", Description = "Wet bulb temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dewPointTemperature_", NickName = "dewPointTemperature", Description = "Dew Point Temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Atmospheric pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number = null;
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Atmospheric pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(Standard.Pressure);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevation_", NickName = "_elevation_", Description = "Elevation [m]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(double.NaN);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -100,7 +106,6 @@ namespace SAM.Core.Grasshopper.Mollier
             double enthalpy = double.NaN;
             double specificVolume = double.NaN;
             double degreeSaturation = double.NaN;
-            double pressure = double.NaN;
             double density = double.NaN;
             double partialDryAirPressure = double.NaN;
             double waterHeatCapacity = double.NaN;
@@ -112,10 +117,23 @@ namespace SAM.Core.Grasshopper.Mollier
             double prandtlNumber = double.NaN;
             MollierPoint mollierPoint = null;
             double dewPointTemperature = double.NaN;
+
+            double pressure = double.NaN;
+
             index = Params.IndexOfInputParam("_pressure_");
             if (index == -1 || !dataAccess.GetData(index, ref pressure) || double.IsNaN(pressure))
             {
                 pressure = Standard.Pressure;
+            }
+
+            index = Params.IndexOfInputParam("_elevation_");
+            if (index != -1)
+            {
+                double elevation = double.NaN;
+                if(dataAccess.GetData(index, ref elevation) && !double.IsNaN(elevation))
+                {
+                    elevation = Core.Mollier.Query.Pressure(elevation);
+                }
             }
 
             //mollierpoint check
