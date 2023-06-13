@@ -6,10 +6,15 @@ namespace SAM.Core.Mollier
     public class UIMollierProcess : IMollierProcess
     {
         private IMollierProcess mollierProcess;
+        
         public Color Color { get; set; }
+        
         public string Start_Label { get; set; } = null;
+        
         public string Process_Label { get; set; } = null;
+        
         public string End_Label { get; set; } = null;
+        
         public MollierPoint Start
         {
             get
@@ -17,6 +22,7 @@ namespace SAM.Core.Mollier
                 return mollierProcess?.Start;
             }
         }
+        
         public MollierPoint End
         {
             get
@@ -24,6 +30,7 @@ namespace SAM.Core.Mollier
                 return mollierProcess?.End;
             }
         }
+        
         public double Pressure
         {
             get
@@ -32,7 +39,6 @@ namespace SAM.Core.Mollier
                 return mollierProcess == null ? double.NaN : mollierProcess.Pressure;
             }
         }
-
 
         public IMollierProcess MollierProcess
         {
@@ -99,6 +105,7 @@ namespace SAM.Core.Mollier
             }
             return true;
         }
+        
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
@@ -127,7 +134,5 @@ namespace SAM.Core.Mollier
 
             return jObject;
         }
-
-
     }
 }
