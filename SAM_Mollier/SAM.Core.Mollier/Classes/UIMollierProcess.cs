@@ -3,18 +3,16 @@ using System.Drawing;
 
 namespace SAM.Core.Mollier
 {
-    public class UIMollierProcess : IMollierProcess
+    public class UIMollierProcess : IMollierProcess, IUIMollierObject
     {
-        private IMollierProcess mollierProcess;
-        
-        public Color Color { get; set; }
-        
-        public string Start_Label { get; set; } = null;
-        
-        public string Process_Label { get; set; } = null;
-        
-        public string End_Label { get; set; } = null;
-        
+        private MollierProcess mollierProcess;
+
+        private UIMollierAppearance uIMollierAppearance;
+
+        private UIMollierAppearance uIMollierAppearance_Start;
+
+        private UIMollierAppearance uIMollierAppearance_End;
+
         public MollierPoint Start
         {
             get
@@ -30,7 +28,56 @@ namespace SAM.Core.Mollier
                 return mollierProcess?.End;
             }
         }
-        
+
+        public UIMollierPoint GetUIMollierPoint_Start()
+        {
+            return new UIMollierPoint(Start, uIMollierAppearance_Start);
+        }
+
+        public UIMollierPoint GetUIMollierPoint_End()
+        {
+            return new UIMollierPoint(End, uIMollierAppearance_End);
+        }
+
+        public UIMollierAppearance UIMollierAppearance
+        {
+            get
+            {
+                return uIMollierAppearance;
+            }
+
+            set
+            {
+                uIMollierAppearance = value;
+            }
+        }
+
+        public UIMollierAppearance UIMollierAppearance_Start
+        {
+            get
+            {
+                return uIMollierAppearance_Start;
+            }
+
+            set
+            {
+                uIMollierAppearance_Start = value;
+            }
+        }
+
+        public UIMollierAppearance UIMollierAppearance_End
+        {
+            get
+            {
+                return uIMollierAppearance_End;
+            }
+
+            set
+            {
+                uIMollierAppearance_End = value;
+            }
+        }
+
         public double Pressure
         {
             get
@@ -40,7 +87,7 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public IMollierProcess MollierProcess
+        public MollierProcess MollierProcess
         {
             get
             {
@@ -48,19 +95,23 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public UIMollierProcess(IMollierProcess mollierProcess, Color color)
+        public UIMollierProcess(MollierProcess mollierProcess, Color color)
         {
             this.mollierProcess = mollierProcess;
-            Color = color;
+            uIMollierAppearance = new UIMollierAppearance(color);
+            uIMollierAppearance_Start = new UIMollierAppearance(color);
+            uIMollierAppearance_End = new UIMollierAppearance(color);
         }
 
         public UIMollierProcess(UIMollierProcess uIMollierProcess)
         {
-            mollierProcess = uIMollierProcess?.MollierProcess;
-            Color = uIMollierProcess == null ? Color.Empty : uIMollierProcess.Color;
-            Start_Label = uIMollierProcess.Start_Label;
-            Process_Label = uIMollierProcess.Process_Label;
-            End_Label = uIMollierProcess.End_Label;
+            if(uIMollierProcess != null)
+            {
+                mollierProcess = uIMollierProcess.MollierProcess?.Clone();
+                uIMollierAppearance = uIMollierProcess.uIMollierAppearance?.Clone();
+                uIMollierAppearance_Start = uIMollierProcess.uIMollierAppearance_Start?.Clone();
+                uIMollierAppearance_End = uIMollierProcess.uIMollierAppearance_End?.Clone();
+            }
         }
 
         public UIMollierProcess(JObject jObject)
@@ -77,32 +128,24 @@ namespace SAM.Core.Mollier
 
             if (jObject.ContainsKey("MollierProcess"))
             {
-                mollierProcess = Core.Query.IJSAMObject(jObject.Value<JObject>("MollierProcess")) as IMollierProcess;
+                mollierProcess = Core.Query.IJSAMObject(jObject.Value<JObject>("MollierProcess")) as MollierProcess;
             }
-            if (jObject.ContainsKey("Start_Label"))
+
+            if (jObject.ContainsKey("UIMollierAppearance"))
             {
-                Start_Label = jObject.Value<string>("Start_Label");
+                uIMollierAppearance = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierAppearance")) as UIMollierAppearance;
             }
-            if (jObject.ContainsKey("Process_Label"))
+
+            if (jObject.ContainsKey("UIMollierAppearance_Start"))
             {
-                Process_Label = jObject.Value<string>("Process_Label");
+                uIMollierAppearance_Start = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierAppearance_Start")) as UIMollierAppearance;
             }
-            if (jObject.ContainsKey("End_Label"))
+
+            if (jObject.ContainsKey("UIMollierAppearance_End"))
             {
-                End_Label = jObject.Value<string>("End_Label");
+                uIMollierAppearance_End = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierAppearance_End")) as UIMollierAppearance;
             }
-            if (jObject.ContainsKey("Color"))
-            {
-                JObject jObject_Color = jObject.Value<JObject>("Color");
-                if (jObject_Color != null)
-                {
-                    SAMColor sAMColor = new SAMColor(jObject_Color);
-                    if (sAMColor != null)
-                    {
-                        Color = sAMColor.ToColor();
-                    }
-                }
-            }
+
             return true;
         }
         
@@ -111,25 +154,24 @@ namespace SAM.Core.Mollier
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if (Color != Color.Empty)
-            {
-                jObject.Add("Color", (new SAMColor(Color)).ToJObject());
-            }
-            if(mollierProcess != null)
+            if (mollierProcess != null)
             {
                 jObject.Add("MollierProcess", mollierProcess.ToJObject());
             }
-            if(Start_Label != null)
+
+            if (uIMollierAppearance != null)
             {
-                jObject.Add("Start_Label", Start_Label);
+                jObject.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());
             }
-            if (Process_Label != null)
+
+            if (uIMollierAppearance_Start != null)
             {
-                jObject.Add("Process_Label", Process_Label);
+                jObject.Add("UIMollierAppearance_Start", uIMollierAppearance_Start.ToJObject());
             }
-            if (End_Label != null)
+
+            if (uIMollierAppearance_End != null)
             {
-                jObject.Add("End_Label", End_Label);
+                jObject.Add("UIMollierAppearance_End", uIMollierAppearance_End.ToJObject());
             }
 
             return jObject;

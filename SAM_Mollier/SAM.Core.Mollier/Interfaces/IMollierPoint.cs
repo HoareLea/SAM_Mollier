@@ -2,5 +2,6 @@
 {
     public interface IMollierPoint : IMollierGroupable
     {
+        double Pressure { get; }
     }
 }

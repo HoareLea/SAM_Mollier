@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace SAM.Core.Mollier
 {
-    public class UIMollierPoint : IMollierPoint
+    public class UIMollierPoint : IMollierPoint, IUIMollierObject
     {
         private MollierPoint mollierPoint;
 
@@ -43,6 +43,12 @@ namespace SAM.Core.Mollier
         {
             this.mollierPoint = mollierPoint?.Clone();
             uIMollierAppearance = new UIMollierAppearance(color, label);
+        }
+
+        public UIMollierPoint(MollierPoint mollierPoint, UIMollierAppearance uIMollierAppearance)
+        {
+            this.mollierPoint = mollierPoint?.Clone();
+            this.uIMollierAppearance = uIMollierAppearance?.Clone();
         }
 
         public UIMollierPoint(UIMollierPoint uIMollierPoint)
