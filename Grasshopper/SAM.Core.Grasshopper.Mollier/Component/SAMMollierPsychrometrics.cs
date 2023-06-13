@@ -130,8 +130,11 @@ namespace SAM.Core.Grasshopper.Mollier
                 maximum_connected_nodes = true;
             }
 
-
-            double pressure = mollierPoint.Pressure;
+            double pressure = Standard.Pressure;
+            if (mollierPoint != null)
+            {
+                pressure = mollierPoint.Pressure;
+            }
 
             index = Params.IndexOfInputParam("_pressure_");
             if (index != -1)
