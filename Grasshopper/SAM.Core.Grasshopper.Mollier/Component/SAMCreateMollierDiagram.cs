@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -65,6 +65,10 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new GooMollierGeometryParam() { Name = "Relative Humidity Lines", NickName = "relativeHumidityLines", Description = "Contains relative humidity lines as curves", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Relative Humidity Values", NickName = "relativeHumidities", Description = "Values of relative humidity lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Relative Humidity Points", NickName = "relativeHumidityPoints", Description = "MollierPoints used to create relative humidity lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+
+                result.Add(new GH_SAMParam(new GooMollierGeometryParam() { Name = "Dry Bulb Temperature Lines", NickName = "dryBulbTemperatureLines", Description = "Contains dry bulb temperature lines as curves", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Dry Bulb Temperature Values", NickName = "dryBulbTemperatures", Description = "Values of dry bulb temperature lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Dry Bulb Temperature Points", NickName = "dryBulbTemperaturePoints", Description = "MollierPoints used to create dry bulb temperature lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
                 result.Add(new GH_SAMParam(new GooMollierGeometryParam() { Name = "Diagram Temperature Lines", NickName = "DiagramTemperatureLines", Description = "Contains diagram temperature lines as curves", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Diagram Temperature Values", NickName = "diagramTemperatures", Description = "Values of diagram temperature lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
@@ -432,6 +436,62 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 dataAccess.SetData(index, chartType);
             }
+
+
+
+            //---
+            //CREATING DRY BULB TEMPERATURE OUTPUT
+            Dictionary<double, List<MollierPoint>> dictionary_dryBulbTemperature = Core.Mollier.Query.DryBulbTemperatureLine((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max);
+            List<double> dryBulbTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
+
+            DataTree<GooMollierPoint> dataTree_DryBulbTemperature = new DataTree<GooMollierPoint>();
+            List<GooMollierGeometry> dryBulbTemperatureLines = new List<GooMollierGeometry>();
+            for (int i = 0; i < dryBulbTemperatures.Count; i++)
+            {
+                GH_Path path = new GH_Path(i);
+
+                List<MollierPoint> mollierPoints = dictionary_dryBulbTemperature[dryBulbTemperatures[i]];
+                mollierPoints?.ForEach(x => dataTree_DryBulbTemperature.Add(new GooMollierPoint(x), path));
+
+                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+
+                if (mollierPoints != null)
+                {
+                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    foreach (MollierPoint mollierPoint in mollierPoints)
+                    {
+                        double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
+                        double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
+                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        polyLine.Add(point3D);
+                    }
+                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    dryBulbTemperatureLines.Add(new GooMollierGeometry(new GH_MollierGeometry(polyLineCurve, color)));
+                }
+            }
+
+            index = Params.IndexOfOutputParam("Dry Bulb Temperature Points");
+            if (index != -1)//&& ChartType == ChartType.Mollier
+            {
+                dataAccess.SetDataTree(index, dataTree_DryBulbTemperature);
+            }
+            index = Params.IndexOfOutputParam("Dry Bulb Temperature Values");
+            if (index != -1)//&& ChartType == ChartType.Mollier
+            {
+                dataAccess.SetDataList(index, dryBulbTemperatures);
+            }
+            index = Params.IndexOfOutputParam("Dry Bulb Temperature Lines");
+            if (index != -1)//&& ChartType == ChartType.Mollier
+            {
+                dataAccess.SetDataList(index, dryBulbTemperatureLines);
+            }
+
+            index = Params.IndexOfOutputParam("_chartType_");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, chartType);
+            }
+            //--
         }
 
     }
