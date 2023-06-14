@@ -143,6 +143,7 @@ namespace SAM.Core.Mollier
             return jObject;
         }
 
+
         public static implicit operator MollierPoint(UIMollierPoint uIMollierPoint)
         {
             if (uIMollierPoint == null)

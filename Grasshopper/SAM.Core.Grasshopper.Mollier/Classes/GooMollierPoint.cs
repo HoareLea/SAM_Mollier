@@ -21,6 +21,29 @@ namespace SAM.Core.Grasshopper.Mollier
         {
         }
 
+        public override bool CastTo<Y>(ref Y target)
+        {
+            if (typeof(Y).IsAssignableFrom(typeof(MollierPoint)))
+            {
+                if (Value is UIMollierPoint)
+                {
+                    target = (Y)(object)((UIMollierPoint)Value).MollierPoint;
+                    return true;
+                }
+            }
+
+            if (typeof(Y).IsAssignableFrom(typeof(UIMollierPoint)))
+            {
+                if (Value is MollierPoint)
+                {
+                    target = (Y)(object)new UIMollierPoint((MollierPoint)Value);
+                    return true;
+                }
+            }
+
+            return base.CastTo(ref target);
+        }
+
         public override IGH_Goo Duplicate()
         {
             return new GooMollierPoint(Value);

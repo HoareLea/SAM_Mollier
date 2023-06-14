@@ -51,6 +51,12 @@ namespace SAM.Core.Mollier
             this.uIMollierAppearance = uIMollierAppearance?.Clone();
         }
 
+        public UIMollierPoint(MollierPoint mollierPoint)
+        {
+            this.mollierPoint = mollierPoint?.Clone();
+            uIMollierAppearance = new UIMollierAppearance();
+        }   
+
         public UIMollierPoint(UIMollierPoint uIMollierPoint)
         {
             if(uIMollierPoint != null)

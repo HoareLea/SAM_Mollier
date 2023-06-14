@@ -9,6 +9,12 @@ namespace SAM.Core.Mollier
         
         public string Label { get; set; }
 
+        public UIMollierAppearance()
+        {
+            Color = Color.Empty;
+            Label = null;
+        }
+
         public UIMollierAppearance(Color color)
         {
             Color = color;
