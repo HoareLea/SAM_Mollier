@@ -412,17 +412,17 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             index = Params.IndexOfOutputParam("Diagram Temperature Points");
-            if (index != -1 && ChartType == ChartType.Mollier)
+            if (index != -1)//&& ChartType == ChartType.Mollier
             {
                 dataAccess.SetDataTree(index, dataTree_DiagramTemperature);
             }
             index = Params.IndexOfOutputParam("Diagram Temperature Values");
-            if (index != -1 && ChartType == ChartType.Mollier)
+            if (index != -1)//&& ChartType == ChartType.Mollier
             {
                 dataAccess.SetDataList(index, diagramTemperatures);
             }
             index = Params.IndexOfOutputParam("Diagram Temperature Lines");
-            if (index != -1 && ChartType == ChartType.Mollier)
+            if (index != -1)//&& ChartType == ChartType.Mollier
             {
                 dataAccess.SetDataList(index, diagramTemperatureLines);
             }
