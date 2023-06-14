@@ -14,6 +14,21 @@ namespace SAM.Weather.Mollier
             this.dateTime = dateTime;
         }
 
+        public WeatherMollierPoint(WeatherMollierPoint weatherMollierPoint)
+            : base(weatherMollierPoint)
+        {
+            if(weatherMollierPoint != null)
+            {
+                dateTime = weatherMollierPoint.dateTime;
+            }
+        }
+
+        public WeatherMollierPoint(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
         public DateTime DateTime
         {
             get
