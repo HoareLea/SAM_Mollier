@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class GooMollierPoint : GooJSAMObject<MollierPoint>
+    public class GooMollierPoint : GooJSAMObject<IMollierPoint>
     {
         public GooMollierPoint()
             : base()
         {
         }
 
-        public GooMollierPoint(MollierPoint mollierPoint)
+        public GooMollierPoint(IMollierPoint mollierPoint)
             : base(mollierPoint)
         {
         }
