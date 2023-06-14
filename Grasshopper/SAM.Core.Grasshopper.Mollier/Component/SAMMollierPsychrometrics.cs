@@ -326,7 +326,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("mollierPoint");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooMollierPoint(mollierPoint));
+                dataAccess.SetData(index, new GooMollierPoint(mollierPoint_Temp));
             }
 
             index = Params.IndexOfOutputParam("dryBulbTemperature");
