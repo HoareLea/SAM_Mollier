@@ -8,7 +8,18 @@ namespace SAM.Core.Mollier
         private MollierPoint mollierPoint;
 
         private UIMollierAppearance uIMollierAppearance;
-        
+
+        public MollierPoint MollierPoint
+        {
+            get
+            {
+                return mollierPoint?.Clone();
+            }
+        }
+
+        /// <summary>
+        /// Pressure [Pa]
+        /// </summary>
         public double Pressure
         {
             get
@@ -18,11 +29,67 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public MollierPoint MollierPoint
+        /// <summary>
+        /// Enthalpy [J/kg]
+        /// </summary>
+        public double Enthalpy
         {
             get
             {
-                return mollierPoint?.Clone();
+                if (mollierPoint == null || !mollierPoint.IsValid())
+                {
+                    return double.NaN;
+                }
+
+                return mollierPoint.Enthalpy;
+            }
+        }
+
+        /// <summary>
+        /// Dry Bulb Temperature [C]
+        /// </summary>
+        public double DryBulbTemperature
+        {
+            get
+            {
+                if (mollierPoint == null || !mollierPoint.IsValid())
+                {
+                    return double.NaN;
+                }
+
+                return mollierPoint.DryBulbTemperature;
+            }
+        }
+
+        /// <summary>
+        /// Humidity Ratio [kg/kg]
+        /// </summary>
+        public double HumidityRatio
+        {
+            get
+            {
+                if (mollierPoint == null || !mollierPoint.IsValid())
+                {
+                    return double.NaN;
+                }
+
+                return mollierPoint.HumidityRatio;
+            }
+        }
+
+        /// <summary>
+        /// Relative Humidity [%]
+        /// </summary>
+        public double RelativeHumidity
+        {
+            get
+            {
+                if (mollierPoint == null || !mollierPoint.IsValid())
+                {
+                    return double.NaN;
+                }
+
+                return mollierPoint.RelativeHumidity;
             }
         }
 
