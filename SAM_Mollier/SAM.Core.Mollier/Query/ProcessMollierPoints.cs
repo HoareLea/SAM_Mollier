@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
-        public static List<MollierPoint> ProcessMollierPoints(this CoolingProcess coolingProcess)
+        public static List<MollierPoint> ProcessMollierPoints(this CoolingProcess coolingProcess, double tolerance = Tolerance.MacroDistance)
         {
             if (coolingProcess == null)
             {
@@ -21,6 +21,11 @@ namespace SAM.Core.Mollier
             if (mollierPoint_End == null || !mollierPoint_End.IsValid())
             {
                 return null;
+            }
+
+            if(Core.Query.AlmostEqual(mollierPoint_Start.HumidityRatio, mollierPoint_End.HumidityRatio, tolerance))
+            {
+                return new List<MollierPoint>() { mollierPoint_Start, mollierPoint_End };
             }
 
             MollierPoint mollierPoint_75 = null;
