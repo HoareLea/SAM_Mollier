@@ -28,7 +28,7 @@ namespace SAM.Core.Grasshopper.Mollier
             this.color = color;
         }
 
-        public List<Point3d> Points
+        public List<Point3d> Point3ds
         {
             get
             {

@@ -160,7 +160,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 System.Drawing.Color color = System.Drawing.Color.LightBlue;
 
-                Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
                 if (mollierPoints != null)
                 {
                     double x1 = ChartType == ChartType.Mollier ? mollierPoints[0].HumidityRatio * 1000 : mollierPoints[0].DryBulbTemperature;
@@ -175,7 +175,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     polyLine.Add(x1, y1, 0);
                     polyLine.Add(x2, y2, 0);
                 }
-                Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
                 if (polyLineCurve.PointAtStart == polyLineCurve.PointAtEnd)
                 {
                     continue;
@@ -212,15 +212,15 @@ namespace SAM.Core.Grasshopper.Mollier
                 System.Drawing.Color color = System.Drawing.Color.LightBlue;
                 if (mollierPoints != null)
                 {
-                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
                     foreach (MollierPoint mollierPoint in mollierPoints)
                     {
                         double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
                         double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
                         polyLine.Add(point3D);
                     }
-                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
                     if (polyLineCurve.PointAtStart == polyLineCurve.PointAtEnd)
                     {
                         continue;
@@ -259,15 +259,15 @@ namespace SAM.Core.Grasshopper.Mollier
                 System.Drawing.Color color = System.Drawing.Color.LightBlue;
                 if (mollierPoints != null)
                 {
-                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
                     foreach (MollierPoint mollierPoint in mollierPoints)
                     {
                         double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
                         double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
                         polyLine.Add(point3D);
                     }
-                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
                     if (polyLineCurve.PointAtStart == polyLineCurve.PointAtEnd)
                     {
                         continue;
@@ -306,15 +306,15 @@ namespace SAM.Core.Grasshopper.Mollier
                 System.Drawing.Color color = System.Drawing.Color.LightBlue;
                 if (mollierPoints != null)
                 {
-                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
                     foreach (MollierPoint mollierPoint in mollierPoints)
                     {
                         double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
                         double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
                         polyLine.Add(point3D);
                     }
-                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
                     if (polyLineCurve.PointAtStart == polyLineCurve.PointAtEnd)
                     {
                         continue;
@@ -356,15 +356,15 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 if (mollierPoints != null)
                 {
-                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
                     foreach (MollierPoint mollierPoint in mollierPoints)
                     {
                         double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
                         double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
                         polyLine.Add(point3D);
                     }
-                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
                     relativeHumidityLines.Add(new GooMollierGeometry(new GH_MollierGeometry(polyLineCurve, color)));
                 }
             }
@@ -401,15 +401,15 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 if (mollierPoints != null)
                 {
-                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
                     foreach (MollierPoint mollierPoint in mollierPoints)
                     {
                         double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
                         double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
                         polyLine.Add(point3D);
                     }
-                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
                     diagramTemperatureLines.Add(new GooMollierGeometry(new GH_MollierGeometry(polyLineCurve, color)));
                 }
             }
@@ -456,15 +456,15 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 if (mollierPoints != null)
                 {
-                    Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
+                    global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
                     foreach (MollierPoint mollierPoint in mollierPoints)
                     {
                         double X = ChartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
                         double Y = ChartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                        Rhino.Geometry.Point3d point3D = new Rhino.Geometry.Point3d(X, Y, 0);
+                        global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
                         polyLine.Add(point3D);
                     }
-                    Rhino.Geometry.PolylineCurve polyLineCurve = new Rhino.Geometry.PolylineCurve(polyLine);
+                    global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
                     dryBulbTemperatureLines.Add(new GooMollierGeometry(new GH_MollierGeometry(polyLineCurve, color)));
                 }
             }

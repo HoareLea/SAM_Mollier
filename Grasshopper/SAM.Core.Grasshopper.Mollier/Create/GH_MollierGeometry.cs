@@ -14,15 +14,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 return null;
             }
 
-            Rhino.Geometry.Polyline polyLine = new Rhino.Geometry.Polyline();
-            foreach (MollierPoint mollierPoint in mollierPoints)
-            {
-                double x = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
-                double y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                polyLine.Add(x, y, z);
-            }
+            global::Rhino.Geometry.Polyline polyline = Convert.ToRhino_Polyline(mollierPoints, chartType, z);
 
-            return new GH_MollierGeometry(new Rhino.Geometry.PolylineCurve(polyLine), color);
+            return new GH_MollierGeometry(new global::Rhino.Geometry.PolylineCurve(polyline), color);
         }
 
         public static GH_MollierGeometry GH_MollierGeometry(this IMollierProcess mollierProcess, Color color, ChartType chartType, double z = 0)
@@ -49,7 +43,6 @@ namespace SAM.Core.Grasshopper.Mollier
 
             return GH_MollierGeometry(new MollierPoint[] { mollierProcess.Start, mollierProcess.End }, color, chartType, z);
         }
-
 
         public static GH_MollierGeometry GH_MollierGeometry(this UIMollierProcess uIMollierProcess, ChartType chartType, double z = 0)
         {

@@ -50,7 +50,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 if (Value == null)
                     return BoundingBox.Empty;
 
-                return new BoundingBox(Value.Points);
+                return new BoundingBox(Value.Point3ds);
             }
         }
 
@@ -66,12 +66,12 @@ namespace SAM.Core.Grasshopper.Mollier
 
             System.Drawing.Color color = Value.Color;
 
-            if(Value.Points.Count == 1)
+            if(Value.Point3ds.Count == 1)
             {
-                args.Pipeline.DrawPoint(Value.Points[0], color);
+                args.Pipeline.DrawPoint(Value.Point3ds[0], color);
                 return;
             }
-            args.Pipeline.DrawPolyline(Value.Points, color);
+            args.Pipeline.DrawPolyline(Value.Point3ds, color);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
@@ -122,7 +122,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            obj_guid = doc.Objects.AddCurve(new PolylineCurve(Value.Points), att);
+            obj_guid = doc.Objects.AddCurve(new PolylineCurve(Value.Point3ds), att);
             return true;
 
         }
@@ -132,9 +132,9 @@ namespace SAM.Core.Grasshopper.Mollier
             if (source is GH_Curve)
             {
                 List<Point3d> points3d = new List<Point3d>();
-                for(int i = 0; i < Value.Points.Count; i++)
+                for(int i = 0; i < Value.Point3ds.Count; i++)
                 {
-                    points3d.Add(Value.Points[i]);
+                    points3d.Add(Value.Point3ds[i]);
                 }
                 Value = new GH_MollierGeometry(points3d, System.Drawing.Color.Black);
                 return true;
@@ -155,9 +155,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 if (object_Temp is GH_Curve)
                 {
                     List<Point3d> points3d = new List<Point3d>();
-                    for (int i = 0; i < Value.Points.Count; i++)
+                    for (int i = 0; i < Value.Point3ds.Count; i++)
                     {
-                        points3d.Add(Value.Points[i]);
+                        points3d.Add(Value.Point3ds[i]);
                     }
                     Value = new GH_MollierGeometry(points3d, System.Drawing.Color.Black);
                     return true;
