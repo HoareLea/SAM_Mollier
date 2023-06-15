@@ -2,11 +2,9 @@
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
-using Rhino.Commands;
 using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Core.Grasshopper.Mollier.Properties;
-using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;

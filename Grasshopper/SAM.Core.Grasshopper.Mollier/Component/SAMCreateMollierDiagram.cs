@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
 using Grasshopper;
-using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 
 namespace SAM.Core.Grasshopper.Mollier

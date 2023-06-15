@@ -1,39 +1,22 @@
-﻿using GH_IO.Serialization;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Rhino;
-using Rhino.Commands;
-using Rhino.DocObjects;
-using Rhino.Geometry;
-using SAM.Core.Grasshopper.Mollier.Properties;
-using SAM.Core.Grasshopper;
+﻿using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using System.Drawing;
+
 namespace SAM.Core.Grasshopper.Mollier
 {
     public class GH_MollierGeometry : IJSAMObject
     {
         private List<Point3d> point3Ds;
-        private System.Drawing.Color color;
-        public bool FromJObject(JObject jObject)
-        {
-            throw new NotImplementedException();
-        }
-
-        public JObject ToJObject()
-        {
-            throw new NotImplementedException();
-        }
+        private Color color;
 
         public GH_MollierGeometry(List<Point3d> point3Ds, Color color)
         {
             this.point3Ds = point3Ds;
             this.color = color;
         }
+
         public GH_MollierGeometry(PolylineCurve polylineCurve, Color color)
         {
             List<Point3d> points3d = new List<Point3d>();
@@ -58,6 +41,16 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 return color;
             }
+        }
+
+        public bool FromJObject(JObject jObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public JObject ToJObject()
+        {
+            throw new NotImplementedException();
         }
     }
 }

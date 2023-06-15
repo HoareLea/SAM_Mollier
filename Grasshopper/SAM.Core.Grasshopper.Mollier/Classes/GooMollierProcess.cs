@@ -58,7 +58,7 @@ namespace SAM.Core.Grasshopper.Mollier
     {
         public override Guid ComponentGuid => new Guid("0e6f78f4-71ed-490d-891e-dcf36bd09771");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override Bitmap Icon => Resources.SAM_Small;
 
         public GooMollierProcessParam()
             : base("MollierProcess", "MollierProcess", "SAM Core MollierProcess", "Params", "SAM")
