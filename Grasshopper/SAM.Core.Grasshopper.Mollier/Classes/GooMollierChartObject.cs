@@ -147,6 +147,29 @@ namespace SAM.Core.Grasshopper.Mollier
             return false;
 
         }
+
+        public override bool CastFrom(object source)
+        {
+            if(source is MollierChartObject)
+            {
+                Value = (MollierChartObject)source;
+                return true;
+            }
+
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            if(typeof(Y).IsAssignableFrom( typeof(MollierChartObject)))
+            {
+                target = (Y)(object)Value;
+
+                return true;
+            }
+
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooMollierChartObjectParam : GH_PersistentParam<GooMollierChartObject>, IGH_PreviewObject, IGH_BakeAwareObject
