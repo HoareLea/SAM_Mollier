@@ -322,6 +322,7 @@ namespace SAM.Core.Grasshopper.Mollier
             kinematicViscosity = Core.Mollier.Query.KinematicViscosity(dryBulbTemperature, humidityRatio, pressure);
             temperatureConductivity = Core.Mollier.Query.TemperatureConductivity(dryBulbTemperature, humidityRatio, pressure);
             prandtlNumber = Core.Mollier.Query.PrandtlNumber(dryBulbTemperature, humidityRatio, pressure);
+            degreeSaturation = Core.Mollier.Query.SaturationDegree(dryBulbTemperature, pressure);
 
             index = Params.IndexOfOutputParam("mollierPoint");
             if (index != -1)
@@ -344,7 +345,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("humidityRatio");
             if (index != -1)
             {
-                dataAccess.SetData(index, humidityRatio*1000);//   change to g/kg
+                dataAccess.SetData(index, humidityRatio * 1000); //Change to g/kg
             }
 
             index = Params.IndexOfOutputParam("wetBulbTemperature");
