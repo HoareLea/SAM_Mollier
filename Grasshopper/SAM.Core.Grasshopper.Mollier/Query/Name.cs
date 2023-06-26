@@ -2,7 +2,7 @@
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public static partial class Modify
+    public static partial class Query
     {
         public static string Name(this IMollierProcess mollierProcess)
         {

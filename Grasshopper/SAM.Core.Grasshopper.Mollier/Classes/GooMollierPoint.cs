@@ -82,7 +82,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
         private void Menu_SaveAs(object sender, EventArgs e)
         {
-            Query.SaveAs(VolatileData);
+            Grasshopper.Query.SaveAs(VolatileData);
         }
     }
 }

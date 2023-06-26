@@ -51,6 +51,7 @@
     <Compile Include="Classes\MollierGroup.cs" />
     <Compile Include="Classes\UIMollierAppearance.cs" />
     <Compile Include="Classes\UIMollierPoint.cs" />
+    <Compile Include="Classes\UICoolingProcess.cs" />
     <Compile Include="Classes\UIMollierProcess.cs" />
     <Compile Include="Classes\MollierZone.cs" />
     <Compile Include="Classes\SteamHumidificationProcess.cs" />

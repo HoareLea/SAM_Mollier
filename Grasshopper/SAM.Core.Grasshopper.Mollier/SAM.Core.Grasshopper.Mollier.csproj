@@ -70,18 +70,18 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\GH_MollierGeometry.cs" />
-    <Compile Include="Classes\GooMollierGeometry.cs" />
+    <Compile Include="Classes\GooMollierChartObject.cs" />
     <Compile Include="Classes\GooMollierGroup.cs" />
     <Compile Include="Classes\GooMollierPoint.cs" />
     <Compile Include="Classes\GooMollierProcess.cs" />
+    <Compile Include="Classes\MollierChartObject.cs" />
     <Compile Include="Component\SAMCreateMollierDiagram.cs" />
     <Compile Include="Component\SAMMollierApparatusDewPoint.cs" />
     <Compile Include="Component\SAMMollierDryBulbTemperature.cs" />
     <Compile Include="Component\SAMMollierPsychrometrics.cs" />
     <Compile Include="Convert\ToRhino\Point3d.cs" />
     <Compile Include="Convert\ToRhino\Polyline.cs" />
-    <Compile Include="Create\GH_MollierGeometry.cs" />
+    <Compile Include="Create\MollierChartObject.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,6 +90,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Query\BoundingBox.cs" />
     <Compile Include="Query\Name.cs" />
   </ItemGroup>
   <ItemGroup>

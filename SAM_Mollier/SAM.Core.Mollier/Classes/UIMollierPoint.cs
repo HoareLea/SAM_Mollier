@@ -112,6 +112,12 @@ namespace SAM.Core.Mollier
             uIMollierAppearance = new UIMollierAppearance(color, label);
         }
 
+        public UIMollierPoint(MollierPoint mollierPoint, Color color)
+        {
+            this.mollierPoint = mollierPoint?.Clone();
+            uIMollierAppearance = new UIMollierAppearance(color);
+        }
+
         public UIMollierPoint(MollierPoint mollierPoint, UIMollierAppearance uIMollierAppearance)
         {
             this.mollierPoint = mollierPoint?.Clone();

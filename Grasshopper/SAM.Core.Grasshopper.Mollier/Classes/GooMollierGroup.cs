@@ -9,21 +9,21 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class GooMollierGroup : GooJSAMObject<MollierPoint>
+    public class GooMollierGroup : GooJSAMObject<IMollierGroup>
     {
         public GooMollierGroup()
             : base()
         {
         }
 
-        public GooMollierGroup(MollierPoint mollierPoint)
-            : base(mollierPoint)
+        public GooMollierGroup(IMollierGroup mollierGroup)
+            : base(mollierGroup)
         {
         }
 
         public override IGH_Goo Duplicate()
         {
-            return new GooMollierPoint(Value);
+            return new GooMollierGroup(Value);
         }
     }
 
@@ -59,7 +59,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
         private void Menu_SaveAs(object sender, EventArgs e)
         {
-            Core.Grasshopper.Query.SaveAs(VolatileData);
+            Grasshopper.Query.SaveAs(VolatileData);
         }
     }
 }

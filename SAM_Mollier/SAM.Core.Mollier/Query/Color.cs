@@ -52,5 +52,32 @@ namespace SAM.Core.Mollier
 
             return result;
         }
+
+        public static Color Color(this IMollierPoint mollierPoint)
+        {
+            if(mollierPoint == null)
+            {
+                return System.Drawing.Color.Empty;
+            }
+
+            MollierPoint mollierPoint_Temp = mollierPoint is UIMollierPoint ? ((UIMollierPoint)mollierPoint).MollierPoint : mollierPoint as MollierPoint;
+            if(mollierPoint_Temp == null)
+            {
+                return System.Drawing.Color.Empty;
+            }
+
+            if(mollierPoint is UIMollierPoint)
+            {
+                UIMollierAppearance uIMollierAppearance = ((UIMollierPoint)mollierPoint).UIMollierAppearance;
+                if (uIMollierAppearance != null)
+                { 
+                    return uIMollierAppearance.Color;
+                }
+            }
+
+
+            return System.Drawing.Color.DarkBlue;
+
+        }
     }
 }

@@ -2,12 +2,9 @@
 using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Core.Mollier;
-using SAM.Geometry.Spatial;
-using SAM.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Eto.Forms;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
