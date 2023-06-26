@@ -3,19 +3,19 @@
     public static partial class Query
     {
         /// <summary>
-        /// Calculates degree of saturation. Unitless value (ratio) between 0 - 1
+        /// Calcilates Vapour Density [kg/m3]
         /// </summary>
         /// <param name="mollierPoint"></param>
-        /// <returns>Degree of Saturation [-]</returns>
-        public static double SaturationDegree(this MollierPoint mollierPoint)
+        /// <returns>Vapour Density [kg/m3]</returns>
+        public static double VapourDensity(this MollierPoint mollierPoint)
         {
             if(mollierPoint == null)
             {
                 return double.NaN;
             }
 
-            double saturationVapourPressure = SaturationVapourPressure(mollierPoint.DryBulbTemperature);
-            if (double.IsNaN(saturationVapourPressure) || saturationVapourPressure == 0)
+            double dryBulbTemperature = mollierPoint.DryBulbTemperature;
+            if (double.IsNaN(dryBulbTemperature))
             {
                 return double.NaN;
             }
@@ -26,7 +26,7 @@
                 return double.NaN;
             }
 
-            return partialVapourPressure / saturationVapourPressure;
+            return partialVapourPressure / (461.5 * (dryBulbTemperature + 273.15)); // Where: 461.5 => Specific gas constant for water vapour J/(kg*K)
 
         }
     }

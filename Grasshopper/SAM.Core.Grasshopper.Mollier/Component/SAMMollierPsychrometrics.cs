@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.8";
+        public override string LatestComponentVersion => "1.0.9";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -60,6 +60,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dryBulbTemperature", NickName = "dryBulbTemperature", Description = "Dry bulb temperature t [°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "relativeHumidity", NickName = "relativeHumidity", Description = "Relative humidity (0 - 100) φ [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "humidityRatio", NickName = "humidityRatio", Description = "Humidty Ratio x [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "saturationHumidityRatio", NickName = "saturationHumidityRatio", Description = "Saturation Humidity Ratio [kg_waterVapor/kg_dryAir]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "wetBulbTemperature", NickName = "wetBulbTemperature", Description = "Wet bulb temperature tf[°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dewPointTemperature", NickName = "dewPointTemperature", Description = "Dew Point Temperature ttau[°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "saturationVapourPressure", NickName = "saturationVapourPressure", Description = "Saturation Vapour Pressure  pS [Pa]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -77,6 +78,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "kinematicViscosity", NickName = "kinematicViscosity", Description = "Kinematic Viscosity v [m²/s]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "temperatureConductivity", NickName = "temperatureConductivity", Description = "Temperature Conductivity a [m²/s]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "prandtlNumber", NickName = "prandtlNumber", Description = "Prandtl Number Pr [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "vapourDensity", NickName = "vapourDensity", Description = "Vapour Density [kg/m3]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -102,6 +104,7 @@ namespace SAM.Core.Grasshopper.Mollier
             double humidityRatio = double.NaN;
             double wetBulbTemperature = double.NaN;
             double saturationVapourPressure = double.NaN;
+            double saturationHumidityRatio = double.NaN;
             double partialVapourPressure = double.NaN;
             double enthalpy = double.NaN;
             double specificVolume = double.NaN;
@@ -117,6 +120,7 @@ namespace SAM.Core.Grasshopper.Mollier
             double prandtlNumber = double.NaN;
             IMollierPoint mollierPoint = null;
             double dewPointTemperature = double.NaN;
+            double vapourDensity = double.NaN;
 
             //mollierpoint check
             index = Params.IndexOfInputParam("mollierPoint_");
@@ -322,7 +326,9 @@ namespace SAM.Core.Grasshopper.Mollier
             kinematicViscosity = Core.Mollier.Query.KinematicViscosity(dryBulbTemperature, humidityRatio, pressure);
             temperatureConductivity = Core.Mollier.Query.TemperatureConductivity(dryBulbTemperature, humidityRatio, pressure);
             prandtlNumber = Core.Mollier.Query.PrandtlNumber(dryBulbTemperature, humidityRatio, pressure);
-            degreeSaturation = Core.Mollier.Query.SaturationDegree(dryBulbTemperature, pressure);
+            degreeSaturation = Core.Mollier.Query.SaturationDegree(mollierPoint_Temp);
+            saturationHumidityRatio = Core.Mollier.Query.SaturationHumidityRatio(mollierPoint_Temp);
+            vapourDensity = Core.Mollier.Query.VapourDensity(mollierPoint_Temp);
 
             index = Params.IndexOfOutputParam("mollierPoint");
             if (index != -1)
@@ -365,6 +371,12 @@ namespace SAM.Core.Grasshopper.Mollier
             if (index != -1)
             {
                 dataAccess.SetData(index, saturationVapourPressure);
+            }
+
+            index = Params.IndexOfOutputParam("saturationHumidityRatio");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, saturationHumidityRatio);
             }
 
             index = Params.IndexOfOutputParam("partialVapourPressure");
@@ -449,6 +461,12 @@ namespace SAM.Core.Grasshopper.Mollier
             if (index != -1)
             {
                 dataAccess.SetData(index, prandtlNumber);
+            }
+
+            index = Params.IndexOfOutputParam("vapourDensity");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, vapourDensity);
             }
         }
     }

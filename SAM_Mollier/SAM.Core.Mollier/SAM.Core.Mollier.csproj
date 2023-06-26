@@ -83,6 +83,7 @@
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\VapourDensity.cs" />
     <Compile Include="Query\SaturationDegree.cs" />
     <Compile Include="Query\Color.cs" />
     <Compile Include="Query\DryBulbTemperatureLine.cs" />
