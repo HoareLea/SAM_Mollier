@@ -105,11 +105,29 @@ namespace SAM.Core.Mollier
                 return CoolingProcess(start, dryBulbTemperature);
             }
 
-            double humidityRatio = (humidityRatio_ADP * (dryBulbTemperature - start.DryBulbTemperature) - start.HumidityRatio * (dryBulbTemperature - dryBulbTemperature_ADP)) / (dryBulbTemperature_ADP - start.DryBulbTemperature);
+            CoolingProcess result = null;
 
-            MollierPoint mollierPoint_End = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
-            double efficiency = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);
-            return CoolingProcess_ByMedium(start, flowTemperature, returnTemperature, efficiency);
+            if (dryBulbTemperature_ADP < dryBulbTemperature)
+            {
+                double humidityRatio = (humidityRatio_ADP * (dryBulbTemperature - start.DryBulbTemperature) - start.HumidityRatio * (dryBulbTemperature - dryBulbTemperature_ADP)) / (dryBulbTemperature_ADP - start.DryBulbTemperature);
+
+                MollierPoint mollierPoint_End = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
+
+                double efficiency = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);
+                
+                result = CoolingProcess_ByMedium(start, flowTemperature, returnTemperature, efficiency);
+            }
+            else
+            {
+                MollierPoint mollierPoint_End = MollierPoint_ByRelativeHumidity(dryBulbTemperature, 100, start.Pressure);
+
+                double efficiency = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);
+
+                result = new CoolingProcess(start, mollierPoint_End, efficiency);
+            }
+
+            return result;
+
         }
 
         public static CoolingProcess CoolingProcess(this MollierPoint start, double dryBulbTemperature, double efficiency = 1)
