@@ -95,7 +95,7 @@ namespace SAM.Core.Mollier
 
             double dewPointTemperature = start.DewPointTemperature();
 
-            double dryBulbTemperature_ADP = Core.Query.LogarithmicMeanTemperatureDifference(start.DryBulbTemperature, dryBulbTemperature, flowTemperature, returnTemperature);
+            double dryBulbTemperature_ADP = (returnTemperature + flowTemperature) / 2;
             double humidityRatio_ADP = Query.HumidityRatio(dryBulbTemperature_ADP, 100, start.Pressure);
 
             MollierPoint mollierPoint_ADP = new MollierPoint(dryBulbTemperature_ADP, humidityRatio_ADP, start.Pressure);
