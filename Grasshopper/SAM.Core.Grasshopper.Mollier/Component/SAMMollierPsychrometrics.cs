@@ -60,7 +60,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dryBulbTemperature", NickName = "dryBulbTemperature", Description = "Dry bulb temperature t [°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "relativeHumidity", NickName = "relativeHumidity", Description = "Relative humidity (0 - 100) φ [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "humidityRatio", NickName = "humidityRatio", Description = "Humidty Ratio x [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "saturationHumidityRatio", NickName = "saturationHumidityRatio", Description = "Saturation Humidity Ratio [kg_waterVapor/kg_dryAir]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "saturationHumidityRatio", NickName = "saturationHumidityRatio", Description = "Saturation Humidity Ratio [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "wetBulbTemperature", NickName = "wetBulbTemperature", Description = "Wet bulb temperature tf[°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dewPointTemperature", NickName = "dewPointTemperature", Description = "Dew Point Temperature ttau[°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "saturationVapourPressure", NickName = "saturationVapourPressure", Description = "Saturation Vapour Pressure  pS [Pa]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -376,7 +376,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("saturationHumidityRatio");
             if (index != -1)
             {
-                dataAccess.SetData(index, saturationHumidityRatio);
+                dataAccess.SetData(index, saturationHumidityRatio * 1000); //Change to g/kg
             }
 
             index = Params.IndexOfOutputParam("partialVapourPressure");
