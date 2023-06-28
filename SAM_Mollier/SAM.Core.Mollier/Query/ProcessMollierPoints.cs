@@ -31,6 +31,11 @@ namespace SAM.Core.Mollier
             MollierPoint mollierPoint_75 = null;
             MollierPoint mollierPoint_85 = null;
 
+            if(mollierPoint_Start.RelativeHumidity > 80)
+            {
+                return new List<MollierPoint>() { mollierPoint_Start, mollierPoint_End };
+            }
+
             double dryBulbTemperature = mollierPoint_Start.RelativeHumidity < 75 ? DryBulbTemperature_ByHumidityRatio(mollierPoint_Start.HumidityRatio, 75, mollierPoint_Start.Pressure) : mollierPoint_Start.DryBulbTemperature;
             if (mollierPoint_Start.RelativeHumidity < 85)
             {
