@@ -57,7 +57,9 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatentLoad", NickName = "equipmentLatentLoad", Description = "Equipment Latent Load [W]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "occupancyLatentLoad", NickName = "occupancyLatentLoad", Description = "Occupancy Latent Load [W]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationLatentLoad", NickName = "infiltrationLatentLoad", Description = "Infiltration Latent Load [W]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
-                
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatRatio", NickName = "sensibleHeatRatio", Description = "Sensible Heat Ratio [-]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -199,6 +201,12 @@ namespace SAM.Analytical.Grasshopper.Mollier
             if (index != -1)
             {
                 dataAccess.SetData(index, lightingGain);
+            }
+
+            index = Params.IndexOfOutputParam("sensibleHeatRatio");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, Core.Mollier.Query.SensibleHeatRatio(sensibleGain, latentGain));
             }
         }
     }
