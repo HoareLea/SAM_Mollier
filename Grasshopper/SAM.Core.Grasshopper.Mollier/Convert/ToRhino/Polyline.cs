@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Rhino.Geometry;
+﻿using Rhino.Geometry;
 using SAM.Core.Mollier;
 using System.Collections.Generic;
 using System.Linq;
