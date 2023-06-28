@@ -65,22 +65,22 @@ namespace SAM.Core.Mollier
 
             if (double.IsNaN(end.RelativeHumidity))
             {
-                double temperature_Temp = averageTemperature;
-                double humidityRatio_Temp = Query.HumidityRatio(averageTemperature, 100, start.Pressure);
+                double temperature_Temp = end.DryBulbTemperature;
+                double humidityRatio_Temp = Query.HumidityRatio(temperature_Temp, 100, start.Pressure);
                 end = new MollierPoint(temperature_Temp, humidityRatio_Temp, start.Pressure);
-                MollierPoint ADP = new MollierPoint(temperature_Temp, humidityRatio_Temp, start.Pressure);
+                //MollierPoint ADP = new MollierPoint(temperature_Temp, humidityRatio_Temp, start.Pressure);
 
-                Func<MollierPoint, MollierPoint, double> calculateDistance = new Func<MollierPoint, MollierPoint, double>((MollierPoint start_Temp, MollierPoint end_Temp) => 
-                { 
-                    return Math.Sqrt((Math.Pow(start.DryBulbTemperature - end.DryBulbTemperature, 2)) + Math.Pow(start.HumidityRatio - end.HumidityRatio, 2));
-                });
+                //Func<MollierPoint, MollierPoint, double> calculateDistance = new Func<MollierPoint, MollierPoint, double>((MollierPoint start_Temp, MollierPoint end_Temp) => 
+                //{ 
+                //    return Math.Sqrt((Math.Pow(start.DryBulbTemperature - end.DryBulbTemperature, 2)) + Math.Pow(start.HumidityRatio - end.HumidityRatio, 2));
+                //});
 
-                while (calculateDistance.Invoke(start, end) - (calculateDistance.Invoke(start, end) + calculateDistance.Invoke(end, ADP)) * efficiency > 0.01)
-                {
-                    humidityRatio_Temp += 0.00001;
-                    temperature_Temp = Query.DryBulbTemperature_ByHumidityRatio(humidityRatio_Temp, 100, start.Pressure);
-                    end = new MollierPoint(temperature_Temp, humidityRatio_Temp, start.Pressure);
-                }
+                //while (calculateDistance.Invoke(start, end) - (calculateDistance.Invoke(start, end) + calculateDistance.Invoke(end, ADP)) * efficiency > 0.01)
+                //{
+                //    humidityRatio_Temp += 0.00001;
+                //    temperature_Temp = Query.DryBulbTemperature_ByHumidityRatio(humidityRatio_Temp, 100, start.Pressure);
+                //    end = new MollierPoint(temperature_Temp, humidityRatio_Temp, start.Pressure);
+                //}
             }
 
             return new CoolingProcess(start, end, efficiency);
