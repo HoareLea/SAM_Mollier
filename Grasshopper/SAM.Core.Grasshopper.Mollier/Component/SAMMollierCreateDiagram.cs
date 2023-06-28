@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Data;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
-    public class SAMCreateMollierDiagram : GH_SAMVariableOutputParameterComponent
+    public class SAMMollierCreateDiagram : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -98,9 +98,9 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
-        public SAMCreateMollierDiagram()
-          : base("SAMMollier.CreateMollierDiagram ", "SAMCreateMollierDiagram ",
-              "Create Mollier Diagram",
+        public SAMMollierCreateDiagram()
+          : base("SAMMollier.CreateDiagram ", "SAMMollier.CreateDiagram ",
+              "Create Mollier or Psychrometric Diagram",
               "SAM", "Mollier")
         {
         }
