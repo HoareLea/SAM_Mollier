@@ -44,7 +44,16 @@
                 return double.NaN;
             }
 
-            return ((enthalpy / 1000)- dryBulbTemperature) / (2501 + 1.86 * dryBulbTemperature);
+            return ((enthalpy / 1000) - dryBulbTemperature) / (2501 + 1.86 * dryBulbTemperature);
+
+            //MD 2023-06-29
+            //double vapourizationLatentHeat = Core.Query.VapourizationLatentHeat(dryBulbTemperature);
+            //if(double.IsNaN(vapourizationLatentHeat))
+            //{
+            //    vapourizationLatentHeat = 2501;
+            //}
+
+            //return ((enthalpy / 1000) - dryBulbTemperature) / (vapourizationLatentHeat + 1.86 * dryBulbTemperature);
         }
 
         /// <summary>

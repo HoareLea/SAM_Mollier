@@ -79,12 +79,20 @@
                 return double.NaN;
             }
 
-            if(sensibleHeatRatio == 0 || (dryBulbTemperature_End - dryBulbTemperature_Start) == 0)
+            if (sensibleHeatRatio == 0 || (dryBulbTemperature_End - dryBulbTemperature_Start) == 0)
             {
                 return double.NaN;
             }
 
-            return enthalpy_Start - (specificHeat * (dryBulbTemperature_Start - dryBulbTemperature_End) / sensibleHeatRatio);
+            if (sensibleHeatRatio == 1)
+            {
+                double humidityRatio_Start = HumidityRatio_ByEnthalpy(dryBulbTemperature_Start, enthalpy_Start);
+
+                return Enthalpy(dryBulbTemperature_End, humidityRatio_Start);
+            }
+
+            //return enthalpy_Start - (specificHeat * (dryBulbTemperature_Start - dryBulbTemperature_End) / sensibleHeatRatio);
+            return enthalpy_Start - (1050 * (dryBulbTemperature_Start - dryBulbTemperature_End) / sensibleHeatRatio);
         }
 
         public static double Enthalpy_BySensibleHeatRatio(double sensibleHeatRatio, double specificHeat, MollierPoint mollierPoint_Start, double dryBulbTemperature_End)
