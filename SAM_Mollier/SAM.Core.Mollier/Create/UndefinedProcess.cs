@@ -55,5 +55,42 @@
             return UndefinedProcess(start, end);
 
         }
+
+        public static UndefinedProcess UndefinedProcess(this MollierPoint mollierPoint, double sensibleHeatRatio, double specificHeat, double dryBulbTemperature_Start, double dryBulbTemperature_End)
+        {
+            if(mollierPoint == null || double.IsNaN(sensibleHeatRatio) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(dryBulbTemperature_End) || double.IsNaN(specificHeat))
+            {
+                return null;
+            }
+
+            double enthaply_Start = Query.Enthalpy_BySensibleHeatRatio(sensibleHeatRatio, specificHeat, mollierPoint, dryBulbTemperature_Start);
+            if(double.IsNaN(enthaply_Start))
+            {
+                return null;
+            }
+
+            double humidityRatio_Start = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_Start, enthaply_Start);
+            if (double.IsNaN(humidityRatio_Start))
+            {
+                return null;
+            }
+
+            double enthaply_End = Query.Enthalpy_BySensibleHeatRatio(sensibleHeatRatio, specificHeat, mollierPoint, dryBulbTemperature_End);
+            if (double.IsNaN(enthaply_Start))
+            {
+                return null;
+            }
+
+            double humidityRatio_End = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_End, enthaply_End);
+            if (double.IsNaN(humidityRatio_End))
+            {
+                return null;
+            }
+
+            MollierPoint start = new MollierPoint(dryBulbTemperature_Start, humidityRatio_Start, mollierPoint.Pressure);
+            MollierPoint end = new MollierPoint(dryBulbTemperature_End, humidityRatio_End, mollierPoint.Pressure);
+
+            return new UndefinedProcess(start, end);
+        }
     }
 }

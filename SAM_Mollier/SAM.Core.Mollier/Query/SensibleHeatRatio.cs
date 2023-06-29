@@ -26,11 +26,11 @@
         /// <summary>
         /// Calculates Sensible Heat Ratio [-]
         /// </summary>
-        /// <param name="specificHeat">Specific Heat [kJ/kg*C][</param>
+        /// <param name="specificHeat">Specific Heat [J/kg*K]</param>
         /// <param name="temperature_In">Temperature In [C]</param>
         /// <param name="temperature_Out">Temperature Out [C]</param>
-        /// <param name="enthaply_In">Enthalpy In [kJ/kg]</param>
-        /// <param name="enthalpy_Out">Enthalpy Out [kJ/kg]</param>
+        /// <param name="enthaply_In">Enthalpy In [J/kg]</param>
+        /// <param name="enthalpy_Out">Enthalpy Out [J/kg]</param>
         /// <returns>Sensible Heat Ratio (SHR) [-]</returns>
         public static double SensibleHeatRatio(double specificHeat, double temperature_In, double temperature_Out, double enthaply_In, double enthalpy_Out)
         {
