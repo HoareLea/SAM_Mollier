@@ -56,14 +56,16 @@
 
         }
 
-        public static UndefinedProcess UndefinedProcess(this MollierPoint mollierPoint, double sensibleHeatRatio, double specificHeat, double dryBulbTemperature_Start, double dryBulbTemperature_End)
+        public static UndefinedProcess UndefinedProcess_BySensibleHeatRatio(this MollierPoint mollierPoint, double sensibleHeatRatio, double dryBulbTemperature_Start, double dryBulbTemperature_End)
         {
-            if(mollierPoint == null || double.IsNaN(sensibleHeatRatio) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(dryBulbTemperature_End) || double.IsNaN(specificHeat))
+            if(mollierPoint == null || double.IsNaN(sensibleHeatRatio) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(dryBulbTemperature_End))
             {
                 return null;
             }
 
-            double enthaply_Start = Query.Enthalpy_BySensibleHeatRatio(sensibleHeatRatio, specificHeat, mollierPoint, dryBulbTemperature_Start);
+            double specificHeat_Start = Query.SpecificHeat_Air(dryBulbTemperature_Start);
+
+            double enthaply_Start = Query.Enthalpy_BySensibleHeatRatio(sensibleHeatRatio, specificHeat_Start, mollierPoint, dryBulbTemperature_Start);
             if(double.IsNaN(enthaply_Start))
             {
                 return null;
@@ -75,7 +77,9 @@
                 return null;
             }
 
-            double enthaply_End = Query.Enthalpy_BySensibleHeatRatio(sensibleHeatRatio, specificHeat, mollierPoint, dryBulbTemperature_End);
+            double specificHeat_End = Query.SpecificHeat_Air(dryBulbTemperature_End);
+
+            double enthaply_End = Query.Enthalpy_BySensibleHeatRatio(sensibleHeatRatio, specificHeat_End, mollierPoint, dryBulbTemperature_End);
             if (double.IsNaN(enthaply_Start))
             {
                 return null;
