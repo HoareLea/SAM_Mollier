@@ -100,37 +100,5 @@
 
             return mollierPoint.HumidityRatio + ((latentLoad /1000) / (airFlow * mollierPoint.Density() * 2450));
         }
-
-        /// <summary>
-        /// Calculates humidity ratio for end point for given senisble heat ratio and start point humidity ratio
-        /// </summary>
-        /// <param name="sensibleHeatRatio">Sensible Heat Ratio (SHR) [-] value from 0 to 1</param>
-        /// <param name="specificHeat">Air Specific Heat [J/kg*K]</param>
-        /// <param name="dryBulbTemperature_Start">Start Dry Bulb Tempearture [C]</param>
-        /// <param name="dryBulbTemperature_End">End Dry Bulb Tempearture [C]</param>
-        /// <param name="humidityRatio_Start">Start Point Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
-        /// <returns>End Point Humidity Ratio [kg_waterVapor/kg_dryAir]</returns>
-        public static double HumidityRatio_BySensibleHeatRatioAndHumidityRatio(double sensibleHeatRatio, double specificHeat, double dryBulbTemperature_Start, double dryBulbTemperature_End, double humidityRatio_Start)
-        {
-            if (double.IsNaN(sensibleHeatRatio) || double.IsNaN(specificHeat) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(dryBulbTemperature_End) || double.IsNaN(humidityRatio_Start))
-            {
-                return double.NaN;
-            }
-
-            double specificHeat_Air = specificHeat / 1000; //[kJ/kg*K]
-            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000; //[kJ/kg*K]
-
-            double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000; //[kJ/kg]
-
-            double divisor = specificHeat_WaterVapour * dryBulbTemperature_End + vapourizationLatentHeat;
-            if(divisor == 0)
-            {
-                return double.NaN;
-            }
-
-            double dividend = (specificHeat_Air * (dryBulbTemperature_End - dryBulbTemperature_Start) / sensibleHeatRatio) + (specificHeat_Air * (dryBulbTemperature_Start - dryBulbTemperature_End)) + (humidityRatio_Start * (specificHeat_WaterVapour * dryBulbTemperature_Start + vapourizationLatentHeat));
-            
-            return dividend / divisor;
-        }
     }
 }

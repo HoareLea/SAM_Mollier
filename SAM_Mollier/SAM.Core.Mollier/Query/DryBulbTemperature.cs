@@ -294,5 +294,47 @@
             return mollierPoint.DryBulbTemperature + ((sensibleLoad/ 1000) / (airFlow * mollierPoint.Density() * mollierPoint.HeatCapacity()));
         }
 
+        /// <summary>
+        /// Calculates humidity ratio for end point for given senisble heat ratio and start point humidity ratio
+        /// </summary>
+        /// <param name="sensibleHeatRatio">Sensible Heat Ratio (SHR) [-] value from 0 to 1</param>
+        /// <param name="specificHeat">Air Specific Heat [J/kg*K]</param>
+        /// <param name="dryBulbTemperature_Start">Start Dry Bulb Tempearture [C]</param>
+        /// <param name="humidityRatio_End">End Point Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <param name="humidityRatio_Start">Start Point Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <returns>End Point Humidity Ratio [kg_waterVapor/kg_dryAir]</returns>
+        public static double DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(double sensibleHeatRatio, double specificHeat, double dryBulbTemperature_Start, double humidityRatio_End, double humidityRatio_Start)
+        {
+            if (double.IsNaN(sensibleHeatRatio) || double.IsNaN(specificHeat) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(humidityRatio_End) || double.IsNaN(humidityRatio_Start))
+            {
+                return double.NaN;
+            }
+
+            double specificHeat_Air = specificHeat / 1000; //[kJ/kg*K]
+            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000; //[kJ/kg*K]
+
+            double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000; //[kJ/kg]
+
+            double divisor = sensibleHeatRatio * (specificHeat_Air + (specificHeat_WaterVapour * humidityRatio_End)) - specificHeat_Air;
+            if (divisor == 0)
+            {
+                return double.NaN;
+            }
+
+            double dividend = (sensibleHeatRatio * ((dryBulbTemperature_Start * (specificHeat_Air + specificHeat_WaterVapour * humidityRatio_Start)) + (vapourizationLatentHeat * (humidityRatio_Start - humidityRatio_End)))) - (specificHeat_Air * dryBulbTemperature_Start);
+
+            return dividend / divisor;
+        }
+
+        public static double DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(double sensibleHeatRatio, double specificHeat, MollierPoint mollierPoint_Start, double humidityRatio_End)
+        {
+            if(mollierPoint_Start == null)
+            {
+                return double.NaN;
+            }
+
+            return DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat, mollierPoint_Start.DryBulbTemperature, humidityRatio_End, mollierPoint_Start.HumidityRatio);
+        }
+
     }
 }

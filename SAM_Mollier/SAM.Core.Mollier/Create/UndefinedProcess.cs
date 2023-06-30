@@ -89,7 +89,7 @@
             MollierPoint mollierPoint_Start_HumidityRatio = null;
             if (sensibleHeatRatio != 1)
             {
-                double humidityRatio = Query.HumidityRatio_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat_Start, dryBulbTemperature_Start, dryBulbTemperature_End, humidityRatio_Start);
+                double humidityRatio = Query.DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat_Start, mollierPoint, humidityRatio_Start);
                 if (!double.IsNaN(humidityRatio))
                 {
                     mollierPoint_Start_HumidityRatio = new MollierPoint(dryBulbTemperature_Start, humidityRatio, mollierPoint.Pressure);
@@ -144,10 +144,10 @@
             MollierPoint mollierPoint_End_HumidityRatio = null;
             if (sensibleHeatRatio != 1)
             {
-                double humidityRatio = Query.HumidityRatio_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat_End, dryBulbTemperature_End, dryBulbTemperature_End, humidityRatio_End);
-                if (!double.IsNaN(humidityRatio))
+                double dryBulbTemperature = Query.DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat_End, mollierPoint, humidityRatio_End);
+                if (!double.IsNaN(dryBulbTemperature))
                 {
-                    mollierPoint_End_HumidityRatio = new MollierPoint(dryBulbTemperature_End, humidityRatio, mollierPoint.Pressure);
+                    mollierPoint_End_HumidityRatio = new MollierPoint(dryBulbTemperature, humidityRatio_End, mollierPoint.Pressure);
                 }
             }
 
