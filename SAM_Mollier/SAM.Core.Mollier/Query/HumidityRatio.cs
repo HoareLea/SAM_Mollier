@@ -46,8 +46,9 @@
 
             double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
             double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+            double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
 
-            return ((enthalpy / 1000) - dryBulbTemperature) / (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature);
+            return ((enthalpy / 1000) - (specificHeat_Air * dryBulbTemperature)) / (( specificHeat_WaterVapour * dryBulbTemperature) + vapourizationLatentHeat);
 
             //MD 2023-06-29
             //double vapourizationLatentHeat = Core.Query.VapourizationLatentHeat(dryBulbTemperature);
@@ -114,6 +115,11 @@
             if (double.IsNaN(sensibleHeatRatio) || double.IsNaN(specificHeat) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(dryBulbTemperature_End) || double.IsNaN(humidityRatio_Start))
             {
                 return double.NaN;
+            }
+
+            if(sensibleHeatRatio == 0)
+            {
+                return humidityRatio_Start;
             }
 
             double specificHeat_Air = specificHeat / 1000; //[kJ/kg*K]

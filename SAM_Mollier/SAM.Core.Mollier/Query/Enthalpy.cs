@@ -48,7 +48,7 @@
                 return result;
             }
 
-            return result * 1000;            
+            return result * 1000;
         }
 
         /// <summary>

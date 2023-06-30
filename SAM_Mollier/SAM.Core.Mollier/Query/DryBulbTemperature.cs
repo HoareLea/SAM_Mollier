@@ -16,7 +16,13 @@
                 return double.NaN;
             }
 
-            return Core.Query.Calculate((double x) => Enthalpy(x, humidityRatio, pressure), enthalpy, -50, 99.999);
+            double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
+            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+            double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
+
+            return (enthalpy - (humidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (humidityRatio * specificHeat_WaterVapour));
+
+            //return Core.Query.Calculate((double x) => Enthalpy(x, humidityRatio, pressure), enthalpy, -50, 99.999);
 
 
             //if (double.IsNaN(enthalpy) || double.IsNaN(humidityRatio))

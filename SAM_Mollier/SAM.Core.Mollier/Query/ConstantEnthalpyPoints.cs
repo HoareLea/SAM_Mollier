@@ -12,12 +12,19 @@ namespace SAM.Core.Mollier
             {
                 result[enthalpy_Min] = new List<MollierPoint>();
 
-                double humidityRatio_1 = HumidityRatio_ByEnthalpy(100, enthalpy_Min * 1000);
-                double temperature_1 = DryBulbTemperature(enthalpy_Min * 1000, humidityRatio_1, pressure);
-                double temperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy_Min * 1000, 100, pressure);
+                //x =0
+                double temperature_1 = DryBulbTemperature(enthalpy_Min, 0, pressure);
+                MollierPoint mollierPoint_1 = new MollierPoint(temperature_1, 0, pressure);
+
+
+                //double humidityRatio_1 = HumidityRatio_ByEnthalpy(100, enthalpy_Min * 1000);
+                //double temperature_1 = DryBulbTemperature(enthalpy_Min * 1000, humidityRatio_1, pressure);
+
+                //RH = 100
+                double temperature_2 = DryBulbTemperature_ByEnthalpy( enthalpy_Min * 1000, 100, pressure);
                 double humidityRatio_2 = HumidityRatio(temperature_2, 100, pressure);
 
-                MollierPoint mollierPoint_1 = new MollierPoint(temperature_1, humidityRatio_1, pressure);
+                //MollierPoint mollierPoint_1 = new MollierPoint(temperature_1, humidityRatio_1, pressure);
                 MollierPoint mollierPoint_2 = mollierPoint_1;
                 if (enthalpy_Min % 10 == 0 && chartType == ChartType.Psychrometric)
                 {
@@ -25,7 +32,8 @@ namespace SAM.Core.Mollier
 
                     double v = 0.0006;
                     double humidityRatio = mollierPoint_2.HumidityRatio + v;
-                    double a = (humidityRatio_1 - humidityRatio_2) / (temperature_1 - temperature_2);
+                    //double a = (humidityRatio_1 - humidityRatio_2) / (temperature_1 - temperature_2);
+                    double a = (mollierPoint_1.HumidityRatio - humidityRatio_2) / (temperature_1 - temperature_2);
                     double b = humidityRatio_2 - a * temperature_2;
                     double temperature = (humidityRatio - b) / a;
 

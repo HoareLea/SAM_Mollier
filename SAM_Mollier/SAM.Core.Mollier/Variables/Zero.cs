@@ -13,17 +13,17 @@
         /// <summary>
         /// Specific Heat of water vapour at constant pressure and temeprature 0C [J/kg*K]
         /// </summary>
-        public const double SpecificHeat_WaterVapour = 1859;
+        public const double SpecificHeat_WaterVapour = 1860;  //1859
 
         /// <summary>
         /// Specific Heat of air vapour at constant pressure and temeprature 0C [J/kg*K]
         /// </summary>
-        public const double SpecificHeat_Air = 1006;
+        public const double SpecificHeat_Air = 1005; //1006
 
         /// <summary>
         /// Specific Heat of water vapour at constant pressure and temeprature 0C [J/kg*K]
         /// </summary>
-        public const double SpecificHeat_Water = 4219.9;
+        public const double SpecificHeat_Water = 4190;  //4219.9
     }
 
 }
