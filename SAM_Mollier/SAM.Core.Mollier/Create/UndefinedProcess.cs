@@ -63,6 +63,11 @@
                 return null;
             }
 
+            if(sensibleHeatRatio == 0)
+            {
+                return new UndefinedProcess(new MollierPoint(mollierPoint.DryBulbTemperature, humidityRatio_Start, mollierPoint.Pressure), new MollierPoint(mollierPoint.DryBulbTemperature, humidityRatio_End, mollierPoint.Pressure));
+            }
+
             //START
 
             double specificHeat_Start = Query.SpecificHeat_Air(dryBulbTemperature_Start);

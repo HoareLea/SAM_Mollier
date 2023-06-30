@@ -117,11 +117,6 @@
                 return double.NaN;
             }
 
-            if(sensibleHeatRatio == 0)
-            {
-                return humidityRatio_Start;
-            }
-
             double specificHeat_Air = specificHeat / 1000; //[kJ/kg*K]
             double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000; //[kJ/kg*K]
 
