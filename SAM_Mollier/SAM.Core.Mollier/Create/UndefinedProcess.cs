@@ -72,7 +72,7 @@
 
             double specificHeat_Start = Query.SpecificHeat_Air(dryBulbTemperature_Start);
 
-            MollierPoint start_DryBulbTemperature = null;
+            MollierPoint mollierPoint_Start_DryBulbTemperature = null;
             if (sensibleHeatRatio != 0)
             {
                 double enthaply = Query.Enthalpy_BySensibleHeatRatioAndDryBulbTemperature(mollierPoint.Pressure, sensibleHeatRatio, specificHeat_Start, mollierPoint, dryBulbTemperature_Start);
@@ -81,44 +81,44 @@
                     double humidityRatio = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_Start, enthaply);
                     if (!double.IsNaN(humidityRatio))
                     {
-                        start_DryBulbTemperature = new MollierPoint(dryBulbTemperature_Start, humidityRatio, mollierPoint.Pressure);
+                        mollierPoint_Start_DryBulbTemperature = new MollierPoint(dryBulbTemperature_Start, humidityRatio, mollierPoint.Pressure);
                     }
                 }
             }
 
-            MollierPoint start_HumidityRatio = null;
+            MollierPoint mollierPoint_Start_HumidityRatio = null;
             if (sensibleHeatRatio != 1)
             {
                 double humidityRatio = Query.HumidityRatio_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat_Start, dryBulbTemperature_Start, dryBulbTemperature_End, humidityRatio_Start);
                 if (!double.IsNaN(humidityRatio))
                 {
-                    start_HumidityRatio = new MollierPoint(dryBulbTemperature_Start, humidityRatio, mollierPoint.Pressure);
+                    mollierPoint_Start_HumidityRatio = new MollierPoint(dryBulbTemperature_Start, humidityRatio, mollierPoint.Pressure);
                 }
             }
 
-            if(start_DryBulbTemperature == null && start_HumidityRatio == null)
+            if(mollierPoint_Start_DryBulbTemperature == null && mollierPoint_Start_HumidityRatio == null)
             {
                 return null;
             }
 
-            MollierPoint start = null;
-            if(start_DryBulbTemperature == null)
+            MollierPoint mollierPoint_Start = null;
+            if(mollierPoint_Start_DryBulbTemperature == null)
             {
-                start = start_HumidityRatio;
+                mollierPoint_Start = mollierPoint_Start_HumidityRatio;
             } 
-            else if(start_HumidityRatio == null)
+            else if(mollierPoint_Start_HumidityRatio == null)
             {
-                start = start_DryBulbTemperature;
+                mollierPoint_Start = mollierPoint_Start_DryBulbTemperature;
             }
             else
             {
-                double enthalpyDifference_HumidityRatio = System.Math.Abs(mollierPoint.Enthalpy - start_HumidityRatio.Enthalpy);
-                double enthalpyDifference_DryBulbTemperature = System.Math.Abs(mollierPoint.Enthalpy - start_DryBulbTemperature.Enthalpy);
+                double enthalpyDifference_HumidityRatio = System.Math.Abs(mollierPoint.Enthalpy - mollierPoint_Start_HumidityRatio.Enthalpy);
+                double enthalpyDifference_DryBulbTemperature = System.Math.Abs(mollierPoint.Enthalpy - mollierPoint_Start_DryBulbTemperature.Enthalpy);
                 
-                start = enthalpyDifference_HumidityRatio < enthalpyDifference_DryBulbTemperature ? start_HumidityRatio : start_DryBulbTemperature;
+                mollierPoint_Start = enthalpyDifference_HumidityRatio < enthalpyDifference_DryBulbTemperature ? mollierPoint_Start_HumidityRatio : mollierPoint_Start_DryBulbTemperature;
             }
 
-            if(start == null)
+            if(mollierPoint_Start == null)
             {
                 return null;
             }
@@ -127,7 +127,7 @@
 
             double specificHeat_End = Query.SpecificHeat_Air(dryBulbTemperature_End);
 
-            MollierPoint end_DryBulbTemperature = null;
+            MollierPoint mollierPoint_End_DryBulbTemperature = null;
             if (sensibleHeatRatio != 0)
             {
                 double enthaply = Query.Enthalpy_BySensibleHeatRatioAndDryBulbTemperature(mollierPoint.Pressure, sensibleHeatRatio, specificHeat_End, mollierPoint, dryBulbTemperature_End);
@@ -136,50 +136,50 @@
                     double humidityRatio = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_End, enthaply);
                     if (!double.IsNaN(humidityRatio))
                     {
-                        end_DryBulbTemperature = new MollierPoint(dryBulbTemperature_End, humidityRatio, mollierPoint.Pressure);
+                        mollierPoint_End_DryBulbTemperature = new MollierPoint(dryBulbTemperature_End, humidityRatio, mollierPoint.Pressure);
                     }
                 }
             }
 
-            MollierPoint end_HumidityRatio = null;
+            MollierPoint mollierPoint_End_HumidityRatio = null;
             if (sensibleHeatRatio != 1)
             {
                 double humidityRatio = Query.HumidityRatio_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat_End, dryBulbTemperature_End, dryBulbTemperature_End, humidityRatio_End);
                 if (!double.IsNaN(humidityRatio))
                 {
-                    end_HumidityRatio = new MollierPoint(dryBulbTemperature_End, humidityRatio, mollierPoint.Pressure);
+                    mollierPoint_End_HumidityRatio = new MollierPoint(dryBulbTemperature_End, humidityRatio, mollierPoint.Pressure);
                 }
             }
 
-            if (end_DryBulbTemperature == null && end_HumidityRatio == null)
+            if (mollierPoint_End_DryBulbTemperature == null && mollierPoint_End_HumidityRatio == null)
             {
                 return null;
             }
 
-            MollierPoint end = null;
-            if (end_DryBulbTemperature == null)
+            MollierPoint mollierPoint_End = null;
+            if (mollierPoint_End_DryBulbTemperature == null)
             {
-                end = end_HumidityRatio;
+                mollierPoint_End = mollierPoint_End_HumidityRatio;
             }
-            else if (end_HumidityRatio == null)
+            else if (mollierPoint_End_HumidityRatio == null)
             {
-                end = end_DryBulbTemperature;
+                mollierPoint_End = mollierPoint_End_DryBulbTemperature;
             }
             else
             {
-                double enthalpyDifference_HumidityRatio = System.Math.Abs(mollierPoint.Enthalpy - end_HumidityRatio.Enthalpy);
-                double enthalpyDifference_DryBulbTemperature = System.Math.Abs(mollierPoint.Enthalpy - end_DryBulbTemperature.Enthalpy);
+                double enthalpyDifference_HumidityRatio = System.Math.Abs(mollierPoint.Enthalpy - mollierPoint_End_HumidityRatio.Enthalpy);
+                double enthalpyDifference_DryBulbTemperature = System.Math.Abs(mollierPoint.Enthalpy - mollierPoint_End_DryBulbTemperature.Enthalpy);
 
-                end = enthalpyDifference_HumidityRatio < enthalpyDifference_DryBulbTemperature ? end_HumidityRatio : end_DryBulbTemperature;
+                mollierPoint_End = enthalpyDifference_HumidityRatio < enthalpyDifference_DryBulbTemperature ? mollierPoint_End_HumidityRatio : mollierPoint_End_DryBulbTemperature;
             }
 
-            if (end == null)
+            if (mollierPoint_End == null)
             {
                 return null;
             }
 
 
-            return new UndefinedProcess(start, end);
+            return new UndefinedProcess(mollierPoint_Start, mollierPoint_End);
         }
     }
 }
