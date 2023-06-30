@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     { 
-        public static Dictionary<double, List<MollierPoint>> SpecificVolumeLine(double specific_volume_Min = Default.SpecificVolumeMin, double specific_volume_Max = Default.SpecificVolumeMax, double pressure = Standard.Pressure, double specificVolumeStep = 0.05, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
+        public static Dictionary<double, List<MollierPoint>> ConstantSpecificVolumePoints(double specific_volume_Min = Default.SpecificVolumeMin, double specific_volume_Max = Default.SpecificVolumeMax, double pressure = Standard.Pressure, double specificVolumeStep = 0.05, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
         {
             Dictionary<double, List<MollierPoint>> result = new Dictionary<double, List<MollierPoint>>();
 

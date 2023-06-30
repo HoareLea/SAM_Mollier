@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     { 
-        public static Dictionary<double, List<MollierPoint>> DensityLine(double density_Min = Default.DensityMin, double density_Max = Default.DensityMax, double pressure = Standard.Pressure, double densityStep = 0.02, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
+        public static Dictionary<double, List<MollierPoint>> ConstantDensityPoints(double density_Min = Default.DensityMin, double density_Max = Default.DensityMax, double pressure = Standard.Pressure, double densityStep = 0.02, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
         {
             Dictionary<double, List<MollierPoint>> result = new Dictionary<double, List<MollierPoint>>();
             while (density_Min <= density_Max)

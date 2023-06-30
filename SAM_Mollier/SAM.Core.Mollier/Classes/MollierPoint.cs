@@ -48,7 +48,7 @@ namespace SAM.Core.Mollier
                     return double.NaN;
                 }
 
-                return Query.Enthalpy(dryBulbTemperature, humidityRatio);
+                return Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure);
             }
         }
 

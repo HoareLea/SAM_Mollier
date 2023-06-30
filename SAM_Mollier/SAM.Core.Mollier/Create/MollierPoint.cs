@@ -21,7 +21,7 @@
                 return null;
             }
 
-            double dryBulbTemperature = Query.DryBulbTemperature(enthalpy, humidityRatio);
+            double dryBulbTemperature = Query.DryBulbTemperature(enthalpy, humidityRatio, pressure);
             if(double.IsNaN(dryBulbTemperature))
             {
                 return null;

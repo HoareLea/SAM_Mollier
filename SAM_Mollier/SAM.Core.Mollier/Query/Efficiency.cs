@@ -11,7 +11,7 @@
         /// <param name="returnTemperature">Return Temperature</param>
         /// <param name="tolerance">Rounding Tolerance</param>
         /// <returns>Efficiency [%]</returns>
-        public static double Efficiency(double dryBulbTemperature_1, double dryBulbTemperature_2, double supplyTemperature, double returnTemperature, double tolerance = SAM.Core.Tolerance.MacroDistance)
+        public static double Efficiency(double dryBulbTemperature_1, double dryBulbTemperature_2, double supplyTemperature, double returnTemperature, double tolerance = Tolerance.MacroDistance)
         {
             if(double.IsNaN(dryBulbTemperature_1) || double.IsNaN(dryBulbTemperature_2) || double.IsNaN(supplyTemperature) || double.IsNaN(returnTemperature))
             {

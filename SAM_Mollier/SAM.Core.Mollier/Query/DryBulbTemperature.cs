@@ -7,15 +7,16 @@
         /// </summary>
         /// <param name="enthalpy">Moist air Enthalpy[J / kg]</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <param name="pressure">Pressure [Pa]</param>
         /// <returns>Dry-bulb temperature [°C]</returns>
-        public static double DryBulbTemperature(double enthalpy, double humidityRatio)
+        public static double DryBulbTemperature(double enthalpy, double humidityRatio, double pressure)
         {
-            if (double.IsNaN(enthalpy) || double.IsNaN(humidityRatio))
+            if (double.IsNaN(enthalpy) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
             {
                 return double.NaN;
             }
 
-            return Core.Query.Calculate((double x) => Enthalpy(x, humidityRatio), enthalpy, -50, 99.999);
+            return Core.Query.Calculate((double x) => Enthalpy(x, humidityRatio, pressure), enthalpy, -50, 99.999);
 
 
             //if (double.IsNaN(enthalpy) || double.IsNaN(humidityRatio))
@@ -181,7 +182,7 @@
             }
 
 
-            return Core.Query.Calculate_BinarySearch((double x) => Density(x, relativeHumidity, pressure), density, -50, 150, true, 100, SAM.Core.Tolerance.Distance); ;
+            return Core.Query.Calculate_BinarySearch((double x) => Density(x, relativeHumidity, pressure), density, -50, 150, true, 100, Tolerance.Distance);
 
             //double result = 100;
             //double density_Temp = double.NaN;
@@ -269,7 +270,6 @@
 
             return Core.Query.Calculate_BinarySearch((double x) => DiagramTemperature(x, humidityRatio), diagramTemperature, -30, 80, increasing: false);
         }
-
 
         /// <summary>
         /// Calculates dry bulb temperature

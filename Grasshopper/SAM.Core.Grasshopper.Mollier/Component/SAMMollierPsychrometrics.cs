@@ -317,7 +317,7 @@ namespace SAM.Core.Grasshopper.Mollier
             specificVolume = Core.Mollier.Query.SpecificVolume(dryBulbTemperature, humidityRatio, pressure);
             saturationVapourPressure = Core.Mollier.Query.SaturationVapourPressure(dryBulbTemperature);
             partialVapourPressure = Core.Mollier.Query.PartialVapourPressure(dryBulbTemperature, relativeHumidity);
-            enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio); 
+            enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure); 
             partialDryAirPressure = Core.Mollier.Query.PartialDryAirPressure(pressure, partialVapourPressure);
             airHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature, humidityRatio);
             waterHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature);

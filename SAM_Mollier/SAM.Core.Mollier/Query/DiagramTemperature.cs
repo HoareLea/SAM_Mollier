@@ -16,7 +16,9 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return dryBulbTemperature + humidityRatio * 1.86 * dryBulbTemperature;
+            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+
+            return dryBulbTemperature + humidityRatio * specificHeat_WaterVapour * dryBulbTemperature;
         }
 
         public static double DiagramTemperature(this MollierPoint mollierPoint)

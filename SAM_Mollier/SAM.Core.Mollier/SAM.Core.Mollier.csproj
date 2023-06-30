@@ -89,16 +89,16 @@
     <Compile Include="Query\VapourDensity.cs" />
     <Compile Include="Query\SaturationDegree.cs" />
     <Compile Include="Query\Color.cs" />
-    <Compile Include="Query\DryBulbTemperatureLine.cs" />
+    <Compile Include="Query\ConstantDryBulbTemperaturePoints.cs" />
     <Compile Include="Query\Efficiency.cs" />
     <Compile Include="Query\ProcessMollierPoints.cs" />
     <Compile Include="Query\ShortenLineByEndPoints.cs" />
-    <Compile Include="Query\DiagramTemperatureLine.cs" />
-    <Compile Include="Query\RelativeHumidityLine.cs" />
-    <Compile Include="Query\WetBulbTemperatureLine.cs" />
-    <Compile Include="Query\SpecificVolumeLine.cs" />
-    <Compile Include="Query\EnthalpyLine.cs" />
-    <Compile Include="Query\DensityLine.cs" />
+    <Compile Include="Query\ConstantDiagramTemperaturePoints.cs" />
+    <Compile Include="Query\ConstantRelativeHumidityPoints.cs" />
+    <Compile Include="Query\ConstantWetBulbTemperaturePoints.cs" />
+    <Compile Include="Query\ConstantSpecificVolumePoints.cs" />
+    <Compile Include="Query\ConstantEnthalpyPoints.cs" />
+    <Compile Include="Query\ConstantDensityPoints.cs" />
     <Compile Include="Query\Project.cs" />
     <Compile Include="Query\DewPoint.cs" />
     <Compile Include="Query\TemperatureDifference.cs" />
@@ -130,8 +130,9 @@
     <Compile Include="Query\HumidityRatio.cs" />
     <Compile Include="Query\SaturationVapourPressure.cs" />
     <Compile Include="Query\PartialVapourPressure.cs" />
-    <Compile Include="Standard\Default.cs" />
-    <Compile Include="Standard\Standard.cs" />
+    <Compile Include="Variables\Default.cs" />
+    <Compile Include="Variables\Zero.cs" />
+    <Compile Include="Variables\Standard.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Convert\" />

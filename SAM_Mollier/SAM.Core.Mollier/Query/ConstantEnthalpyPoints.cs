@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
-        public static Dictionary<double, List<MollierPoint>> EnthalpyLine(ChartType chartType = ChartType.Mollier, double enthalpy_Min = Default.EnthalpyMin, double enthalpy_Max = Default.EnthalpyMax, double pressure = Standard.Pressure, double enthalpyStep = 1, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
+        public static Dictionary<double, List<MollierPoint>> ConstantEnthalpyPoints(ChartType chartType = ChartType.Mollier, double enthalpy_Min = Default.EnthalpyMin, double enthalpy_Max = Default.EnthalpyMax, double pressure = Standard.Pressure, double enthalpyStep = 1, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
         {
             Dictionary<double, List<MollierPoint>> result = new Dictionary<double, List<MollierPoint>>();
 
@@ -13,7 +13,7 @@ namespace SAM.Core.Mollier
                 result[enthalpy_Min] = new List<MollierPoint>();
 
                 double humidityRatio_1 = HumidityRatio_ByEnthalpy(100, enthalpy_Min * 1000);
-                double temperature_1 = DryBulbTemperature(enthalpy_Min * 1000, humidityRatio_1);
+                double temperature_1 = DryBulbTemperature(enthalpy_Min * 1000, humidityRatio_1, pressure);
                 double temperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy_Min * 1000, 100, pressure);
                 double humidityRatio_2 = HumidityRatio(temperature_2, 100, pressure);
 

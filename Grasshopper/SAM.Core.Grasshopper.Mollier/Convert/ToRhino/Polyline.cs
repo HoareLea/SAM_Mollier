@@ -24,7 +24,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 }
 
                 Point3d point3d = mollierPoint.ToRhino_Point3d(chartType, z);
-                if(!point3d.IsValid || point3d == global::Rhino.Geometry.Point3d.Unset)
+                if(!point3d.IsValid || point3d == Point3d.Unset)
                 {
                     return null;
                 }

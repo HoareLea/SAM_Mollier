@@ -148,7 +148,7 @@ namespace SAM.Core.Grasshopper.Mollier
             ChartType chartType = isMollier == true ? ChartType.Mollier : ChartType.Psychrometric;
 
             //CREATING DENSITY OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_Density = Core.Mollier.Query.DensityLine(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
+            Dictionary<double, List<MollierPoint>> dictionary_Density = Core.Mollier.Query.ConstantDensityPoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> densities = new List<double>(dictionary_Density.Keys);
 
             DataTree<GooMollierPoint> dataTree_Densities = new DataTree<GooMollierPoint>();
@@ -203,7 +203,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             //CREATING ENTHALPY OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_Enthalpy = Core.Mollier.Query.EnthalpyLine(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
+            Dictionary<double, List<MollierPoint>> dictionary_Enthalpy = Core.Mollier.Query.ConstantEnthalpyPoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> enthalpies = new List<double>(dictionary_Enthalpy.Keys);
 
             DataTree<GooMollierPoint> dataTree_Enthalpies = new DataTree<GooMollierPoint>();
@@ -255,7 +255,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             //CREATING SPECIFIC VOLUME OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_SpecificVolume = Core.Mollier.Query.SpecificVolumeLine(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
+            Dictionary<double, List<MollierPoint>> dictionary_SpecificVolume = Core.Mollier.Query.ConstantSpecificVolumePoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> specificVolumes = new List<double>(dictionary_SpecificVolume.Keys);
 
             DataTree<GooMollierPoint> dataTree_SpecificVolumes = new DataTree<GooMollierPoint>();
@@ -308,7 +308,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             //CREATING WET BULB TEMPERATURE OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_WetBulbTemperature = Core.Mollier.Query.WetBulbTemperatureLine(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
+            Dictionary<double, List<MollierPoint>> dictionary_WetBulbTemperature = Core.Mollier.Query.ConstantWetBulbTemperaturePoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> wetBulbTemperatures = new List<double>(dictionary_WetBulbTemperature.Keys);
 
             DataTree<GooMollierPoint> dataTree_WetBulbTemperature = new DataTree<GooMollierPoint>();
@@ -362,7 +362,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             //CREATING RELATIVE HUMIDITY OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_relativeHumidity = Core.Mollier.Query.RelativeHumidityLine((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max); ;
+            Dictionary<double, List<MollierPoint>> dictionary_relativeHumidity = Core.Mollier.Query.ConstantRelativeHumidityPoints((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max); ;
             List<double> relativeHumidities = new List<double>(dictionary_relativeHumidity.Keys);
 
             DataTree<GooMollierPoint> dataTree_RelativeHumidity = new DataTree<GooMollierPoint>();
@@ -413,7 +413,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             //CREATING DIAGRAM TEMPERATURE OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_diagramTemperature = Core.Mollier.Query.DiagramTemperatureLine((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max);
+            Dictionary<double, List<MollierPoint>> dictionary_diagramTemperature = Core.Mollier.Query.ConstantDiagramTemperaturePoints((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max);
             List<double> diagramTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
 
             DataTree<GooMollierPoint> dataTree_DiagramTemperature = new DataTree<GooMollierPoint>();
@@ -474,7 +474,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
             //---
             //CREATING DRY BULB TEMPERATURE OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_dryBulbTemperature = Core.Mollier.Query.DryBulbTemperatureLine((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max);
+            Dictionary<double, List<MollierPoint>> dictionary_dryBulbTemperature = Core.Mollier.Query.ConstantDryBulbTemperaturePoints((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max);
             List<double> dryBulbTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
 
             DataTree<GooMollierPoint> dataTree_DryBulbTemperature = new DataTree<GooMollierPoint>();
