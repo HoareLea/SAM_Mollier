@@ -11,18 +11,26 @@
         /// <returns>Density [kg/m3]</returns>
         public static double Density(double dryBulbTemperature, double relativeHumidity, double pressure)
         {
-            if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
+            double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+            if(double.IsNaN(humidityRatio))
             {
                 return double.NaN;
             }
 
-            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity, pressure);
-            if (double.IsNaN(partialVapourPressure))
-            {
-                return double.NaN;
-            }
+            return Density_ByHumidityRatio(dryBulbTemperature, humidityRatio, pressure);
 
-            return 0.00348 * pressure / (273.15 + dryBulbTemperature) - 0.00132 * partialVapourPressure / (273.15 + dryBulbTemperature);
+            //if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
+            //{
+            //    return double.NaN;
+            //}
+
+            //double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity, pressure);
+            //if (double.IsNaN(partialVapourPressure))
+            //{
+            //    return double.NaN;
+            //}
+
+            //return 0.00348 * pressure / (273.15 + dryBulbTemperature) - 0.00132 * partialVapourPressure / (273.15 + dryBulbTemperature);
         }
 
         /// <summary>
@@ -54,18 +62,18 @@
                 return double.NaN;
             }
 
-            double relativeHumidity = RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
-            if(double.IsNaN(relativeHumidity))
+            double saturationHumidityRatio = SaturationHumidityRatio(dryBulbTemperature, pressure);
+            if(double.IsNaN(saturationHumidityRatio))
             {
                 return double.NaN;
             }
 
-            return Density(dryBulbTemperature, relativeHumidity, pressure);
+            if(humidityRatio < saturationHumidityRatio)
+            {
+                saturationHumidityRatio = humidityRatio;
+            }
 
-            //double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
-            //double partialVapourPressure = SaturationVapourPressure(dryBulbTemperature);
-
-            //return 0.00348 * pressure / (273.15 + dryBulbTemperature) - 0.00217 * (partialVapourPressure * ((((humidityRatio * pressure / (0.6222 + humidityRatio)) / (partialVapourPressure))))) / (273.15 + dryBulbTemperature);
+            return (1 + humidityRatio) / (saturationHumidityRatio + 0.6222) * (pressure) / (Constant.GasConstnt_WaterVapour * (dryBulbTemperature + 273.15)); //Equation 2.20 Gluck
         }
 
         /// <summary>
