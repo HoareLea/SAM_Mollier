@@ -2,6 +2,39 @@
 {
     public static partial class Query
     {
+        public static double WetBulbTemperature_ByHumidityRatio(double dryBulbTemperature, double humidityRatio, double pressure)
+        {
+            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+
+            double saturationHumidityRatio = SaturationHumidityRatio(dryBulbTemperature, pressure);
+            if (double.IsNaN(saturationHumidityRatio))
+            {
+                return double.NaN;
+            }
+
+            if (humidityRatio > saturationHumidityRatio)
+            {
+                return dryBulbTemperature;
+            }
+
+            double relativeHumidity = RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
+            if(double.IsNaN(relativeHumidity))
+            {
+                return double.NaN;
+            }
+
+            double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
+            if (double.IsNaN(enthalpy))
+            {
+                return double.NaN;
+            }
+
+            return Core.Query.Calculate_ByMaxStep((double x) => Enthalpy_ByRelativeHumidity(x, 100, pressure), enthalpy, -20, 50);
+        }
+
         public static double WetBulbTemperature(double dryBulbTemperature, double relativeHumidity, double pressure)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
@@ -46,7 +79,7 @@
                 return double.NaN;
             }
 
-            return WetBulbTemperature(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity, mollierPoint.Pressure);
+            return WetBulbTemperature_ByHumidityRatio(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure);
         }
     }
 }

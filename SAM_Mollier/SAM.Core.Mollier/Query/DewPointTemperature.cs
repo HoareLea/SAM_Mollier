@@ -38,23 +38,7 @@
                 return double.NaN;
             }
 
-            double v = System.Math.Log10(partialVapourPressure / 6.1078);
-            if (double.IsNaN(v))
-            {
-                return double.NaN;
-            }
-
-            double a = dryBulbTemperature >= 0 ? 7.5 : 7.6;
-            double b = dryBulbTemperature >= 0 ? 237.3 : 240.7;
-
-            double result = b * v / (a - v);
-            if (result > 100)
-            {
-                return double.NaN;
-            }
-
-
-            return result;
+            return SaturationTemperature(partialVapourPressure);
         }
 
         public static double DewPointTemperature(this MollierPoint mollierPoint)

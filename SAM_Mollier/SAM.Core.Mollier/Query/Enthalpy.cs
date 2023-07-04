@@ -31,6 +31,8 @@
             double specificHeat_Air = Zero.SpecificHeat_Air / 1000; //[kJ/kg*K]
             double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000; //[kJ/kg*K]
             double specificHeat_Water = Zero.SpecificHeat_Water / 1000; //[kJ/kg*K]
+            double specificHeat_Ice = Zero.SpecificHeat_Ice / 1000; //[kJ/kg*K]
+            double meltingHeat_Ice = Zero.MeltingHeat_Ice / 1000; //[kJ/kg*K]
 
             double result = double.NaN;
 
@@ -42,7 +44,7 @@
                 }
                 else
                 {
-                    result = Zero.SpecificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (Zero.SpecificHeat_Ice - Zero.MeltingHeat_Ice);
+                    result = Zero.SpecificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (specificHeat_Ice - meltingHeat_Ice);
                 }
             }
             else
