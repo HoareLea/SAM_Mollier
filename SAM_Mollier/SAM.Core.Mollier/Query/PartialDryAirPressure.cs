@@ -32,16 +32,10 @@
                 return double.NaN;
             }
 
-            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity);
+            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity, pressure);
             if(double.IsNaN(partialVapourPressure))
             {
-                double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
-                if (double.IsNaN(humidityRatio))
-                {
-                    return double.NaN;
-                }
-
-                return PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
+                return double.NaN;
             }
 
             return PartialDryAirPressure(pressure, partialVapourPressure);

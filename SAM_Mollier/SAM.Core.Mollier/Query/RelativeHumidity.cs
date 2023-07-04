@@ -38,15 +38,16 @@
         /// </summary>
         /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
         /// <param name="dewPointTemperature">Dew Point Temperature [°C]</param>
+        /// <param name="pressure">Pressure [Pa]</param>
         /// <returns>Relative Humidity (0 - 100) [%]</returns>
-        public static double RelativeHumidity_ByDewPointTemperature(double dryBulbTemperature, double dewPointTemperature)
+        public static double RelativeHumidity_ByDewPointTemperature(double dryBulbTemperature, double dewPointTemperature, double pressure)
         {
             if (double.IsNaN(dryBulbTemperature) || double.IsNaN(dewPointTemperature))
             {
                 return double.NaN;
             }
 
-            return Core.Query.Calculate((double x) => DewPointTemperature(dryBulbTemperature, x), dewPointTemperature, 0, 100);
+            return Core.Query.Calculate((double x) => DewPointTemperature(dryBulbTemperature, x, pressure), dewPointTemperature, 0, 100);
         }
 
         /// <summary>
@@ -73,14 +74,14 @@
             return System.Math.Min(1, pressureRatio / SaturationVapourPressure(dryBulbTemperature)) * 100;
         }
 
-        public static double RelativeHumidity_ByDryBulbTemperature(double dryBulbTemperature, double relativeHumidity)
+        public static double RelativeHumidity_ByDryBulbTemperature(double dryBulbTemperature, double relativeHumidity, double pressure)
         {
-            if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity))
+            if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
             {
                 return double.NaN;
             }
 
-            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity);
+            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity, pressure);
             if(double.IsNaN(partialVapourPressure))
             {
                 return double.NaN;

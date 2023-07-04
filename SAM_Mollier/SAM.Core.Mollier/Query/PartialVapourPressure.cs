@@ -7,8 +7,9 @@
         /// </summary>
         /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C]</param>
         /// <param name="relativeHumidity">Relative Humidity (0 - 100) [%]</param>
+        /// <param name="pressure">Pressure [Pa]</param>
         /// <returns>Partial Vapour Pressure [Pa]</returns>
-        public static double PartialVapourPressure(double dryBulbTemperature, double relativeHumidity)
+        public static double PartialVapourPressure(double dryBulbTemperature, double relativeHumidity, double pressure)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity))
             {
@@ -20,7 +21,19 @@
                 return 0;
             }
 
-            return SaturationVapourPressure(dryBulbTemperature) * relativeHumidity / 100;
+            double result = SaturationVapourPressure(dryBulbTemperature) * relativeHumidity / 100;
+            if(double.IsNaN(result))
+            {
+                double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                if (double.IsNaN(humidityRatio))
+                {
+                    return double.NaN;
+                }
+
+                return PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -41,7 +54,7 @@
                 return double.NaN;
             }
 
-            return PartialVapourPressure(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity);
+            return PartialVapourPressure(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity, mollierPoint.Pressure);
         }
     }
 }
