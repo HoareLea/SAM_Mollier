@@ -21,35 +21,21 @@
             double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
 
             return (enthalpy - (humidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (humidityRatio * specificHeat_WaterVapour));
+        }
 
-            //return Core.Query.Calculate((double x) => Enthalpy(x, humidityRatio, pressure), enthalpy, -50, 99.999);
+        public static double DryBulbTemperature(double enthalpy, double humidityRatio, double pressure, double saturationHumidityRatio)
+        {
+            if (double.IsNaN(enthalpy) || double.IsNaN(humidityRatio) || double.IsNaN(pressure) || double.IsNaN(saturationHumidityRatio))
+            {
+                return double.NaN;
+            }
 
+            double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
+            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+            double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
+            double specificHeat_Water = Zero.SpecificHeat_Water / 1000;
 
-            //if (double.IsNaN(enthalpy) || double.IsNaN(humidityRatio))
-            //{
-            //    return double.NaN;
-            //}
-
-            //double result = -25;
-            //double enthalpy_Temp = double.NaN;
-            //do
-            //{
-            //    result += 1;
-            //    enthalpy_Temp = 1.01 * result + humidityRatio * (2501 + 1.86 * result);
-            //}
-            //while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp <= enthalpy && result <= 120);
-
-            //int i = 0;
-            //do
-            //{
-            //    result -= 0.001;
-            //    enthalpy_Temp = 1.01 * result + humidityRatio * (2501 + 1.86 * result);
-            //    i++;
-            //}
-            //while (!double.IsNaN(enthalpy_Temp) && enthalpy_Temp > enthalpy && i <= 10000);
-
-            //return result;
-            //return ((enthalpy / 1000) - 2501 * humidityRatio) / (1.005 + humidityRatio * 1.86);
+            return (enthalpy / 1000 - (saturationHumidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (saturationHumidityRatio * specificHeat_WaterVapour) + (specificHeat_Water * (humidityRatio - saturationHumidityRatio)));
         }
 
         /// <summary>

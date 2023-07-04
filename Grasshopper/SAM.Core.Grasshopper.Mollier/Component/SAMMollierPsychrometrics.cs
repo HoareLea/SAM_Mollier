@@ -332,6 +332,29 @@ namespace SAM.Core.Grasshopper.Mollier
 
             double diagramTemperature = Core.Mollier.Query.DiagramTemperature(dryBulbTemperature, humidityRatio, pressure);
 
+            //START
+
+            double enthalpy_M = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure);
+
+            double saturationDryBulbTemperature_M = Core.Mollier.Query.DryBulbTemperature_ByEnthalpy(enthalpy_M, 100, pressure);
+
+            MollierPoint MollierPoint_Saturation_M = Core.Mollier.Query.SaturationMollierPoint(saturationDryBulbTemperature_M, pressure);
+
+            //double humidiRatio_Saturation_M = MollierPoint_Saturation_M.HumidityRatio;
+            //double humidityRatio_M = humidityRatio;
+
+            //double dryBulbTemperature_Saturation_M = MollierPoint_Saturation_M.DryBulbTemperature;
+            //double dryBulbTemperature_M = mollierPoint_M.DryBulbTemperature;
+
+            //double humidiRatio_Difference = humidityRatio_M - humidiRatio_Saturation_M;
+            //double dryBulbTemperature_Difference = dryBulbTemperature_M - dryBulbTemperature_Saturation_M;
+
+            //double directionFactor = humidiRatio_Difference / dryBulbTemperature_Difference;
+
+            //double angle = System.Math.Atan(directionFactor);
+
+            //END
+
             index = Params.IndexOfOutputParam("mollierPoint");
             if (index != -1)
             {

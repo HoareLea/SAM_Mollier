@@ -29,6 +29,31 @@
 
             return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
         }
+        /// <summary>
+        /// This is special case use for calculating point below saturation line
+        /// </summary>
+        /// <param name="enthalpy"></param>
+        /// <param name="dryBulbTemperature"></param>
+        /// <param name="humidityRatio"></param>
+        /// <param name="pressure"></param>
+        /// <returns></returns>
+        public static MollierPoint MollierPoint_ByEnthalpyAndDryBulbTemperature(double enthalpy, double dryBulbTemperature, double humidityRatio, double pressure)
+        {
+            if (double.IsNaN(enthalpy) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
+            {
+                return null;
+            }
+
+            double saturationHumidityRatio = Query.SaturationHumidityRatio(dryBulbTemperature, pressure);
+
+            double dryBulbTemperature_Temp = Query.DryBulbTemperature(enthalpy, humidityRatio, pressure, saturationHumidityRatio);
+            if (double.IsNaN(dryBulbTemperature_Temp))
+            {
+                return null;
+            }
+
+            return new MollierPoint(dryBulbTemperature_Temp, humidityRatio, pressure);
+        }
 
         public static MollierPoint MollierPoint_ByRelativeHumidity(double dryBulbTemperature, double relativeHumidity, double pressure)
         {
