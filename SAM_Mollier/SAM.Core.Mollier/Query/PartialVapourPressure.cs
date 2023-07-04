@@ -21,19 +21,13 @@
                 return 0;
             }
 
-            double result = SaturationVapourPressure(dryBulbTemperature) * relativeHumidity / 100;
-            if(double.IsNaN(result))
+            double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+            if (double.IsNaN(humidityRatio))
             {
-                double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
-                if (double.IsNaN(humidityRatio))
-                {
-                    return double.NaN;
-                }
-
-                return PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
+                return double.NaN;
             }
 
-            return result;
+            return PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
         }
 
         /// <summary>
@@ -54,7 +48,7 @@
                 return double.NaN;
             }
 
-            return PartialVapourPressure(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity, mollierPoint.Pressure);
+            return PartialVapourPressure_ByHumidityRatio(mollierPoint.HumidityRatio, mollierPoint.Pressure);
         }
     }
 }

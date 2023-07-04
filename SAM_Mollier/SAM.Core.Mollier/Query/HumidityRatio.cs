@@ -17,14 +17,24 @@
                 return double.NaN;
             }
 
-            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity, pressure);
-            if(double.IsNaN(partialVapourPressure))
+            double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
+            if(double.IsNaN(saturationVapourPressure))
             {
                 return double.NaN;
             }
 
+            double relativeHumidity_Factor = relativeHumidity / 100;
+
+            return (0.622 * relativeHumidity_Factor) / ((pressure / saturationVapourPressure) - relativeHumidity_Factor);
+
+            //double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity, pressure);
+            //if(double.IsNaN(partialVapourPressure))
+            //{
+            //    return double.NaN;
+            //}
+
             //double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
-            return  0.6222 * partialVapourPressure / (pressure - partialVapourPressure);
+            //return  0.6222 * partialVapourPressure / (pressure - partialVapourPressure);
 
             //return result;
             //saturationVapourPressure = saturationVapourPressure * relativeHumidity / 100;

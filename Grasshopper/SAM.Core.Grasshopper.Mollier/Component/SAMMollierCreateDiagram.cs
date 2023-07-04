@@ -158,6 +158,11 @@ namespace SAM.Core.Grasshopper.Mollier
                 GH_Path path = new GH_Path(i);
                 List<MollierPoint> mollierPoints = dictionary_Density[densities[i]];
 
+                if (mollierPoints == null || mollierPoints.Count == 0)
+                {
+                    continue;
+                }
+
                 System.Drawing.Color color = System.Drawing.Color.LightBlue;
 
                 UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[0], mollierPoints[1]);
