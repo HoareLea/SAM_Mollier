@@ -35,10 +35,32 @@
             double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity);
             if(double.IsNaN(partialVapourPressure))
             {
+                double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                if (double.IsNaN(humidityRatio))
+                {
+                    return double.NaN;
+                }
+
+                return PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
+            }
+
+            return PartialDryAirPressure(pressure, partialVapourPressure);
+        }
+
+        /// <summary>
+        /// Calculates PartialDryAirPressure from humidityRatio and Pressure (Prof. Dr.-Ing. habil. Bernd Glück, Zustands- und Stoffwerte 2. überarbeitete und erweiterte Auflage Berlin: Verlag für Bauwesen 1991, ISBN 3-345-00487-9 equation 2.7)
+        /// </summary>
+        /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <param name="pressure">Pressure [Pa]</param>
+        /// <returns>Partial Dry Air Pressure [Pa]</returns>
+        public static double PartialDryAirPressure_ByHumidityRatio(double humidityRatio, double pressure)
+        {
+            if(double.IsNaN(humidityRatio) || double.IsNaN(pressure))
+            {
                 return double.NaN;
             }
 
-            return PartialDryAirPressure(pressure, partialVapourPressure); 
+            return 0.6222 / (0.6222 + humidityRatio) * pressure;
         }
 
         public static double PartialDryAirPressure(this MollierPoint mollierPoint)

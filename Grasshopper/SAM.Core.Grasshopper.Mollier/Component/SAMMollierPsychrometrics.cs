@@ -316,7 +316,7 @@ namespace SAM.Core.Grasshopper.Mollier
             density = Core.Mollier.Query.Density(dryBulbTemperature, relativeHumidity, pressure);
             specificVolume = Core.Mollier.Query.SpecificVolume(dryBulbTemperature, humidityRatio, pressure);
             saturationVapourPressure = Core.Mollier.Query.SaturationVapourPressure(dryBulbTemperature);
-            partialVapourPressure = Core.Mollier.Query.PartialVapourPressure(dryBulbTemperature, relativeHumidity);
+            partialVapourPressure = Core.Mollier.Query.PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
             enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure); 
             partialDryAirPressure = Core.Mollier.Query.PartialDryAirPressure(pressure, partialVapourPressure);
             airHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature, humidityRatio);
@@ -330,13 +330,15 @@ namespace SAM.Core.Grasshopper.Mollier
             saturationHumidityRatio = Core.Mollier.Query.SaturationHumidityRatio(mollierPoint_Temp);
             vapourDensity = Core.Mollier.Query.VapourDensity(mollierPoint_Temp);
 
-            double diagramTemperature = Core.Mollier.Query.DiagramTemperature(dryBulbTemperature, humidityRatio, pressure);
+            //double diagramTemperature = Core.Mollier.Query.DiagramTemperature(dryBulbTemperature, humidityRatio, pressure);
 
             //START
 
-            double enthalpy_M = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure);
+            //double enthalpy_M = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure);
 
-            double saturationDryBulbTemperature_M = Core.Mollier.Query.DryBulbTemperature_ByEnthalpy(enthalpy_M, 100, pressure);
+            double saturationDryBulbTemperature_M = Core.Mollier.Query.SaturationTemperature_ByHumidityRatio(dryBulbTemperature, humidityRatio);
+
+            //double saturationDryBulbTemperature_M = Core.Mollier.Query.DryBulbTemperature_ByEnthalpy(enthalpy_M, 100, pressure);
 
             MollierPoint MollierPoint_Saturation_M = Core.Mollier.Query.SaturationMollierPoint(saturationDryBulbTemperature_M, pressure);
 

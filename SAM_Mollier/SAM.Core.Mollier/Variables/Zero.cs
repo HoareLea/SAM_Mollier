@@ -6,7 +6,7 @@
     public static class Zero
     {
         /// <summary>
-        /// Latent Heat of Vapourization (Evaporation heat of water) - The specific heat of water condensation at temparture 0C [J/kg]
+        /// Latent Heat of Vapourization (Evaporation heat of water), enthalpy of vaporizarion (r0) - The specific heat of water condensation at temparture 0C [J/kg]
         /// </summary>
         public const double VapourizationLatentHeat = 2501000;
 
@@ -24,6 +24,16 @@
         /// Specific Heat of water vapour at constant pressure and temeprature 0C [J/kg*K]
         /// </summary>
         public const double SpecificHeat_Water = 4190;  //4219.9
+
+        /// <summary>
+        /// Specific Heat of ice at constant pressure and temeprature 0C [J/kg*K]
+        /// </summary>
+        public const double SpecificHeat_Ice = 2090;
+
+        /// <summary>
+        /// Fusion Heat for Ice [J/kg]
+        /// </summary>
+        public const double MeltingHeat_Ice = 334000;
     }
 
 }

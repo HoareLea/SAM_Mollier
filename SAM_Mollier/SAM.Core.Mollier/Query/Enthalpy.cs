@@ -36,7 +36,14 @@
 
             if (humidityRatio > saturationHumidityRatio)
             {
-                result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio) * specificHeat_Water * dryBulbTemperature);
+                if(dryBulbTemperature > 0)
+                {
+                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio) * specificHeat_Water * dryBulbTemperature);
+                }
+                else
+                {
+                    result = Zero.SpecificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (Zero.SpecificHeat_Ice - Zero.MeltingHeat_Ice);
+                }
             }
             else
             {
