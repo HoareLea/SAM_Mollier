@@ -36,7 +36,7 @@
 
             if (humidityRatio > saturationHumidityRatio)
             {
-                result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio ) * specificHeat_Water * dryBulbTemperature);
+                result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio) * specificHeat_Water * dryBulbTemperature);
             }
             else
             {

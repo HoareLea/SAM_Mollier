@@ -323,7 +323,11 @@
 
             double dividend = (sensibleHeatRatio * ((dryBulbTemperature_Start * (specificHeat_Air + specificHeat_WaterVapour * humidityRatio_Start)) + (vapourizationLatentHeat * (humidityRatio_Start - humidityRatio_End)))) - (specificHeat_Air * dryBulbTemperature_Start);
 
-            return dividend / divisor;
+            //return dividend / divisor;
+            //return (humidityRatio_Start * specificHeat_WaterVapour * dryBulbTemperature_Start + humidityRatio_Start * vapourizationLatentHeat - 2 * specificHeat_Air * dryBulbTemperature_Start - humidityRatio_End * vapourizationLatentHeat) / (humidityRatio_End * specificHeat_WaterVapour - 2 * specificHeat_Air);
+            //to = (cp * ti - SHR * xo * hwe + SHR * hi) / (SHR * cp - cp + SHR * xo * cpw)
+            //return (-(sensibleHeatRatio * specificHeat_Air * dryBulbTemperature_Start - (sensibleHeatRatio * humidityRatio_Start - sensibleHeatRatio * humidityRatio_End) * specificHeat_WaterVapour * dryBulbTemperature_Start + (sensibleHeatRatio * humidityRatio_End - sensibleHeatRatio * humidityRatio_Start) * vapourizationLatentHeat)) / (sensibleHeatRatio * specificHeat_Air - specificHeat_Air);
+            return (-specificHeat_Air* dryBulbTemperature_Start+ sensibleHeatRatio*(specificHeat_Air* dryBulbTemperature_Start+ humidityRatio_Start* specificHeat_WaterVapour* dryBulbTemperature_Start+ humidityRatio_Start* vapourizationLatentHeat)+ humidityRatio_End* vapourizationLatentHeat) / (sensibleHeatRatio*(specificHeat_Air+ humidityRatio_End* specificHeat_WaterVapour)- specificHeat_Air);
         }
 
         public static double DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(double sensibleHeatRatio, double specificHeat, MollierPoint mollierPoint_Start, double humidityRatio_End)
@@ -335,6 +339,37 @@
 
             return DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat, mollierPoint_Start.DryBulbTemperature, humidityRatio_End, mollierPoint_Start.HumidityRatio);
         }
+
+        /// <summary>
+        /// Calculates Dry Bulb Tempareture [C] base on Humidity Ratio and Enthalpy
+        /// </summary>
+        /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <param name="enthalpy">Moist air Enthalpy[J / kg]</param>
+        /// <returns>Dry Bulb Tempareture [C]</returns>
+        //public static double DryBulbTemperature_ByHumidityRatioAndEnthalpy(double humidityRatio, double enthalpy)
+        //{
+        //    if(double.IsNaN(humidityRatio) || double.IsNaN(enthalpy))
+        //    {
+        //        return double.NaN;
+        //    }
+
+        //    double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
+        //    double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
+        //    double SpecificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+        //    double SpecificHeat_Water = Zero.SpecificHeat_Water / 1000;
+
+        //    double saturationHumidityRatio = double.NaN;
+
+        //    double divisor = enthalpy - (vapourizationLatentHeat * saturationHumidityRatio);
+        //    if (divisor == 0)
+        //    {
+        //        return double.NaN;
+        //    }
+
+        //    double dividend = specificHeat_Air + (saturationHumidityRatio * SpecificHeat_WaterVapour) + SpecificHeat_Water * (humidityRatio - saturationHumidityRatio);
+
+        //    return dividend / divisor;
+        //}
 
     }
 }

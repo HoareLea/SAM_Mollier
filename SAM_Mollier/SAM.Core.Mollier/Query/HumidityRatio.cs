@@ -84,6 +84,24 @@
             return ((2830 - 0.24 * wetBulbTemperature) * pressureRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2830 + 1.86 * dryBulbTemperature - 2.1 * wetBulbTemperature);
         }
 
+        public static double HumidityRatio_ByHumidityRatio(double humidityRatio, double pressure)
+        {
+            if(double.IsNaN(humidityRatio) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+
+            double partialVapourPressure = PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
+            if(double.IsNaN(partialVapourPressure))
+            {
+                return double.NaN;
+            }
+
+            double partialDryAirPressure = PartialDryAirPressure(pressure, partialVapourPressure);
+
+            return 0.622 * partialVapourPressure / partialDryAirPressure;
+        }
+
         /// <summary>
         /// Calculates dry bulb temperature
         /// </summary>

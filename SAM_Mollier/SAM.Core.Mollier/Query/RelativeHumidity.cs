@@ -73,6 +73,43 @@
             return System.Math.Min(1, pressureRatio / SaturationVapourPressure(dryBulbTemperature)) * 100;
         }
 
+        public static double RelativeHumidity_ByDryBulbTemperature(double dryBulbTemperature, double relativeHumidity)
+        {
+            if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity))
+            {
+                return double.NaN;
+            }
+
+            double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity);
+            if(double.IsNaN(partialVapourPressure))
+            {
+                return double.NaN;
+            }
+
+            double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
+            if(double.IsNaN(saturationVapourPressure))
+            {
+                return double.NaN;
+            }
+
+            return RelativeHumidity_ByPartialVapourPressure(partialVapourPressure, saturationVapourPressure);
+        }
+
+        public static double RelativeHumidity_ByPartialVapourPressure(double partialVapourPressure, double saturationVapourPressure)
+        {
+            if(double.IsNaN(partialVapourPressure) || double.IsNaN(saturationVapourPressure))
+            { 
+                return double.NaN; 
+            }
+
+            if(saturationVapourPressure == 0)
+            {
+                return 0;
+            }
+
+            return partialVapourPressure / saturationVapourPressure;
+        }
+
 
     }
 }

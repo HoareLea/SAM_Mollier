@@ -1,4 +1,6 @@
-﻿namespace SAM.Core.Mollier
+﻿using Microsoft.Win32.SafeHandles;
+
+namespace SAM.Core.Mollier
 {
     public static partial class Create
     {
@@ -70,7 +72,7 @@
 
             //START
 
-            double specificHeat_Start = Query.SpecificHeat_Air(dryBulbTemperature_Start);
+            double specificHeat_Start = Zero.SpecificHeat_Air;//Query.SpecificHeat_Air(dryBulbTemperature_Start);
 
             MollierPoint mollierPoint_Start_DryBulbTemperature = null;
             if (sensibleHeatRatio != 0)
@@ -89,10 +91,10 @@
             MollierPoint mollierPoint_Start_HumidityRatio = null;
             if (sensibleHeatRatio != 1)
             {
-                double humidityRatio = Query.DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat_Start, mollierPoint, humidityRatio_Start);
-                if (!double.IsNaN(humidityRatio))
+                double dryBulbTemperature = Query.DryBulbTemperature_BySensibleHeatRatioAndHumidityRatio(sensibleHeatRatio, specificHeat_Start, mollierPoint, humidityRatio_Start);
+                if (!double.IsNaN(dryBulbTemperature))
                 {
-                    mollierPoint_Start_HumidityRatio = new MollierPoint(dryBulbTemperature_Start, humidityRatio, mollierPoint.Pressure);
+                    mollierPoint_Start_HumidityRatio = new MollierPoint(dryBulbTemperature, humidityRatio_Start, mollierPoint.Pressure);
                 }
             }
 
@@ -125,7 +127,7 @@
 
             //END
 
-            double specificHeat_End = Query.SpecificHeat_Air(dryBulbTemperature_End);
+            double specificHeat_End = Zero.SpecificHeat_Air;//Query.SpecificHeat_Air(dryBulbTemperature_End);
 
             MollierPoint mollierPoint_End_DryBulbTemperature = null;
             if (sensibleHeatRatio != 0)
