@@ -330,6 +330,8 @@ namespace SAM.Core.Grasshopper.Mollier
             saturationHumidityRatio = Core.Mollier.Query.SaturationHumidityRatio(mollierPoint_Temp);
             vapourDensity = Core.Mollier.Query.VapourDensity(mollierPoint_Temp);
 
+            double diagramTemperature = Core.Mollier.Query.DiagramTemperature(dryBulbTemperature, humidityRatio, pressure);
+
             index = Params.IndexOfOutputParam("mollierPoint");
             if (index != -1)
             {

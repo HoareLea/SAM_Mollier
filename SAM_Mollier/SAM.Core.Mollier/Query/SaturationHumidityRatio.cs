@@ -19,6 +19,22 @@
             return 0.6222 * saturationVapourPressure / (pressure - saturationVapourPressure); //by Gluck
         }
 
+        public static double SaturationHumidityRatio_ByEnthalpy(double enthalpy, double pressure)
+        {
+            if(double.IsNaN(enthalpy) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+            
+            double dryBulbTemperature = DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
+            if(double.IsNaN(dryBulbTemperature))
+            {
+                return double.NaN;
+            }
+
+            return SaturationHumidityRatio(dryBulbTemperature, pressure);
+        }
+
         /// <summary>
         /// Calculates saturation humidity ratio (for relative humidity 100%) for given MollierPoint.
         /// </summary>
