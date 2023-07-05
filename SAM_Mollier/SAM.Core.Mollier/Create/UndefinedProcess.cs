@@ -34,7 +34,7 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double dryBulbTemperature = start.DryBulbTemperature + ((sensibleLoad / 1000) / (airFlow * Query.HeatCapacity(start) * Query.Density(start)));
+            double dryBulbTemperature = start.DryBulbTemperature + ((sensibleLoad / 1000) / (airFlow * Query.SpecificHeatCapacity_Air(start) * Query.Density(start)));
             if(double.IsNaN(dryBulbTemperature))
             {
                 return null;

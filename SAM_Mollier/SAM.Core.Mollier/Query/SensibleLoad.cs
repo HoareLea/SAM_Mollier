@@ -16,7 +16,8 @@
                 return double.NaN;
             }
 
-            return airFlow * mollierPoint.Density() * mollierPoint.HeatCapacity() * temperatureDifference * 1000;
+            return airFlow * mollierPoint.Density() * mollierPoint.SpecificHeatCapacity_Air() * temperatureDifference * 1000;
+            //m3/s * kg/m3 * J/kgK * K = kg/s * J/kg = J/s
         }
 
         /// <summary>

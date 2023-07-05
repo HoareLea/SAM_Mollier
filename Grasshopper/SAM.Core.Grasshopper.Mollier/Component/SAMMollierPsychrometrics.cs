@@ -313,8 +313,8 @@ namespace SAM.Core.Grasshopper.Mollier
             partialVapourPressure = Core.Mollier.Query.PartialVapourPressure_ByHumidityRatio(humidityRatio, dryBulbTemperature, pressure);
             enthalpy = Core.Mollier.Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure); 
             partialDryAirPressure = Core.Mollier.Query.PartialDryAirPressure(pressure, partialVapourPressure);
-            airHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature, humidityRatio);
-            waterHeatCapacity = Core.Mollier.Query.HeatCapacity(dryBulbTemperature);
+            airHeatCapacity = Core.Mollier.Query.SpecificHeatCapacity_Air(dryBulbTemperature, humidityRatio);
+            waterHeatCapacity = Core.Mollier.Query.SpecificHeatCapacity_Water(dryBulbTemperature);
             thermalConductivity = Core.Mollier.Query.ThermalConductivity(dryBulbTemperature, humidityRatio);
             dynamicViscosity = Core.Mollier.Query.DynamicViscosity(dryBulbTemperature, humidityRatio);
             kinematicViscosity = Core.Mollier.Query.KinematicViscosity(dryBulbTemperature, humidityRatio, pressure);

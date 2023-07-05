@@ -31,7 +31,7 @@ namespace SAM.Core.Mollier
             double dryBulbTemperature_ADP = Core.Query.Calculate_ByDivision(func, end.Enthalpy, temperature_Temp, start.DryBulbTemperature);
             if (double.IsNaN(dryBulbTemperature_ADP))
             {
-                dryBulbTemperature_ADP = Core.Query.Calculate_ByDivision(func, end.Enthalpy, -273.15, temperature_Temp);
+                dryBulbTemperature_ADP = Core.Query.Calculate_ByDivision(func, end.Enthalpy, -Unit.ConversionFactor_Kelvin, temperature_Temp);
             }
 
             if(double.IsNaN(dryBulbTemperature_ADP))

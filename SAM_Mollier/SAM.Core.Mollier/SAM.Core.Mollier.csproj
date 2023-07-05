@@ -119,7 +119,7 @@
     <Compile Include="Query\Pressure.cs" />
     <Compile Include="Query\ThermalConductivity.cs" />
     <Compile Include="Query\SpecificVolume.cs" />
-    <Compile Include="Query\HeatCapacity.cs" />
+    <Compile Include="Query\SpecificHeatCapacity.cs" />
     <Compile Include="Query\DewPointTemperature.cs" />
     <Compile Include="Query\WetBulbTemperature.cs" />
     <Compile Include="Query\DryBulbTemperature.cs" />
@@ -130,6 +130,7 @@
     <Compile Include="Query\HumidityRatio.cs" />
     <Compile Include="Query\SaturationVapourPressure.cs" />
     <Compile Include="Query\PartialVapourPressure.cs" />
+    <Compile Include="Variables\Unit.cs" />
     <Compile Include="Variables\Default.cs" />
     <Compile Include="Variables\Constant.cs" />
     <Compile Include="Variables\Zero.cs" />

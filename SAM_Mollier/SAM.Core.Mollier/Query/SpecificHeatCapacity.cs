@@ -3,11 +3,11 @@
     public static partial class Query
     {
         /// <summary>
-        /// Heat Capacity of Water
+        /// Specific Heat Capacity of Water
         /// </summary>
         /// <param name="temperature">Temperature [°C]</param>
-        /// <returns>Heat Capacity [kJ/kgK]</returns>
-        public static double HeatCapacity(double temperature)
+        /// <returns>Specific Water Heat Capacity [kJ/kgK]</returns>
+        public static double SpecificHeatCapacity_Water(double temperature)
         {
             if (temperature < 0 || temperature > 100)
             {
@@ -18,12 +18,12 @@
         }
 
         /// <summary>
-        /// Heat Capacity of Air
+        /// Specific Heat Capacity of Air
         /// </summary>
         /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
-        /// <returns>Heat Capacity of Air [kJ/kgK]</returns>
-        public static double HeatCapacity(double dryBulbTemperature, double humidityRatio)
+        /// <returns>Specific Heat Capacity of Air [kJ/kgK]</returns>
+        public static double SpecificHeatCapacity_Air(double dryBulbTemperature, double humidityRatio)
         {
             if (double.IsNaN(humidityRatio) || double.IsNaN(dryBulbTemperature))
             {
@@ -37,18 +37,18 @@
         }
 
         /// <summary>
-        /// Heat Capacity of Air
+        /// Specific Heat Capacity of Air
         /// </summary>
         /// <param name="mollierPoint">MollierPoint</param>
-        /// <returns>Heat Capacity of Air [kJ/kgK]</returns>
-        public static double HeatCapacity(this MollierPoint mollierPoint)
+        /// <returns>Specific Heat Capacity of Air [kJ/kgK]</returns>
+        public static double SpecificHeatCapacity_Air(this MollierPoint mollierPoint)
         {
             if(mollierPoint == null)
             {
                 return double.NaN;
             }
 
-            return HeatCapacity(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio);
+            return SpecificHeatCapacity_Air(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio);
         }
     }
 }

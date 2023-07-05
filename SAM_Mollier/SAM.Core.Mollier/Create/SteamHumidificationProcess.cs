@@ -59,12 +59,12 @@
                 return null;
             }
 
-            double heatCapacity = start_Temp.HeatCapacity();
-            double heatCapacity_Saturation = start_Saturation.HeatCapacity();
+            double heatCapacity_Air = start_Temp.SpecificHeatCapacity_Air();
+            double heatCapacity_Air_Saturation = start_Saturation.SpecificHeatCapacity_Air();
 
             //The small rise in dry-bulb temperature from a steam humidifier is due to the sensible heating effect of the steam.
             //https://www.sciencedirect.com/topics/engineering/steam-humidifier
-            double temperatureDifference = (heatCapacity / heatCapacity_Saturation) * (end_Temp.HumidityRatio - start_Temp.HumidityRatio) * (100 - start_Temp.DryBulbTemperature);
+            double temperatureDifference = (heatCapacity_Air / heatCapacity_Air_Saturation) * (end_Temp.HumidityRatio - start_Temp.HumidityRatio) * (100 - start_Temp.DryBulbTemperature);
 
             end_Temp = new MollierPoint(end_Temp.DryBulbTemperature + temperatureDifference, end_Temp.HumidityRatio, end_Temp.Pressure);
             if (end_Temp == null)
