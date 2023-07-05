@@ -195,7 +195,7 @@ namespace SAM.Core.Mollier
             if(epsilon != 0)
             {
                 double enthalpy = mollierPoint.Enthalpy + enthalpyDifference;
-                double humidityRatio = mollierPoint.HumidityRatio + (enthalpyDifference * 1000) / epsilon;
+                double humidityRatio = mollierPoint.HumidityRatio + (enthalpyDifference / 1000) / epsilon;
 
                 mollierPoint_End = MollierPoint_ByEnthalpy(enthalpy, humidityRatio, mollierPoint.Pressure);
                 if (mollierPoint_End == null)

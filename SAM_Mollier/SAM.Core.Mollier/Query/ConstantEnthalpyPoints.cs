@@ -13,7 +13,7 @@ namespace SAM.Core.Mollier
                 result[enthalpy_Min] = new List<MollierPoint>();
 
                 //x =0
-                double temperature_1 = DryBulbTemperature(enthalpy_Min, 0, pressure);
+                double temperature_1 = DryBulbTemperature(enthalpy_Min * 1000, 0, pressure);
                 MollierPoint mollierPoint_1 = new MollierPoint(temperature_1, 0, pressure);
 
 

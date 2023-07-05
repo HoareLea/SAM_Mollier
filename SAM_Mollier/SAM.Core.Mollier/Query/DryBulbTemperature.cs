@@ -20,7 +20,7 @@
             double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
             double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
 
-            return (enthalpy - (humidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (humidityRatio * specificHeat_WaterVapour));
+            return (enthalpy / 1000 - (humidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (humidityRatio * specificHeat_WaterVapour));
         }
 
         public static double DryBulbTemperature(double enthalpy, double humidityRatio, double pressure, double saturationHumidityRatio)
