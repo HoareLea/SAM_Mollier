@@ -6,6 +6,7 @@
         /// Calculates elevation from pressure
         /// </summary>
         /// <param name="pressure">Pressure [Pa]</param>
+        /// <param name="tolerance">Tolerance</param>
         /// <returns>Elevation [m]</returns>
         public static double Elevation(double pressure, double tolerance = Tolerance.MacroDistance)
         {
