@@ -1,4 +1,6 @@
-﻿namespace SAM.Core.Mollier
+﻿using System;
+
+namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
@@ -16,11 +18,26 @@
                 return double.NaN;
             }
 
+            Func<double, double> func = new Func<double, double>((double temperature) =>
+            {
+                double saturationTemperature = SaturationTemperature(temperature, pressure);
+
+                return Enthalpy(saturationTemperature, humidityRatio, pressure);
+            });
+
             double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
             double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
             double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
 
-            return (enthalpy / 1000 - (humidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (humidityRatio * specificHeat_WaterVapour));
+            double result = (enthalpy / 1000 - (humidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (humidityRatio * specificHeat_WaterVapour));
+
+            double saturationDryBulbTemperature = Core.Query.Calculate_ByMaxStep(func, enthalpy, -20, 15);
+            if (!double.IsNaN(saturationDryBulbTemperature) || saturationDryBulbTemperature > result)
+            {
+                result = saturationDryBulbTemperature;
+            }
+
+            return result;
         }
 
         public static double DryBulbTemperature(double enthalpy, double humidityRatio, double pressure, double saturationHumidityRatio)

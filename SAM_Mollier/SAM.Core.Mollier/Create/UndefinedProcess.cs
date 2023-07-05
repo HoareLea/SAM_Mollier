@@ -1,6 +1,4 @@
-﻿using Microsoft.Win32.SafeHandles;
-
-namespace SAM.Core.Mollier
+﻿namespace SAM.Core.Mollier
 {
     public static partial class Create
     {
