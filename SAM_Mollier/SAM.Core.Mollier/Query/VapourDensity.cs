@@ -26,7 +26,9 @@
                 return double.NaN;
             }
 
-            return partialVapourPressure / (461.5 * (dryBulbTemperature + 273.15)); // Where: 461.5 => Specific gas constant for water vapour J/(kg*K) indywidualna stała gazowa pary wodnej
+            double gasConstant_WaterVapour = Constant.GasConstant_WaterVapour;
+
+            return partialVapourPressure / (gasConstant_WaterVapour * (dryBulbTemperature + 273.15)); // Where: 461.5 => Specific gas constant for water vapour J/(kg*K) indywidualna stała gazowa pary wodnej
 
         }
     }

@@ -64,7 +64,7 @@ namespace SAM.Core.Mollier
         }
 
         /// <summary>
-        /// Humidity Ratio [kg/kg]
+        /// Humidity Ratio [kg_waterVapor/kg_dryAir]
         /// </summary>
         public double HumidityRatio
         {

@@ -3,12 +3,12 @@
     public static partial class Query
     {
         /// <summary>
-        /// Calculates specific volume for dry air from dry bulb temperature, relative humidity and pressure.
+        /// Calculates specific volume for dry air from dry bulb temperature, relative humidity and pressure v[m³/kg_dryAir].
         /// </summary>
         /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
-        /// <returns>Dry Air Specific Volume [m3/kg]</returns>
+        /// <returns>Dry Air Specific Volume v [m³/kg_dryAir]</returns>
         public static double SpecificVolume(double dryBulbTemperature, double humidityRatio, double pressure)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
