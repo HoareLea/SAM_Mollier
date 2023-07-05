@@ -183,5 +183,33 @@ namespace SAM.Core.Mollier
 
             return new UndefinedProcess(mollierPoint_Start, mollierPoint_End);
         }
+    
+        public static UndefinedProcess UndefinedProcess_ByEpsilon(this MollierPoint mollierPoint, double epsilon, double enthalpyDifference)
+        {
+            if(mollierPoint == null || double.IsNaN(epsilon) || double.IsNaN(enthalpyDifference))
+            {
+                return null;
+            }
+
+            MollierPoint mollierPoint_End = null;
+            if(epsilon != 0)
+            {
+                double enthalpy = mollierPoint.Enthalpy + enthalpyDifference;
+                double humidityRatio = mollierPoint.HumidityRatio + (enthalpyDifference * 1000) / epsilon;
+
+                mollierPoint_End = MollierPoint_ByEnthalpy(enthalpy, humidityRatio, mollierPoint.Pressure);
+                if (mollierPoint_End == null)
+                {
+                    return null;
+                }
+            }
+
+            if(mollierPoint_End == null)
+            {
+                mollierPoint_End = new MollierPoint(mollierPoint);
+            }
+
+            return new UndefinedProcess(mollierPoint, mollierPoint_End);
+        }
     }
 }
