@@ -70,9 +70,9 @@ namespace SAM.Core.Mollier
             return SaturationTemperature(partialVapourPressure);
         }
 
-        public static double SaturationTemperature_ByHumidityRatio(double dryBulbTemperature, double humidtyRatio)
+        public static double SaturationTemperature_ByHumidityRatio(double dryBulbTemperature, double humidtyRatio, double pressure)
         {
-            double partialVapourPressure = PartialVapourPressure_ByHumidityRatio(dryBulbTemperature, humidtyRatio);
+            double partialVapourPressure = PartialVapourPressure_ByHumidityRatio(humidtyRatio, dryBulbTemperature, pressure);
             if (double.IsNaN(partialVapourPressure))
             {
                 return double.NaN;

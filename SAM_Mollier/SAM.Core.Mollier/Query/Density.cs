@@ -73,7 +73,7 @@
                 saturationHumidityRatio = humidityRatio;
             }
 
-            return (1 + humidityRatio) / (saturationHumidityRatio + 0.6222) * (pressure) / (Constant.GasConstnt_WaterVapour * (dryBulbTemperature + 273.15)); //Equation 2.20 Gluck
+            return (1 + humidityRatio) / (saturationHumidityRatio + 0.6222) * (pressure) / (Constant.GasConstant_WaterVapour * (dryBulbTemperature + 273.15)); //Equation 2.20 Gluck
         }
 
         /// <summary>

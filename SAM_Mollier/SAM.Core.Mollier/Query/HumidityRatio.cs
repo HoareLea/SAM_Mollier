@@ -94,14 +94,14 @@
             return ((2830 - 0.24 * wetBulbTemperature) * pressureRatio - 1.006 * (dryBulbTemperature - wetBulbTemperature)) / (2830 + 1.86 * dryBulbTemperature - 2.1 * wetBulbTemperature);
         }
 
-        public static double HumidityRatio_ByHumidityRatio(double humidityRatio, double pressure)
+        public static double HumidityRatio_ByHumidityRatio(double humidityRatio, double dryBulbTemperature, double pressure)
         {
             if(double.IsNaN(humidityRatio) || double.IsNaN(pressure))
             {
                 return double.NaN;
             }
 
-            double partialVapourPressure = PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
+            double partialVapourPressure = PartialVapourPressure_ByHumidityRatio(humidityRatio, dryBulbTemperature, pressure);
             if(double.IsNaN(partialVapourPressure))
             {
                 return double.NaN;

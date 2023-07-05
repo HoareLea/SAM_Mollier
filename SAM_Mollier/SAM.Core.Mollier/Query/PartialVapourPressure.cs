@@ -27,7 +27,7 @@
                 return double.NaN;
             }
 
-            return PartialVapourPressure_ByHumidityRatio(humidityRatio, pressure);
+            return PartialVapourPressure_ByHumidityRatio(humidityRatio, dryBulbTemperature, pressure);
         }
 
         /// <summary>
@@ -36,9 +36,31 @@
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Partial Vapour Pressure [Pa]</returns>
-        public static double PartialVapourPressure_ByHumidityRatio(double humidityRatio, double pressure)
+        public static double PartialVapourPressure_ByHumidityRatio(double humidityRatio, double dryBulbTemperature, double pressure)
         {
-            return (humidityRatio / (0.6222 + humidityRatio)) * pressure;
+            if(double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+
+            double result = (humidityRatio / (0.6222 + humidityRatio)) * pressure;
+            if(double.IsNaN(result))
+            {
+                return double.NaN;
+            }
+
+            double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
+            if(double.IsNaN(saturationVapourPressure))
+            {
+                return result;
+            }
+
+            if(saturationVapourPressure < result)
+            {
+                result = saturationVapourPressure;
+            }
+
+            return result;
         }
 
         public static double PartialVapourPressure(this MollierPoint mollierPoint)
@@ -48,7 +70,7 @@
                 return double.NaN;
             }
 
-            return PartialVapourPressure_ByHumidityRatio(mollierPoint.HumidityRatio, mollierPoint.Pressure);
+            return PartialVapourPressure_ByHumidityRatio(mollierPoint.HumidityRatio, mollierPoint.DryBulbTemperature, mollierPoint.Pressure);
         }
     }
 }
