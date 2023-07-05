@@ -184,29 +184,39 @@ namespace SAM.Core.Mollier
             return new UndefinedProcess(mollierPoint_Start, mollierPoint_End);
         }
     
-        public static UndefinedProcess UndefinedProcess_ByEpsilon(this MollierPoint mollierPoint, double epsilon, double enthalpyDifference)
+        public static UndefinedProcess UndefinedProcess_ByEpsilonAndEnthalpyDifference(this MollierPoint mollierPoint, double epsilon, double enthalpyDifference)
         {
-            if(mollierPoint == null || double.IsNaN(epsilon) || double.IsNaN(enthalpyDifference))
+            if(mollierPoint == null || double.IsNaN(epsilon) || double.IsNaN(enthalpyDifference) || epsilon == 0)
             {
                 return null;
             }
 
-            MollierPoint mollierPoint_End = null;
-            if(epsilon != 0)
-            {
-                double enthalpy = mollierPoint.Enthalpy + enthalpyDifference;
-                double humidityRatio = mollierPoint.HumidityRatio + (enthalpyDifference / 1000) / epsilon;
+            double enthalpy = mollierPoint.Enthalpy + enthalpyDifference;
+            double humidityRatio = mollierPoint.HumidityRatio + (enthalpyDifference / 1000) / epsilon;
 
-                mollierPoint_End = MollierPoint_ByEnthalpy(enthalpy, humidityRatio, mollierPoint.Pressure);
-                if (mollierPoint_End == null)
-                {
-                    return null;
-                }
+            MollierPoint mollierPoint_End = MollierPoint_ByEnthalpy(enthalpy, humidityRatio, mollierPoint.Pressure);
+            if (mollierPoint_End == null)
+            {
+                return null;
             }
 
-            if(mollierPoint_End == null)
+            return new UndefinedProcess(mollierPoint, mollierPoint_End);
+        }
+
+        public static UndefinedProcess UndefinedProcess_ByEpsilonAndHumidityRatioDifference(this MollierPoint mollierPoint, double epsilon, double humidityRatioDifference)
+        {
+            if (mollierPoint == null || double.IsNaN(epsilon) || double.IsNaN(humidityRatioDifference))
             {
-                mollierPoint_End = new MollierPoint(mollierPoint);
+                return null;
+            }
+
+            double enthalpy = mollierPoint.Enthalpy + (humidityRatioDifference * epsilon) * 1000;
+            double humidityRatio = mollierPoint.HumidityRatio + humidityRatioDifference;
+
+            MollierPoint mollierPoint_End = MollierPoint_ByEnthalpy(enthalpy, humidityRatio, mollierPoint.Pressure);
+            if (mollierPoint_End == null)
+            {
+                return null;
             }
 
             return new UndefinedProcess(mollierPoint, mollierPoint_End);
