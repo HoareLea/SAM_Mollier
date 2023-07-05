@@ -32,7 +32,7 @@
                 return double.NaN;
             }
 
-            return Density(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity, mollierPoint.Pressure);
+            return Density_ByHumidityRatio(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure);
         }
 
         /// <summary>
