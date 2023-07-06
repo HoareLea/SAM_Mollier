@@ -44,7 +44,7 @@
                 }
                 else
                 {
-                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (specificHeat_Ice - meltingHeat_Ice);
+                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (-meltingHeat_Ice + specificHeat_Ice * dryBulbTemperature);
                 }
             }
             else

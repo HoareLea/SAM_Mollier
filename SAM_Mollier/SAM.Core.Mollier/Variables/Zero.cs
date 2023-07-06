@@ -31,7 +31,7 @@
         public const double SpecificHeat_Ice = 2090;
 
         /// <summary>
-        /// Fusion Heat for Ice [J/kg]
+        /// Fusion Heat for Ice (r_ice)[J/kg]
         /// </summary>
         public const double MeltingHeat_Ice = 334000;
     }
