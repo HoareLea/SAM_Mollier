@@ -21,7 +21,7 @@ namespace SAM.Core.Mollier
                 //double temperature_1 = DryBulbTemperature(enthalpy_Min * 1000, humidityRatio_1, pressure);
 
                 //RH = 100
-                double temperature_2 = DryBulbTemperature_ByEnthalpy( enthalpy_Min * 1000, 100, pressure);
+                double temperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy_Min * 1000, 100, pressure);
                 double humidityRatio_2 = HumidityRatio(temperature_2, 100, pressure);
 
                 //MollierPoint mollierPoint_1 = new MollierPoint(temperature_1, humidityRatio_1, pressure);

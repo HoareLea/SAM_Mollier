@@ -22,8 +22,19 @@ namespace SAM.Core.Grasshopper.Mollier
                 return global::Rhino.Geometry.Point3d.Unset;
             }
 
-            double x = chartType == ChartType.Mollier ? mollierPoint_Temp.HumidityRatio * 1000 : mollierPoint_Temp.DryBulbTemperature;
-            double y = chartType == ChartType.Mollier ? mollierPoint_Temp.DryBulbTemperature : mollierPoint_Temp.HumidityRatio * 1000;
+            double humidityRatio = mollierPoint_Temp.HumidityRatio;
+
+            double diagramTemperature = Core.Mollier.Query.DiagramTemperature(mollierPoint_Temp);
+            if (mollierPoint_Temp.SaturationHumidityRatio() < humidityRatio)
+            {
+                if (Core.Mollier.Query.TryFindDiagramTemperature(mollierPoint_Temp, out double diagramTemperature_Temp))
+                {
+                    diagramTemperature = diagramTemperature_Temp;
+                }
+            }
+
+            double x = chartType == ChartType.Mollier ? humidityRatio * 1000 : mollierPoint_Temp.DryBulbTemperature;
+            double y = chartType == ChartType.Mollier ? diagramTemperature : humidityRatio * 1000;
             if (double.IsNaN(x) || double.IsNaN(y))
             {
                 return global::Rhino.Geometry.Point3d.Unset;

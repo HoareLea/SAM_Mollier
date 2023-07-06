@@ -31,7 +31,7 @@ namespace SAM.Core.Mollier
 
             double result = (enthalpy / 1000 - (humidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (humidityRatio * specificHeat_WaterVapour));
 
-            double saturationDryBulbTemperature = Core.Query.Calculate_ByMaxStep(func, enthalpy * 1000, -20, 15);
+            double saturationDryBulbTemperature = Core.Query.Calculate_ByMaxStep(func, enthalpy * 1000, -20, 15, 200, 0.000001);
             if (!double.IsNaN(saturationDryBulbTemperature) || saturationDryBulbTemperature > result)
             {
                 result = saturationDryBulbTemperature;

@@ -18,8 +18,9 @@ namespace SAM.Core.Mollier
             }
 
             double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+            double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
 
-            double result = dryBulbTemperature + humidityRatio * specificHeat_WaterVapour * dryBulbTemperature;
+            double result = dryBulbTemperature + System.Math.Abs((humidityRatio * specificHeat_WaterVapour) * dryBulbTemperature);
 
             //double saturationTemperature = SaturationTemperature(dryBulbTemperature, pressure);
             //if (dryBulbTemperature < saturationTemperature)

@@ -52,10 +52,16 @@
             double dryBulbTemperature_1 = DryBulbTemperature(enthalpy, 0, pressure);
             MollierPoint mollierPoint_1 = Create.MollierPoint_ByRelativeHumidity(dryBulbTemperature_1, 0, pressure);
 
-            double dryBulbTemperature_2 = DryBulbTemperature(enthalpy, 100, pressure);
-            MollierPoint mollierPoint_2 = Create.MollierPoint_ByRelativeHumidity(dryBulbTemperature_2, 100, pressure);
+            //MollierPoint mollierPoint_1_DT = Create.MollierPoint_ByRelativeHumidity(DiagramTemperature(dryBulbTemperature_1, humidityRatio, pressure), 0, pressure);
+
+            double temperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
+            double humidityRatio_2 = HumidityRatio(temperature_2, 100, pressure);
+            MollierPoint mollierPoint_2 = new MollierPoint(temperature_2, humidityRatio_2, pressure);
+
+            //MollierPoint mollierPoint_2_DT = Create.MollierPoint_ByRelativeHumidity(DiagramTemperature(dryBulbTemperature_2, humidityRatio, pressure), 100, pressure);
 
             return TryFindDiagramTemperature(mollierPoint_1, mollierPoint_2, humidityRatio, out diagramTemperature);
+
         }
 
         public static bool TryFindDiagramTemperature(MollierPoint mollierPoint, out double diagramTemperature)
