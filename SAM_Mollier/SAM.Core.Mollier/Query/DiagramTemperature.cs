@@ -10,7 +10,7 @@ namespace SAM.Core.Mollier
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Pressure [Pa]</param>
         /// <returns>Diagram Temperature [°C]</returns>
-        public static double DiagramTemperature(double dryBulbTemperature, double humidityRatio)
+        public static double DiagramTemperature(double dryBulbTemperature, double humidityRatio, double pressure)
         {
             if (double.IsNaN(humidityRatio) || double.IsNaN(dryBulbTemperature))
             {
@@ -19,7 +19,22 @@ namespace SAM.Core.Mollier
 
             double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
 
-            return dryBulbTemperature + humidityRatio * specificHeat_WaterVapour * dryBulbTemperature;
+            double result = dryBulbTemperature + humidityRatio * specificHeat_WaterVapour * dryBulbTemperature;
+
+            //double saturationTemperature = SaturationTemperature(dryBulbTemperature, pressure);
+            //if (dryBulbTemperature < saturationTemperature)
+            //{
+            //    double enthalpy = Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure);
+
+            //    if(TryFindDiagramTemperature(enthalpy, humidityRatio, pressure, out double diagramTemperature))
+            //    {
+            //        return diagramTemperature;
+            //    }
+
+            //    //return saturationTemperature - (saturationTemperature + dryBulbTemperature) / 2;
+            //}
+            return result;
+
         }
 
         public static double DiagramTemperature(this MollierPoint mollierPoint)
@@ -29,7 +44,7 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
             
-            return DiagramTemperature(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio);
+            return DiagramTemperature(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure);
         }
     }
 }

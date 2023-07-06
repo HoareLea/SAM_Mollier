@@ -83,6 +83,7 @@
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\TryFindDiagramTemperature.cs" />
     <Compile Include="Query\Epsilon.cs" />
     <Compile Include="Query\SpecificHeat.cs" />
     <Compile Include="Query\SensibleHeatRatio.cs" />

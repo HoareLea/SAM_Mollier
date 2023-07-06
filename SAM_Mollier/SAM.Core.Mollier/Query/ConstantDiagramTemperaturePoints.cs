@@ -14,7 +14,7 @@ namespace SAM.Core.Mollier
                 List<MollierPoint> pointList = new List<MollierPoint>();
                 MollierPoint mollierPoint_1 = new MollierPoint(i, 0, pressure);
 
-                MollierPoint mollierPoint_2 = new MollierPoint(DiagramTemperature(i, HumidityRatio(i, 100, pressure)), HumidityRatio(DiagramTemperature(i, HumidityRatio(i, 100, pressure)), 100, pressure), pressure);
+                MollierPoint mollierPoint_2 = new MollierPoint(DiagramTemperature(i, HumidityRatio(i, 100, pressure), pressure), HumidityRatio(DiagramTemperature(i, HumidityRatio(i, 100, pressure), pressure), 100, pressure), pressure);
 
                 List<MollierPoint> points = ShortenLineByEndPoints(mollierPoint_1, mollierPoint_2, humidityRatio_Min, humidityRatio_Max, temperature_Min, temperature_Max);
                 if (points != null && points.Count > 1)
