@@ -11,22 +11,22 @@
         public const double VapourizationLatentHeat = 2501000;
 
         /// <summary>
-        /// Specific Heat of water vapour at constant pressure and temeprature 0C [J/kg*K]
+        /// Specific Heat of water vapour at constant pressure and temeprature  0C (cpw) [J/kg*K]
         /// </summary>
         public const double SpecificHeat_WaterVapour = 1860;  //1859
 
         /// <summary>
-        /// Specific Heat of air vapour at constant pressure and temeprature 0C [J/kg*K]
+        /// Specific Heat of air vapour at constant pressure and temeprature 0C (cp) [J/kg*K]
         /// </summary>
         public const double SpecificHeat_Air = 1005; //1006
 
         /// <summary>
-        /// Specific Heat of water vapour at constant pressure and temeprature 0C [J/kg*K]
+        /// Specific Heat of water vapour at constant pressure and temeprature 0C (cw) [J/kg*K]
         /// </summary>
         public const double SpecificHeat_Water = 4190;  //4219.9
 
         /// <summary>
-        /// Specific Heat of ice at constant pressure and temeprature 0C [J/kg*K]
+        /// Specific Heat of ice at constant pressure and temeprature 0C (c_ice) [J/kg*K]
         /// </summary>
         public const double SpecificHeat_Ice = 2090;
 
