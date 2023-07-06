@@ -208,8 +208,21 @@
                 return null;
             }
 
-            double enthalpy = mollierPoint.Enthalpy - humidityRatioDifference * epsilon * 1000;
-            double humidityRatio = mollierPoint.HumidityRatio - humidityRatioDifference;
+            double enthalpy = mollierPoint.Enthalpy + humidityRatioDifference * epsilon * 1000;
+            double humidityRatio = mollierPoint.HumidityRatio + humidityRatioDifference;
+
+            //double enthalpy = double.NaN;
+            //double humidityRatio = double.NaN;
+
+            //if (epsilon < 0)
+            //{
+
+            //}
+            //else
+            //{
+            //    enthalpy = mollierPoint.Enthalpy + humidityRatioDifference * epsilon * 1000;
+            //    humidityRatio = mollierPoint.HumidityRatio + humidityRatioDifference;
+            //}
 
             MollierPoint mollierPoint_End = MollierPoint_ByEnthalpy(enthalpy, humidityRatio, mollierPoint.Pressure);
             if (mollierPoint_End == null)
