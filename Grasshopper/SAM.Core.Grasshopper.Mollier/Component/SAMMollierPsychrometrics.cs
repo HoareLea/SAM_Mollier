@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.10";
+        public override string LatestComponentVersion => "1.0.11";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,6 +32,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierPoint_", NickName = "mollierPoint_", Description = "MollierPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dryBulbTemperature", NickName = "dryBulbTemperature", Description = "Dry bulb temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "enthalpy", NickName = "enthalpy", Description = "Enthalpy [kJ/kg]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "relativeHumidity", NickName = "relativeHumidity", Description = "Relative humidity (0 - 100) [%] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "humidityRatio", NickName = "humidityRatio", Description = "Humidty Ratio [g/kg]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "wetBulbTemperature", NickName = "wetBulbTemperature", Description = "Wet bulb temperature [°C] \n Connect only one humidity indication \n relativeHumidity or wetBulbTemperature or dewPointTemperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
@@ -247,6 +248,24 @@ namespace SAM.Core.Grasshopper.Mollier
                 }
                 numberOfConnected++;
             }
+
+            //enthalpy check
+            index = Params.IndexOfInputParam("enthalpy");
+            if (index != -1)
+            {
+                if (dataAccess.GetData(index, ref enthalpy) && !double.IsNaN(enthalpy))
+                {
+                    enthalpy *= 1000;
+                    if (numberOfConnected == 2 || double.IsNaN(humidityRatio))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                        return;
+                    }
+                    numberOfConnected++;
+                }
+            }
+
+
             //checking if all data are correct
             if (numberOfConnected != 2)
             {
@@ -298,6 +317,11 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, relativeHumidity, pressure);
                 humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
+            }
+            else if (!double.IsNaN(enthalpy) && !double.IsNaN(humidityRatio))
+            {
+                dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature(enthalpy, humidityRatio, pressure);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
             }
 
