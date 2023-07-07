@@ -22,7 +22,7 @@ namespace SAM.Core.Mollier
             {
                 double saturationTemperature = SaturationTemperature(temperature, pressure);
 
-                return Enthalpy(saturationTemperature, humidityRatio, pressure) * 1000;
+                return Enthalpy(saturationTemperature, humidityRatio, pressure);
             });
 
             double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
@@ -31,7 +31,12 @@ namespace SAM.Core.Mollier
 
             double result = (enthalpy / 1000 - (humidityRatio * vapourizationLatentHeat)) / (specificHeat_Air + (humidityRatio * specificHeat_WaterVapour));
 
-            double saturationDryBulbTemperature = Core.Query.Calculate_ByMaxStep(func, enthalpy * 1000, -20, 15, 200, 0.000001);
+            if (humidityRatio == 0)
+            {
+                return result;
+            }
+
+            double saturationDryBulbTemperature = Core.Query.Calculate_ByMaxStep(func, enthalpy, -20, 15, out int count, out double enthalpy_Temp, 100, Tolerance.MacroDistance);
             if (!double.IsNaN(saturationDryBulbTemperature) || saturationDryBulbTemperature > result)
             {
                 result = saturationDryBulbTemperature;
