@@ -494,12 +494,12 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("specificHeat");
             if (index != -1)
             {
-                dataAccess.SetData(index, specificHeat);
+                dataAccess.SetData(index, specificHeat / 1000);
             }
             index = Params.IndexOfOutputParam("specificHeat_DryAir");
             if (index != -1)
             {
-                dataAccess.SetData(index, specificHeat_DryAir);
+                dataAccess.SetData(index, specificHeat_DryAir / 1000);
             }
         }
     }

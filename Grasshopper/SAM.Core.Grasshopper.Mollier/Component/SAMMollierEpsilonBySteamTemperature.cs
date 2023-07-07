@@ -23,7 +23,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Mollier;
 
-        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
         protected override GH_SAMParam[] Inputs
         {

@@ -22,7 +22,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Mollier;
 
-        public override GH_Exposure Exposure => GH_Exposure.hidden;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
         protected override GH_SAMParam[] Inputs
         {
@@ -81,19 +81,19 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("cp_Air");
             if (index != -1)
             {
-                dataAccess.SetData(index, specificHeat_Air);
+                dataAccess.SetData(index, specificHeat_Air / 1000);
             }
 
             index = Params.IndexOfOutputParam("cp_WaterVapour");
             if (index != -1)
             {
-                dataAccess.SetData(index, specificHeat_WaterVapour);
+                dataAccess.SetData(index, specificHeat_WaterVapour / 1000);
             }
 
             index = Params.IndexOfOutputParam("cp_Water");
             if (index != -1)
             {
-                dataAccess.SetData(index, specificHeat_Water);
+                dataAccess.SetData(index, specificHeat_Water / 1000);
             }
         }
     }
