@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.11";
+        public override string LatestComponentVersion => "1.0.12";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -80,6 +80,8 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "temperatureConductivity", NickName = "temperatureConductivity", Description = "Temperature Conductivity a [m²/s]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "prandtlNumber", NickName = "prandtlNumber", Description = "Prandtl Number Pr [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "vapourDensity", NickName = "vapourDensity", Description = "Vapour Density [kg/m3]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "specificHeat", NickName = "specificHeat", Description = "Specific Heat [kJ/kgK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "specificHeat_DryAir", NickName = "specificHeat_DryAir", Description = "Dry Air Specific Heat [kJ/kgK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -122,6 +124,8 @@ namespace SAM.Core.Grasshopper.Mollier
             IMollierPoint mollierPoint = null;
             double dewPointTemperature = double.NaN;
             double vapourDensity = double.NaN;
+            double specificHeat = double.NaN;
+            double specificHeat_DryAir = double.NaN;
 
             //mollierpoint check
             index = Params.IndexOfInputParam("mollierPoint_");
@@ -330,6 +334,7 @@ namespace SAM.Core.Grasshopper.Mollier
             degreeSaturation = mollierPoint_Temp.SaturationDegree();
             saturationHumidityRatio = mollierPoint_Temp.SaturationHumidityRatio();
             vapourDensity = mollierPoint_Temp.VapourDensity();
+            specificHeat = mollierPoint_Temp.SpecificHeat();
 
             density = Core.Mollier.Query.Density_ByHumidityRatio(dryBulbTemperature, humidityRatio, pressure);
             specificVolume = Core.Mollier.Query.SpecificVolume(dryBulbTemperature, humidityRatio, pressure);
@@ -344,6 +349,8 @@ namespace SAM.Core.Grasshopper.Mollier
             kinematicViscosity = Core.Mollier.Query.KinematicViscosity(dryBulbTemperature, humidityRatio, pressure);
             temperatureConductivity = Core.Mollier.Query.TemperatureConductivity(dryBulbTemperature, humidityRatio, pressure);
             prandtlNumber = Core.Mollier.Query.PrandtlNumber(dryBulbTemperature, humidityRatio, pressure);
+            specificHeat_DryAir = Core.Mollier.Query.SpecificHeat_Air(dryBulbTemperature);
+
 
             index = Params.IndexOfOutputParam("mollierPoint");
             if (index != -1)
@@ -482,6 +489,17 @@ namespace SAM.Core.Grasshopper.Mollier
             if (index != -1)
             {
                 dataAccess.SetData(index, vapourDensity);
+            }
+
+            index = Params.IndexOfOutputParam("specificHeat");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, specificHeat);
+            }
+            index = Params.IndexOfOutputParam("specificHeat_DryAir");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, specificHeat_DryAir);
             }
         }
     }
