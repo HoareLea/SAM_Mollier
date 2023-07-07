@@ -85,7 +85,7 @@ namespace SAM.Core.Mollier
             {
                 return double.NaN;
             }
-            double result = 4.177375 - 2.144614 * Math.Pow(temperature, 6) - 3.165823e-7 * Math.Pow(temperature, 2) + 4.134309e-8 * Math.Pow(temperature, 3);
+            double result = 4.177375 - 2.144614e-6 * temperature - 3.165823e-7 * Math.Pow(temperature, 2) + 4.134309e-8 * Math.Pow(temperature, 3);
             //double result = 5e-07*Math.Pow(dryBulbTemperature, 4) - 0.0002 * Math.Pow(dryBulbTemperature, 3) + 0.0328 * Math.Pow(dryBulbTemperature, 2) - 1.99 * dryBulbTemperature + 4215.6;
             return result * 1000;
         }
