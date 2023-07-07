@@ -51,7 +51,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
         public SAMMollierApparatusDewPoint()
-          : base("SAMMollier.ApparatusDewPoint ", "SAMMollier.ApparatusDewPoint ",
+          : base("SAMMollier.ApparatusDewPoint", "SAMMollier.ApparatusDewPoint",
               "Calculates apparatus dew point (ADP)",
               "SAM", "Mollier")
         {

@@ -20,7 +20,6 @@
             return enthalpyDifference / humidityRatioDifference;
         }
 
-
         public static double Epsilon(this MollierProcess mollierProcess)
         {
             if(mollierProcess == null)
@@ -30,6 +29,24 @@
 
             return Epsilon(mollierProcess.Start, mollierProcess.End);
 
+        }
+
+        /// <summary>
+        /// Calculates Epsilon by Steam Temperature [kJ/kg]
+        /// </summary>
+        /// <param name="steamTemperature">Steam Temperature [K]</param>
+        /// <returns>Epsilon [kJ/kg]</returns>
+        public static double Epsilon(double steamTemperature)
+        {
+            if (double.IsNaN(steamTemperature))
+            {
+                return double.NaN;
+            }
+
+            double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
+            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+
+            return vapourizationLatentHeat + specificHeat_WaterVapour * steamTemperature;
         }
     }
 }

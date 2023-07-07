@@ -99,7 +99,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
         public SAMMollierCreateDiagram()
-          : base("SAMMollier.CreateDiagram ", "SAMMollier.CreateDiagram ",
+          : base("SAMMollier.CreateDiagram", "SAMMollier.CreateDiagram",
               "Create Mollier or Psychrometric Diagram",
               "SAM", "Mollier")
         {

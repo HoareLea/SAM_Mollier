@@ -77,6 +77,10 @@
     <Compile Include="Classes\MollierChartObject.cs" />
     <Compile Include="Component\SAMMollierCreateDiagram.cs" />
     <Compile Include="Component\SAMMollierApparatusDewPoint.cs" />
+    <Compile Include="Component\SAMMollierDryAirMassFlowByMollierPoint.cs" />
+    <Compile Include="Component\SAMMollierDryAirMassFlow.cs" />
+    <Compile Include="Component\SAMMollierSpecificHeat.cs" />
+    <Compile Include="Component\SAMMollierEpsilonBySteamTemperature.cs" />
     <Compile Include="Component\SAMMollierDryBulbTemperature.cs" />
     <Compile Include="Component\SAMMollierPsychrometrics.cs" />
     <Compile Include="Convert\ToRhino\Point3d.cs" />
