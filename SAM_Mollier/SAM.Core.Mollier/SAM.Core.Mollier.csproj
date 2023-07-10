@@ -84,6 +84,7 @@
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\MassFlow.cs" />
+    <Compile Include="Query\SaturationDiagramPoint.cs" />
     <Compile Include="Query\TryFindDiagramTemperature.cs" />
     <Compile Include="Query\Epsilon.cs" />
     <Compile Include="Query\SpecificHeat.cs" />
