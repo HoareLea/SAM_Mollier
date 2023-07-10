@@ -282,7 +282,12 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return Core.Query.Calculate_BinarySearch((double x) => DiagramTemperature(x, humidityRatio, pressure), diagramTemperature, -30, 80, increasing: false);
+            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+            double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
+
+            return diagramTemperature / (specificHeat_Air + humidityRatio * specificHeat_WaterVapour);
+
+            //return Core.Query.Calculate_BinarySearch((double x) => DiagramTemperature(x, humidityRatio, pressure), diagramTemperature, -30, 80, increasing: false);
         }
 
         /// <summary>

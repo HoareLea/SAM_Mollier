@@ -24,7 +24,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
             double humidityRatio = mollierPoint_Temp.HumidityRatio;
 
-            double diagramTemperature = Core.Mollier.Query.DiagramTemperature(mollierPoint_Temp);
+            double diagramTemperature = mollierPoint_Temp.DryBulbTemperature; //Core.Mollier.Query.DiagramTemperature(mollierPoint_Temp);
             if (mollierPoint_Temp.SaturationHumidityRatio() < humidityRatio)
             {
                 if (Core.Mollier.Query.TryFindDiagramTemperature(mollierPoint_Temp, out double diagramTemperature_Temp))
