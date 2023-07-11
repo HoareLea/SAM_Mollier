@@ -62,8 +62,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "relativeHumidity", NickName = "relativeHumidity", Description = "Relative humidity (0 - 100) φ [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "humidityRatio", NickName = "humidityRatio", Description = "Humidty Ratio x [g/kg]\nWassergehalt x [g/kg]\nWilgotność bezwzględna x [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "saturationHumidityRatio", NickName = "saturationHumidityRatio", Description = "Saturation Humidity Ratio xs [g/kg] \nWassergehalt im Sättigungszustand xs [g/kg]\n\n*Humidity ratio at saturation line φ=100%", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "saturationTemperature", NickName = "saturationTemperature", Description = "Saturation temperature ts[°C]\nSättigungstemperatur ts[°C]\nTemperatura nasycenia ts[°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "wetBulbTemperature", NickName = "wetBulbTemperature", Description = "Wet bulb temperature t_wb[°C] \nFeuchtkugeltemperatur tf[°C]\nTemperatura termometru mokrego t_wb[°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dewPointTemperature", NickName = "dewPointTemperature", Description = "Dew Point (Saturation) Temperature ttau[°C] \nTaupunkttemperatur ttau[°C]\nTemperatura punktu rosy ttau[°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dewPointTemperature", NickName = "dewPointTemperature", Description = "Dew  Temperature ttau[°C] \nTaupunkttemperatur ttau[°C]\nTemperatura punktu rosy ttau[°C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "saturationVapourPressure", NickName = "saturationVapourPressure", Description = "Saturation Vapour Pressure  pS [Pa] \nSättigungsdruck pS [Pa]\nCiśnienie nasycenia pS [Pa]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "partialVapourPressure", NickName = "partialVapourPressure", Description = "Partial Vapour Pressure pW [Pa] \nPartialdruck des Wasserdampfes (absolut) pW [Pa]\nCiśnienie cząstkowe (udziałowe) pary wodnej pW [Pa]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "partialDryAirPressure", NickName = "partialDryAirPressure", Description = "Partial Dry Air Pressure pL [Pa]\nPartialdruck der trockenen Luft (absolut) pL [Pa]\nCiśnienie cząstkowe (udziałowe) powietrza suchego pL [Pa]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -126,6 +127,7 @@ namespace SAM.Core.Grasshopper.Mollier
             double vapourDensity = double.NaN;
             double specificHeat = double.NaN;
             double specificHeat_DryAir = double.NaN;
+            double saturationTemperature = double.NaN;
 
             //mollierpoint check
             index = Params.IndexOfInputParam("mollierPoint_");
@@ -327,12 +329,14 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature(enthalpy, humidityRatio, pressure);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
+                relativeHumidity = mollierPoint_Temp.RelativeHumidity;
             }
 
             wetBulbTemperature = mollierPoint_Temp.WetBulbTemperature();
             dewPointTemperature = mollierPoint_Temp.DewPointTemperature();
             degreeSaturation = mollierPoint_Temp.SaturationDegree();
             saturationHumidityRatio = mollierPoint_Temp.SaturationHumidityRatio();
+            saturationTemperature = mollierPoint_Temp.SaturationTemperature();
             vapourDensity = mollierPoint_Temp.VapourDensity();
             specificHeat = mollierPoint_Temp.SpecificHeat();
 
@@ -399,6 +403,12 @@ namespace SAM.Core.Grasshopper.Mollier
             if (index != -1)
             {
                 dataAccess.SetData(index, saturationHumidityRatio * 1000); //Change to g/kg
+            }
+
+            index = Params.IndexOfOutputParam("saturationTemperature");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, saturationTemperature);
             }
 
             index = Params.IndexOfOutputParam("partialVapourPressure");

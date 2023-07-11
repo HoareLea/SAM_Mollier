@@ -64,7 +64,13 @@
                 return double.NaN;
             }
 
-            return PartialDryAirPressure(mollierPoint.DryBulbTemperature, mollierPoint.RelativeHumidity, mollierPoint.Pressure);
+            double partialVapourPressure = PartialVapourPressure_ByHumidityRatio(mollierPoint.HumidityRatio, mollierPoint.DryBulbTemperature, mollierPoint.Pressure);
+            if (double.IsNaN(partialVapourPressure))
+            {
+                return double.NaN;
+            }
+
+            return PartialDryAirPressure(mollierPoint.Pressure, partialVapourPressure);
         }
     }
 }
