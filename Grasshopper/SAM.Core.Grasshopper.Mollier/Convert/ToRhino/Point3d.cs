@@ -34,7 +34,8 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             double x = chartType == ChartType.Mollier ? humidityRatio * 1000 : mollierPoint_Temp.DryBulbTemperature;
-            double y = chartType == ChartType.Mollier ? diagramTemperature : humidityRatio * 1000;
+            double y = chartType == ChartType.Mollier ? diagramTemperature
+                : humidityRatio * 1000;
             if (double.IsNaN(x) || double.IsNaN(y))
             {
                 return global::Rhino.Geometry.Point3d.Unset;
