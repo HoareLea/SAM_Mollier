@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Mollier
 {
@@ -20,29 +22,37 @@ namespace SAM.Core.Mollier
 
                 double diagramTempearture_2 = DiagramTemperature(i, humidityRatio, pressure);
 
-                MollierPoint mollierPoint_2 = SaturationDiagramPoint(diagramTempearture_2, humidityRatio, pressure);
-                if(mollierPoint_2 == null)
-                {
-                    humidityRatio = humidityRatio_Max;
-                    diagramTempearture_2 = DiagramTemperature(i, humidityRatio, pressure);
-                    mollierPoint_2 = new MollierPoint(diagramTempearture_2, humidityRatio, pressure);
-                }
+                //Func<double, double> func = new Func<double, double>((double dryBulbTemperature) =>
+                //{
+                //    double diagramTempearture = DiagramTemperature(dryBulbTemperature, humidityRatio, pressure);
+                //    double saturationTemperature = SaturationTemperature(dryBulbTemperature, pressure);
+                //    if(double.IsNaN(saturationTemperature))
+                //    {
+                //        saturationTemperature = diagramTempearture;
+                //    }
 
-                mollierPoints.Add(mollierPoint_1);
-                mollierPoints.Add(mollierPoint_2);
-                result.Add(i, mollierPoints);
+                //    return Math.Abs(diagramTempearture - saturationTemperature);
+                //});
+
+                //diagramTempearture_2 = Core.Query.Calculate_ByMaxStep(func, Tolerance.MacroDistance, diagramTempearture_2, Math.Abs(diagramTempearture_2 - diagramTempearture_1));
+                //if(double.IsNaN(diagramTempearture_2))
+                //{
+                //    diagramTempearture_2 = DiagramTemperature(i, humidityRatio, pressure);
+                //}
+
+                MollierPoint mollierPoint_2 = new MollierPoint(diagramTempearture_2, humidityRatio, pressure);
 
                 //MollierPoint mollierPoint_2 = new MollierPoint(i, HumidityRatio(i, 100, pressure), pressure);
 
                 //MollierPoint mollierPoint_2 = new MollierPoint(DiagramTemperature(i, HumidityRatio(i, 100, pressure), pressure), HumidityRatio(DiagramTemperature(i, HumidityRatio(i, 100, pressure), pressure), 100, pressure), pressure);
 
-                //List<MollierPoint> points = ShortenLineByEndPoints(mollierPoint_1, mollierPoint_2, humidityRatio_Min, humidityRatio_Max, temperature_Min, temperature_Max);
-                //if (points != null && points.Count > 1)
-                //{
-                //    mollierPoints.Add(points[0]);
-                //    mollierPoints.Add(points[1]);
-                //    result.Add(i, mollierPoints);
-                //}
+                List<MollierPoint> points = ShortenLineByEndPoints(mollierPoint_1, mollierPoint_2, humidityRatio_Min, humidityRatio_Max, temperature_Min, temperature_Max);
+                if (points != null && points.Count > 1)
+                {
+                    mollierPoints.Add(points[0]);
+                    mollierPoints.Add(points[1]);
+                    result.Add(i, mollierPoints);
+                }
             }
             return result;
         }
