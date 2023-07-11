@@ -41,11 +41,11 @@ namespace SAM.Core.Mollier
 
         public static double DiagramTemperature(this MollierPoint mollierPoint)
         {
-            if (mollierPoint == null)
+            if(mollierPoint == null)
             {
                 return double.NaN;
             }
-
+            
             return DiagramTemperature(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure);
         }
     }
