@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace SAM.Core.Mollier
@@ -92,6 +93,14 @@ namespace SAM.Core.Mollier
             get
             {
                 return mollierProcess?.Clone();
+            }
+        }
+
+        public List<MollierPoint> MollierPoints
+        {
+            get
+            {
+                return mollierProcess?.MollierPoints;
             }
         }
 

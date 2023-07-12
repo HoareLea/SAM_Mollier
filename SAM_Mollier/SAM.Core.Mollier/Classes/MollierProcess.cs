@@ -2,106 +2,59 @@
 
 namespace SAM.Core.Mollier
 {
-    public abstract class MollierProcess : IMollierProcess
+    public abstract class MollierProcess : MollierCurve, IMollierProcess
     {
-        private MollierPoint start;
-        private MollierPoint end;
-
         internal MollierProcess(MollierPoint start, MollierPoint end)
+            :base(start, end)
         {
-            this.start = start == null ? null : new MollierPoint(start);
-            this.end = end == null ? null : new MollierPoint(end);
+
         }
 
-        public MollierProcess(IMollierProcess mollierProcess)
+        public MollierProcess(MollierProcess mollierProcess)
+            :base(mollierProcess)
         {
-            if(mollierProcess != null)
-            {
-                start = mollierProcess.Start;
-                start = start == null ? null : new MollierPoint(start);
 
-
-                end = mollierProcess.End;
-                end = end == null ? null : new MollierPoint(end);
-            }
         }
 
         public MollierProcess(JObject jObject)
+            :base(jObject)
         {
-            FromJObject(jObject);
-        }
 
-        public MollierPoint Start
-        {
-            get
-            {
-                return start == null ? null : new MollierPoint(start);
-            }
-        }
-
-        public MollierPoint End
-        {
-            get
-            {
-                return end == null ? null : new MollierPoint(end);
-            }
-        }
-
-        public double Pressure
-        {
-            get
-            {
-                if(start == null)
-                {
-                    return double.NaN;
-                }
-
-                return start.Pressure;
-            }
         }
 
         public virtual void Scale(double factor)
         {
-            if(start == null || end == null)
+            if(Start == null || End == null)
             {
                 return;
             }
 
-            double dryBulbTemperatureDifference = start.DryBulbTemperature - end.DryBulbTemperature;
-            double humidityRatioDifference = start.HumidityRatio - end.HumidityRatio;
+            double dryBulbTemperatureDifference = Start.DryBulbTemperature - End.DryBulbTemperature;
+            double humidityRatioDifference = Start.HumidityRatio - End.HumidityRatio;
 
-            end = new MollierPoint(start.DryBulbTemperature - (dryBulbTemperatureDifference * factor), start.HumidityRatio - (humidityRatioDifference * factor), start.Pressure);
+            mollierPoints[1] = new MollierPoint(Start.DryBulbTemperature - (dryBulbTemperatureDifference * factor), Start.HumidityRatio - (humidityRatioDifference * factor), Start.Pressure);
         }
 
         public virtual bool FromJObject(JObject jObject)
         {
-            if (jObject == null)
+            bool result = base.FromJObject(jObject);
+            if (!result)
             {
                 return false;
             }
 
-            start = jObject.ContainsKey("Start") ? new MollierPoint( jObject.Value<JObject>("Start")): null;
-            end = jObject.ContainsKey("End") ? new MollierPoint(jObject.Value<JObject>("End")) : null;
-
-            return true;
+            return result;
         }
 
         public virtual JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Core.Query.FullTypeName(this));
-
-            if (start != null)
+            JObject result = base.ToJObject();
+            if(result == null)
             {
-                jObject.Add("Start", start.ToJObject());
+                return result;
             }
 
-            if (end != null)
-            {
-                jObject.Add("End", end.ToJObject());
-            }
-
-            return jObject;
+            return result;
         }
     }
 }

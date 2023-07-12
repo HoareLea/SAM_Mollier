@@ -49,9 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\MollierGroup.cs" />
+    <Compile Include="Classes\MollierCurve.cs" />
     <Compile Include="Classes\UIMollierAppearance.cs" />
     <Compile Include="Classes\UIMollierPoint.cs" />
     <Compile Include="Classes\UICoolingProcess.cs" />
+    <Compile Include="Classes\UIMollierCurve.cs" />
     <Compile Include="Classes\UIMollierProcess.cs" />
     <Compile Include="Classes\MollierZone.cs" />
     <Compile Include="Classes\SteamHumidificationProcess.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Create\HeatingProcess.cs" />
     <Compile Include="Enums\MollierProcessType.cs" />
     <Compile Include="Interfaces\IMollierGroupable.cs" />
+    <Compile Include="Interfaces\IMollierCurve.cs" />
     <Compile Include="Interfaces\IUIMollierObject.cs" />
     <Compile Include="Interfaces\IMollierObject.cs" />
     <Compile Include="Interfaces\IMollierGroup.cs" />
