@@ -18,7 +18,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.6";
+        public override string LatestComponentVersion => "1.0.7";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -69,9 +69,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Dry Bulb Temperature Values", NickName = "dryBulbTemperatures", Description = "Values of dry bulb temperature lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Dry Bulb Temperature Points", NickName = "dryBulbTemperaturePoints", Description = "MollierPoints used to create dry bulb temperature lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new GooMollierChartObjectParam() { Name = "Diagram Temperature Lines", NickName = "DiagramTemperatureLines", Description = "Contains diagram temperature lines as curves used ONLY to construct Mollier diagram", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Diagram Temperature Values", NickName = "diagramTemperatures", Description = "Values of diagram temperature lines used ONLY to construct Mollier diagram", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Diagram Temperature Points", NickName = "diagramTemperaturePoints", Description = "MollierPoints used to create diagram temperature lines used ONLY to construct Mollier diagram", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                //result.Add(new GH_SAMParam(new GooMollierChartObjectParam() { Name = "Diagram Temperature Lines", NickName = "DiagramTemperatureLines", Description = "Contains diagram temperature lines as curves used ONLY to construct Mollier diagram", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                //result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Diagram Temperature Values", NickName = "diagramTemperatures", Description = "Values of diagram temperature lines used ONLY to construct Mollier diagram", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                //result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Diagram Temperature Points", NickName = "diagramTemperaturePoints", Description = "MollierPoints used to create diagram temperature lines used ONLY to construct Mollier diagram", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
                 result.Add(new GH_SAMParam(new GooMollierChartObjectParam() { Name = "Density Lines", NickName = "densityLines", Description = "Contains density lines as curves", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Density Values", NickName = "densities", Description = "Values of density lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
@@ -419,62 +419,55 @@ namespace SAM.Core.Grasshopper.Mollier
 
             //CREATING DIAGRAM TEMPERATURE OUTPUT
             Dictionary<double, List<MollierPoint>> dictionary_diagramTemperature = Core.Mollier.Query.ConstantDiagramTemperaturePoints(temperature_Min, temperature_Max, Standard.Pressure);
-            List<double> diagramTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
+            //List<double> diagramTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
 
-            DataTree<GooMollierPoint> dataTree_DiagramTemperature = new DataTree<GooMollierPoint>();
-            List<GooMollierChartObject> diagramTemperatureLines = new List<GooMollierChartObject>();
-            for (int i = 0; i < diagramTemperatures.Count; i++)
-            {
-                GH_Path path = new GH_Path(i);
+            //DataTree<GooMollierPoint> dataTree_DiagramTemperature = new DataTree<GooMollierPoint>();
+            //List<GooMollierChartObject> diagramTemperatureLines = new List<GooMollierChartObject>();
+            //for (int i = 0; i < diagramTemperatures.Count; i++)
+            //{
+            //    GH_Path path = new GH_Path(i);
 
-                List<MollierPoint> mollierPoints = dictionary_diagramTemperature[diagramTemperatures[i]];
-                mollierPoints?.ForEach(x => dataTree_DiagramTemperature.Add(new GooMollierPoint(x), path));
+            //    List<MollierPoint> mollierPoints = dictionary_diagramTemperature[diagramTemperatures[i]];
+            //    mollierPoints?.ForEach(x => dataTree_DiagramTemperature.Add(new GooMollierPoint(x), path));
 
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+            //    System.Drawing.Color color = System.Drawing.Color.LightBlue;
 
-                if (mollierPoints != null)
-                {
-                    for (int j = 0; j < mollierPoints.Count - 1; j++)
-                    {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[j], mollierPoints[j + 1]);
-                        diagramTemperatureLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
-                    }
+            //    if (mollierPoints != null)
+            //    {
+            //        for (int j = 0; j < mollierPoints.Count - 1; j++)
+            //        {
+            //            UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[j], mollierPoints[j + 1]);
+            //            diagramTemperatureLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
+            //        }
 
-                    //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
-                    //foreach (MollierPoint mollierPoint in mollierPoints)
-                    //{
-                    //    double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
-                    //    double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                    //    global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
-                    //    polyLine.Add(point3D);
-                    //}
-                    //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
-                    //diagramTemperatureLines.Add(new GooMollierObject(new MollierGeometry(polyLineCurve, color)));
-                }
-            }
+            //        //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
+            //        //foreach (MollierPoint mollierPoint in mollierPoints)
+            //        //{
+            //        //    double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
+            //        //    double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
+            //        //    global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
+            //        //    polyLine.Add(point3D);
+            //        //}
+            //        //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
+            //        //diagramTemperatureLines.Add(new GooMollierObject(new MollierGeometry(polyLineCurve, color)));
+            //    }
+            //}
 
-            index = Params.IndexOfOutputParam("Diagram Temperature Points");
-            if (index != -1)//&& ChartType == ChartType.Mollier
-            {
-                dataAccess.SetDataTree(index, dataTree_DiagramTemperature);
-            }
-            index = Params.IndexOfOutputParam("Diagram Temperature Values");
-            if (index != -1)//&& ChartType == ChartType.Mollier
-            {
-                dataAccess.SetDataList(index, diagramTemperatures);
-            }
-            index = Params.IndexOfOutputParam("Diagram Temperature Lines");
-            if (index != -1)//&& ChartType == ChartType.Mollier
-            {
-                dataAccess.SetDataList(index, diagramTemperatureLines);
-            }
-
-            index = Params.IndexOfOutputParam("_chartType_");
-            if (index != -1)
-            {
-                dataAccess.SetData(index, isMollier);
-            }
-
+            //index = Params.IndexOfOutputParam("Diagram Temperature Points");
+            //if (index != -1)//&& ChartType == ChartType.Mollier
+            //{
+            //    dataAccess.SetDataTree(index, dataTree_DiagramTemperature);
+            //}
+            //index = Params.IndexOfOutputParam("Diagram Temperature Values");
+            //if (index != -1)//&& ChartType == ChartType.Mollier
+            //{
+            //    dataAccess.SetDataList(index, diagramTemperatures);
+            //}
+            //index = Params.IndexOfOutputParam("Diagram Temperature Lines");
+            //if (index != -1)//&& ChartType == ChartType.Mollier
+            //{
+            //    dataAccess.SetDataList(index, diagramTemperatureLines);
+            //}
 
 
             //---
