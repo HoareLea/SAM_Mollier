@@ -20,16 +20,17 @@
 
             double result = (humidityRatio * pressure / (0.6222 + humidityRatio)) / SaturationVapourPressure(dryBulbTemperature) * 100;
 
-            if(result < 0  || result > 100)
+            if(result > 100)
             {
-                result = System.Math.Round(result);
+                return 100;
             }
 
-            if(result < 0 || result > 100)
+            if(result < 0)
             {
-                return double.NaN;
+                return 0;
             }
 
+            result = System.Math.Round(result);
             return result;
         }
 

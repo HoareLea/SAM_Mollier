@@ -5,20 +5,24 @@ namespace SAM.Core.Mollier
     public static partial class Query
     {
 
-        public static Dictionary<double, List<MollierPoint>> ConstantRelativeHumidityPoints(int temperature_Min, int temperature_Max, double pressure, int relativeHumidity_Step = 10, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
+        public static Dictionary<double, List<MollierPoint>> ConstantRelativeHumidityPoints(double temperature_Min, double temperature_Max, double pressure, int relativeHumidity_Step = 10, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
         {
             Dictionary<double, List<MollierPoint>> result = new Dictionary<double, List<MollierPoint>>();
+
+            int min = System.Convert.ToInt32(temperature_Min);
+            int max = System.Convert.ToInt32(temperature_Max);
 
             for (int i = 0; i <= 100; i += relativeHumidity_Step)
             {
                 List<MollierPoint> relativeHumidity_Points = new List<MollierPoint>();
-                for (int j = temperature_Min; j <= temperature_Max; j++)
+                for (int j = min; j <= max; j++)
                 {
                     double humidityRatio = HumidityRatio(j, i, pressure);
                     if (humidityRatio * 1000 < humidityRatio_Min)
                     {
                         continue;
                     }
+
                     if (humidityRatio * 1000 > humidityRatio_Max)
                     {
                         if (relativeHumidity_Points != null && relativeHumidity_Points.Count > 2)

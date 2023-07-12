@@ -18,27 +18,30 @@
             }
 
             double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
-            if(double.IsNaN(saturationVapourPressure))
+            if (double.IsNaN(saturationVapourPressure))
             {
                 return double.NaN;
             }
 
             double relativeHumidity_Factor = relativeHumidity / 100;
 
-            return (0.622 * relativeHumidity_Factor) / ((pressure / saturationVapourPressure) - relativeHumidity_Factor);
+            double result = (0.622 * relativeHumidity_Factor) / ((pressure / saturationVapourPressure) - relativeHumidity_Factor);
 
-            //double partialVapourPressure = PartialVapourPressure(dryBulbTemperature, relativeHumidity, pressure);
-            //if(double.IsNaN(partialVapourPressure))
-            //{
-            //    return double.NaN;
-            //}
+            double relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
 
-            //double saturationVapourPressure = SaturationVapourPressure(dryBulbTemperature);
-            //return  0.6222 * partialVapourPressure / (pressure - partialVapourPressure);
+            while (relativeHumidity_Temp < relativeHumidity)
+            {
+                result += result * 0.01;
+                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+            }
 
-            //return result;
-            //saturationVapourPressure = saturationVapourPressure * relativeHumidity / 100;
-            //return 0.6222 * partialVapourPressure / (pressure - partialVapourPressure); //from Recknagel Sprenger
+            while (relativeHumidity_Temp > relativeHumidity)
+            {
+                result -= result * 0.01;
+                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+            }
+
+            return result;
         }
 
         /// <summary>

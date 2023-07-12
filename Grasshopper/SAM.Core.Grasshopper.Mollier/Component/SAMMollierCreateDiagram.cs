@@ -418,7 +418,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             //CREATING DIAGRAM TEMPERATURE OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_diagramTemperature = Core.Mollier.Query.ConstantDiagramTemperaturePoints((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max);
+            Dictionary<double, List<MollierPoint>> dictionary_diagramTemperature = Core.Mollier.Query.ConstantDiagramTemperaturePoints(temperature_Min, temperature_Max, Standard.Pressure);
             List<double> diagramTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
 
             DataTree<GooMollierPoint> dataTree_DiagramTemperature = new DataTree<GooMollierPoint>();
