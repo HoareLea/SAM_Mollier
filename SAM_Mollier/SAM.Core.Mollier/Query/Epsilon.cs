@@ -32,10 +32,10 @@
         }
 
         /// <summary>
-        /// Calculates Epsilon by Steam Temperature [kJ/kg]
+        /// Calculates slope coefficient Epsilon ε [kJ/kg] by Steam Temperature.
         /// </summary>
-        /// <param name="steamTemperature">Steam Temperature [K]</param>
-        /// <returns>Epsilon [kJ/kg]</returns>
+        /// <param name="steamTemperature">Steam Temperature [°C]</param>
+        /// <returns>Epsilon ε [kJ/kg]</returns>
         public static double Epsilon(double steamTemperature)
         {
             if (double.IsNaN(steamTemperature))
@@ -48,5 +48,25 @@
 
             return vapourizationLatentHeat + specificHeat_WaterVapour * steamTemperature;
         }
+
+        /// <summary>
+        /// Calculates slope coefficient Epsilon ε [kJ/kg] by Total Heat Gains Qtotal=Qsens+Qlat [W] and Moisture Gains Mass Flow Ẇ [kg/s]
+        /// </summary>
+        /// <param name="totaLoad">Total Heat Gains Qtotal [W]</param>
+        /// <param name="moistureGainsMassFlow">Moisture Gains Mass Flow  Ẇ [kg/s]</param>
+        /// <returns>Epsilon ε [kJ/kg]</returns>
+        public static double Epsilon(double totaLoad, double moistureGainsMassFlow)
+        {
+            if (double.IsNaN(totaLoad) || double.IsNaN(moistureGainsMassFlow))
+            {
+                return double.NaN;
+            }
+
+            double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
+            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+
+            return totaLoad / moistureGainsMassFlow;
+        }
+
     }
 }

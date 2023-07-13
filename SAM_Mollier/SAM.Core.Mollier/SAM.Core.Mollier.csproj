@@ -97,6 +97,7 @@
     <Compile Include="Query\ConstantValueCurves.cs" />
     <Compile Include="Query\ConstantValueCurve.cs" />
     <Compile Include="Query\Intersection.cs" />
+    <Compile Include="Query\MoistureGainsMassFlow.cs" />
     <Compile Include="Query\SaturationDiagramPoint.cs" />
     <Compile Include="Query\MassFlow.cs" />
     <Compile Include="Query\TryFindDiagramTemperature.cs" />
