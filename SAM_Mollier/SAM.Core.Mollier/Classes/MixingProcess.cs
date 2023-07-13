@@ -4,6 +4,8 @@ namespace SAM.Core.Mollier
 {
     public class MixingProcess : MollierProcess
     {
+        public override ChartDataType ChartDataType => ChartDataType.MixingProcess;
+
         internal MixingProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {

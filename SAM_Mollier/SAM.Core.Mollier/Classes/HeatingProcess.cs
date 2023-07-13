@@ -4,6 +4,8 @@ namespace SAM.Core.Mollier
 {
     public class HeatingProcess : MollierProcess
     {
+        public override ChartDataType ChartDataType => ChartDataType.HeatingProcess;
+
         internal HeatingProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {

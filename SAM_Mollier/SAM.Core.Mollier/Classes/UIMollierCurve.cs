@@ -31,6 +31,14 @@ namespace SAM.Core.Mollier
             }
         }
 
+        public ChartDataType ChartDataType
+        {
+            get
+            {
+                return mollierCurve == null ? ChartDataType.Undefined : mollierCurve.ChartDataType;
+            }
+        }
+
         public double Pressure
         {
             get

@@ -9,7 +9,7 @@ namespace SAM.Core.Mollier
 
         internal MollierCurve(params MollierPoint[] mollierPoints)
         {
-            if(mollierPoints != null)
+            if (mollierPoints != null)
             {
                 this.mollierPoints = new List<MollierPoint>();
 
@@ -24,11 +24,11 @@ namespace SAM.Core.Mollier
 
         internal MollierCurve(IEnumerable<MollierPoint> mollierPoints)
         {
-            if(mollierPoints != null)
+            if (mollierPoints != null)
             {
                 this.mollierPoints = new List<MollierPoint>();
 
-                foreach(MollierPoint mollierPoint in mollierPoints)
+                foreach (MollierPoint mollierPoint in mollierPoints)
                 {
                     MollierPoint mollierPoint_Temp = mollierPoint == null ? null : new MollierPoint(mollierPoint);
 
@@ -39,7 +39,7 @@ namespace SAM.Core.Mollier
 
         public MollierCurve(MollierCurve mollierCurve)
         {
-            if(mollierCurve?.mollierPoints != null)
+            if (mollierCurve?.mollierPoints != null)
             {
                 mollierPoints = new List<MollierPoint>();
 
@@ -77,9 +77,11 @@ namespace SAM.Core.Mollier
         {
             get
             {
-                return mollierPoints == null || mollierPoints.Count == 0  || mollierPoints[0] == null ? double.NaN : mollierPoints[0].Pressure;
+                return mollierPoints == null || mollierPoints.Count == 0 || mollierPoints[0] == null ? double.NaN : mollierPoints[0].Pressure;
             }
         }
+
+        public abstract ChartDataType ChartDataType { get; }
 
         public List<MollierPoint> MollierPoints
         {

@@ -4,6 +4,8 @@ namespace SAM.Core.Mollier
 {
     public class CoolingProcess : MollierProcess
     {
+        public override ChartDataType ChartDataType => ChartDataType.CoolingProcess;
+
         private double efficiency = 1;
         internal CoolingProcess(MollierPoint start, MollierPoint end, double efficiency)
             : base(start, end)
