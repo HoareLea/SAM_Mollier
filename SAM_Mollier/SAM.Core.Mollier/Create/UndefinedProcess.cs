@@ -17,29 +17,29 @@
         /// </summary>
         /// <param name="start">Start MollierPoint</param>
         /// <param name="latentLoad">Latent Load [W]</param>
-        /// <param name="airFlow">Air Flow [m3/s]</param>
+        /// <param name="airMassFlow">Air Mass Flow [kg/s]</param>
         /// <param name="sensibleLoad">Sensible Load [W]</param>
         /// <returns>UndefinedProcess</returns>
-        public static UndefinedProcess UndefinedProcess(this MollierPoint start, double airFlow, double sensibleLoad, double latentLoad)
+        public static UndefinedProcess UndefinedProcess(this MollierPoint start, double airMassFlow, double sensibleLoad, double latentLoad)
         {
             if(start == null || !start.IsValid())
             {
                 return null;
             }
 
-            if (double.IsNaN(airFlow) || double.IsNaN(sensibleLoad) || double.IsNaN(latentLoad))
+            if (double.IsNaN(airMassFlow) || double.IsNaN(sensibleLoad) || double.IsNaN(latentLoad))
             {
                 return null;
             }
 
-            double dryBulbTemperature = start.DryBulbTemperature + ((sensibleLoad / 1000) / (airFlow * Query.SpecificHeatCapacity_Air(start) * Query.Density(start)));
+            double dryBulbTemperature = start.DryBulbTemperature + ((sensibleLoad / 1000) / (airMassFlow * Query.SpecificHeatCapacity_Air(start)));
             if(double.IsNaN(dryBulbTemperature))
             {
                 return null;
             }
 
 
-            double humidityRatio = Query.HumidityRatio(start, latentLoad, airFlow);
+            double humidityRatio = Query.HumidityRatio(start, latentLoad, airMassFlow);
             if (double.IsNaN(humidityRatio))
             {
                 return null;
