@@ -3,12 +3,12 @@
     public static partial class Query
     {
         /// <summary>
-        /// Calculates dew point temperature from dry bulb temperature, relative humidity and pressure.
+        /// Calculates dew point temperature tτ from dry bulb temperature, relative humidity and pressure.
         /// </summary>
         /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
         /// <param name="relativeHumidity">Relative humidity (0 - 100)[%]</param>
         /// <param name="pressure">Pressure [Pa]</param>
-        /// <returns>Dew point temperature ttau [°C]</returns>
+        /// <returns>Dew point temperature tτ [°C]</returns>
         public static double DewPointTemperature(double dryBulbTemperature, double relativeHumidity, double pressure)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
