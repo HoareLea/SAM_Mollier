@@ -48,8 +48,8 @@ namespace SAM.Core.Mollier
                 return specificHeat_Air;
             }
 
-            double specificHeat_WaterVapour = SpecificHeat_Air(dryBulbTemperature);
-            if (double.IsNaN(specificHeat_Air))
+            double specificHeat_WaterVapour = SpecificHeat_WaterVapour(dryBulbTemperature);
+            if (double.IsNaN(specificHeat_WaterVapour))
             {
                 return double.NaN;
             }

@@ -15,7 +15,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,9 +40,9 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "cp_Air", NickName = "cp_Air", Description = "Specific Heat od Air [kJ/kg*K]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "cp_WaterVapour", NickName = "cp_WaterVapour", Description = "Specific Heat od Water Vapour [kJ/kg*K]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "cp_Water", NickName = "cp_Water", Description = "Specific Heat od Water [kJ/kg*K]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "cp_DryAir", NickName = "cp_DryAir", Description = "Specific Heat of Dry Air  cpL [kJ/kg*K]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "cp_WaterVapour", NickName = "cp_WaterVapour", Description = "Specific Heat of Water Vapour cpW [kJ/kg*K]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "cp_Water", NickName = "cp_Water", Description = "Specific Heat of Water cw [kJ/kg*K]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -78,7 +78,7 @@ namespace SAM.Core.Grasshopper.Mollier
             double specificHeat_WaterVapour = Core.Mollier.Query.SpecificHeat_WaterVapour(dryBulbTemperature);
             double specificHeat_Water = Core.Mollier.Query.SpecificHeat_Water(dryBulbTemperature);
 
-            index = Params.IndexOfOutputParam("cp_Air");
+            index = Params.IndexOfOutputParam("cp_DryAir");
             if (index != -1)
             {
                 dataAccess.SetData(index, specificHeat_Air / 1000);

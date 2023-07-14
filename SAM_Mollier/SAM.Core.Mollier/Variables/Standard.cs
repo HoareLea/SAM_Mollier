@@ -6,7 +6,7 @@
     public static class Standard
     {
         /// <summary>
-        /// Standard Pressure [Pa].
+        /// Standard Pressure [Pa] at 0m sea level.
         /// </summary>
         public const double Pressure = 101325;
 
