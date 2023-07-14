@@ -147,5 +147,51 @@ namespace SAM.Core.Mollier
 
             return result;
         }
+
+        public static List<ConstantValueCurve> ConstantValueCurves_Enthalpy(Range<double> enthalpyRange, double step, double pressure)
+        {
+            if (enthalpyRange == null || double.IsNaN(enthalpyRange.Min) || double.IsNaN(enthalpyRange.Max) || double.IsNaN(step) || double.IsNaN(pressure))
+            {
+                return null;
+            }
+
+            List<ConstantValueCurve> result = new List<ConstantValueCurve>();
+
+            double enthalpy = enthalpyRange.Min;
+            while (enthalpy <= enthalpyRange.Max)
+            {
+                ConstantValueCurve constantValueCurve = ConstantValueCurve_Enthalpy(enthalpy, pressure);
+                if (constantValueCurve != null)
+                {
+                    result.Add(constantValueCurve);
+                }
+
+                enthalpy += step;
+            }
+
+            return result;
+        }
+
+        public static List<ConstantValueCurve> ConstantValueCurves_Enthalpy(Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange, double enthalpyStep, double pressure)
+        {
+            if (dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Min) || double.IsNaN(dryBulbTemperatureRange.Max) || humidityRatioRange == null || double.IsNaN(humidityRatioRange.Min) || double.IsNaN(humidityRatioRange.Max) || double.IsNaN(enthalpyStep) || double.IsNaN(pressure))
+            {
+                return null;
+            }
+
+            double enthalpy_Max = Enthalpy(dryBulbTemperatureRange.Min, humidityRatioRange.Min, pressure);
+            if (double.IsNaN(enthalpy_Max))
+            {
+                return null;
+            }
+
+            double enthalpy_Min = Enthalpy(dryBulbTemperatureRange.Max, humidityRatioRange.Max, pressure);
+            if (double.IsNaN(enthalpy_Max))
+            {
+                return null;
+            }
+
+            return ConstantValueCurves_Enthalpy(new Range<double>(enthalpy_Max, enthalpy_Min), enthalpyStep, pressure);
+        }
     }
 }
