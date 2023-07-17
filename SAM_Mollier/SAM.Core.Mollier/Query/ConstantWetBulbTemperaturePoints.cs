@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     { 
-        public static Dictionary<double, List<MollierPoint>> ConstantWetBulbTemperaturePoints(double wetBulbTemperature_Min = Default.WetBulbTemperatureMin, double wetBulbTemperature_Max = Default.WetBulbTemperatureMax, double pressure = Standard.Pressure, double wetBulbTemperatureStep = 5, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
+        public static Dictionary<double, List<MollierPoint>> ConstantWetBulbTemperaturePoints(double wetBulbTemperature_Min = Default.WetBulbTemperature_Min, double wetBulbTemperature_Max = Default.WetBulbTemperature_Max, double pressure = Standard.Pressure, double wetBulbTemperatureStep = 5, double dryBulbTemperature_Min = Default.DryBulbTemperature_Min, double dryBulbTemperature_Max = Default.DryBulbTemperature_Max, double humidityRatio_Min = Default.HumidityRatio_Min, double humidityRatio_Max = Default.HumidityRatio_Max)
         {
             Dictionary<double, List<MollierPoint>> result = new Dictionary<double, List<MollierPoint>>();
             while (wetBulbTemperature_Min <= wetBulbTemperature_Max)

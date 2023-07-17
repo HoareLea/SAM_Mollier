@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
-        public static Dictionary<double, List<MollierPoint>> ConstantEnthalpyPoints(ChartType chartType = ChartType.Mollier, double enthalpy_Min = Default.EnthalpyMin, double enthalpy_Max = Default.EnthalpyMax, double pressure = Standard.Pressure, double enthalpyStep = 1, double dryBulbTemperature_Min = Default.DryBulbTemperatureMin, double dryBulbTemperature_Max = Default.DryBulbTemperatureMax, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
+        public static Dictionary<double, List<MollierPoint>> ConstantEnthalpyPoints(ChartType chartType = ChartType.Mollier, double enthalpy_Min = Default.Enthalpy_Min, double enthalpy_Max = Default.Enthalpy_Max, double pressure = Standard.Pressure, double enthalpyStep = 1, double dryBulbTemperature_Min = Default.DryBulbTemperature_Min, double dryBulbTemperature_Max = Default.DryBulbTemperature_Max, double humidityRatio_Min = Default.HumidityRatio_Min, double humidityRatio_Max = Default.HumidityRatio_Max)
         {
             Dictionary<double, List<MollierPoint>> result = new Dictionary<double, List<MollierPoint>>();
 

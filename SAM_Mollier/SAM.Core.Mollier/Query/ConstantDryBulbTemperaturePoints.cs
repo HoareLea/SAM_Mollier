@@ -5,7 +5,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
-        public static Dictionary<double, List<MollierPoint>> ConstantDryBulbTemperaturePoints(double temperature_Min, double temperature_Max, double pressure, double humidityRatio_Min = Default.HumidityRatioMin, double humidityRatio_Max = Default.HumidityRatioMax)
+        public static Dictionary<double, List<MollierPoint>> ConstantDryBulbTemperaturePoints(double temperature_Min, double temperature_Max, double pressure, double humidityRatio_Min = Default.HumidityRatio_Min, double humidityRatio_Max = Default.HumidityRatio_Max)
         {
             Dictionary<double, List<MollierPoint>> result = new Dictionary<double, List<MollierPoint>>();
 

@@ -148,6 +148,8 @@ namespace SAM.Core.Grasshopper.Mollier
             ChartType chartType = isMollier == true ? ChartType.Mollier : ChartType.Psychrometric;
 
             //CREATING DENSITY OUTPUT
+            //Core.Mollier.Query.ConstantValueCurves_Density()
+
             Dictionary<double, List<MollierPoint>> dictionary_Density = Core.Mollier.Query.ConstantDensityPoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
             List<double> densities = new List<double>(dictionary_Density.Keys);
 

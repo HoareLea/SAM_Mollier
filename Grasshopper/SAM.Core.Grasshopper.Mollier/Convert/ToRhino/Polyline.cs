@@ -35,6 +35,17 @@ namespace SAM.Core.Grasshopper.Mollier
             return result;
         }
 
+        public static Polyline ToRhino_Polyline(this IMollierCurve mollierCurve, ChartType chartType, double z = 0)
+        {
+            if(mollierCurve == null || chartType == ChartType.Undefined)
+            {
+                return null;
+            }
+
+
+            return ToRhino_Polyline(mollierCurve.MollierPoints, chartType, z);
+        }
+
         public static Polyline ToRhino_Polyline(this MollierProcess mollierProcess, ChartType chartType, double z = 0)
         {
             if (mollierProcess == null || chartType == ChartType.Undefined)
