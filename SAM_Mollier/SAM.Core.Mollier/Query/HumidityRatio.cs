@@ -27,18 +27,18 @@
 
             double result = (0.622 * relativeHumidity_Factor) / ((pressure / saturationVapourPressure) - relativeHumidity_Factor);
 
-            double relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+            double relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, true);
 
             while (relativeHumidity_Temp < relativeHumidity)
             {
                 result += result * 0.01;
-                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, true);
             }
 
             while (relativeHumidity_Temp > relativeHumidity)
             {
                 result -= result * 0.01;
-                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, true);
             }
 
             return result;
