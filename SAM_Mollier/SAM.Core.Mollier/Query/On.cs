@@ -11,7 +11,7 @@ namespace SAM.Core.Mollier
                 return false;
             }
 
-            MollierPoint closest = Closest(start, end, mollierPoint, false);
+            MollierPoint closest = Closest(start, end, mollierPoint, true);
             if (closest == null)
             {
                 return false;

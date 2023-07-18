@@ -100,6 +100,19 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
+            if(Value.UIMollierObject is UIMollierCurve)
+            {
+                Polyline polyline = ((UIMollierCurve)Value.UIMollierObject)?.ToRhino_Polyline(Value.ChartType, Value.Z);
+                if (polyline == null)
+                {
+                    return;
+                }
+
+                args.Pipeline.DrawPolyline(polyline, color);
+
+                return;
+            }
+
 
             throw new NotImplementedException();
         }
@@ -144,6 +157,19 @@ namespace SAM.Core.Grasshopper.Mollier
                 return true;
             }
 
+            if (Value.UIMollierObject is UIMollierCurve)
+            {
+                Polyline polyline = ((UIMollierCurve)Value.UIMollierObject)?.ToRhino_Polyline(Value.ChartType, Value.Z);
+                if (polyline == null)
+                {
+                    return false;
+                }
+
+
+                obj_guid = doc.Objects.AddCurve(new PolylineCurve(polyline), att);
+                return true;
+            }
+
             return false;
 
         }
@@ -178,7 +204,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
-        bool IGH_PreviewObject.Hidden { get; set; }
+        bool IGH_PreviewObject.Hidden { get; set; } = false;
 
         bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;
 

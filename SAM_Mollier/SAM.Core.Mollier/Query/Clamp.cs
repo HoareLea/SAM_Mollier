@@ -6,7 +6,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
-        public static ConstantValueCurve Limit(this ConstantValueCurve constantValueCurve, Range<double> humidityRatioRange, Range<double> dryBulbTemperatureRange, double tolerance = Tolerance.Distance)
+        public static ConstantValueCurve Clamp(this ConstantValueCurve constantValueCurve, Range<double> humidityRatioRange, Range<double> dryBulbTemperatureRange, double tolerance = Tolerance.Distance)
         {
             if (constantValueCurve == null || dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Min) || double.IsNaN(dryBulbTemperatureRange.Max) || humidityRatioRange == null || double.IsNaN(humidityRatioRange.Min) || double.IsNaN(humidityRatioRange.Max))
             {
@@ -66,8 +66,8 @@ namespace SAM.Core.Mollier
             mollierPoints = new List<MollierPoint>();
             for (int i = mollierPoints_Temp.Count - 1; i > 0; i--)
             {
-                MollierPoint start = mollierPoints[i];
-                MollierPoint end = mollierPoints[i - 1];
+                MollierPoint start = mollierPoints_Temp[i];
+                MollierPoint end = mollierPoints_Temp[i - 1];
 
                 if (!InRange(start.Mid(end), humidityRatioRange, dryBulbTemperatureRange))
                 {
@@ -90,7 +90,7 @@ namespace SAM.Core.Mollier
             return new ConstantValueCurve(constantValueCurve.ChartDataType, constantValueCurve.Value, mollierPoints);
         }
 
-        public static List<ConstantValueCurve> Limit(this IEnumerable<ConstantValueCurve> constantValueCurves, Range<double> humidityRatioRange, Range<double> dryBulbTemperatureRange, double tolerance = Tolerance.Distance)
+        public static List<ConstantValueCurve> Clamp(this IEnumerable<ConstantValueCurve> constantValueCurves, Range<double> humidityRatioRange, Range<double> dryBulbTemperatureRange, double tolerance = Tolerance.Distance)
         {
             if(constantValueCurves == null || humidityRatioRange == null || dryBulbTemperatureRange == null)
             {
@@ -100,7 +100,7 @@ namespace SAM.Core.Mollier
             List<ConstantValueCurve> result = new List<ConstantValueCurve>();
             foreach(ConstantValueCurve constantValueCurve in constantValueCurves)
             {
-                ConstantValueCurve constantValueCurve_Temp = constantValueCurve?.Limit(humidityRatioRange, dryBulbTemperatureRange, tolerance);
+                ConstantValueCurve constantValueCurve_Temp = constantValueCurve?.Clamp(humidityRatioRange, dryBulbTemperatureRange, tolerance);
                 if(constantValueCurve_Temp == null)
                 {
                     continue;

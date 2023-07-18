@@ -33,6 +33,11 @@ namespace SAM.Core.Grasshopper.Mollier
                 return BoundingBox((IMollierProcess)uIMollierObject, chartType, z);
             }
 
+            if (uIMollierObject is IMollierCurve)
+            {
+                return BoundingBox((IMollierCurve)uIMollierObject, chartType, z);
+            }
+
             throw new System.NotImplementedException();
         }
 
@@ -60,6 +65,27 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             Polyline polyline = mollierProcess.ToRhino_Polyline(chartType, z);
+            if (polyline == null)
+            {
+                return global::Rhino.Geometry.BoundingBox.Empty;
+            }
+
+            return new BoundingBox(polyline);
+        }
+
+        public static BoundingBox BoundingBox(this IMollierCurve mollierCurve, ChartType chartType = ChartType.Mollier, double z = 0)
+        {
+            if (mollierCurve == null)
+            {
+                return global::Rhino.Geometry.BoundingBox.Empty;
+            }
+
+            if(mollierCurve is IMollierProcess)
+            {
+                return BoundingBox((IMollierProcess)mollierCurve, chartType, z);
+            }
+
+            Polyline polyline = mollierCurve.ToRhino_Polyline(chartType, z);
             if (polyline == null)
             {
                 return global::Rhino.Geometry.BoundingBox.Empty;

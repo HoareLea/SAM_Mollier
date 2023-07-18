@@ -28,7 +28,7 @@
             else if (parameter > 1 && bounded)
                 return end_Temp;
             else
-                return new MollierPoint(start_Temp.HumidityRatio + parameter * c, start_Temp.DryBulbTemperature + parameter * d, start.Pressure);
+                return new MollierPoint(start_Temp.DryBulbTemperature + parameter * d, start_Temp.HumidityRatio + parameter * c, start.Pressure);
 
         }
     }

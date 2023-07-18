@@ -18,7 +18,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.7";
+        public override string LatestComponentVersion => "1.0.8";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,6 +50,10 @@ namespace SAM.Core.Grasshopper.Mollier
                 param_Bool = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_chartType_", NickName = "_chartType_", Description = "Type of the chart: true - Mollier Chart, false - Psychrometric Chart", Access = GH_ParamAccess.item, Optional = true };
                 param_Bool.SetPersistentData(true);
                 result.Add(new GH_SAMParam(param_Bool, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(Standard.Pressure);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -147,391 +151,351 @@ namespace SAM.Core.Grasshopper.Mollier
             }
             ChartType chartType = isMollier == true ? ChartType.Mollier : ChartType.Psychrometric;
 
-            //CREATING DENSITY OUTPUT
-            //Core.Mollier.Query.ConstantValueCurves_Density()
-
-            Dictionary<double, List<MollierPoint>> dictionary_Density = Core.Mollier.Query.ConstantDensityPoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
-            List<double> densities = new List<double>(dictionary_Density.Keys);
-
-            DataTree<GooMollierPoint> dataTree_Densities = new DataTree<GooMollierPoint>();
-            List<GooMollierChartObject> densityLines = new List<GooMollierChartObject>();
-            for (int i = 0; i < densities.Count; i++)
+            double pressure = Standard.Pressure;
+            index = Params.IndexOfInputParam("_pressure_");
+            if(index != -1)
             {
-                GH_Path path = new GH_Path(i);
-                List<MollierPoint> mollierPoints = dictionary_Density[densities[i]];
-
-                if (mollierPoints == null || mollierPoints.Count == 0)
+                if(!dataAccess.GetData(index, ref pressure))
                 {
-                    continue;
-                }
-
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
-
-                UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[0], mollierPoints[1]);
-                densityLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
-
-                //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
-                //if (mollierPoints != null)
-                //{
-                //    double x1 = chartType == ChartType.Mollier ? mollierPoints[0].HumidityRatio * 1000 : mollierPoints[0].DryBulbTemperature;
-                //    double y1 = chartType == ChartType.Mollier ? mollierPoints[0].DryBulbTemperature : mollierPoints[0].HumidityRatio * 1000;
-                //    double x2 = chartType == ChartType.Mollier ? mollierPoints[1].HumidityRatio * 1000 : mollierPoints[1].DryBulbTemperature;
-                //    double y2 = chartType == ChartType.Mollier ? mollierPoints[1].DryBulbTemperature : mollierPoints[1].HumidityRatio * 1000;
-
-                //    if (double.IsNaN(x1) || double.IsNaN(x2) || double.IsNaN(y1) || double.IsNaN(y2) || (y1 == y2 && x1 == x2))
-                //    {
-                //        continue;
-                //    }
-                //    polyLine.Add(x1, y1, 0);
-                //    polyLine.Add(x2, y2, 0);
-                //}
-                //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
-                //if (polyLineCurve.PointAtStart == polyLineCurve.PointAtEnd)
-                //{
-                //    continue;
-                //}
-                //mollierPoints?.ForEach(x => dataTree_Densities.Add(new GooMollierPoint(x), path));
-                //densityLines.Add(new GooMollierChartObject(new MollierGeometry(polyLineCurve, color)));
-            }
-            index = Params.IndexOfOutputParam("Density Points");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_Densities);
-            }
-            index = Params.IndexOfOutputParam("Density Values");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, densities);
-            }
-            index = Params.IndexOfOutputParam("Density Lines");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, densityLines);
-            }
-
-            //CREATING ENTHALPY OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_Enthalpy = Core.Mollier.Query.ConstantEnthalpyPoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
-            List<double> enthalpies = new List<double>(dictionary_Enthalpy.Keys);
-
-            DataTree<GooMollierPoint> dataTree_Enthalpies = new DataTree<GooMollierPoint>();
-            List<GooMollierChartObject> enthalpyLines = new List<GooMollierChartObject>();
-            for (int i = 0; i < enthalpies.Count; i++)
-            {
-                GH_Path path = new GH_Path(i);
-                List<MollierPoint> mollierPoints = dictionary_Enthalpy[enthalpies[i]];
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
-                if (mollierPoints != null)
-                {
-                    for(int j = 0; j < mollierPoints.Count - 1; j++)
-                    {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[j], mollierPoints[j + 1]);
-                        enthalpyLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
-                    }
-
-                    //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
-                    //foreach (MollierPoint mollierPoint in mollierPoints)
-                    //{
-                    //    double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
-                    //    double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                    //    global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
-                    //    polyLine.Add(point3D);
-                    //}
-                    //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
-                    //if (polyLineCurve.PointAtStart == polyLineCurve.PointAtEnd)
-                    //{
-                    //    continue;
-                    //}
-                    //mollierPoints?.ForEach(x => dataTree_Enthalpies.Add(new GooMollierPoint(x), path));
-                    //enthalpyLines.Add(new GooMollierObject(new MollierGeometry(polyLineCurve, color)));
-                }
-            }
-            index = Params.IndexOfOutputParam("Enthalpy Points");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_Enthalpies);
-            }
-            index = Params.IndexOfOutputParam("Enthalpy Values");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, enthalpies);
-            }
-            index = Params.IndexOfOutputParam("Enthalpy Lines");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, enthalpyLines);
-            }
-
-            //CREATING SPECIFIC VOLUME OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_SpecificVolume = Core.Mollier.Query.ConstantSpecificVolumePoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
-            List<double> specificVolumes = new List<double>(dictionary_SpecificVolume.Keys);
-
-            DataTree<GooMollierPoint> dataTree_SpecificVolumes = new DataTree<GooMollierPoint>();
-            List<GooMollierChartObject> specificVolumeLines = new List<GooMollierChartObject>();
-            for (int i = 0; i < specificVolumes.Count; i++)
-            {
-                GH_Path path = new GH_Path(i);
-                List<MollierPoint> mollierPoints = dictionary_SpecificVolume[specificVolumes[i]];
-
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
-                if (mollierPoints != null)
-                {
-                    for (int j = 0; j < mollierPoints.Count - 1; j++)
-                    {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[j], mollierPoints[j + 1]);
-                        specificVolumeLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
-                    }
-
-                    //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
-                    //foreach (MollierPoint mollierPoint in mollierPoints)
-                    //{
-                    //    double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
-                    //    double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                    //    global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
-                    //    polyLine.Add(point3D);
-                    //}
-                    //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
-                    //if (polyLineCurve.PointAtStart == polyLineCurve.PointAtEnd)
-                    //{
-                    //    continue;
-                    //}
-                    //mollierPoints?.ForEach(x => dataTree_SpecificVolumes.Add(new GooMollierPoint(x), path));
-                    //specificVolumeLines.Add(new GooMollierObject(new MollierGeometry(polyLineCurve, color)));
-                }
-            }
-            index = Params.IndexOfOutputParam("Specific Volume Points");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_SpecificVolumes);
-            }
-            index = Params.IndexOfOutputParam("Specific Volume Values");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, specificVolumes);
-            }
-            index = Params.IndexOfOutputParam("Specific Volume Lines");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, specificVolumeLines);
-            }
-
-            //CREATING WET BULB TEMPERATURE OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_WetBulbTemperature = Core.Mollier.Query.ConstantWetBulbTemperaturePoints(humidityRatio_Max: humidityRatio_Max, humidityRatio_Min: humidityRatio_Min, dryBulbTemperature_Min: temperature_Min, dryBulbTemperature_Max: temperature_Max);
-            List<double> wetBulbTemperatures = new List<double>(dictionary_WetBulbTemperature.Keys);
-
-            DataTree<GooMollierPoint> dataTree_WetBulbTemperature = new DataTree<GooMollierPoint>();
-            List<GooMollierChartObject> wetBulbTemperatureLines = new List<GooMollierChartObject>();
-            for (int i = 0; i < wetBulbTemperatures.Count; i++)
-            {
-                GH_Path path = new GH_Path(i);
-                List<MollierPoint> mollierPoints = dictionary_WetBulbTemperature[wetBulbTemperatures[i]];
-
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
-                if (mollierPoints != null)
-                {
-                    for (int j = 0; j < mollierPoints.Count - 1; j++)
-                    {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[j], mollierPoints[j + 1]);
-                        wetBulbTemperatureLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
-                    }
-
-
-                    //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
-                    //foreach (MollierPoint mollierPoint in mollierPoints)
-                    //{
-                    //    double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
-                    //    double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                    //    global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
-                    //    polyLine.Add(point3D);
-                    //}
-                    //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
-                    //if (polyLineCurve.PointAtStart == polyLineCurve.PointAtEnd)
-                    //{
-                    //    continue;
-                    //}
-                    //mollierPoints?.ForEach(x => dataTree_WetBulbTemperature.Add(new GooMollierPoint(x), path));
-                    //wetBulbTemperatureLines.Add(new GooMollierObject(new MollierGeometry(polyLineCurve, color)));
-                }
-            }
-            index = Params.IndexOfOutputParam("Wet Bulb Temperature Points");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_WetBulbTemperature);
-            }
-            index = Params.IndexOfOutputParam("Wet Bulb Temperature Values");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, wetBulbTemperatures);
-            }
-            index = Params.IndexOfOutputParam("Wet Bulb Temperature Lines");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, wetBulbTemperatureLines);
-            }
-
-            //CREATING RELATIVE HUMIDITY OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_relativeHumidity = Core.Mollier.Query.ConstantRelativeHumidityPoints((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max); ;
-            List<double> relativeHumidities = new List<double>(dictionary_relativeHumidity.Keys);
-
-            DataTree<GooMollierPoint> dataTree_RelativeHumidity = new DataTree<GooMollierPoint>();
-            List<GooMollierChartObject> relativeHumidityLines = new List<GooMollierChartObject>();
-            for (int i = 0; i < relativeHumidities.Count; i++)
-            {
-                GH_Path path = new GH_Path(i);
-
-                List<MollierPoint> mollierPoints = dictionary_relativeHumidity[relativeHumidities[i]];
-                mollierPoints?.ForEach(x => dataTree_RelativeHumidity.Add(new GooMollierPoint(x), path));
-
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
-
-                if (mollierPoints != null)
-                {
-                    for (int j = 0; j < mollierPoints.Count - 1; j++)
-                    {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[j], mollierPoints[j + 1]);
-                        relativeHumidityLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
-                    }
-
-                    //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
-                    //foreach (MollierPoint mollierPoint in mollierPoints)
-                    //{
-                    //    double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
-                    //    double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                    //    global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
-                    //    polyLine.Add(point3D);
-                    //}
-                    //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
-                    //relativeHumidityLines.Add(new GooMollierObject(new MollierGeometry(polyLineCurve, color)));
-                }
-            }
-            index = Params.IndexOfOutputParam("Relative Humidity Points");
-            if (index != -1)
-            {
-                dataAccess.SetDataTree(index, dataTree_RelativeHumidity);
-            }
-            index = Params.IndexOfOutputParam("Relative Humidity Values");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, relativeHumidities);
-            }
-            index = Params.IndexOfOutputParam("Relative Humidity Lines");
-            if (index != -1)
-            {
-                dataAccess.SetDataList(index, relativeHumidityLines);
-            }
-
-            //CREATING DIAGRAM TEMPERATURE OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_diagramTemperature = Core.Mollier.Query.ConstantDiagramTemperaturePoints(temperature_Min, temperature_Max, Standard.Pressure);
-            //List<double> diagramTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
-
-            //DataTree<GooMollierPoint> dataTree_DiagramTemperature = new DataTree<GooMollierPoint>();
-            //List<GooMollierChartObject> diagramTemperatureLines = new List<GooMollierChartObject>();
-            //for (int i = 0; i < diagramTemperatures.Count; i++)
-            //{
-            //    GH_Path path = new GH_Path(i);
-
-            //    List<MollierPoint> mollierPoints = dictionary_diagramTemperature[diagramTemperatures[i]];
-            //    mollierPoints?.ForEach(x => dataTree_DiagramTemperature.Add(new GooMollierPoint(x), path));
-
-            //    System.Drawing.Color color = System.Drawing.Color.LightBlue;
-
-            //    if (mollierPoints != null)
-            //    {
-            //        for (int j = 0; j < mollierPoints.Count - 1; j++)
-            //        {
-            //            UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[j], mollierPoints[j + 1]);
-            //            diagramTemperatureLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
-            //        }
-
-            //        //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
-            //        //foreach (MollierPoint mollierPoint in mollierPoints)
-            //        //{
-            //        //    double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
-            //        //    double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-            //        //    global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
-            //        //    polyLine.Add(point3D);
-            //        //}
-            //        //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
-            //        //diagramTemperatureLines.Add(new GooMollierObject(new MollierGeometry(polyLineCurve, color)));
-            //    }
-            //}
-
-            //index = Params.IndexOfOutputParam("Diagram Temperature Points");
-            //if (index != -1)//&& ChartType == ChartType.Mollier
-            //{
-            //    dataAccess.SetDataTree(index, dataTree_DiagramTemperature);
-            //}
-            //index = Params.IndexOfOutputParam("Diagram Temperature Values");
-            //if (index != -1)//&& ChartType == ChartType.Mollier
-            //{
-            //    dataAccess.SetDataList(index, diagramTemperatures);
-            //}
-            //index = Params.IndexOfOutputParam("Diagram Temperature Lines");
-            //if (index != -1)//&& ChartType == ChartType.Mollier
-            //{
-            //    dataAccess.SetDataList(index, diagramTemperatureLines);
-            //}
-
-
-            //---
-            //CREATING DRY BULB TEMPERATURE OUTPUT
-            Dictionary<double, List<MollierPoint>> dictionary_dryBulbTemperature = Core.Mollier.Query.ConstantDryBulbTemperaturePoints((int)temperature_Min, (int)temperature_Max, Standard.Pressure, humidityRatio_Min: humidityRatio_Min, humidityRatio_Max: humidityRatio_Max);
-            List<double> dryBulbTemperatures = new List<double>(dictionary_diagramTemperature.Keys);
-
-            DataTree<GooMollierPoint> dataTree_DryBulbTemperature = new DataTree<GooMollierPoint>();
-            List<GooMollierChartObject> dryBulbTemperatureLines = new List<GooMollierChartObject>();
-            for (int i = 0; i < dryBulbTemperatures.Count; i++)
-            {
-                GH_Path path = new GH_Path(i);
-
-                List<MollierPoint> mollierPoints = dictionary_dryBulbTemperature[dryBulbTemperatures[i]];
-                mollierPoints?.ForEach(x => dataTree_DryBulbTemperature.Add(new GooMollierPoint(x), path));
-
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
-
-                if (mollierPoints != null)
-                {
-
-                    for (int j = 0; j < mollierPoints.Count - 1; j++)
-                    {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(mollierPoints[j], mollierPoints[j + 1]);
-                        dryBulbTemperatureLines.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierProcess(undefinedProcess, color), chartType, 0)));
-                    }
-
-                    //global::Rhino.Geometry.Polyline polyLine = new global::Rhino.Geometry.Polyline();
-                    //foreach (MollierPoint mollierPoint in mollierPoints)
-                    //{
-                    //    double X = chartType == ChartType.Mollier ? mollierPoint.HumidityRatio * 1000 : mollierPoint.DryBulbTemperature;
-                    //    double Y = chartType == ChartType.Mollier ? mollierPoint.DryBulbTemperature : mollierPoint.HumidityRatio * 1000;
-                    //    global::Rhino.Geometry.Point3d point3D = new global::Rhino.Geometry.Point3d(X, Y, 0);
-                    //    polyLine.Add(point3D);
-                    //}
-                    //global::Rhino.Geometry.PolylineCurve polyLineCurve = new global::Rhino.Geometry.PolylineCurve(polyLine);
-                    //dryBulbTemperatureLines.Add(new GooMollierObject(new MollierGeometry(polyLineCurve, color)));
+                    pressure = Standard.Pressure;
                 }
             }
 
-            index = Params.IndexOfOutputParam("Dry Bulb Temperature Points");
-            if (index != -1)//&& ChartType == ChartType.Mollier
-            {
-                dataAccess.SetDataTree(index, dataTree_DryBulbTemperature);
-            }
-            index = Params.IndexOfOutputParam("Dry Bulb Temperature Values");
-            if (index != -1)//&& ChartType == ChartType.Mollier
-            {
-                dataAccess.SetDataList(index, dryBulbTemperatures);
-            }
-            index = Params.IndexOfOutputParam("Dry Bulb Temperature Lines");
-            if (index != -1)//&& ChartType == ChartType.Mollier
-            {
-                dataAccess.SetDataList(index, dryBulbTemperatureLines);
-            }
+            List<double> values;
+            DataTree<GooMollierPoint> dataTree;
+            List<GooMollierChartObject> gooMollierChartObjects = null;
+
+            List<ConstantValueCurve> constantValueCurves = null;
 
             index = Params.IndexOfOutputParam("_chartType_");
             if (index != -1)
             {
                 dataAccess.SetData(index, isMollier);
             }
-            //--
+
+            Range<double> humidityRatioRange = new Range<double>(humidityRatio_Min / 1000, humidityRatio_Max / 1000);
+            Range<double> dryBulbTemperatureRange = new Range<double>(temperature_Min, temperature_Max);
+
+
+            //CREATING DENSITY OUTPUT
+
+            values = null;
+            dataTree = null;
+            gooMollierChartObjects = null;
+
+            constantValueCurves = Core.Mollier.Query.ConstantValueCurves_Density(new Range<double>(Default.Density_Min, Default.Density_Max), Default.Density_Interval, pressure);
+            if(constantValueCurves != null)
+            {
+                constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
+                constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+
+                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+
+                values = constantValueCurves.ConvertAll(x => x.Value);
+
+                dataTree = new DataTree<GooMollierPoint>();
+                gooMollierChartObjects = new List<GooMollierChartObject>();
+                for (int i = 0; i < constantValueCurves.Count; i++)
+                {
+                    List<MollierPoint> mollierPoints = constantValueCurves[i]?.MollierPoints;
+                    if(mollierPoints == null || mollierPoints.Count == 0)
+                    {
+                        gooMollierChartObjects.Add(null);
+                        continue;
+                    }
+
+                    GH_Path path = new GH_Path(i);
+                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+
+                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                }
+            }
+
+            index = Params.IndexOfOutputParam("Density Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("Density Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, values);
+            }
+
+            index = Params.IndexOfOutputParam("Density Lines");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, gooMollierChartObjects);
+            }
+
+            //CREATING ENTHALPY OUTPUT
+
+            values = null;
+            dataTree = null;
+            gooMollierChartObjects = null;
+
+            constantValueCurves = Core.Mollier.Query.ConstantValueCurves_Enthalpy(new Range<double>(Default.Enthalpy_Min * 1000, Default.Enthalpy_Max * 1000), Default.Enthalpy_Interval * 1000, pressure);
+            if (constantValueCurves != null)
+            {
+                constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
+                constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+
+                //TEST START
+                ConstantValueCurve constantValueCurve = constantValueCurves.Find(x => x.Value == 40000);
+                constantValueCurve = constantValueCurve.Clamp(new Range<double>(0.005, 0.010), new Range<double>(20, 30));
+                //TEST END
+
+                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+
+                values = constantValueCurves.ConvertAll(x => x.Value);
+
+                dataTree = new DataTree<GooMollierPoint>();
+                gooMollierChartObjects = new List<GooMollierChartObject>();
+                for (int i = 0; i < constantValueCurves.Count; i++)
+                {
+                    List<MollierPoint> mollierPoints = constantValueCurves[i]?.MollierPoints;
+                    if (mollierPoints == null || mollierPoints.Count == 0)
+                    {
+                        gooMollierChartObjects.Add(null);
+                        continue;
+                    }
+
+                    GH_Path path = new GH_Path(i);
+                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+
+                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                }
+            }
+
+            index = Params.IndexOfOutputParam("Enthalpy Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("Enthalpy Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, values);
+            }
+
+            index = Params.IndexOfOutputParam("Enthalpy Lines");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, gooMollierChartObjects);
+            }
+
+            //CREATING SPECIFIC VOLUME OUTPUT
+
+            values = null;
+            dataTree = null;
+            gooMollierChartObjects = null;
+
+            constantValueCurves = Core.Mollier.Query.ConstantValueCurves_SpecificVolume(new Range<double>(Default.SpecificVolume_Min, Default.SpecificVolume_Max), Default.SpecificVolume_Interval, pressure);
+            if (constantValueCurves != null)
+            {
+                constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
+                constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+
+                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+
+                values = constantValueCurves.ConvertAll(x => x.Value);
+
+                dataTree = new DataTree<GooMollierPoint>();
+                gooMollierChartObjects = new List<GooMollierChartObject>();
+                for (int i = 0; i < constantValueCurves.Count; i++)
+                {
+                    List<MollierPoint> mollierPoints = constantValueCurves[i]?.MollierPoints;
+                    if (mollierPoints == null || mollierPoints.Count == 0)
+                    {
+                        gooMollierChartObjects.Add(null);
+                        continue;
+                    }
+
+                    GH_Path path = new GH_Path(i);
+                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+
+                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                }
+            }
+
+            index = Params.IndexOfOutputParam("Specific Volume Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("Specific Volume Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, values);
+            }
+
+            index = Params.IndexOfOutputParam("Specific Volume Lines");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, gooMollierChartObjects);
+            }
+
+
+            //CREATING WET BULB TEMPERATURE OUTPUT
+
+            values = null;
+            dataTree = null;
+            gooMollierChartObjects = null;
+
+            constantValueCurves = Core.Mollier.Query.ConstantValueCurves_WetBulbTemperature(new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max), Default.DryBulbTemperature_Interval, pressure);
+            if (constantValueCurves != null)
+            {
+                constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
+                constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+
+                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+
+                values = constantValueCurves.ConvertAll(x => x.Value);
+
+                dataTree = new DataTree<GooMollierPoint>();
+                gooMollierChartObjects = new List<GooMollierChartObject>();
+                for (int i = 0; i < constantValueCurves.Count; i++)
+                {
+                    List<MollierPoint> mollierPoints = constantValueCurves[i]?.MollierPoints;
+                    if (mollierPoints == null || mollierPoints.Count == 0)
+                    {
+                        gooMollierChartObjects.Add(null);
+                        continue;
+                    }
+
+                    GH_Path path = new GH_Path(i);
+                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+
+                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                }
+            }
+
+            index = Params.IndexOfOutputParam("Wet Bulb Temperature Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("Wet Bulb Temperature Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, values);
+            }
+
+            index = Params.IndexOfOutputParam("Wet Bulb Temperature Lines");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, gooMollierChartObjects);
+            }
+
+
+            //CREATING RELATIVE HUMIDITY OUTPUT
+
+            values = null;
+            dataTree = null;
+            gooMollierChartObjects = null;
+
+            constantValueCurves = Core.Mollier.Query.ConstantValueCurves_RelativeHumidity(new Range<double>(0, 100), 10, pressure, new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max));
+            if (constantValueCurves != null)
+            {
+                constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
+                constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+
+                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+
+                values = constantValueCurves.ConvertAll(x => x.Value);
+
+                dataTree = new DataTree<GooMollierPoint>();
+                gooMollierChartObjects = new List<GooMollierChartObject>();
+                for (int i = 0; i < constantValueCurves.Count; i++)
+                {
+                    List<MollierPoint> mollierPoints = constantValueCurves[i]?.MollierPoints;
+                    if (mollierPoints == null || mollierPoints.Count == 0)
+                    {
+                        gooMollierChartObjects.Add(null);
+                        continue;
+                    }
+
+                    GH_Path path = new GH_Path(i);
+                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+
+                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                }
+            }
+
+            index = Params.IndexOfOutputParam("Relative Humidity Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("Relative Humidity Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, values);
+            }
+
+            index = Params.IndexOfOutputParam("Relative Humidity Lines");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, gooMollierChartObjects);
+            }
+
+
+            //CREATING DRY BULB TEMPERATURE OUTPUT
+
+            values = null;
+            dataTree = null;
+            gooMollierChartObjects = null;
+
+            constantValueCurves = Core.Mollier.Query.ConstantValueCurves_DryBulbTemperature(new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max), Default.DryBulbTemperature_Interval, pressure);
+            if (constantValueCurves != null)
+            {
+                constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
+                constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+
+                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+
+                values = constantValueCurves.ConvertAll(x => x.Value);
+
+                dataTree = new DataTree<GooMollierPoint>();
+                gooMollierChartObjects = new List<GooMollierChartObject>();
+                for (int i = 0; i < constantValueCurves.Count; i++)
+                {
+                    List<MollierPoint> mollierPoints = constantValueCurves[i]?.MollierPoints;
+                    if (mollierPoints == null || mollierPoints.Count == 0)
+                    {
+                        gooMollierChartObjects.Add(null);
+                        continue;
+                    }
+
+                    GH_Path path = new GH_Path(i);
+                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+
+                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                }
+            }
+
+            index = Params.IndexOfOutputParam("Dry Bulb Temperature Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("Dry Bulb Temperature Values");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, values);
+            }
+
+            index = Params.IndexOfOutputParam("Dry Bulb Temperature Lines");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, gooMollierChartObjects);
+            }
         }
 
     }

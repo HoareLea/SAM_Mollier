@@ -105,7 +105,7 @@
     <Compile Include="Query\SpecificHeat.cs" />
     <Compile Include="Query\SensibleHeatRatio.cs" />
     <Compile Include="Query\LogarithmicMeanTemperatureDifference.cs" />
-    <Compile Include="Query\Limit.cs" />
+    <Compile Include="Query\Clamp.cs" />
     <Compile Include="Query\VapourDensity.cs" />
     <Compile Include="Query\SaturationDegree.cs" />
     <Compile Include="Query\Color.cs" />
