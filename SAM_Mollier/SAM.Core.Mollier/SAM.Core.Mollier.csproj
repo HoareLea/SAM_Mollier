@@ -109,16 +109,9 @@
     <Compile Include="Query\VapourDensity.cs" />
     <Compile Include="Query\SaturationDegree.cs" />
     <Compile Include="Query\Color.cs" />
-    <Compile Include="Query\ConstantDryBulbTemperaturePoints.cs" />
     <Compile Include="Query\Efficiency.cs" />
     <Compile Include="Query\ProcessMollierPoints.cs" />
     <Compile Include="Query\ShortenLineByEndPoints.cs" />
-    <Compile Include="Query\ConstantDiagramTemperaturePoints.cs" />
-    <Compile Include="Query\ConstantRelativeHumidityPoints.cs" />
-    <Compile Include="Query\ConstantWetBulbTemperaturePoints.cs" />
-    <Compile Include="Query\ConstantSpecificVolumePoints.cs" />
-    <Compile Include="Query\ConstantEnthalpyPoints.cs" />
-    <Compile Include="Query\ConstantDensityPoints.cs" />
     <Compile Include="Query\Project.cs" />
     <Compile Include="Query\DewPoint.cs" />
     <Compile Include="Query\TemperatureDifference.cs" />
