@@ -189,7 +189,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
                 constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
 
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+                System.Drawing.Color color = Default.Density_Color;
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
@@ -246,7 +246,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 constantValueCurve = constantValueCurve.Clamp(new Range<double>(0.005, 0.010), new Range<double>(20, 30));
                 //TEST END
 
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+                System.Drawing.Color color = Default.Enthalpy_Color;
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
@@ -298,7 +298,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
                 constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
 
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+                System.Drawing.Color color = Default.SpecificVolume_Color;
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
@@ -351,7 +351,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
                 constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
 
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+                System.Drawing.Color color = Default.WetBulbTemperature_Color;
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
@@ -404,7 +404,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
                 constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
 
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+                System.Drawing.Color color = Default.RelativeHumidity_Color;
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
@@ -457,7 +457,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
                 constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
 
-                System.Drawing.Color color = System.Drawing.Color.LightBlue;
+                System.Drawing.Color color = Default.DryBulbTemperature_Color;
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
