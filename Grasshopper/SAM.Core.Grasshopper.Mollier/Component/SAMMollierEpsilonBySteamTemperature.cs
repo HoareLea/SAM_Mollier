@@ -41,8 +41,8 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "epsilon", NickName = "epsilon", Description = "Epsilon [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "epsilon", NickName = "epsilon", Description = "Epsilon [kJ/kg] \n*vapourizationLatentHeat + specificHeat_WaterVapour * steamTemperature", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "epsilon_h", NickName = "epsilon_h", Description = "Epsilon [kJ/kg] calculated from saturated steam enthalpy h''from temperature ", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -75,12 +75,18 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             double epsilon = Core.Mollier.Query.Epsilon(steamTemperature);
+            double epsilon_h = Core.Mollier.Query.Epsilon_BySteamTemperatureUsingEnthalpy(steamTemperature);
 
 
             index = Params.IndexOfOutputParam("epsilon");
             if (index != -1)
             {
                 dataAccess.SetData(index, epsilon);
+            }
+            index = Params.IndexOfOutputParam("epsilon_h");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, Math.Round(epsilon_h));
             }
         }
     }

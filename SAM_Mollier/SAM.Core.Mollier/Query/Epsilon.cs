@@ -68,5 +68,23 @@
             return totaLoad / moistureGainsMassFlow;
         }
 
+        /// <summary>
+        /// Calculates slope coefficient Epsilon ε [kJ/kg] by steam Temperature using enthalpy h".
+        /// </summary>
+        /// <param name="steamTemperature">Steam Temperature [°C]</param>
+        /// <returns>Epsilon ε [kJ/kg]</returns>
+        public static double Epsilon_BySteamTemperatureUsingEnthalpy(double steamTemperature)
+        {
+            if (double.IsNaN(steamTemperature))
+            {
+                return double.NaN;
+            }
+
+            //double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000;
+            //double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+
+            return Query.Enthalpy_SaturatedSteam_ByTemperature(steamTemperature);
+        }
+
     }
 }

@@ -18,7 +18,7 @@
         /// <summary>
         /// Specific Heat of air vapour at constant pressure and temeprature 0C (cp) [J/kg*K]
         /// </summary>
-        public const double SpecificHeat_Air = 1005; //1006
+        public const double SpecificHeat_Air = 1010; //1006
 
         /// <summary>
         /// Specific Heat of water vapour at constant pressure and temeprature 0C (cw) [J/kg*K]

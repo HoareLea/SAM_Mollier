@@ -355,6 +355,8 @@ namespace SAM.Core.Grasshopper.Mollier
             prandtlNumber = Core.Mollier.Query.PrandtlNumber(dryBulbTemperature, humidityRatio, pressure);
             specificHeat_DryAir = Core.Mollier.Query.SpecificHeat_Air(dryBulbTemperature);
 
+            relativeHumidity = Core.Query.Round(relativeHumidity, 0.1);
+
 
             index = Params.IndexOfOutputParam("mollierPoint");
             if (index != -1)

@@ -1,4 +1,6 @@
-﻿namespace SAM.Core.Mollier
+﻿using System;
+
+namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
@@ -158,6 +160,33 @@
             }
 
             return Enthalpy_BySensibleHeatRatioAndEnthalpy(sensibleHeatRatio, specificHeat, mollierPoint_Start.DryBulbTemperature, enthalpy_End, mollierPoint_Start.Enthalpy);
+        }
+
+        /// <summary>
+        /// Calculates enthalpy of saturated steam from dry bulb temperature.
+        /// </summary>
+        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="pressure">Atmospheric pressure [Pa]</param>
+        /// <returns>Enthalpy h" [kJ/kg]</returns>
+        public static double Enthalpy_SaturatedSteam_ByTemperature(double dryBulbTemperature)
+        {
+            if (double.IsNaN(dryBulbTemperature) )
+            {
+                return double.NaN;
+            }
+
+            if (dryBulbTemperature < 0)
+            {
+                return double.NaN;
+                //'it is too cold'
+            }
+
+            if (dryBulbTemperature >= 0) //from 10C to 200C max 0.02% (Gluck 1.43)
+            {
+                return (2.501482e3 + 1.789736 * dryBulbTemperature + 8.957546e-4 * Math.Pow(dryBulbTemperature, 2) - 1.300254e-5 * Math.Pow(dryBulbTemperature, 3));
+            }
+
+            return double.NaN;
         }
     }
 }
