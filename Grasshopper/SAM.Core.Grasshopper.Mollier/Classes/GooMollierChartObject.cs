@@ -102,7 +102,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
             if(Value.UIMollierObject is UIMollierCurve)
             {
-                Polyline polyline = ((UIMollierCurve)Value.UIMollierObject)?.ToRhino_Polyline(Value.ChartType, Value.Z);
+                Polyline polyline = ((UIMollierCurve)Value.UIMollierObject).ToRhino_Polyline(Value.ChartType, Value.Z);
                 if (polyline == null)
                 {
                     return;

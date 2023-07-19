@@ -6,13 +6,18 @@ namespace SAM.Core.Grasshopper.Mollier
     {
         public static global::Rhino.Geometry.Point3d ToRhino_Point3d(this IMollierPoint mollierPoint, ChartType chartType, double z = 0)
         {
+            return ToRhino_Point3d(mollierPoint, chartType, true, z);
+        }
+
+        public static global::Rhino.Geometry.Point3d ToRhino_Point3d(this IMollierPoint mollierPoint, ChartType chartType, bool recalculateTemperature = true, double z = 0)
+        {
             if (mollierPoint == null || chartType == ChartType.Undefined)
             {
                 return global::Rhino.Geometry.Point3d.Unset;
             }
 
             MollierPoint mollierPoint_Temp = mollierPoint is UIMollierPoint ? ((UIMollierPoint)mollierPoint).MollierPoint : mollierPoint as MollierPoint;
-            if(mollierPoint_Temp == null)
+            if (mollierPoint_Temp == null)
             {
                 return global::Rhino.Geometry.Point3d.Unset;
             }
@@ -22,11 +27,11 @@ namespace SAM.Core.Grasshopper.Mollier
                 return global::Rhino.Geometry.Point3d.Unset;
             }
 
-            double humidityRatio = mollierPoint_Temp.HumidityRatio * 1000;
+            double humidityRatio = mollierPoint_Temp.HumidityRatio;
             double dryBulbTemperature = mollierPoint_Temp.DryBulbTemperature;
-            double diagramTemperature = double.NaN;
+            double diagramTemperature = dryBulbTemperature;
 
-            if (chartType == ChartType.Mollier)
+            if (chartType == ChartType.Mollier && recalculateTemperature)
             {
                 diagramTemperature = Core.Mollier.Query.DiagramTemperature(mollierPoint_Temp);
                 if (mollierPoint_Temp.SaturationHumidityRatio() < humidityRatio)
@@ -37,6 +42,8 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
                 }
             }
+
+            humidityRatio *= 1000;
 
             double x = chartType == ChartType.Mollier ? humidityRatio : dryBulbTemperature;
             double y = chartType == ChartType.Mollier ? diagramTemperature : humidityRatio;

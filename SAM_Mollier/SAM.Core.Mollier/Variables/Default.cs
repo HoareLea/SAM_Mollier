@@ -9,7 +9,7 @@
 
         public const double Enthalpy_Min = -20; //TODO: [MACIEK] Implement Enthalpy, use SI units [J/kg]
         public const double Enthalpy_Max = 140; //TODO: [MACIEK] Implement Enthalpy, use SI units [J/kg]
-        public const double Enthalpy_Interval = 10; //TODO: [MACIEK] Implement Enthalpy, use SI units [J/kg]
+        public const double Enthalpy_Interval = 1; //TODO: [MACIEK] Implement Enthalpy, use SI units [J/kg]
         public static System.Drawing.Color Enthalpy_Color { get; } = System.Drawing.Color.LightGray;
 
         public const double SpecificVolume_Min = 0.65;

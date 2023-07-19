@@ -393,7 +393,7 @@ namespace SAM.Core.Grasshopper.Mollier
             dataTree = null;
             gooMollierChartObjects = null;
 
-            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_RelativeHumidity(new Range<double>(0, 100), 10, pressure, new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max));
+            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_RelativeHumidity(new Range<double>(10, 100), 10, pressure, new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max));
             if (constantValueCurves != null)
             {
                 constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));

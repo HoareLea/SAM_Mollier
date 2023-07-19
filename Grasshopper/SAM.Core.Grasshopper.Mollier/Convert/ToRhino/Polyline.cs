@@ -7,7 +7,7 @@ namespace SAM.Core.Grasshopper.Mollier
 {
     public static partial class Convert
     {
-        public static Polyline ToRhino_Polyline(this IEnumerable<MollierPoint> mollierPoints, ChartType chartType, double z = 0)
+        public static Polyline ToRhino_Polyline(this IEnumerable<MollierPoint> mollierPoints, ChartType chartType, bool recalculateTemperature = true, double z = 0)
         {
             if (mollierPoints == null || mollierPoints.Count() < 2 || chartType == ChartType.Undefined)
             {
@@ -23,7 +23,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     return null;
                 }
 
-                Point3d point3d = mollierPoint.ToRhino_Point3d(chartType, z);
+                Point3d point3d = mollierPoint.ToRhino_Point3d(chartType, recalculateTemperature, z);
                 if(!point3d.IsValid || point3d == Point3d.Unset)
                 {
                     return null;
@@ -42,8 +42,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return null;
             }
 
-
-            return ToRhino_Polyline(mollierCurve.MollierPoints, chartType, z);
+            return ToRhino_Polyline(mollierCurve.MollierPoints, chartType, mollierCurve.ChartDataType != ChartDataType.DiagramTemperature, z);
         }
 
         public static Polyline ToRhino_Polyline(this MollierProcess mollierProcess, ChartType chartType, double z = 0)
@@ -53,7 +52,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return null;
             }
 
-            return ToRhino_Polyline(new MollierPoint[] { mollierProcess.Start, mollierProcess.End}, chartType, z);
+            return ToRhino_Polyline(new MollierPoint[] { mollierProcess.Start, mollierProcess.End}, chartType, true, z);
         }
 
         public static Polyline ToRhino_Polyline(this IMollierProcess mollierProcess, ChartType chartType, double z = 0)
@@ -83,7 +82,7 @@ namespace SAM.Core.Grasshopper.Mollier
             if (uIMollierProcess is UICoolingProcess && ((UICoolingProcess)uIMollierProcess).Realistic)
             {
                 List<MollierPoint> mollierPoints = Core.Mollier.Query.ProcessMollierPoints((CoolingProcess)mollierProcess);
-                result = mollierPoints.ToRhino_Polyline(chartType, z);
+                result = mollierPoints.ToRhino_Polyline(chartType, true, z);
             }
             else
             {
