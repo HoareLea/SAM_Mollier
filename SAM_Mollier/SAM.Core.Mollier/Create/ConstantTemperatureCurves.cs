@@ -55,6 +55,12 @@ namespace SAM.Core.Mollier
                 dryBulbTemperature += step;
             }
 
+            ConstantTemperatureCurve constantTemperatureCurve_Liquid = ConstantTemperatureCurve_Liquid(dryBulbTemperatureRange.Min, pressure);
+            if (constantTemperatureCurve_Liquid != null)
+            {
+                result.Add(constantTemperatureCurve_Liquid);
+            }
+
             return result;
         }
     }
