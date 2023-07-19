@@ -27,18 +27,31 @@
 
             double result = (0.622 * relativeHumidity_Factor) / ((pressure / saturationVapourPressure) - relativeHumidity_Factor);
 
-            double relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, true);
+            double relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
 
-            while (relativeHumidity_Temp < relativeHumidity)
+            double factor = 0.1;
+            
+            while (result > 0 && (double.IsNaN(relativeHumidity_Temp) || relativeHumidity_Temp > relativeHumidity))
             {
-                result += result * 0.01;
-                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, true);
+                result -= result * factor;
+                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
             }
 
-            while (relativeHumidity_Temp > relativeHumidity)
+            for(int i = 0; i < 3; i++)
             {
-                result -= result * 0.01;
-                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, true);
+                factor /= 10;
+
+                while (!double.IsNaN(relativeHumidity_Temp) && relativeHumidity_Temp < relativeHumidity)
+                {
+                    result += result * factor;
+                    relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+                }
+
+                while (result > 0 && (double.IsNaN(relativeHumidity_Temp) || relativeHumidity_Temp > relativeHumidity))
+                {
+                    result -= result * factor;
+                    relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+                }
             }
 
             return result;

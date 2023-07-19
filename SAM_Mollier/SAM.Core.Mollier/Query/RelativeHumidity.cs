@@ -10,7 +10,7 @@
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <param name="clamp">Clamp value Relative Humidity to range 0 - 100</param>
         /// <returns>Relative Humidity (0 - 100) [%]</returns>
-        public static double RelativeHumidity(double dryBulbTemperature, double humidityRatio, double pressure, bool clamp = false)
+        public static double RelativeHumidity(double dryBulbTemperature, double humidityRatio, double pressure)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
             {
@@ -23,15 +23,15 @@
 
             if(result > 100)
             {
-                return clamp ? 100 : double.NaN;
+                return double.NaN;
             }
 
             if(result < 0)
             {
-                return clamp ? 0 : double.NaN;
+                return double.NaN;
             }
 
-            result = System.Math.Round(result);
+            //result = System.Math.Round(result);
             return result;
         }
 
