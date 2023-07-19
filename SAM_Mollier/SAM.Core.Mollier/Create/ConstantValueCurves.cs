@@ -28,54 +28,6 @@ namespace SAM.Core.Mollier
             return result;
         }
 
-        public static List<ConstantValueCurve> ConstantValueCurves_DiagramTemperature(Range<double> dryBulbTemperatureRange, double step, double pressure)
-        {
-            if (dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Min) || double.IsNaN(dryBulbTemperatureRange.Max) || double.IsNaN(step) || double.IsNaN(pressure))
-            {
-                return null;
-            }
-
-            List<ConstantValueCurve> result = new List<ConstantValueCurve>();
-
-            double dryBulbTemperature = dryBulbTemperatureRange.Min;
-            while (dryBulbTemperature <= dryBulbTemperatureRange.Max)
-            {
-                ConstantValueCurve constantValueCurve = ConstantValueCurve_DiagramTemperature(dryBulbTemperature, pressure);
-                if (constantValueCurve != null)
-                {
-                    result.Add(constantValueCurve);
-                }
-
-                dryBulbTemperature += step;
-            }
-
-            return result;
-        }
-
-        public static List<ConstantValueCurve> ConstantValueCurves_DryBulbTemperature(Range<double> dryBulbTemperatureRange, double step, double pressure)
-        {
-            if (dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Min) || double.IsNaN(dryBulbTemperatureRange.Max) || double.IsNaN(step) || double.IsNaN(pressure))
-            {
-                return null;
-            }
-
-            List<ConstantValueCurve> result = new List<ConstantValueCurve>();
-
-            double dryBulbTemperature = dryBulbTemperatureRange.Min;
-            while (dryBulbTemperature <= dryBulbTemperatureRange.Max)
-            {
-                ConstantValueCurve constantValueCurve = ConstantValueCurve_DryBulbTemperature(dryBulbTemperature, pressure);
-                if (constantValueCurve != null)
-                {
-                    result.Add(constantValueCurve);
-                }
-
-                dryBulbTemperature += step;
-            }
-
-            return result;
-        }
-
         public static List<ConstantValueCurve> ConstantValueCurves_RelativeHumidity(Range<double> relativeHumidityRange, double step, double pressure, Range<double> dryBulbTemperatureRange)
         {
             if (relativeHumidityRange == null || double.IsNaN(relativeHumidityRange.Min) || double.IsNaN(relativeHumidityRange.Max) || dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Min) || double.IsNaN(dryBulbTemperatureRange.Max) || double.IsNaN(step) || double.IsNaN(pressure))

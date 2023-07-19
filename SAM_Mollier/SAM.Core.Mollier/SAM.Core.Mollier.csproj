@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ConstantTemperatureCurve.cs" />
     <Compile Include="Classes\ConstantValueCurve.cs" />
     <Compile Include="Classes\MollierGroup.cs" />
     <Compile Include="Classes\MollierCurve.cs" />
@@ -67,6 +68,8 @@
     <Compile Include="Classes\HeatRecoveryProcess.cs" />
     <Compile Include="Classes\MollierProcess.cs" />
     <Compile Include="Classes\HeatingProcess.cs" />
+    <Compile Include="Create\ConstantTemperatureCurve.cs" />
+    <Compile Include="Create\ConstantTemperatureCurves.cs" />
     <Compile Include="Create\MollierPoints.cs" />
     <Compile Include="Create\HeatRecoveryProcess .cs" />
     <Compile Include="Create\SteamHumidificationProcess.cs" />
@@ -78,6 +81,7 @@
     <Compile Include="Create\MollierPoint.cs" />
     <Compile Include="Create\HeatingProcess.cs" />
     <Compile Include="Enums\ChartDataType.cs" />
+    <Compile Include="Enums\Phase.cs" />
     <Compile Include="Enums\MollierProcessType.cs" />
     <Compile Include="Interfaces\IMollierGroupable.cs" />
     <Compile Include="Interfaces\IMollierCurve.cs" />
