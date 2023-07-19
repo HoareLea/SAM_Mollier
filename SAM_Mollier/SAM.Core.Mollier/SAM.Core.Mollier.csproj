@@ -94,8 +94,8 @@
     <Compile Include="Query\Mid.cs" />
     <Compile Include="Query\On.cs" />
     <Compile Include="Query\Closest.cs" />
-    <Compile Include="Query\ConstantValueCurves.cs" />
-    <Compile Include="Query\ConstantValueCurve.cs" />
+    <Compile Include="Create\ConstantValueCurves.cs" />
+    <Compile Include="Create\ConstantValueCurve.cs" />
     <Compile Include="Query\Intersection.cs" />
     <Compile Include="Query\MoistureGainsMassFlow.cs" />
     <Compile Include="Query\SaturationDiagramPoint.cs" />

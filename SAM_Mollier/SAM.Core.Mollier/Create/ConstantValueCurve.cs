@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Mollier
 {
-    public static partial class Query
+    public static partial class Create
     { 
         public static ConstantValueCurve ConstantValueCurve_Density(double density, double pressure)
         {
@@ -12,13 +12,13 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double dryBulbTemperature_1 = DryBulbTemperature_ByDensityAndRelativeHumidity(density, 0, pressure);
+            double dryBulbTemperature_1 = Query.DryBulbTemperature_ByDensityAndRelativeHumidity(density, 0, pressure);
             if(double.IsNaN(dryBulbTemperature_1))
             {
                 return null;
             }
 
-            double humidityRatio_1 = HumidityRatio(dryBulbTemperature_1, 0, pressure);
+            double humidityRatio_1 = Query.HumidityRatio(dryBulbTemperature_1, 0, pressure);
             if (double.IsNaN(humidityRatio_1))
             {
                 return null;
@@ -30,13 +30,13 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double temperature_2 = DryBulbTemperature_ByDensityAndRelativeHumidity(density, 100, pressure);
+            double temperature_2 = Query.DryBulbTemperature_ByDensityAndRelativeHumidity(density, 100, pressure);
             if (double.IsNaN(temperature_2))
             {
                 return null;
             }
 
-            double humidityRatio_2 = HumidityRatio(temperature_2, 100, pressure);
+            double humidityRatio_2 = Query.HumidityRatio(temperature_2, 100, pressure);
             if (double.IsNaN(humidityRatio_2))
             {
                 return null;
@@ -58,13 +58,13 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double humidityRatio_1 = HumidityRatio(dryBulbTemperature, 0, pressure);
+            double humidityRatio_1 = Query.HumidityRatio(dryBulbTemperature, 0, pressure);
             if(double.IsNaN(humidityRatio_1))
             {
                 return null;
             }
 
-            double diagramTemperature_1 = DiagramTemperature(dryBulbTemperature, humidityRatio_1, pressure);
+            double diagramTemperature_1 = Query.DiagramTemperature(dryBulbTemperature, humidityRatio_1, pressure);
             if(double.IsNaN(diagramTemperature_1))
             {
                 return null;
@@ -76,13 +76,13 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double humidityRatio_2 = HumidityRatio(dryBulbTemperature, 100, pressure);
+            double humidityRatio_2 = Query.HumidityRatio(dryBulbTemperature, 100, pressure);
             if (double.IsNaN(humidityRatio_1))
             {
                 return null;
             }
 
-            double diagramTemperature_2 = DiagramTemperature(dryBulbTemperature, humidityRatio_2, pressure);
+            double diagramTemperature_2 = Query.DiagramTemperature(dryBulbTemperature, humidityRatio_2, pressure);
             if (double.IsNaN(diagramTemperature_1))
             {
                 return null;
@@ -110,7 +110,7 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double humidityRatio = HumidityRatio(dryBulbTemperature, 100, pressure);
+            double humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, pressure);
             if (double.IsNaN(humidityRatio))
             {
                 return null;
@@ -133,7 +133,7 @@ namespace SAM.Core.Mollier
             }
 
             //Relative Humidity = 0
-            double dryBulbTemperature_1 = DryBulbTemperature(enthalpy, 0, pressure);
+            double dryBulbTemperature_1 = Query.DryBulbTemperature(enthalpy, 0, pressure);
             if(double.IsNaN(dryBulbTemperature_1))
             {
                 return null;
@@ -146,13 +146,13 @@ namespace SAM.Core.Mollier
             }
 
             //Relative Humidity = 100
-            double dryBulbTemperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
+            double dryBulbTemperature_2 = Query.DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
             if(double.IsNaN(dryBulbTemperature_2))
             {
                 return null;
             }
 
-            double humidityRatio_2 = HumidityRatio(dryBulbTemperature_2, 100, pressure);
+            double humidityRatio_2 = Query.HumidityRatio(dryBulbTemperature_2, 100, pressure);
             if (double.IsNaN(humidityRatio_2))
             {
                 return null;
@@ -185,7 +185,7 @@ namespace SAM.Core.Mollier
             List<MollierPoint> mollierPoints = new List<MollierPoint>();
             while(dryBulbTemperature <= dryBulbTemperatureRange.Max)
             {
-                double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                double humidityRatio = Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
                 if(!double.IsNaN(humidityRatio))
                 {
                     MollierPoint mollierPoint = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
@@ -201,7 +201,7 @@ namespace SAM.Core.Mollier
             if(dryBulbTemperature > dryBulbTemperatureRange.Max)
             {
                 dryBulbTemperature = dryBulbTemperatureRange.Max;
-                double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                double humidityRatio = Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
                 if (!double.IsNaN(humidityRatio))
                 {
                     MollierPoint mollierPoint = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
@@ -227,13 +227,13 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            MollierPoint mollierPoint_1 = Create.MollierPoint_ByRelativeHumidityAndSpecificVolume(0, specificVolume, pressure);
+            MollierPoint mollierPoint_1 = MollierPoint_ByRelativeHumidityAndSpecificVolume(0, specificVolume, pressure);
             if (mollierPoint_1 == null || !mollierPoint_1.IsValid())
             {
                 return null;
             }
 
-            MollierPoint mollierPoint_2 = Create.MollierPoint_ByRelativeHumidityAndSpecificVolume(100, specificVolume, pressure);
+            MollierPoint mollierPoint_2 = MollierPoint_ByRelativeHumidityAndSpecificVolume(100, specificVolume, pressure);
             if (mollierPoint_2 == null || !mollierPoint_2.IsValid())
             {
                 return null;
@@ -249,12 +249,12 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double dryBulbTemperature_1 = DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, 0, pressure);
+            double dryBulbTemperature_1 = Query.DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, 0, pressure);
             if (double.IsNaN(dryBulbTemperature_1))
             {
                 return null;
             }
-            double humidityRatio_1 = HumidityRatio(dryBulbTemperature_1, 0, pressure);
+            double humidityRatio_1 = Query.HumidityRatio(dryBulbTemperature_1, 0, pressure);
             if(double.IsNaN(humidityRatio_1))
             {
                 return null;
@@ -267,13 +267,13 @@ namespace SAM.Core.Mollier
             }
 
 
-            double dryBulbTemperature_2 = DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, 100, pressure);
+            double dryBulbTemperature_2 = Query.DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, 100, pressure);
             if (double.IsNaN(dryBulbTemperature_2))
             {
                 return null;
             }
 
-            double humidityRatio_2 = HumidityRatio(dryBulbTemperature_2, 100, pressure);
+            double humidityRatio_2 = Query.HumidityRatio(dryBulbTemperature_2, 100, pressure);
             if (double.IsNaN(humidityRatio_2))
             {
                 return null;

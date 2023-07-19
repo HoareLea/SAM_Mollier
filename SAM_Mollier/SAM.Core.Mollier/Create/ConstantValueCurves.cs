@@ -2,7 +2,7 @@
 
 namespace SAM.Core.Mollier
 {
-    public static partial class Query
+    public static partial class Create
     { 
         public static List<ConstantValueCurve> ConstantValueCurves_Density(Range<double> densityRange, double step, double pressure)
         {
@@ -179,13 +179,13 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double enthalpy_Max = Enthalpy(dryBulbTemperatureRange.Min, humidityRatioRange.Min, pressure);
+            double enthalpy_Max = Query.Enthalpy(dryBulbTemperatureRange.Min, humidityRatioRange.Min, pressure);
             if (double.IsNaN(enthalpy_Max))
             {
                 return null;
             }
 
-            double enthalpy_Min = Enthalpy(dryBulbTemperatureRange.Max, humidityRatioRange.Max, pressure);
+            double enthalpy_Min = Query.Enthalpy(dryBulbTemperatureRange.Max, humidityRatioRange.Max, pressure);
             if (double.IsNaN(enthalpy_Max))
             {
                 return null;
