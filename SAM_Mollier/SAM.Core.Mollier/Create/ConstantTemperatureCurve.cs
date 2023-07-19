@@ -91,7 +91,7 @@
                 return null;
             }
 
-            MollierPoint end = new MollierPoint(dryBulbTemperature_Min, humidityRatio, pressure);
+            MollierPoint end = new MollierPoint(0, humidityRatio, pressure);
 
             return new ConstantTemperatureCurve(Phase.Liquid, 0, start, end);
         }
