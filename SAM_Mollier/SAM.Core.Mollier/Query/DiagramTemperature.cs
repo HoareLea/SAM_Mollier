@@ -9,44 +9,60 @@ namespace SAM.Core.Mollier
         /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Pressure [Pa]</param>
+        /// <param name="phase">Default phase for 0C (only for case where dry bulb temperature set to 0 and phase is not a gas)</param>
         /// <returns>Diagram Temperature [°C]</returns>
-        public static double DiagramTemperature(double dryBulbTemperature, double humidityRatio, double pressure)
+        public static double DiagramTemperature(double dryBulbTemperature, double humidityRatio, double pressure, Phase phase = Phase.Liquid)
         {
             if (double.IsNaN(humidityRatio) || double.IsNaN(dryBulbTemperature))
             {
                 return double.NaN;
             }
+            
+            double humidityRatio_Saturation = SaturationHumidityRatio(dryBulbTemperature, pressure);
+            if(double.IsNaN(humidityRatio_Saturation) || humidityRatio_Saturation >= humidityRatio)
+            {
+                double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
+                double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
 
-            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000;
-            double specificHeat_Air = Zero.SpecificHeat_Air / 1000;
+                return (specificHeat_Air + humidityRatio * specificHeat_WaterVapour) * dryBulbTemperature;
+            }
 
-            //double result = dryBulbTemperature + System.Math.Abs((humidityRatio * specificHeat_WaterVapour) * dryBulbTemperature);
-            double result = (specificHeat_Air + humidityRatio * specificHeat_WaterVapour) * dryBulbTemperature;
+            double enthalpy = Enthalpy(dryBulbTemperature, humidityRatio, pressure);
 
-            //double saturationTemperature = SaturationTemperature(dryBulbTemperature, pressure);
-            //if (dryBulbTemperature < saturationTemperature)
-            //{
-            //    double enthalpy = Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure);
+            double diagramTemperature_1 = DiagramTemperature(dryBulbTemperature, 0, pressure);
 
-            //    if(TryFindDiagramTemperature(enthalpy, humidityRatio, pressure, out double diagramTemperature))
-            //    {
-            //        return diagramTemperature;
-            //    }
+            double dryBulbTemperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
+            double humidityRatio_2 = HumidityRatio(dryBulbTemperature_2, 100, pressure);
 
-            //    //return saturationTemperature - (saturationTemperature + dryBulbTemperature) / 2;
-            //}
-            return result;
+            if (!Intersection(0, diagramTemperature_1, humidityRatio_2, dryBulbTemperature_2, humidityRatio, 0, humidityRatio, 1, out double result, out double humidityRatio_Result))
+            {
+                return double.NaN;
+            }
 
+            if (dryBulbTemperature > 0)
+            {
+                return result;
+            }
+
+            if (dryBulbTemperature == 0)
+            {
+                if (phase != Phase.Solid)
+                {
+                    return result;
+                }
+            }
+
+            return result - ((humidityRatio - humidityRatio_Saturation) * Zero.MeltingHeat_Ice + Zero.SpecificHeat_Ice * result);
         }
 
-        public static double DiagramTemperature(this MollierPoint mollierPoint)
+        public static double DiagramTemperature(this MollierPoint mollierPoint, Phase phase = Phase.Liquid)
         {
             if(mollierPoint == null)
             {
                 return double.NaN;
             }
             
-            return DiagramTemperature(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure);
+            return DiagramTemperature(mollierPoint.DryBulbTemperature, mollierPoint.HumidityRatio, mollierPoint.Pressure, phase);
         }
     }
 }

@@ -98,14 +98,26 @@
             return new ConstantTemperatureCurve(Phase.Liquid, 0, start, end);
         }
 
-        public static ConstantTemperatureCurve ConstantTemperatureCurve_Solid(double pressure)
+        public static ConstantTemperatureCurve ConstantTemperatureCurve_Solid(double dryBulbTemperature_Min, double pressure)
         {
+            if (double.IsNaN(pressure))
+            {
+                return null;
+            }
+
             MollierPoint start = Query.SaturationMollierPoint(0, pressure);
-            MollierPoint end = null;
+            MollierPoint mollierPoint = MollierPoint_ByEnthalpy(start.Enthalpy, 0, pressure);
 
-            throw new System.NotImplementedException();
+            double diagramTemperature = Query.DiagramTemperature(mollierPoint);
 
-            return new ConstantTemperatureCurve(Phase.Liquid, 0, start, end);
+            if (!Query.Intersection(mollierPoint.HumidityRatio, diagramTemperature, start.HumidityRatio, 0, 0, dryBulbTemperature_Min, start.HumidityRatio, dryBulbTemperature_Min, out double dryBulbTemperature, out double humidityRatio))
+            {
+                return null;
+            }
+
+            MollierPoint end = new MollierPoint(0, humidityRatio, pressure);
+
+            return new ConstantTemperatureCurve(Phase.Solid, 0, start, end);
         }
     }
 }

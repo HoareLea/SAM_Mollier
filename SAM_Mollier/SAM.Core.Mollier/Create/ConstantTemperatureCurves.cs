@@ -31,6 +31,12 @@ namespace SAM.Core.Mollier
                 result.Add(constantTemperatureCurve_Liquid);
             }
 
+            ConstantTemperatureCurve constantTemperatureCurve_Solid = ConstantTemperatureCurve_Solid(dryBulbTemperatureRange.Min, pressure);
+            if (constantTemperatureCurve_Solid != null)
+            {
+                result.Add(constantTemperatureCurve_Solid);
+            }
+
             return result;
         }
 
@@ -59,6 +65,12 @@ namespace SAM.Core.Mollier
             if (constantTemperatureCurve_Liquid != null)
             {
                 result.Add(constantTemperatureCurve_Liquid);
+            }
+
+            ConstantTemperatureCurve constantTemperatureCurve_Solid = ConstantTemperatureCurve_Solid(dryBulbTemperatureRange.Min, pressure);
+            if (constantTemperatureCurve_Solid != null)
+            {
+                result.Add(constantTemperatureCurve_Solid);
             }
 
             return result;
