@@ -86,7 +86,9 @@
             MollierPoint start = Query.SaturationMollierPoint(0, pressure);
             MollierPoint mollierPoint = MollierPoint_ByEnthalpy(start.Enthalpy, 0, pressure);
 
-            if(!Query.Intersection(mollierPoint.HumidityRatio, mollierPoint.DryBulbTemperature, start.HumidityRatio, start.DryBulbTemperature, 0, dryBulbTemperature_Min, start.HumidityRatio, dryBulbTemperature_Min, out double dryBulbTemperature, out double humidityRatio))
+            double diagramTemperature = Query.DiagramTemperature(mollierPoint);
+
+            if(!Query.Intersection(mollierPoint.HumidityRatio, diagramTemperature, start.HumidityRatio, 0, 0, dryBulbTemperature_Min, start.HumidityRatio, dryBulbTemperature_Min, out double dryBulbTemperature, out double humidityRatio))
             {
                 return null;
             }
