@@ -34,13 +34,13 @@ namespace SAM.Core.Grasshopper.Mollier
             if (chartType == ChartType.Mollier && recalculateTemperature)
             {
                 diagramTemperature = Core.Mollier.Query.DiagramTemperature(mollierPoint_Temp);
-                if (mollierPoint_Temp.SaturationHumidityRatio() < humidityRatio)
-                {
-                    if (Core.Mollier.Query.TryFindDiagramTemperature(mollierPoint_Temp, out double diagramTemperature_Temp))
-                    {
-                        diagramTemperature = diagramTemperature_Temp;
-                    }
-                }
+                //if (mollierPoint_Temp.SaturationHumidityRatio() < humidityRatio)
+                //{
+                //    if (Core.Mollier.Query.TryFindDiagramTemperature(mollierPoint_Temp, out double diagramTemperature_Temp))
+                //    {
+                //        diagramTemperature = diagramTemperature_Temp;
+                //    }
+                //}
             }
 
             humidityRatio *= 1000;

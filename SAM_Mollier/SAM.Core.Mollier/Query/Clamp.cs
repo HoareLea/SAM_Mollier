@@ -53,7 +53,13 @@ namespace SAM.Core.Mollier
                     continue;
                 }
 
-                if(mollierPoints_Intersection.Count > 1)
+
+                if (constantValueCurve.ChartDataType == ChartDataType.RelativeHumidity && constantValueCurve.Value == 100)
+                {
+                    mollierPoints_Intersection = mollierPoints_Intersection.ConvertAll(x => new MollierPoint(x.DryBulbTemperature, HumidityRatio(x.DryBulbTemperature, 100, x.Pressure), x.Pressure));
+                }
+
+                if (mollierPoints_Intersection.Count > 1)
                 {
                     mollierPoints_Intersection.Sort((x, y) => func_Distance.Invoke(start, x).CompareTo(func_Distance.Invoke(start, y)));
                 }

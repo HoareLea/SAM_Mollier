@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using SAM.Core.Mollier;
 using Grasshopper;
 using Grasshopper.Kernel.Data;
+using System.Linq;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
@@ -205,9 +206,9 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    //mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
 
-                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                    //gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
             }
 
@@ -257,9 +258,9 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    //mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
 
-                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                    //gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
             }
 
@@ -309,9 +310,9 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    //mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
 
-                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                    //gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
             }
 
@@ -362,9 +363,9 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    //mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
 
-                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                    //gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
             }
 
@@ -415,7 +416,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    //mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
 
                     gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
@@ -468,9 +469,9 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    //mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
 
-                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                    //gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
             }
 
