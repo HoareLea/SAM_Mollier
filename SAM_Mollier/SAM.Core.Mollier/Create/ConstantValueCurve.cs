@@ -175,38 +175,46 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            double dryBulbTemperature_1 = Query.DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, 0, pressure);
-            if (double.IsNaN(dryBulbTemperature_1))
-            {
-                return null;
-            }
-            double humidityRatio_1 = Query.HumidityRatio(dryBulbTemperature_1, 0, pressure);
-            if(double.IsNaN(humidityRatio_1))
-            {
-                return null;
-            }
+            //double dryBulbTemperature_1 = Query.DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, 0, pressure);
+            //if (double.IsNaN(dryBulbTemperature_1))
+            //{
+            //    return null;
+            //}
+            //double humidityRatio_1 = Query.HumidityRatio(dryBulbTemperature_1, 0, pressure);
+            //if(double.IsNaN(humidityRatio_1))
+            //{
+            //    return null;
+            //}
 
-            MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature_1, humidityRatio_1, pressure);
-            if(!mollierPoint_1.IsValid())
-            {
-                return null;
-            }
+            //MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature_1, humidityRatio_1, pressure);
+            //if(!mollierPoint_1.IsValid())
+            //{
+            //    return null;
+            //}
 
 
-            double dryBulbTemperature_2 = Query.DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, 100, pressure);
-            if (double.IsNaN(dryBulbTemperature_2))
-            {
-                return null;
-            }
+            //double dryBulbTemperature_2 = Query.DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, 100, pressure);
+            //if (double.IsNaN(dryBulbTemperature_2))
+            //{
+            //    return null;
+            //}
 
-            double humidityRatio_2 = Query.HumidityRatio(dryBulbTemperature_2, 100, pressure);
-            if (double.IsNaN(humidityRatio_2))
-            {
-                return null;
-            }
+            //double humidityRatio_2 = Query.HumidityRatio(dryBulbTemperature_2, 100, pressure);
+            //if (double.IsNaN(humidityRatio_2))
+            //{
+            //    return null;
+            //}
 
-            MollierPoint mollierPoint_2 = new MollierPoint(dryBulbTemperature_2, humidityRatio_2, pressure);
+            MollierPoint mollierPoint_2 = new MollierPoint(wetBulbTemperature, Query.SaturationHumidityRatio(wetBulbTemperature, pressure), pressure);// new MollierPoint(dryBulbTemperature_2, humidityRatio_2, pressure);
             if (!mollierPoint_2.IsValid())
+            {
+                return null;
+            }
+
+            //mollierPoint_2.Enthalpy
+
+            MollierPoint mollierPoint_1 = MollierPoint_ByEnthalpy(mollierPoint_2.Enthalpy, 0, pressure);
+            if (!mollierPoint_1.IsValid())
             {
                 return null;
             }

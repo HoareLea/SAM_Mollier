@@ -27,8 +27,11 @@
                 return null;
             }
 
+            //TODO: Implement iterative way to be more precise with the result:  66431.6076 vc 66431.0722
+
             return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
         }
+        
         /// <summary>
         /// This is special case use for calculating point below saturation line
         /// </summary>

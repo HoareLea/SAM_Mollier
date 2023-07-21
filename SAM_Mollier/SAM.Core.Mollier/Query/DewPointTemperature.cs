@@ -39,6 +39,15 @@
                 return double.NaN;
             }
 
+            //TO DO 2023-07-21 add calculation for ts Glueck 1.2 which is using 1.3 so for cases <0 will calcualte ts
+            //for case of negative temperature and x=0 there is special case :
+            //Since the dewpoint can never exceed the temperature, ttau<t
+            //for for temop <-15 and x=0 will be <-20°C
+            if (partialVapourPressure == 0)
+            {
+                return System.Math.Min(dryBulbTemperature, -20);
+            }
+
             return SaturationTemperature(partialVapourPressure);
         }
 

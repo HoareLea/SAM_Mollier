@@ -40,6 +40,8 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
+            result = result+(humidityRatio - humidityRatio_Saturation) * Zero.SpecificHeat_Water / 1000 * dryBulbTemperature;
+
             if (dryBulbTemperature > 0)
             {
                 return result;
