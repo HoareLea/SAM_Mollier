@@ -86,5 +86,40 @@
             return Query.Enthalpy_SaturatedSteam_ByTemperature(steamTemperature);
         }
 
+        //public static double Epsilon(this MollierProcess mollierProcess)
+        //{
+        //    if (mollierProcess == null)
+        //    {
+        //        return double.NaN;
+        //    }
+
+        //    return Epsilon(mollierProcess.Start, mollierProcess.End);
+
+        //}
+
+        /// <summary>
+        /// Calculates slope coefficient Epsilon ε [kJ/kg] by Water Temperature.
+        ///It is used for Adiabatic humidification by water
+        /// </summary>
+        /// <param name="waterTemperature">Water Temperature [°C]</param>
+        /// <returns>Epsilon ε [kJ/kg]</returns>
+        public static double Epsilon_ByWaterTemperature(double waterTemperature, double specificHeat_Water= Zero.SpecificHeat_Water / 1000)
+        {
+            if (double.IsNaN(waterTemperature))
+            {
+                return double.NaN;
+            }
+
+            if (double.IsNaN(specificHeat_Water))
+            {
+                return double.NaN;
+            }
+
+            //double specificHeat_Water0 = Zero.SpecificHeat_Water / 1000;
+            //specificHeat_Water = SpecificHeat_Water(waterTemperature) / 1000;
+
+            return specificHeat_Water * waterTemperature;
+        }
+
     }
 }

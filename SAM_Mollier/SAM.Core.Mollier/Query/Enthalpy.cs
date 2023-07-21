@@ -40,7 +40,7 @@ namespace SAM.Core.Mollier
 
             if (humidityRatio > saturationHumidityRatio)
             {
-                if(dryBulbTemperature >= 0)
+                if(dryBulbTemperature > 0)
                 {
                     result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio) * specificHeat_Water * dryBulbTemperature);
                 }

@@ -357,6 +357,9 @@ namespace SAM.Core.Grasshopper.Mollier
 
             relativeHumidity = Core.Query.Round(relativeHumidity, 0.1);
 
+            //TEST START
+            double diagramTemperature = SAM.Core.Mollier.Query.DiagramTemperature(mollierPoint_Temp);
+            //TEST END
 
             index = Params.IndexOfOutputParam("mollierPoint");
             if (index != -1)

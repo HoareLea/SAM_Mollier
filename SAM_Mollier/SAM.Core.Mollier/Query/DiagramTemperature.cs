@@ -11,7 +11,7 @@ namespace SAM.Core.Mollier
         /// <param name="pressure">Pressure [Pa]</param>
         /// <param name="phase">Default phase for 0C (only for case where dry bulb temperature set to 0 and phase is not a gas)</param>
         /// <returns>Diagram Temperature [°C]</returns>
-        public static double DiagramTemperature(double dryBulbTemperature, double humidityRatio, double pressure, Phase phase = Phase.Liquid)
+        public static double DiagramTemperature(double dryBulbTemperature, double humidityRatio, double pressure, Phase phase = Phase.Solid)
         {
             if (double.IsNaN(humidityRatio) || double.IsNaN(dryBulbTemperature))
             {
@@ -28,8 +28,9 @@ namespace SAM.Core.Mollier
             }
 
             double enthalpy = Enthalpy(dryBulbTemperature, humidityRatio, pressure);
+            double dryBulbTemperature_1 = DryBulbTemperature(enthalpy, 0, pressure);
 
-            double diagramTemperature_1 = DiagramTemperature(dryBulbTemperature, 0, pressure);
+            double diagramTemperature_1 = DiagramTemperature(dryBulbTemperature_1, 0, pressure);
 
             double dryBulbTemperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
             double humidityRatio_2 = HumidityRatio(dryBulbTemperature_2, 100, pressure);
@@ -52,10 +53,10 @@ namespace SAM.Core.Mollier
                 }
             }
 
-            return result - ((humidityRatio - humidityRatio_Saturation) * Zero.MeltingHeat_Ice + Zero.SpecificHeat_Ice * result);
+            return result - System.Math.Abs((humidityRatio - humidityRatio_Saturation) * (-Zero.MeltingHeat_Ice / 1000 + Zero.SpecificHeat_Ice / 1000 * result));
         }
 
-        public static double DiagramTemperature(this MollierPoint mollierPoint, Phase phase = Phase.Liquid)
+        public static double DiagramTemperature(this MollierPoint mollierPoint, Phase phase = Phase.Solid)
         {
             if(mollierPoint == null)
             {
