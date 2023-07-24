@@ -55,6 +55,9 @@ namespace SAM.Core.Mollier
             List<ConstantEnthalpyCurve> result = new List<ConstantEnthalpyCurve>();
             result.Add(new ConstantEnthalpyCurve(Phase.Gas, enthalpy, mollierPoint_1, mollierPoint_2));
 
+            double diagramTemperature_1 = Query.DiagramTemperature(mollierPoint_1);
+            double diagramTemperature_2 = Query.DiagramTemperature(mollierPoint_2);
+
             //Phase Liquid
             double dryBulbTemperature_3 = dryBulbTemperatureRange.Min;
             if (double.IsNaN(dryBulbTemperature_3))
@@ -62,7 +65,7 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if(!Query.Intersection(humidityRatio_1, dryBulbTemperature_1, humidityRatio_2, dryBulbTemperature_2, 0, dryBulbTemperature_3, 1, dryBulbTemperature_3, out double diagramTemperature, out double humidityRatio_3))
+            if(!Query.Intersection(humidityRatio_1, diagramTemperature_1, humidityRatio_2, diagramTemperature_2, 0, dryBulbTemperature_3, 1, dryBulbTemperature_3, out double diagramTemperature, out double humidityRatio_3))
             {
                 return result;
             }
