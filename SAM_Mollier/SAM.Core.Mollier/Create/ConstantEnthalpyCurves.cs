@@ -98,6 +98,9 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
+            enthalpy_Min = enthalpy_Min - (enthalpy_Min % enthalpyStep) - enthalpyStep;
+            enthalpy_Max = enthalpy_Max - (enthalpy_Max % enthalpyStep) + enthalpyStep;
+
             return ConstantEnthalpyCurves(dryBulbTemperatureRange, new Range<double>(enthalpy_Max, enthalpy_Min), enthalpyStep, pressure);
         }
 
