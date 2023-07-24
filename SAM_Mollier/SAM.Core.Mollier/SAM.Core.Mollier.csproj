@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ConstantEnthalpyCurve.cs" />
     <Compile Include="Classes\ConstantTemperatureCurve.cs" />
     <Compile Include="Classes\ConstantValueCurve.cs" />
     <Compile Include="Classes\MollierGroup.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Classes\HeatRecoveryProcess.cs" />
     <Compile Include="Classes\MollierProcess.cs" />
     <Compile Include="Classes\HeatingProcess.cs" />
+    <Compile Include="Create\ConstantEnthalpyCurves.cs" />
     <Compile Include="Create\ConstantTemperatureCurve.cs" />
     <Compile Include="Create\ConstantTemperatureCurves.cs" />
     <Compile Include="Create\MollierPoints.cs" />
@@ -104,7 +106,6 @@
     <Compile Include="Query\MoistureGainsMassFlow.cs" />
     <Compile Include="Query\SaturationDiagramPoint.cs" />
     <Compile Include="Query\MassFlow.cs" />
-    <Compile Include="Query\TryFindDiagramTemperature.cs" />
     <Compile Include="Query\Epsilon.cs" />
     <Compile Include="Query\SpecificHeat.cs" />
     <Compile Include="Query\SensibleHeatRatio.cs" />
