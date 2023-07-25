@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace SAM.Core.Mollier
 {
     public static partial class Query
@@ -28,6 +30,7 @@ namespace SAM.Core.Mollier
             }
 
             double enthalpy = Enthalpy(dryBulbTemperature, humidityRatio, pressure);
+
             double dryBulbTemperature_1 = DryBulbTemperature(enthalpy, 0, pressure);
 
             double diagramTemperature_1 = DiagramTemperature(dryBulbTemperature_1, 0, pressure);
@@ -35,29 +38,31 @@ namespace SAM.Core.Mollier
             double dryBulbTemperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
             double humidityRatio_2 = HumidityRatio(dryBulbTemperature_2, 100, pressure);
 
-            double diagramTemperature_2 = DiagramTemperature(dryBulbTemperature_2, 0, pressure);
+            double diagramTemperature_2 = DiagramTemperature(dryBulbTemperature_2, humidityRatio_2, pressure);
 
             if (!Intersection(0, diagramTemperature_1, humidityRatio_2, diagramTemperature_2, humidityRatio, 0, humidityRatio, 1, out double result, out double humidityRatio_Result))
             {
                 return double.NaN;
             }
 
-            result = result + (humidityRatio - humidityRatio_Saturation) * Zero.SpecificHeat_Water / 1000 * dryBulbTemperature;
+            return result;
 
-            if (dryBulbTemperature > 0)
-            {
-                return result;
-            }
+            //result = result + (humidityRatio - humidityRatio_Saturation) * Zero.SpecificHeat_Water / 1000 * System.Math.Abs(result);
 
-            if (dryBulbTemperature == 0)
-            {
-                if (phase != Phase.Solid)
-                {
-                    return result;
-                }
-            }
+            //if (dryBulbTemperature > 0)
+            //{
+            //    return result;
+            //}
 
-            return result - System.Math.Abs((humidityRatio - humidityRatio_Saturation) * (-Zero.MeltingHeat_Ice / 1000 + Zero.SpecificHeat_Ice / 1000 * result));
+            //if (dryBulbTemperature == 0)
+            //{
+            //    if (phase != Phase.Solid)
+            //    {
+            //        return result;
+            //    }
+            //}
+
+            //return result - System.Math.Abs((humidityRatio - humidityRatio_Saturation) * (-Zero.MeltingHeat_Ice / 1000 + Zero.SpecificHeat_Ice / 1000 * result));
         }
 
         public static double DiagramTemperature(this MollierPoint mollierPoint, Phase phase = Phase.Solid)

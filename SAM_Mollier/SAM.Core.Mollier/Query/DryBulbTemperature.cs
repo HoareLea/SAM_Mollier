@@ -112,7 +112,7 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            return Core.Query.Calculate_ByMaxStep((double x) => HumidityRatio(x, relativeHumidity, pressure), humidityRatio, -50, 50, 100, Tolerance.Distance);
+            return Core.Query.Calculate_ByMaxStep((double x) => HumidityRatio(x, relativeHumidity, pressure) * 1000, humidityRatio * 1000, -50, 50, 100, Tolerance.Distance);
 
 
             //OPTION 1

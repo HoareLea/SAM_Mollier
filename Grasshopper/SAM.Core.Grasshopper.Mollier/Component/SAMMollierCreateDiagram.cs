@@ -116,14 +116,20 @@ namespace SAM.Core.Grasshopper.Mollier
 
             double pressure = 101325;
 
-            MollierPoint mollierPoint_1 = new MollierPoint(50, 0.034502698535080957, pressure);
-            double digramTemperature_1 = Core.Mollier.Query.DiagramTemperature(mollierPoint_1);
+            //List<ConstantEnthalpyCurve> constantEnthalpyCurves = Core.Mollier.Create.ConstantEnthalpyCurves(140000, pressure, new Range<double>(-20, 50));
 
-            MollierPoint mollierPoint_2 = new MollierPoint(36.592000000000247, 0.040110056521000151, pressure);
-            double digramTemperature_2 = Core.Mollier.Query.DiagramTemperature(mollierPoint_2);
+            //ConstantEnthalpyCurve ConstantEnthalpyCurve_50 = Core.Mollier.Create.ConstantEnthalpyCurves(140000, pressure, new Range<double>(-20, 50)).Find(x => x.Phase == Core.Mollier.Phase.Gas);
 
-            MollierPoint mollierPoint_3 = new MollierPoint(36.048061300040033, 0.063980940533765726, pressure);
-            double digramTemperature_3 = Core.Mollier.Query.DiagramTemperature(mollierPoint_3);
+            //ConstantEnthalpyCurve ConstantEnthalpyCurve_100 = Core.Mollier.Create.ConstantEnthalpyCurves(140000, pressure, new Range<double>(-20, 100)).Find(x => x.Phase == Core.Mollier.Phase.Gas);
+
+            //MollierPoint mollierPoint_1 = new MollierPoint(50, 0.034502698535080957, pressure);
+            //double digramTemperature_1 = Core.Mollier.Query.DiagramTemperature(mollierPoint_1);
+
+            //MollierPoint mollierPoint_2 = new MollierPoint(36.592000000000247, 0.040110056521000151, pressure);
+            //double digramTemperature_2 = Core.Mollier.Query.DiagramTemperature(mollierPoint_2);
+
+            //MollierPoint mollierPoint_3 = new MollierPoint(36.048061300040033, 0.063980940533765726, pressure);
+            //double digramTemperature_3 = Core.Mollier.Query.DiagramTemperature(mollierPoint_3);
 
             //TEST END
 
