@@ -112,6 +112,23 @@ namespace SAM.Core.Grasshopper.Mollier
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            //TEST START
+
+            double pressure = 101325;
+
+            MollierPoint mollierPoint_1 = new MollierPoint(50, 0.034502698535080957, pressure);
+            double digramTemperature_1 = Core.Mollier.Query.DiagramTemperature(mollierPoint_1);
+
+            MollierPoint mollierPoint_2 = new MollierPoint(36.592000000000247, 0.040110056521000151, pressure);
+            double digramTemperature_2 = Core.Mollier.Query.DiagramTemperature(mollierPoint_2);
+
+            MollierPoint mollierPoint_3 = new MollierPoint(36.048061300040033, 0.063980940533765726, pressure);
+            double digramTemperature_3 = Core.Mollier.Query.DiagramTemperature(mollierPoint_3);
+
+            //TEST END
+
+
+
             //PROCESSING INPUT
             int index;
 
@@ -152,7 +169,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
             ChartType chartType = isMollier == true ? ChartType.Mollier : ChartType.Psychrometric;
 
-            double pressure = Standard.Pressure;
+            pressure = Standard.Pressure; //double
             index = Params.IndexOfInputParam("_pressure_");
             if(index != -1)
             {

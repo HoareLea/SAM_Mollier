@@ -35,12 +35,14 @@ namespace SAM.Core.Mollier
             double dryBulbTemperature_2 = DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
             double humidityRatio_2 = HumidityRatio(dryBulbTemperature_2, 100, pressure);
 
-            if (!Intersection(0, diagramTemperature_1, humidityRatio_2, dryBulbTemperature_2, humidityRatio, 0, humidityRatio, 1, out double result, out double humidityRatio_Result))
+            double diagramTemperature_2 = DiagramTemperature(dryBulbTemperature_2, 0, pressure);
+
+            if (!Intersection(0, diagramTemperature_1, humidityRatio_2, diagramTemperature_2, humidityRatio, 0, humidityRatio, 1, out double result, out double humidityRatio_Result))
             {
                 return double.NaN;
             }
 
-            result = result+(humidityRatio - humidityRatio_Saturation) * Zero.SpecificHeat_Water / 1000 * dryBulbTemperature;
+            result = result + (humidityRatio - humidityRatio_Saturation) * Zero.SpecificHeat_Water / 1000 * dryBulbTemperature;
 
             if (dryBulbTemperature > 0)
             {
