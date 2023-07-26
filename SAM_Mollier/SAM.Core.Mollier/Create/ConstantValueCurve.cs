@@ -221,11 +221,6 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if(mollierPoint_2.DryBulbTemperature > dryBulbTemperatureRange.Min)
-            {
-                return null;
-            }
-
             double enthalpy = mollierPoint_2.Enthalpy;
             if(humidityRatio_2 > humidityRatioRange.Max)
             {
@@ -247,6 +242,11 @@ namespace SAM.Core.Mollier
             }
 
             if (mollierPoint_1.DryBulbTemperature < dryBulbTemperatureRange.Min && mollierPoint_2.DryBulbTemperature < dryBulbTemperatureRange.Min)
+            {
+                return null;
+            }
+
+            if (mollierPoint_2.DryBulbTemperature > dryBulbTemperatureRange.Max)
             {
                 return null;
             }
