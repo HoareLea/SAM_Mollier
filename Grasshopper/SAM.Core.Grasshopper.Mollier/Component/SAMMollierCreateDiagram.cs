@@ -112,28 +112,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            //TEST START
-
             double pressure = 101325;
-
-            //List<ConstantEnthalpyCurve> constantEnthalpyCurves = Core.Mollier.Create.ConstantEnthalpyCurves(140000, pressure, new Range<double>(-20, 50));
-
-            //ConstantEnthalpyCurve ConstantEnthalpyCurve_50 = Core.Mollier.Create.ConstantEnthalpyCurves(140000, pressure, new Range<double>(-20, 50)).Find(x => x.Phase == Core.Mollier.Phase.Gas);
-
-            //ConstantEnthalpyCurve ConstantEnthalpyCurve_100 = Core.Mollier.Create.ConstantEnthalpyCurves(140000, pressure, new Range<double>(-20, 100)).Find(x => x.Phase == Core.Mollier.Phase.Gas);
-
-            //MollierPoint mollierPoint_1 = new MollierPoint(50, 0.034502698535080957, pressure);
-            //double digramTemperature_1 = Core.Mollier.Query.DiagramTemperature(mollierPoint_1);
-
-            //MollierPoint mollierPoint_2 = new MollierPoint(36.592000000000247, 0.040110056521000151, pressure);
-            //double digramTemperature_2 = Core.Mollier.Query.DiagramTemperature(mollierPoint_2);
-
-            //MollierPoint mollierPoint_3 = new MollierPoint(36.048061300040033, 0.063980940533765726, pressure);
-            //double digramTemperature_3 = Core.Mollier.Query.DiagramTemperature(mollierPoint_3);
-
-            //TEST END
-
-
 
             //PROCESSING INPUT
             int index;
@@ -207,7 +186,7 @@ namespace SAM.Core.Grasshopper.Mollier
             dataTree = null;
             gooMollierChartObjects = null;
 
-            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_Density(new Range<double>(Default.Density_Min, Default.Density_Max), Default.Density_Interval, pressure);
+            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_Density(new Range<double>(Default.Density_Min, Default.Density_Max), humidityRatioRange, dryBulbTemperatureRange, Default.Density_Interval, pressure);
             if(constantValueCurves != null)
             {
                 //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
@@ -267,9 +246,6 @@ namespace SAM.Core.Grasshopper.Mollier
                 //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
                 constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
 
-                //TEMP
-                //constantValueCurves.RemoveAll(x => x.Value != 35000);
-
                 System.Drawing.Color color = Default.Enthalpy_Color;
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
@@ -316,7 +292,7 @@ namespace SAM.Core.Grasshopper.Mollier
             dataTree = null;
             gooMollierChartObjects = null;
 
-            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_SpecificVolume(new Range<double>(Default.SpecificVolume_Min, Default.SpecificVolume_Max), Default.SpecificVolume_Interval, pressure);
+            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_SpecificVolume(dryBulbTemperatureRange, new Range<double>(Default.SpecificVolume_Min, Default.SpecificVolume_Max), Default.SpecificVolume_Interval, pressure);
             if (constantValueCurves != null)
             {
                 //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
@@ -369,7 +345,7 @@ namespace SAM.Core.Grasshopper.Mollier
             dataTree = null;
             gooMollierChartObjects = null;
 
-            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_WetBulbTemperature(new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max), Default.DryBulbTemperature_Interval, pressure);
+            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_WetBulbTemperature(dryBulbTemperatureRange, humidityRatioRange, Default.DryBulbTemperature_Interval, pressure);
             if (constantValueCurves != null)
             {
                 //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
@@ -422,7 +398,7 @@ namespace SAM.Core.Grasshopper.Mollier
             dataTree = null;
             gooMollierChartObjects = null;
 
-            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_RelativeHumidity(new Range<double>(10, 100), 10, pressure, new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max));
+            constantValueCurves = Core.Mollier.Create.ConstantValueCurves_RelativeHumidity(new Range<double>(10, 100), 10, pressure, dryBulbTemperatureRange, humidityRatioRange);
             if (constantValueCurves != null)
             {
                 //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
@@ -475,7 +451,7 @@ namespace SAM.Core.Grasshopper.Mollier
             dataTree = null;
             gooMollierChartObjects = null;
 
-            constantValueCurves = Core.Mollier.Create.ConstantTemperatureCurves_DryBulbTemperature(new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max), Default.DryBulbTemperature_Interval, pressure)?.ConvertAll(x => x as ConstantValueCurve);
+            constantValueCurves = Core.Mollier.Create.ConstantTemperatureCurves_DryBulbTemperature(new Range<double>(Default.DryBulbTemperature_Min, Default.DryBulbTemperature_Max), new Range<double>(Default.HumidityRatio_Min / 1000, Default.HumidityRatio_Max / 1000), Default.DryBulbTemperature_Interval, pressure)?.ConvertAll(x => x as ConstantValueCurve);
             if (constantValueCurves != null)
             {
                 //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
