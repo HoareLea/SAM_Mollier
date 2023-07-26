@@ -19,6 +19,7 @@
 
         public const double WetBulbTemperature_Min = -10;
         public const double WetBulbTemperature_Max = 30;
+        public const double WetBulbTemperature_Interval = 1;
         public static System.Drawing.Color WetBulbTemperature_Color { get; } = System.Drawing.Color.LightSalmon;
 
         public const double DryBulbTemperature_Min = -20;
