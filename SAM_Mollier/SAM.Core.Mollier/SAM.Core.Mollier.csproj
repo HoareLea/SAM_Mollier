@@ -148,8 +148,9 @@
     <Compile Include="Query\HumidityRatio.cs" />
     <Compile Include="Query\SaturationVapourPressure.cs" />
     <Compile Include="Query\PartialVapourPressure.cs" />
-    <Compile Include="Variables\Unit.cs" />
     <Compile Include="Variables\Default.cs" />
+    <Compile Include="Variables\Unit.cs" />
+    <Compile Include="Variables\Limit.cs" />
     <Compile Include="Variables\Constant.cs" />
     <Compile Include="Variables\Zero.cs" />
     <Compile Include="Variables\Standard.cs" />
