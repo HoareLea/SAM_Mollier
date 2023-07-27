@@ -2,6 +2,52 @@
 {
     public static partial class Create
     { 
+        public static ConstantTemperatureCurve ConstantTemperatureCurve_DiagramTemperature(double dryBulbTemperature, double pressure)
+        {
+            if(double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure))
+            {
+                return null;
+            }
+
+            double humidityRatio_1 = Query.HumidityRatio(dryBulbTemperature, 0, pressure);
+            if(double.IsNaN(humidityRatio_1))
+            {
+                return null;
+            }
+
+            double diagramTemperature_1 = Query.DiagramTemperature(dryBulbTemperature, humidityRatio_1, pressure);
+            if(double.IsNaN(diagramTemperature_1))
+            {
+                return null;
+            }
+
+            MollierPoint mollierPoint_1 = new MollierPoint(diagramTemperature_1, humidityRatio_1, pressure);
+            if (!mollierPoint_1.IsValid())
+            {
+                return null;
+            }
+
+            double humidityRatio_2 = Query.HumidityRatio(dryBulbTemperature, 100, pressure);
+            if (double.IsNaN(humidityRatio_1))
+            {
+                return null;
+            }
+
+            double diagramTemperature_2 = Query.DiagramTemperature(dryBulbTemperature, humidityRatio_2, pressure);
+            if (double.IsNaN(diagramTemperature_1))
+            {
+                return null;
+            }
+
+            MollierPoint mollierPoint_2 = new MollierPoint(diagramTemperature_2, humidityRatio_2, pressure);
+            if (!mollierPoint_2.IsValid())
+            {
+                return null;
+            }
+
+            return new ConstantTemperatureCurve(Phase.Gas, dryBulbTemperature, mollierPoint_1, mollierPoint_2);
+        }
+
         public static ConstantTemperatureCurve ConstantTemperatureCurve_DryBulbTemperature(double dryBulbTemperature, Range<double> humidityRatioRange, double pressure)
         {
             if (double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure) || humidityRatioRange == null || double.IsNaN(humidityRatioRange.Min) || double.IsNaN(humidityRatioRange.Max))
