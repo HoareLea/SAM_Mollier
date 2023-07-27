@@ -1,17 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core.Mollier
 {
     public static partial class Create
     {
-        public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves(double enthalpy, double pressure, Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange)
+        public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves(double enthalpy, double pressure, Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange, params Phase[] phases)
         {
             if (double.IsNaN(enthalpy) || double.IsNaN(pressure) || dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Max) || double.IsNaN(dryBulbTemperatureRange.Min) || humidityRatioRange == null || double.IsNaN(humidityRatioRange.Max) || double.IsNaN(humidityRatioRange.Min))
             {
                 return null;
             }
 
-            //Phase Gas
+
+            Phase[] phases_Temp = phases == null || phases.Length == 0 ? new Phase[] { Phase.Gas, Phase.Liquid} : phases;
+
+            List<ConstantEnthalpyCurve> result = new List<ConstantEnthalpyCurve>();
 
             //Mollier Point 1
             double dryBulbTemperature_1 = Query.DryBulbTemperature(enthalpy, 0, pressure);
@@ -21,13 +25,13 @@ namespace SAM.Core.Mollier
             }
 
             double humidityRatio_1 = 0;
-            if(dryBulbTemperature_1 > dryBulbTemperatureRange.Max)
+            if (dryBulbTemperature_1 > dryBulbTemperatureRange.Max)
             {
                 dryBulbTemperature_1 = dryBulbTemperatureRange.Max;
                 humidityRatio_1 = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_1, enthalpy);
             }
 
-            if(humidityRatio_1 < humidityRatioRange.Min)
+            if (humidityRatio_1 < humidityRatioRange.Min)
             {
                 humidityRatio_1 = humidityRatioRange.Min;
                 dryBulbTemperature_1 = Query.DryBulbTemperature(enthalpy, humidityRatio_1, pressure);
@@ -75,46 +79,51 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            List<ConstantEnthalpyCurve> result = new List<ConstantEnthalpyCurve>();
-            result.Add(new ConstantEnthalpyCurve(Phase.Gas, enthalpy, mollierPoint_1, mollierPoint_2));
-
-            double diagramTemperature_1 = Query.DiagramTemperature(mollierPoint_1);
-            double diagramTemperature_2 = Query.DiagramTemperature(mollierPoint_2);
+            //Phase Gas
+            if (phases_Temp.Contains(Phase.Gas))
+            {
+                result.Add(new ConstantEnthalpyCurve(Phase.Gas, enthalpy, mollierPoint_1, mollierPoint_2));
+            }
 
             //Phase Liquid
-            double dryBulbTemperature_3 = dryBulbTemperatureRange.Min;
-            if (double.IsNaN(dryBulbTemperature_3))
+            if (phases_Temp.Contains(Phase.Liquid))
             {
-                return null;
+                double diagramTemperature_1 = Query.DiagramTemperature(mollierPoint_1);
+                double diagramTemperature_2 = Query.DiagramTemperature(mollierPoint_2);
+
+
+                double dryBulbTemperature_3 = dryBulbTemperatureRange.Min;
+                if (double.IsNaN(dryBulbTemperature_3))
+                {
+                    return null;
+                }
+
+                if (!Query.Intersection(humidityRatio_1, diagramTemperature_1, humidityRatio_2, diagramTemperature_2, 0, dryBulbTemperature_3, 1, dryBulbTemperature_3, out double diagramTemperature, out double humidityRatio_3))
+                {
+                    return result;
+                }
+
+                if (humidityRatio_3 > humidityRatioRange.Max)
+                {
+                    humidityRatio_3 = humidityRatioRange.Max;
+                }
+
+                dryBulbTemperature_3 = Query.DryBulbTemperature(enthalpy, humidityRatio_3, pressure);
+                if (dryBulbTemperature_3 < dryBulbTemperatureRange.Min)
+                {
+                    dryBulbTemperature_3 = dryBulbTemperatureRange.Min;
+                    humidityRatio_3 = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_3, enthalpy);
+                }
+
+
+                MollierPoint mollierPoint_3 = new MollierPoint(dryBulbTemperature_3, humidityRatio_3, pressure);
+                if (!mollierPoint_3.IsValid())
+                {
+                    return result;
+                }
+
+                result.Add(new ConstantEnthalpyCurve(Phase.Liquid, enthalpy, mollierPoint_2, mollierPoint_3));
             }
-
-            if (!Query.Intersection(humidityRatio_1, diagramTemperature_1, humidityRatio_2, diagramTemperature_2, 0, dryBulbTemperature_3, 1, dryBulbTemperature_3, out double diagramTemperature, out double humidityRatio_3))
-            {
-                return result;
-            }
-
-            if(humidityRatio_3 > humidityRatioRange.Max)
-            {
-                humidityRatio_3 = humidityRatioRange.Max;
-            }
-
-            dryBulbTemperature_3 = Query.DryBulbTemperature(enthalpy, humidityRatio_3, pressure);
-            if(dryBulbTemperature_3 < dryBulbTemperatureRange.Min)
-            {
-                dryBulbTemperature_3 = dryBulbTemperatureRange.Min;
-                humidityRatio_3 = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_3, enthalpy);
-            }
-
-
-            MollierPoint mollierPoint_3 = new MollierPoint(dryBulbTemperature_3, humidityRatio_3, pressure);
-            if (!mollierPoint_3.IsValid())
-            {
-                return result;
-            }
-
-
-
-            result.Add(new ConstantEnthalpyCurve(Phase.Liquid, enthalpy, mollierPoint_2, mollierPoint_3));
 
             return result;
         }
