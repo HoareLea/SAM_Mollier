@@ -137,6 +137,30 @@ namespace SAM.Core.Mollier
             return result;
         }
 
+        public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves(Range<double> enthalpyRange, double pressure, double enthalpyStep, Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange, params Phase[] phases)
+        {
+            if(enthalpyRange == null)
+            {
+                return null;
+            }
+            
+            List<ConstantEnthalpyCurve> result = new List<ConstantEnthalpyCurve>();
+
+            double enthalpy = enthalpyRange.Min;
+            while (enthalpy <= enthalpyRange.Max)
+            {
+                List<ConstantEnthalpyCurve> constantValueCurves = ConstantEnthalpyCurves(enthalpy, pressure, dryBulbTemperatureRange, humidityRatioRange, phases);
+                if (constantValueCurves != null)
+                {
+                    result.AddRange(constantValueCurves);
+                }
+
+                enthalpy += enthalpyStep;
+            }
+
+            return result;
+        }
+
         public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves_ByHumidityRatioRange(Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange, double enthalpyStep, double pressure)
         {
             if (dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Min) || double.IsNaN(dryBulbTemperatureRange.Max) || humidityRatioRange == null || double.IsNaN(humidityRatioRange.Min) || double.IsNaN(humidityRatioRange.Max) || double.IsNaN(enthalpyStep) || double.IsNaN(pressure))
