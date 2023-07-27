@@ -82,48 +82,6 @@ namespace SAM.Core.Mollier
             return result;
         }
 
-        public static ConstantValueCurve ConstantValueCurve_Enthalpy(double enthalpy, double pressure)
-        {
-            if (double.IsNaN(enthalpy) || double.IsNaN(pressure))
-            {
-                return null;
-            }
-
-            //Relative Humidity = 0
-            double dryBulbTemperature_1 = Query.DryBulbTemperature(enthalpy, 0, pressure);
-            if (double.IsNaN(dryBulbTemperature_1))
-            {
-                return null;
-            }
-
-            MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature_1, 0, pressure);
-            if (!mollierPoint_1.IsValid())
-            {
-                return null;
-            }
-
-            //Relative Humidity = 100
-            double dryBulbTemperature_2 = Query.DryBulbTemperature_ByEnthalpy(enthalpy, 100, pressure);
-            if (double.IsNaN(dryBulbTemperature_2))
-            {
-                return null;
-            }
-
-            double humidityRatio_2 = Query.HumidityRatio(dryBulbTemperature_2, 100, pressure);
-            if (double.IsNaN(humidityRatio_2))
-            {
-                return null;
-            }
-
-            MollierPoint mollierPoint_2 = new MollierPoint(dryBulbTemperature_2, humidityRatio_2, pressure);
-            if (!mollierPoint_2.IsValid())
-            {
-                return null;
-            }
-
-            return new ConstantValueCurve(ChartDataType.Enthalpy, enthalpy, mollierPoint_1, mollierPoint_2);
-        }
-
         public static ConstantValueCurve ConstantValueCurve_RelativeHumidity(double relativeHumidity, double pressure, Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange)
         {
             if (double.IsNaN(relativeHumidity) || double.IsNaN(pressure) || dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Min) || double.IsNaN(dryBulbTemperatureRange.Max))
