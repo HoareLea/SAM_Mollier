@@ -275,6 +275,23 @@ namespace SAM.Core.Mollier
             return  Core.Query.Calculate_ByMaxStep((double x) => SpecificVolume(x, HumidityRatio(x, relativeHumidity, pressure), pressure), specificVolume, -50, 50);
         }
 
+        /// <summary>
+        /// Calculates dry bulb temperature from relative humidity, specific volume and pressure
+        /// </summary>
+        /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
+        /// <param name="specificVolume">Specific Volume [m3/kg]</param>
+        /// <param name="pressure">Atmospheric pressure [Pa]</param>
+        /// <returns>Dry-bulb temperature [°C]</returns>
+        public static double DryBulbTemperature_ByHumidityRatioAndSpecificVolume(double humidityRatio, double specificVolume, double pressure)
+        {
+            if (double.IsNaN(humidityRatio) || double.IsNaN(specificVolume) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+
+            return Core.Query.Calculate_ByMaxStep((double x) => SpecificVolume(x, humidityRatio, pressure), specificVolume, -50, 50);
+        }
+
         public static double DryBulbTemperature_ByDiagramTemperature(double diagramTemperature, double humidityRatio, double pressure)
         {
             if (double.IsNaN(diagramTemperature))

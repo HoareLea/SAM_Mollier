@@ -50,48 +50,37 @@
 
         public static ConstantTemperatureCurve ConstantTemperatureCurve_DryBulbTemperature(double dryBulbTemperature, Range<double> humidityRatioRange, double pressure)
         {
-            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure))
+            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure) || humidityRatioRange == null || double.IsNaN(humidityRatioRange.Min) || double.IsNaN(humidityRatioRange.Max))
             {
                 return null;
             }
 
 
-            double humidityRatio = 0;
-            if (humidityRatioRange.Min > humidityRatio)
-            {
-                humidityRatio = humidityRatioRange.Min;
-            }
+            double humidityRatio_1 = System.Math.Max(humidityRatioRange.Min, 0);
 
-            if(humidityRatioRange.Max < humidityRatio)
+            if(humidityRatio_1 > Query.SaturationHumidityRatio(dryBulbTemperature, pressure))
             {
                 return null;
             }
 
-            MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
+            MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature, humidityRatio_1, pressure);
             if (!mollierPoint_1.IsValid())
             {
                 return null;
             }
 
-
-
-            humidityRatio = Query.HumidityRatio(dryBulbTemperature, 100, pressure);
-            if (double.IsNaN(humidityRatio))
+            double humidityRatio_2 = Query.HumidityRatio(dryBulbTemperature, 100, pressure);
+            if (double.IsNaN(humidityRatio_2))
             {
                 return null;
             }
 
-            if (humidityRatio < humidityRatioRange.Min)
+            if (humidityRatio_2 > humidityRatioRange.Max)
             {
-                return null;
+                humidityRatio_2 = humidityRatioRange.Max;
             }
 
-            if (humidityRatio > humidityRatioRange.Max)
-            {
-                humidityRatio = humidityRatioRange.Max;
-            }
-
-            MollierPoint mollierPoint_2 = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
+            MollierPoint mollierPoint_2 = new MollierPoint(dryBulbTemperature, humidityRatio_2, pressure);
             if(!mollierPoint_2.IsValid())
             {
                 return null;

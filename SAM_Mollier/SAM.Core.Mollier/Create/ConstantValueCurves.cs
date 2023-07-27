@@ -52,7 +52,7 @@ namespace SAM.Core.Mollier
             return result;
         }
 
-        public static List<ConstantValueCurve> ConstantValueCurves_SpecificVolume(Range<double> dryBulbTemperatureRange, Range<double> specificVolumeRange, double step, double pressure)
+        public static List<ConstantValueCurve> ConstantValueCurves_SpecificVolume(Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange, Range<double> specificVolumeRange, double step, double pressure)
         {
             if (specificVolumeRange == null || double.IsNaN(specificVolumeRange.Min) || double.IsNaN(specificVolumeRange.Max) || double.IsNaN(step) || double.IsNaN(pressure))
             {
@@ -64,7 +64,7 @@ namespace SAM.Core.Mollier
             double specificVolume = specificVolumeRange.Min;
             while (specificVolume <= specificVolumeRange.Max)
             {
-                ConstantValueCurve constantValueCurve = ConstantValueCurve_SpecificVolume(dryBulbTemperatureRange, specificVolume, pressure);
+                ConstantValueCurve constantValueCurve = ConstantValueCurve_SpecificVolume(dryBulbTemperatureRange, humidityRatioRange, specificVolume, pressure);
                 if (constantValueCurve != null)
                 {
                     result.Add(constantValueCurve);

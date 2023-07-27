@@ -73,7 +73,23 @@
 
             return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
         }
-    
+
+        public static MollierPoint MollierPoint_ByHumidityRatioAndSpecificVolume(double humidityRatio, double specificVolume, double pressure)
+        {
+            if (double.IsNaN(humidityRatio) || double.IsNaN(specificVolume) || double.IsNaN(pressure))
+            {
+                return null;
+            }
+
+            double dryBulbTemperature = Query.DryBulbTemperature_ByHumidityRatioAndSpecificVolume(humidityRatio, specificVolume, pressure);
+            if (double.IsNaN(dryBulbTemperature))
+            {
+                return null;
+            }
+
+            return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
+        }
+
         public static MollierPoint MollierPoint_ByRelativeHumidityAndSpecificVolume(double relativeHumidity, double specificVolume, double pressure)
         {
             if (double.IsNaN(relativeHumidity) || double.IsNaN(specificVolume) || double.IsNaN(pressure))
