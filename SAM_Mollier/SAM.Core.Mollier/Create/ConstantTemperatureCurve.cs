@@ -2,15 +2,15 @@
 {
     public static partial class Create
     { 
-        public static ConstantTemperatureCurve ConstantTemperatureCurve_DryBulbTemperature(double dryBulbTemperature, Range<double> humidityRatioRange, double pressure)
+        public static ConstantTemperatureCurve ConstantTemperatureCurve_DryBulbTemperature(this MollierRange mollierRange, double dryBulbTemperature, double pressure)
         {
-            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure) || humidityRatioRange == null || double.IsNaN(humidityRatioRange.Min) || double.IsNaN(humidityRatioRange.Max))
+            if (double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
                 return null;
             }
 
 
-            double humidityRatio_1 = System.Math.Max(humidityRatioRange.Min, 0);
+            double humidityRatio_1 = System.Math.Max(mollierRange.HumidityRatio_Min, 0);
 
             if(humidityRatio_1 > Query.SaturationHumidityRatio(dryBulbTemperature, pressure))
             {
@@ -29,9 +29,9 @@
                 return null;
             }
 
-            if (humidityRatio_2 > humidityRatioRange.Max)
+            if (humidityRatio_2 > mollierRange.HumidityRatio_Max)
             {
-                humidityRatio_2 = humidityRatioRange.Max;
+                humidityRatio_2 = mollierRange.HumidityRatio_Max;
             }
 
             MollierPoint mollierPoint_2 = new MollierPoint(dryBulbTemperature, humidityRatio_2, pressure);
@@ -43,9 +43,9 @@
             return new ConstantTemperatureCurve(Phase.Gas, dryBulbTemperature, mollierPoint_1, mollierPoint_2);
         }
 
-        public static ConstantTemperatureCurve ConstantTemperatureCurve_Liquid(double dryBulbTemperature_Min, double pressure)
+        public static ConstantTemperatureCurve ConstantTemperatureCurve_Liquid(this MollierRange mollierRange, double pressure)
         {
-            if(double.IsNaN(pressure))
+            if(double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
                 return null;
             }
@@ -55,7 +55,7 @@
 
             double diagramTemperature = Query.DiagramTemperature(mollierPoint);
 
-            if(!Query.Intersection(mollierPoint.HumidityRatio, diagramTemperature, start.HumidityRatio, 0, 0, dryBulbTemperature_Min, start.HumidityRatio, dryBulbTemperature_Min, out double dryBulbTemperature, out double humidityRatio))
+            if(!Query.Intersection(mollierPoint.HumidityRatio, diagramTemperature, start.HumidityRatio, 0, 0, mollierRange.DryBulbTemperature_Min, start.HumidityRatio, mollierRange.DryBulbTemperature_Min, out double dryBulbTemperature, out double humidityRatio))
             {
                 return null;
             }
@@ -65,9 +65,9 @@
             return new ConstantTemperatureCurve(Phase.Liquid, 0, start, end);
         }
 
-        public static ConstantTemperatureCurve ConstantTemperatureCurve_Solid(double dryBulbTemperature_Min, double pressure)
+        public static ConstantTemperatureCurve ConstantTemperatureCurve_Solid(this MollierRange mollierRange, double pressure)
         {
-            if (double.IsNaN(pressure))
+            if (double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
                 return null;
             }
@@ -77,7 +77,7 @@
 
             double diagramTemperature = Query.DiagramTemperature(mollierPoint);
 
-            if (!Query.Intersection(mollierPoint.HumidityRatio, diagramTemperature, start.HumidityRatio, 0, 0, dryBulbTemperature_Min, start.HumidityRatio, dryBulbTemperature_Min, out double dryBulbTemperature, out double humidityRatio))
+            if (!Query.Intersection(mollierPoint.HumidityRatio, diagramTemperature, start.HumidityRatio, 0, 0, mollierRange.DryBulbTemperature_Min, start.HumidityRatio, mollierRange.DryBulbTemperature_Min, out double dryBulbTemperature, out double humidityRatio))
             {
                 return null;
             }

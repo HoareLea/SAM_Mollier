@@ -5,9 +5,9 @@ namespace SAM.Core.Mollier
 {
     public static partial class Create
     {
-        public static ConstantValueCurve ConstantValueCurve_Density(Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange, double density, double pressure)
+        public static ConstantValueCurve ConstantValueCurve_Density(this MollierRange mollierRange, double density, double pressure)
         {
-            if (double.IsNaN(density) || double.IsNaN(pressure))
+            if (double.IsNaN(density) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
                 return null;
             }
@@ -18,7 +18,7 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if (dryBulbTemperature_1 > dryBulbTemperatureRange.Max)
+            if (dryBulbTemperature_1 > mollierRange.DryBulbTemperature_Max)
             {
                 return null;
             }
@@ -29,9 +29,9 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if (humidityRatio_1 < humidityRatioRange.Min)
+            if (humidityRatio_1 < mollierRange.HumidityRatio_Min)
             {
-                humidityRatio_1 = humidityRatioRange.Min;
+                humidityRatio_1 = mollierRange.HumidityRatio_Min;
                 dryBulbTemperature_1 = Query.DryBulbTemperature_ByDensityAndHumidityRatio(density, humidityRatio_1, pressure);
             }
 
@@ -64,49 +64,47 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if(mollierPoint_2.HumidityRatio > humidityRatioRange.Max)
+            if(mollierPoint_2.HumidityRatio > mollierRange.HumidityRatio_Max)
             {
-                humidityRatio_2 = humidityRatioRange.Max;
+                humidityRatio_2 = mollierRange.HumidityRatio_Max;
                 dryBulbTemperature_2 = Query.DryBulbTemperature_ByDensityAndHumidityRatio(density, humidityRatio_2, pressure);
                 mollierPoint_2 = new MollierPoint(dryBulbTemperature_2, humidityRatio_2, pressure);
             }
 
-            if(mollierPoint_1.DryBulbTemperature < dryBulbTemperatureRange.Min && mollierPoint_2.DryBulbTemperature < dryBulbTemperatureRange.Min)
+            if(mollierPoint_1.DryBulbTemperature < mollierRange.DryBulbTemperature_Min && mollierPoint_2.DryBulbTemperature < mollierRange.DryBulbTemperature_Min)
             {
                 return null;
             }
 
             ConstantValueCurve result = new ConstantValueCurve(ChartDataType.Density, density, mollierPoint_1, mollierPoint_2);
-
-            //result = result.Clamp(humidityRatioRange, dryBulbTemperatureRange);
             return result;
         }
 
-        public static ConstantValueCurve ConstantValueCurve_RelativeHumidity(double relativeHumidity, double pressure, Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange)
+        public static ConstantValueCurve ConstantValueCurve_RelativeHumidity(this MollierRange mollierRange, double relativeHumidity, double pressure)
         {
-            if (double.IsNaN(relativeHumidity) || double.IsNaN(pressure) || dryBulbTemperatureRange == null || double.IsNaN(dryBulbTemperatureRange.Min) || double.IsNaN(dryBulbTemperatureRange.Max))
+            if (double.IsNaN(relativeHumidity) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
                 return null;
             }
 
-            double step = (dryBulbTemperatureRange.Max - dryBulbTemperatureRange.Min) / Math.Truncate(dryBulbTemperatureRange.Max - dryBulbTemperatureRange.Min);
+            double step = (mollierRange.DryBulbTemperature_Max - mollierRange.DryBulbTemperature_Min) / Math.Truncate(mollierRange.DryBulbTemperature_Max - mollierRange.DryBulbTemperature_Min);
             if (double.IsNaN(step) || double.IsInfinity(step))
             {
                 step = 0.1;
             }
 
-            double dryBulbTemperature = Query.DryBulbTemperature_ByHumidityRatio(humidityRatioRange.Min, relativeHumidity, pressure);
-            dryBulbTemperature = Math.Max(dryBulbTemperature, dryBulbTemperatureRange.Min);
+            double dryBulbTemperature = Query.DryBulbTemperature_ByHumidityRatio(mollierRange.HumidityRatio_Min, relativeHumidity, pressure);
+            dryBulbTemperature = Math.Max(dryBulbTemperature, mollierRange.DryBulbTemperature_Min);
 
             List<MollierPoint> mollierPoints = new List<MollierPoint>();
-            while (dryBulbTemperature <= dryBulbTemperatureRange.Max)
+            while (dryBulbTemperature <= mollierRange.DryBulbTemperature_Max)
             {
                 double humidityRatio = Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
                 if (!double.IsNaN(humidityRatio))
                 {
-                    if(humidityRatio > humidityRatioRange.Max)
+                    if(humidityRatio > mollierRange.HumidityRatio_Max)
                     {
-                        humidityRatio = humidityRatioRange.Max;
+                        humidityRatio = mollierRange.HumidityRatio_Max;
                         dryBulbTemperature = Query.DryBulbTemperature_ByHumidityRatio(humidityRatio, relativeHumidity, pressure);
                     }
 
@@ -116,7 +114,7 @@ namespace SAM.Core.Mollier
                         mollierPoints.Add(mollierPoint);
                     }
 
-                    if(humidityRatio >= humidityRatioRange.Max)
+                    if(humidityRatio >= mollierRange.HumidityRatio_Max)
                     {
                         break;
                     }
@@ -125,9 +123,9 @@ namespace SAM.Core.Mollier
                 dryBulbTemperature += step;
             }
 
-            if (dryBulbTemperature > dryBulbTemperatureRange.Max)
+            if (dryBulbTemperature > mollierRange.DryBulbTemperature_Max)
             {
-                dryBulbTemperature = dryBulbTemperatureRange.Max;
+                dryBulbTemperature = mollierRange.DryBulbTemperature_Max;
                 double humidityRatio = Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
                 if (!double.IsNaN(humidityRatio))
                 {
@@ -147,14 +145,14 @@ namespace SAM.Core.Mollier
             return new ConstantValueCurve(ChartDataType.RelativeHumidity, relativeHumidity, mollierPoints);
         }
 
-        public static ConstantValueCurve ConstantValueCurve_SpecificVolume(Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange, double specificVolume, double pressure)
+        public static ConstantValueCurve ConstantValueCurve_SpecificVolume(this MollierRange mollierRange, double specificVolume, double pressure)
         {
-            if (double.IsNaN(specificVolume) || double.IsNaN(pressure))
+            if (double.IsNaN(specificVolume) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
                 return null;
             }
 
-            double humidityRatio_1 = Math.Max(0, humidityRatioRange.Min);
+            double humidityRatio_1 = Math.Max(0, mollierRange.HumidityRatio_Min);
 
             MollierPoint mollierPoint_1 = MollierPoint_ByHumidityRatioAndSpecificVolume(humidityRatio_1, specificVolume, pressure);
             if (mollierPoint_1 == null || !mollierPoint_1.IsValid())
@@ -162,7 +160,7 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if (mollierPoint_1.DryBulbTemperature > dryBulbTemperatureRange.Max)
+            if (mollierPoint_1.DryBulbTemperature > mollierRange.DryBulbTemperature_Max)
             {
                 return null;
             }
@@ -179,14 +177,14 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if(mollierPoint_2.HumidityRatio > humidityRatioRange.Max)
+            if(mollierPoint_2.HumidityRatio > mollierRange.HumidityRatio_Max)
             {
-                double dryBulbTemperature = Query.DryBulbTemperature_ByHumidityRatioAndSpecificVolume(humidityRatioRange.Max, specificVolume, pressure);
-                mollierPoint_2 = new MollierPoint(dryBulbTemperature, humidityRatioRange.Max, pressure);
+                double dryBulbTemperature = Query.DryBulbTemperature_ByHumidityRatioAndSpecificVolume(mollierRange.HumidityRatio_Max, specificVolume, pressure);
+                mollierPoint_2 = new MollierPoint(dryBulbTemperature, mollierRange.HumidityRatio_Max, pressure);
             }
 
 
-            if (mollierPoint_1.DryBulbTemperature < dryBulbTemperatureRange.Min && mollierPoint_2.DryBulbTemperature < dryBulbTemperatureRange.Min)
+            if (mollierPoint_1.DryBulbTemperature < mollierRange.DryBulbTemperature_Min && mollierPoint_2.DryBulbTemperature < mollierRange.DryBulbTemperature_Min)
             {
                 return null;
             }
@@ -194,15 +192,15 @@ namespace SAM.Core.Mollier
             return new ConstantValueCurve(ChartDataType.SpecificVolume, specificVolume, mollierPoint_1, mollierPoint_2);
         }
 
-        public static ConstantValueCurve ConstantValueCurve_WetBulbTemperature(Range<double> dryBulbTemperatureRange, Range<double> humidityRatioRange, double wetBulbTemperature, double pressure)
+        public static ConstantValueCurve ConstantValueCurve_WetBulbTemperature(this MollierRange mollierRange, double wetBulbTemperature, double pressure)
         {
-            if (double.IsNaN(wetBulbTemperature) || double.IsNaN(pressure))
+            if (double.IsNaN(wetBulbTemperature) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
                 return null;
             }
 
             double humidityRatio_2 = Query.SaturationHumidityRatio(wetBulbTemperature, pressure);
-            if(humidityRatio_2  < humidityRatioRange.Min)
+            if(humidityRatio_2  < mollierRange.HumidityRatio_Min)
             {
                 return null;
             }
@@ -214,21 +212,21 @@ namespace SAM.Core.Mollier
             }
 
             double enthalpy = mollierPoint_2.Enthalpy;
-            if(humidityRatio_2 > humidityRatioRange.Max)
+            if(humidityRatio_2 > mollierRange.HumidityRatio_Max)
             {
-                humidityRatio_2 = humidityRatioRange.Max;
+                humidityRatio_2 = mollierRange.HumidityRatio_Max;
                 mollierPoint_2 = MollierPoint_ByEnthalpy(enthalpy, humidityRatio_2, pressure);
             }
 
-            if (mollierPoint_2.DryBulbTemperature > dryBulbTemperatureRange.Max)
+            if (mollierPoint_2.DryBulbTemperature > mollierRange.DryBulbTemperature_Max)
             {
                 return null;
             }
 
             double humidityRatio_1 = 0;
-            if(humidityRatio_1 < humidityRatioRange.Min)
+            if(humidityRatio_1 < mollierRange.HumidityRatio_Min)
             {
-                humidityRatio_1 = humidityRatioRange.Min;
+                humidityRatio_1 = mollierRange.HumidityRatio_Min;
             }
 
             MollierPoint mollierPoint_1 = MollierPoint_ByEnthalpy(enthalpy, humidityRatio_1, pressure);
@@ -237,16 +235,16 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if (mollierPoint_1.DryBulbTemperature > dryBulbTemperatureRange.Max)
+            if (mollierPoint_1.DryBulbTemperature > mollierRange.DryBulbTemperature_Max)
             {
-                double dryBulbTemperature_1 = dryBulbTemperatureRange.Max;
+                double dryBulbTemperature_1 = mollierRange.DryBulbTemperature_Max;
 
                 humidityRatio_1 = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_1, enthalpy);
 
                 mollierPoint_1 = MollierPoint_ByEnthalpy(enthalpy, humidityRatio_1, pressure);
             }
 
-            if (mollierPoint_1.DryBulbTemperature < dryBulbTemperatureRange.Min && mollierPoint_2.DryBulbTemperature < dryBulbTemperatureRange.Min)
+            if (mollierPoint_1.DryBulbTemperature < mollierRange.DryBulbTemperature_Min && mollierPoint_2.DryBulbTemperature < mollierRange.DryBulbTemperature_Min)
             {
                 return null;
             }

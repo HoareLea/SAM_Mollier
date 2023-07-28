@@ -53,6 +53,9 @@
     <Compile Include="Classes\ConstantValueCurve.cs" />
     <Compile Include="Classes\MollierGroup.cs" />
     <Compile Include="Classes\MollierCurve.cs" />
+    <Compile Include="Classes\MollierModel.cs" />
+    <Compile Include="Classes\MollierRange.cs" />
+    <Compile Include="Classes\MollierSettings.cs" />
     <Compile Include="Classes\UIMollierAppearance.cs" />
     <Compile Include="Classes\UIMollierPoint.cs" />
     <Compile Include="Classes\UICoolingProcess.cs" />
@@ -72,7 +75,7 @@
     <Compile Include="Create\ConstantEnthalpyCurves.cs" />
     <Compile Include="Create\ConstantTemperatureCurve.cs" />
     <Compile Include="Create\ConstantTemperatureCurves.cs" />
-    <Compile Include="Create\MollierPoints.cs" />
+    <Compile Include="Create\MollierRange.cs" />
     <Compile Include="Create\HeatRecoveryProcess .cs" />
     <Compile Include="Create\SteamHumidificationProcess.cs" />
     <Compile Include="Create\IsotermicHumidificationProcess.cs" />

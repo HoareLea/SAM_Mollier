@@ -3,6 +3,9 @@
     //Limits
     public static class Limit
     {
+        public const double Pressure_Min = 35000;
+        public const double Pressure_Max = 400000;
+
         public const double Density_Min = 0.45;
         public const double Density_Max = 1.41;
 
