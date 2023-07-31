@@ -12,7 +12,6 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-
             Phase[] phases_Temp = phases == null || phases.Length == 0 ? new Phase[] { Phase.Gas, Phase.Liquid} : phases;
 
             List<ConstantEnthalpyCurve> result = new List<ConstantEnthalpyCurve>();
@@ -93,8 +92,8 @@ namespace SAM.Core.Mollier
             }
 
             //Phase Liquid
-            if (phases_Temp.Contains(Phase.Liquid))
-            {                
+            if (phases_Temp.Contains(Phase.Liquid) && mollierPoint_2.HumidityRatio < mollierRange.HumidityRatio_Max)
+            {       
                 double diagramTemperature_1 = Query.DiagramTemperature(mollierPoint_1);
                 double diagramTemperature_2 = Query.DiagramTemperature(mollierPoint_2);
 
@@ -107,9 +106,9 @@ namespace SAM.Core.Mollier
 
                 if (Query.Intersection(humidityRatio_1, diagramTemperature_1, humidityRatio_2, diagramTemperature_2, 0, dryBulbTemperature_3, 1, dryBulbTemperature_3, out double diagramTemperature, out double humidityRatio_3))
                 {
-                    if (humidityRatio_3 > mollierRange.DryBulbTemperature_Max)
+                    if (humidityRatio_3 > mollierRange.HumidityRatio_Max)
                     {
-                        humidityRatio_3 = mollierRange.DryBulbTemperature_Max;
+                        humidityRatio_3 = mollierRange.HumidityRatio_Max;
                     }
 
                     dryBulbTemperature_3 = Query.DryBulbTemperature(enthalpy, humidityRatio_3, pressure);
@@ -130,8 +129,6 @@ namespace SAM.Core.Mollier
                         result.Add(new ConstantEnthalpyCurve(Phase.Liquid, enthalpy, mollierPoint_2, mollierPoint_3));
                     }
                 }
-
-
             }
 
             return result;
