@@ -19,6 +19,50 @@ namespace SAM.Core.Mollier
             throw new NotImplementedException();
         }
 
+        public void Regenerate()
+        {
+            if(dictionary == null || dictionary.Count == 0)
+            {
+                return;
+            }
+
+
+        }
+
+
+        public List<T> GetMollierObjects<T>() where T : IMollierObject
+        {
+            if(dictionary == null || dictionary.Count == 0)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(KeyValuePair<Type, List<IMollierObject>> keyValuePair in dictionary)
+            {
+                if(keyValuePair.Value == null || keyValuePair.Value.Count == 0)
+                {
+                    continue;
+                }
+
+                if(!typeof(T).IsAssignableFrom(keyValuePair.Key))
+                {
+                    continue;
+                }
+
+                foreach(IMollierObject mollierObject in keyValuePair.Value)
+                {
+                    if(mollierObject == null)
+                    {
+                        continue;
+                    }
+
+                    result.Add((T)(object)mollierObject);
+                }
+            }
+
+            return result;
+        }
 
     }
 }
