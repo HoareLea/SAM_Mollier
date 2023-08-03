@@ -87,8 +87,13 @@ namespace SAM.Analytical.Mollier
                 }
             }
 
-            throw new NotImplementedException();
+            List<IMollierGroup> mollierGroups_Summer = mollierProcesses_Summer.Group(true, tolerance);
+            List<IMollierGroup> mollierGroups_Winter = mollierProcesses_Winter.Group(true, tolerance);
 
+            if((mollierGroups_Summer == null || mollierProcesses_Summer.Count == 0) && (mollierGroups_Winter == null || mollierProcesses_Winter.Count == 0))
+            {
+
+            }
 
 
 
@@ -99,70 +104,70 @@ namespace SAM.Analytical.Mollier
             //{
             //    List<IAnalyticalEquipment> analyticalEquipments_Temp = null;
 
-            //    List<IMollierProcess> mollierProcesses = new List<IMollierProcess>();
-            //    if (mollierGroupable is MollierGroup)
-            //    {
-            //        MollierGroup mollierGroup_Temp = (MollierGroup)mollierGroupable;
-            //        if(mollierGroup_Temp.Name.ToLower() == "winter")
-            //        {
-            //            analyticalEquipments_Temp = analyticalEquipments_Winter;
-            //        }
-            //        else if (mollierGroup_Temp.Name.ToLower() == "summer")
-            //        {
-            //            analyticalEquipments_Temp = analyticalEquipments_Winter;
-            //        }
+                //    List<IMollierProcess> mollierProcesses = new List<IMollierProcess>();
+                //    if (mollierGroupable is MollierGroup)
+                //    {
+                //        MollierGroup mollierGroup_Temp = (MollierGroup)mollierGroupable;
+                //        if(mollierGroup_Temp.Name.ToLower() == "winter")
+                //        {
+                //            analyticalEquipments_Temp = analyticalEquipments_Winter;
+                //        }
+                //        else if (mollierGroup_Temp.Name.ToLower() == "summer")
+                //        {
+                //            analyticalEquipments_Temp = analyticalEquipments_Winter;
+                //        }
 
-            //        foreach (IMollierGroupable mollierGroupable_MollierGroup in mollierGroup_Temp)
-            //        {
-            //            if(mollierGroupable_MollierGroup is IMollierProcess)
-            //            {
-            //                mollierProcesses.Add((IMollierProcess)mollierGroupable_MollierGroup);
-            //            }
-            //        }
+                //        foreach (IMollierGroupable mollierGroupable_MollierGroup in mollierGroup_Temp)
+                //        {
+                //            if(mollierGroupable_MollierGroup is IMollierProcess)
+                //            {
+                //                mollierProcesses.Add((IMollierProcess)mollierGroupable_MollierGroup);
+                //            }
+                //        }
 
-            //    }
-            //    else if(mollierGroupable is IMollierProcess)
-            //    {
-            //        IMollierProcess mollierProcess = (IMollierProcess)mollierGroupable;
-            //        mollierProcesses.Add(mollierProcess);
+                //    }
+                //    else if(mollierGroupable is IMollierProcess)
+                //    {
+                //        IMollierProcess mollierProcess = (IMollierProcess)mollierGroupable;
+                //        mollierProcesses.Add(mollierProcess);
 
-            //        analyticalEquipments_Temp = analyticalEquipments;
-            //    }
+                //        analyticalEquipments_Temp = analyticalEquipments;
+                //    }
 
-            //    if(analyticalEquipments_Temp == null)
-            //    {
-            //        analyticalEquipments_Temp = analyticalEquipments;
-            //    }
+                //    if(analyticalEquipments_Temp == null)
+                //    {
+                //        analyticalEquipments_Temp = analyticalEquipments;
+                //    }
 
-            //    foreach(IMollierProcess mollierProcess in mollierProcesses)
-            //    {
-            //        if (mollierProcess is CoolingProcess)
-            //        {
-            //            CoolingCoil coolingCoil = new CoolingCoil("Cooling Coil", double.NaN, double.NaN);
+                //    foreach(IMollierProcess mollierProcess in mollierProcesses)
+                //    {
+                //        if (mollierProcess is CoolingProcess)
+                //        {
+                //            CoolingCoil coolingCoil = new CoolingCoil("Cooling Coil", double.NaN, double.NaN);
 
-            //            analyticalEquipments.Add(coolingCoil);
-            //            continue;
-            //        }
+                //            analyticalEquipments.Add(coolingCoil);
+                //            continue;
+                //        }
 
-            //        if (mollierProcess is HeatingProcess)
-            //        {
-            //            HeatingCoil heatingCoil = new HeatingCoil("Heating Coil", double.NaN, double.NaN);
+                //        if (mollierProcess is HeatingProcess)
+                //        {
+                //            HeatingCoil heatingCoil = new HeatingCoil("Heating Coil", double.NaN, double.NaN);
 
-            //            analyticalEquipments.Add(heatingCoil);
-            //            continue;
-            //        }
+                //            analyticalEquipments.Add(heatingCoil);
+                //            continue;
+                //        }
 
-            //        if (mollierProcess is HeatRecoveryProcess)
-            //        {
-            //            //HeatRecoveryUnit heatRecoveryUnit = new HeatRecoveryUnit("Heat Recovery Unit", );
+                //        if (mollierProcess is HeatRecoveryProcess)
+                //        {
+                //            //HeatRecoveryUnit heatRecoveryUnit = new HeatRecoveryUnit("Heat Recovery Unit", );
 
-            //            //analyticalEquipments.Add(heatRecoveryUnit);
-            //            continue;
-            //        }
-            //    }
-            //}
+                //            //analyticalEquipments.Add(heatRecoveryUnit);
+                //            continue;
+                //        }
+                //    }
+                //}
 
-            //return new AirHandlingUnit("Air Handling Unit");
+                //return new AirHandlingUnit("Air Handling Unit");
         }
     }
 }

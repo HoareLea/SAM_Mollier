@@ -98,6 +98,7 @@
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\Group.cs" />
     <Compile Include="Query\Next.cs" />
     <Compile Include="Query\Sort.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
@@ -120,7 +121,6 @@
     <Compile Include="Query\SpecificHeat.cs" />
     <Compile Include="Query\SensibleHeatRatio.cs" />
     <Compile Include="Query\LogarithmicMeanTemperatureDifference.cs" />
-    <Compile Include="Query\Clamp.cs" />
     <Compile Include="Query\VapourDensity.cs" />
     <Compile Include="Query\SaturationDegree.cs" />
     <Compile Include="Query\Color.cs" />
