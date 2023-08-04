@@ -6,7 +6,7 @@ namespace SAM.Core.Mollier
     { 
         public static List<ConstantTemperatureCurve> ConstantTemperatureCurves_DryBulbTemperature(this MollierRange mollierRange, double step, double pressure)
         {
-            if (double.IsNaN(step) || double.IsNaN(pressure) || mollierRange == null || mollierRange.IsValid())
+            if (double.IsNaN(step) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
                 return null;
             }
