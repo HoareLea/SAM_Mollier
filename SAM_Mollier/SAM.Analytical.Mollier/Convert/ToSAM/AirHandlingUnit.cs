@@ -95,7 +95,7 @@ namespace SAM.Analytical.Mollier
 
             }
 
-
+            throw new System.NotImplementedException();
 
             //    List<IAnalyticalEquipment> analyticalEquipments = new List<IAnalyticalEquipment>();
             //List<IAnalyticalEquipment> analyticalEquipments_Winter = new List<IAnalyticalEquipment>();
