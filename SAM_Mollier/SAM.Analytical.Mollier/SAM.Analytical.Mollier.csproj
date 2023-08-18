@@ -69,6 +69,8 @@
     <Compile Include="Create\AirHandlingUnitResult.cs" />
     <Compile Include="Enums\AirHandlingUnitCalculationMethod.cs" />
     <Compile Include="Enums\Parameter\SpaceParameter.cs" />
+    <Compile Include="Query\SimpleEquipmentTypes.cs" />
+    <Compile Include="Query\SimpleEquipmentType.cs" />
     <Compile Include="Query\TryGetInfiltrationGains.cs" />
     <Compile Include="Query\ApparatusDewPoint.cs" />
     <Compile Include="Query\SummerSpaceRelativeHumidity.cs" />
