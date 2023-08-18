@@ -125,5 +125,12 @@
 
             return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
         }
+        public static MollierPoint MollierPoint_ByEnthalpyAndRelativeHumidity(double enthalpy, double relativeHumidity, double pressure)
+        {
+            double dryBulbTemperature = Query.DryBulbTemperature_ByEnthalpy(enthalpy, relativeHumidity, pressure);
+            double humidityRatio = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature, enthalpy);
+
+            return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
+        }
     }
 }
