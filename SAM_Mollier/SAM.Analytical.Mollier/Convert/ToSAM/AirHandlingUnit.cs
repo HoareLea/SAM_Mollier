@@ -2,6 +2,7 @@
 using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Mollier
 {
@@ -94,6 +95,11 @@ namespace SAM.Analytical.Mollier
             {
                 return null;
             }
+
+            List<Type> types_Summer = Query.SimpleEquipmentTypes(mollierGroups_Summer?.FirstOrDefault()?.ToList().ConvertAll(x => (IMollierProcess)x));
+            List<Type> types_Winter = Query.SimpleEquipmentTypes(mollierGroups_Winter?.FirstOrDefault()?.ToList().ConvertAll(x => (IMollierProcess)x));
+
+
 
             throw new NotImplementedException();
         }
