@@ -45,9 +45,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "totalLoad", NickName = "totalLoad", Description = "Total load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleLoad", NickName = "sensibleLoad", Description = "Sensible load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "latentLoad", NickName = "latentLoad", Description = "Latent load [kg/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δh", NickName = "Δh", Description = "Enthalpy difference Δh [J/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δh", NickName = "Δh", Description = "Enthalpy difference Δh [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δt", NickName = "Δt", Description = "Dry bulb temperature difference Δt [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δx", NickName = "Δx", Description = "Humidity ratio difference Δx [kg/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δx", NickName = "Δx", Description = "Humidity ratio difference Δx [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ε", NickName = "ε", Description = "Epsilon - Enthalpy to humidity ratio proportion [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -103,7 +103,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 dataAccess.SetData(index, sensibleLoad);
             }
-            index = Params.IndexOfInputParam("Δt");
+            index = Params.IndexOfOutputParam("Δt");
             if (index != -1)
             {
                 dataAccess.SetData(index, temperatureDifference);
@@ -117,10 +117,10 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 dataAccess.SetData(index, totalLoad);
             }
-            index = Params.IndexOfInputParam("Δh");
+            index = Params.IndexOfOutputParam("Δh");
             if (index != -1)
             {
-                dataAccess.SetData(index, enthalpyDifference);
+                dataAccess.SetData(index, enthalpyDifference / 1000);
             }
 
             double humidityRatioDifference = mollierProcess.End.HumidityRatio - mollierProcess.Start.HumidityRatio;
@@ -130,14 +130,14 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 dataAccess.SetData(index, latentLoad);
             }
-            index = Params.IndexOfInputParam("Δx");
+            index = Params.IndexOfOutputParam("Δx");
             if (index != -1)
             {
-                dataAccess.SetData(index, humidityRatioDifference);
+                dataAccess.SetData(index, humidityRatioDifference * 1000);
             }
 
             double epsilon = Core.Mollier.Query.Epsilon(mollierProcess);
-            index = Params.IndexOfInputParam("ε");
+            index = Params.IndexOfOutputParam("ε");
             if (index != -1)
             {
                 dataAccess.SetData(index, epsilon);
