@@ -4,7 +4,7 @@ namespace SAM.Weather.Mollier
 {
     public static partial class Query
     {
-        public static List<Core.Mollier.MollierPoint> MollierPoints(this WeatherDay weatherDay)
+        public static List<Core.Mollier.MollierPoint> MollierPoints(this WeatherDay weatherDay, double pressure = double.NaN)
         {
             if(weatherDay == null)
             {
@@ -48,13 +48,27 @@ namespace SAM.Weather.Mollier
                     continue;
                 }
 
-                double pressure = Core.Mollier.Standard.Pressure;
-                if(pressures != null && i < pressures.Count)
+                double pressure_Temp = pressure;
+
+                if (double.IsNaN(pressure_Temp))
                 {
-                    pressure = pressures[i];
+                    if (pressures != null && i < pressures.Count)
+                    {
+                        pressure_Temp = pressures[i];
+                    }
                 }
 
-                Core.Mollier.MollierPoint mollierPoint = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
+                if (double.IsNaN(pressure_Temp))
+                {
+                    pressure_Temp = Core.Mollier.Standard.Pressure;
+                }
+
+                if (double.IsNaN(pressure_Temp))
+                {
+                    continue;
+                }
+
+                Core.Mollier.MollierPoint mollierPoint = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure_Temp);
                 if(mollierPoint == null)
                 {
                     continue;

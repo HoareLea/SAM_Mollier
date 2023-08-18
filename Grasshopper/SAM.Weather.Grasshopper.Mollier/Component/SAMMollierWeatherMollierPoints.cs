@@ -16,7 +16,7 @@ namespace SAM.Weather.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,6 +45,10 @@ namespace SAM.Weather.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 GooWeatherObjectParam gooWeatherObjectParam = new GooWeatherObjectParam() { Name = "_weatherObject", NickName = "_weatherObject", Description = "SAM Weather IWeatherObject such as WeatherData, WeatherYear, WeatherDay and WeatherHour", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(gooWeatherObjectParam, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number number = null;
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "pressure_", NickName = "pressure_", Description = "Pressure", Optional = true, Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean @boolean = null;
                 @boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Connect a boolean toggle to run.", Access = GH_ParamAccess.item };
@@ -100,22 +104,32 @@ namespace SAM.Weather.Grasshopper.Mollier
                 return;
             }
 
+            double pressure = double.NaN;
+            index = Params.IndexOfInputParam("pressure_");
+            if(index != -1)
+            {
+                if(!dataAccess.GetData(index, ref pressure))
+                {
+                    pressure = double.NaN;
+                }
+            }
+
             List<Core.Mollier.MollierPoint> mollierPoints = null;
             if (weatherObject is WeatherData)
             {
-                mollierPoints = Weather.Mollier.Query.WeatherMollierPoints((WeatherData)weatherObject)?.ConvertAll(x => x as Core.Mollier.MollierPoint);
+                mollierPoints = Weather.Mollier.Query.WeatherMollierPoints((WeatherData)weatherObject, pressure)?.ConvertAll(x => x as Core.Mollier.MollierPoint);
             }
             else if (weatherObject is WeatherYear)
             {
-                mollierPoints = Weather.Mollier.Query.WeatherMollierPoints((WeatherYear)weatherObject)?.ConvertAll(x => x as Core.Mollier.MollierPoint);
+                mollierPoints = Weather.Mollier.Query.WeatherMollierPoints((WeatherYear)weatherObject, pressure)?.ConvertAll(x => x as Core.Mollier.MollierPoint);
             }
             else if (weatherObject is WeatherDay)
             {
-                mollierPoints = Weather.Mollier.Query.MollierPoints((WeatherDay)weatherObject);
+                mollierPoints = Weather.Mollier.Query.MollierPoints((WeatherDay)weatherObject, pressure);
             }
             else if (weatherObject is WeatherHour)
             {
-                mollierPoints = new List<Core.Mollier.MollierPoint>() { Weather.Mollier.Query.MollierPoint((WeatherHour)weatherObject) };
+                mollierPoints = new List<Core.Mollier.MollierPoint>() { Weather.Mollier.Query.MollierPoint((WeatherHour)weatherObject, pressure) };
             }
 
             index = Params.IndexOfOutputParam("mollierPoints");

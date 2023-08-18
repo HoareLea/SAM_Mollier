@@ -5,9 +5,9 @@ namespace SAM.Weather.Mollier
 {
     public static partial class Query
     {
-        public static List<WeatherMollierPoint> WeatherMollierPoints(this WeatherDay weatherDay, int year, int month, int day)
+        public static List<WeatherMollierPoint> WeatherMollierPoints(this WeatherDay weatherDay, int year, int month, int day, double pressure = double.NaN)
         {
-            List<MollierPoint> mollierPoints = weatherDay?.MollierPoints();
+            List<MollierPoint> mollierPoints = weatherDay?.MollierPoints(pressure);
             if(mollierPoints == null)
             {
                 return null;
@@ -28,7 +28,7 @@ namespace SAM.Weather.Mollier
             return result;
         }
 
-        public static List<WeatherMollierPoint> WeatherMollierPoints(this WeatherYear weatherYear)
+        public static List<WeatherMollierPoint> WeatherMollierPoints(this WeatherYear weatherYear, double pressure = double.NaN)
         {
             List<WeatherDay> weatherDays = weatherYear?.WeatherDays;
             if(weatherDays == null)
@@ -41,7 +41,7 @@ namespace SAM.Weather.Mollier
             List<WeatherMollierPoint> result = new List<WeatherMollierPoint>();
             for (int i = 0; i < weatherDays.Count; i++)
             {
-                List<WeatherMollierPoint> weatherMollierPoints = weatherDays[i].WeatherMollierPoints(dateTime.Year, dateTime.Month, dateTime.Day);
+                List<WeatherMollierPoint> weatherMollierPoints = weatherDays[i].WeatherMollierPoints(dateTime.Year, dateTime.Month, dateTime.Day, pressure);
 
                 dateTime.AddDays(1);
 
@@ -56,7 +56,7 @@ namespace SAM.Weather.Mollier
             return result;
         }
 
-        public static List<WeatherMollierPoint> WeatherMollierPoints(this WeatherData weatherData)
+        public static List<WeatherMollierPoint> WeatherMollierPoints(this WeatherData weatherData, double pressure = double.NaN)
         {
             List<WeatherYear> weatherYears = weatherData?.WeatherYears;
             if(weatherYears == null)
@@ -67,7 +67,7 @@ namespace SAM.Weather.Mollier
             List<WeatherMollierPoint> result = new List<WeatherMollierPoint>();
             foreach(WeatherYear weatherYear in weatherYears)
             {
-                List<WeatherMollierPoint> weatherMollierPoints = weatherYear?.WeatherMollierPoints();
+                List<WeatherMollierPoint> weatherMollierPoints = weatherYear?.WeatherMollierPoints(pressure);
                 if(weatherMollierPoints == null)
                 {
                     continue;
