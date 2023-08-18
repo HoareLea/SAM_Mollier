@@ -97,7 +97,7 @@ namespace SAM.Core.Grasshopper.Mollier
             MollierPoint mollierPoint = mollierProcess.End;
             double temperatureDifference = mollierProcess.End.DryBulbTemperature - mollierProcess.Start.DryBulbTemperature;
             double sensibleLoad = Core.Mollier.Query.SensibleLoad_ByMassFlow(mollierPoint, temperatureDifference, massFlow) / 1000;
-            sensibleLoad = Core.Query.Round(sensibleLoad, 0.1);
+            sensibleLoad = Core.Query.Round(sensibleLoad, 0.01);
             index = Params.IndexOfOutputParam("sensibleLoad");
             if (index != -1)
             {
@@ -111,7 +111,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
             double enthalpyDifference = mollierProcess.End.Enthalpy - mollierProcess.Start.Enthalpy;
             double totalLoad = Core.Mollier.Query.TotalLoad_ByMassFlow(enthalpyDifference, massFlow) / 1000;
-            totalLoad = Core.Query.Round(sensibleLoad, 0.1);
+            totalLoad = Core.Query.Round(totalLoad, 0.01);
             index = Params.IndexOfOutputParam("totalLoad");
             if (index != -1)
             {
