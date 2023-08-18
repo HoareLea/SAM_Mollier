@@ -19,6 +19,22 @@
             return airFlow * mollierPoint.Density() * mollierPoint.SpecificHeatCapacity_Air() * temperatureDifference * 1000;
             //m3/s * kg/m3 * J/kgK * K = kg/s * J/kg = J/s
         }
+        /// <summary>
+        /// Sensible load for the air
+        /// </summary>
+        /// <param name="mollierPoint"></param>
+        /// <param name="temperatureDifference">temperature difference [K]</param>
+        /// <param name="massFlow">Mass flow [kg/s]</param>
+        /// <returns>Sensible load [W]</returns>
+        public static double SensibleLoad_ByMassFlow(this MollierPoint mollierPoint, double temperatureDifference, double massFlow)
+        {
+            if(mollierPoint == null || double.IsNaN(massFlow) || double.IsNaN(temperatureDifference))
+            {
+                return double.NaN;
+            }
+
+            return massFlow * mollierPoint.SpecificHeatCapacity_Air() * temperatureDifference * 1000;
+        }
 
         /// <summary>
         /// Sensible load for given cooling process and airflow

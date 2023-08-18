@@ -20,6 +20,22 @@
         }
 
         /// <summary>
+        /// Total load of the air
+        /// </summary>
+        /// <param name="enthalpyDifference">Enthalpy difference [J/kg]</param>
+        /// <param name="massFlow">[kg/s]</param>
+        /// <returns>Total load of the air [W]</returns>
+        public static double TotalLoad_ByMassFlow(double enthalpyDifference, double massFlow)
+        {
+            if (double.IsNaN(massFlow) || double.IsNaN(enthalpyDifference))
+            {
+                return double.NaN;
+            }
+
+            return massFlow * enthalpyDifference;
+        }
+
+        /// <summary>
         /// Total load for given cooling process and airflow
         /// </summary>
         /// <param name="coolingProcess">Cooling process</param>

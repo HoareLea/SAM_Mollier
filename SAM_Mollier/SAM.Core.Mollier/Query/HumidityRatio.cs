@@ -151,7 +151,7 @@
         /// <param name="partialVapourPressure">Partial Vapour Pressure [Pa]</param>
         /// <param name="pressure">Pressure [Pa]</param>
         /// <returns></returns>
-        public static double HumidityRatioByPartialVapourPressure(double partialVapourPressure, double pressure)
+        public static double HumidityRatio_ByPartialVapourPressure(double partialVapourPressure, double pressure)
         {
             if(double.IsNaN(partialVapourPressure) || double.IsNaN(pressure))
             {

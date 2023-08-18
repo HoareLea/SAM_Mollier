@@ -36,5 +36,22 @@
 
         }
 
+        /// <summary>
+        /// Calculates moist air mass flow [kg/s]
+        /// </summary>
+        /// <param name="volumetricFlow">Volumetric Flow [m3/s]</param>
+        /// <param name="density">Density [kg/m3]</param>
+        /// <returns>Moist air mass flow [kg/s]</returns>
+        public static double MassFlow(double volumetricFlow, double density)
+        {
+            if (double.IsNaN(volumetricFlow) || double.IsNaN(density))
+            {
+                return double.NaN;
+            }
+            return volumetricFlow * density;
+        }
+
+
+
     }
 }
