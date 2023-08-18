@@ -79,6 +79,7 @@
     <Compile Include="Component\SAMMollierApparatusDewPoint.cs" />
     <Compile Include="Component\SAMMollierLoadByProcess.cs" />
     <Compile Include="Component\SAMMollierEpsilonByWaterTemperature.cs" />
+    <Compile Include="Component\SAMMollierMassFlowRate.cs" />
     <Compile Include="Component\SAMMollierMoistureGainsMassFlow.cs" />
     <Compile Include="Component\SAMMollierEpsilon.cs" />
     <Compile Include="Component\SAMMollierDryAirMassFlowByMollierPoint.cs" />
