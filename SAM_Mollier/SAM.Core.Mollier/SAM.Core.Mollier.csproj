@@ -100,6 +100,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\Group.cs" />
     <Compile Include="Query\Next.cs" />
+    <Compile Include="Query\LatentLoad.cs" />
     <Compile Include="Query\Sort.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\MollierProcesses.cs" />
