@@ -43,7 +43,7 @@ namespace SAM.Weather.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                GooWeatherObjectParam gooWeatherObjectParam = new GooWeatherObjectParam() { Name = "_weatherObject", NickName = "_weatherObject", Description = "SAM Weather IWeatherObject such as WeatherData, WeatherYear, WeatherDay", Access = GH_ParamAccess.item };
+                GooWeatherObjectParam gooWeatherObjectParam = new GooWeatherObjectParam() { Name = "_weatherObject", NickName = "_weatherObject", Description = "SAM Weather IWeatherObject such as WeatherData, WeatherYear, WeatherDay and WeatherHour", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(gooWeatherObjectParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean @boolean = null;
@@ -112,6 +112,10 @@ namespace SAM.Weather.Grasshopper.Mollier
             else if (weatherObject is WeatherDay)
             {
                 mollierPoints = Weather.Mollier.Query.MollierPoints((WeatherDay)weatherObject);
+            }
+            else if (weatherObject is WeatherHour)
+            {
+                mollierPoints = new List<Core.Mollier.MollierPoint>() { Weather.Mollier.Query.MollierPoint((WeatherHour)weatherObject) };
             }
 
             index = Params.IndexOfOutputParam("mollierPoints");

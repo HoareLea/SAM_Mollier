@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\WeatherMollierPoint.cs" />
+    <Compile Include="Query\MollierPoint.cs" />
     <Compile Include="Query\WeatherMollierPoints.cs" />
     <Compile Include="Query\MollierPoints.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
