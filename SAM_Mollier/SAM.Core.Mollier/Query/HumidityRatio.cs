@@ -144,5 +144,22 @@
 
             return mollierPoint.HumidityRatio + ((latentLoad /1000) / (airMassFlow * 2450));  //latent heat of vaporization r0 for 20degC TO DO replce with formula 
         }
+
+        /// <summary>
+        /// Calculates humidity ratio by partial vapour pressure  
+        /// </summary>
+        /// <param name="partialVapourPressure">Partial Vapour Pressure [Pa]</param>
+        /// <param name="pressure">Pressure [Pa]</param>
+        /// <returns></returns>
+        public static double HumidityRatio_ByPartialVapourPressure(double partialVapourPressure, double pressure)
+        {
+            if(double.IsNaN(partialVapourPressure) || double.IsNaN(pressure))
+            {
+                return double.NaN;
+            }
+
+            return 0.6222 * partialVapourPressure / (pressure - partialVapourPressure);
+        }
+
     }
 }

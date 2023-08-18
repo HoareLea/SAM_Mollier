@@ -77,6 +77,7 @@
     <Compile Include="Classes\MollierChartObject.cs" />
     <Compile Include="Component\SAMMollierCreateDiagram.cs" />
     <Compile Include="Component\SAMMollierApparatusDewPoint.cs" />
+    <Compile Include="Component\SAMMollierLoadByProcess.cs" />
     <Compile Include="Component\SAMMollierEpsilonByWaterTemperature.cs" />
     <Compile Include="Component\SAMMollierMoistureGainsMassFlow.cs" />
     <Compile Include="Component\SAMMollierEpsilon.cs" />
