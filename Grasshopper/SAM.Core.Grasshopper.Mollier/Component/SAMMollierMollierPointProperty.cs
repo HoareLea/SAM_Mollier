@@ -10,7 +10,7 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("d41c0352-d17c-43d8-962d-ef05ad8d9343");
+        public override Guid ComponentGuid => new Guid("254fa1da-f390-4fe3-b3d1-c4fbeb830280");
 
         /// <summary>
         /// The latest version of this component
