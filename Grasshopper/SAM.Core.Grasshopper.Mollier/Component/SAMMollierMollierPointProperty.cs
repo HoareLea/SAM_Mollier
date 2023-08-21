@@ -26,8 +26,8 @@ namespace SAM.Weather.Grasshopper
         /// Zone Type Enum Component
         /// </summary>
         public SAMMollierMollierPointProperty()
-          : base("SAMWeather.MollierPointProperty", "SAMWeather.MollierPointProperty",
-              "Select MollierPointProperty",
+          : base("SAMMollier.MollierPointProperty", "SAMMollier.MollierPointProperty",
+              "Select MollierPointProperty \n*Psychrometric variables",
               "SAM", "Mollier")
         {
         }
