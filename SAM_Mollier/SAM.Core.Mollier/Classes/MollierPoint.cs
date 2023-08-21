@@ -143,6 +143,49 @@ namespace SAM.Core.Mollier
             return jObject;
         }
 
+        public double this[MollierPointProperty mollierPointProperty]
+        {
+            get
+            {
+                switch(mollierPointProperty)
+                {
+                    case MollierPointProperty.Undefined: 
+                        return double.NaN;
+
+                    case MollierPointProperty.DryBulbTemperature:
+                        return dryBulbTemperature;
+
+                    case MollierPointProperty.WetBulbTemperature:
+                        return Query.WetBulbTemperature(this);
+
+                    case MollierPointProperty.DewPointTemperature:
+                        return Query.DewPointTemperature(this);
+
+                    case MollierPointProperty.DiagramTemperature:
+                        return Query.DiagramTemperature(this);
+
+                    case MollierPointProperty.RelativeHumidity:
+                        return Query.RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
+
+                    case MollierPointProperty.Density:
+                        return Query.Density(this);
+
+                    case MollierPointProperty.Enthalpy:
+                        return Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure);
+
+                    case MollierPointProperty.HumidityRatio:
+                        return humidityRatio;
+
+                    case MollierPointProperty.SpecificVolume:
+                        return Query.SpecificVolume(this);
+
+                    default:
+                        return double.NaN;
+
+                }
+            }
+        }
+
 
         public static implicit operator MollierPoint(UIMollierPoint uIMollierPoint)
         {

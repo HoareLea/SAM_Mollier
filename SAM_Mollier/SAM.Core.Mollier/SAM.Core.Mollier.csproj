@@ -85,6 +85,7 @@
     <Compile Include="Create\CoolingProcess.cs" />
     <Compile Include="Create\MollierPoint.cs" />
     <Compile Include="Create\HeatingProcess.cs" />
+    <Compile Include="Enums\MollierPointProperty.cs" />
     <Compile Include="Enums\ChartDataType.cs" />
     <Compile Include="Enums\Phase.cs" />
     <Compile Include="Enums\MollierProcessType.cs" />
