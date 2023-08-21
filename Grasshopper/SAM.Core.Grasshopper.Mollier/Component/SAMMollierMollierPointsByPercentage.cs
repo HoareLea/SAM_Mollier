@@ -114,7 +114,7 @@ namespace SAM.Core.Grasshopper.Mollier
             List<MollierPoint> mollierPoints = new List<MollierPoint>();
 
             index = Params.IndexOfInputParam("_mollierPoints");
-            if (index == -1 || !dataAccess.GetData(index, ref mollierPoints) || mollierPoints == null)
+            if (index == -1 || !dataAccess.GetDataList(index, mollierPoints) || mollierPoints == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
