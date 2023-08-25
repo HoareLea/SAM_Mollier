@@ -27,9 +27,9 @@
         public const double DryBulbTemperature_Interval = 5;
         public static System.Drawing.Color DryBulbTemperature_Color { get; } = System.Drawing.Color.LightGray;
 
-        public const double HumidityRatio_Min = 0;//TODO: [MACIEK] Update Units Humidity Ratio [kg_waterVapor/kg_dryAir]
-        public const double HumidityRatio_Max = 35; //TODO: [MACIEK] Update Units Humidity Ratio [kg_waterVapor/kg_dryAir]
-        public const double HumidityRatio_Interval = 5;//TODO: [MACIEK] Update Units Humidity Ratio [kg_waterVapor/kg_dryAir]
+        public const double HumidityRatio_Min = 0;
+        public const double HumidityRatio_Max = 0.035;
+        public const double HumidityRatio_Interval = 0.005;
 
         public const double PartialVapourPressure_Interval = 0.5; //TODO: [MACIEK] rename to CodeName PartialVapourPressure, use SI units [Pa]
 
