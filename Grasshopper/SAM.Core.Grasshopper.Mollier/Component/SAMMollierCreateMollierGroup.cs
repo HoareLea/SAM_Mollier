@@ -30,8 +30,9 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-
-                result.Add(new GH_SAMParam(new GooMollierObjectParam() { Name = "_mollierObjects", NickName = "_mollierObjects", Description = "Mollier Objects", Access = GH_ParamAccess.list, Optional = false }, ParamVisibility.Binding));
+                GooMollierObjectParam gooMollierObjectParam = new GooMollierObjectParam() { Name = "_mollierObjects", NickName = "_mollierObjects", Description = "Mollier Objects", Access = GH_ParamAccess.list, Optional = false };
+                gooMollierObjectParam.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(gooMollierObjectParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Group Name", Access = GH_ParamAccess.item, Optional = true };
                 param_String.SetPersistentData("New Group");
@@ -58,7 +59,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         public SAMMollierCreateMollierGroup()
           : base("SAMMollier.CreateMollierGroup", "SAMMollier.CreateMollierGroup",
-              "Create Mollier Group",
+              "Create Mollier Group \n *Merges all object into one Mollier Group",
               "SAM", "Mollier")
         {
         }
@@ -85,7 +86,7 @@ namespace SAM.Core.Grasshopper.Mollier
             MollierGroup mollierGroup = new MollierGroup(name);
             foreach(IMollierObject mollierObject in mollierObjects)
             {
-                IMollierGroupable mollierGroupable = mollierObject as IMollierGroupable;
+                IMollierGroupable mollierGroupable = (mollierObject as IMollierGroupable)?.Clone();
                 if(mollierGroupable == null)
                 {
                     continue;
@@ -98,7 +99,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("mollierGroup");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, mollierGroup);
+                dataAccess.SetData(index, new GooMollierGroup(mollierGroup));
             }
         }
 

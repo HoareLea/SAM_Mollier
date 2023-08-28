@@ -25,9 +25,19 @@ namespace SAM.Core.Grasshopper.Mollier
         {
             return new GooMollierGroup(Value);
         }
+
+        public override bool CastFrom(object source)
+        {
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
-    public class GooMollierGroupParam : GH_PersistentParam<GooMollierPoint>
+    public class GooMollierGroupParam : GH_PersistentParam<GooMollierGroup>
     {
         public override Guid ComponentGuid => new Guid("2bc4d547-aa2b-473e-b42e-575722ce8367");
 
@@ -38,12 +48,12 @@ namespace SAM.Core.Grasshopper.Mollier
         {
         }
 
-        protected override GH_GetterResult Prompt_Plural(ref List<GooMollierPoint> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GooMollierGroup> values)
         {
             throw new NotImplementedException();
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GooMollierPoint value)
+        protected override GH_GetterResult Prompt_Singular(ref GooMollierGroup value)
         {
             throw new NotImplementedException();
         }
