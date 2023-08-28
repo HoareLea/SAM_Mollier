@@ -7,9 +7,9 @@
         public const double Density_Interval = 0.05;
         public static System.Drawing.Color Density_Color { get; } = System.Drawing.Color.LightGreen;
 
-        public const double Enthalpy_Min = -20; //TODO: [MACIEK] Implement Enthalpy, use SI units [J/kg]
-        public const double Enthalpy_Max = 140; //TODO: [MACIEK] Implement Enthalpy, use SI units [J/kg]
-        public const double Enthalpy_Interval = 1; //TODO: [MACIEK] Implement Enthalpy, use SI units [J/kg]
+        public const double Enthalpy_Min = -20000;
+        public const double Enthalpy_Max = 140000;
+        public const double Enthalpy_Interval = 1000;
         public static System.Drawing.Color Enthalpy_Color { get; } = System.Drawing.Color.LightGray;
 
         public const double SpecificVolume_Min = 0.65;
@@ -27,9 +27,9 @@
         public const double DryBulbTemperature_Interval = 5;
         public static System.Drawing.Color DryBulbTemperature_Color { get; } = System.Drawing.Color.LightGray;
 
-        public const double HumidityRatio_Min = 0;//TODO: [MACIEK] Update Units Humidity Ratio [kg_waterVapor/kg_dryAir]
-        public const double HumidityRatio_Max = 35; //TODO: [MACIEK] Update Units Humidity Ratio [kg_waterVapor/kg_dryAir]
-        public const double HumidityRatio_Interval = 5;//TODO: [MACIEK] Update Units Humidity Ratio [kg_waterVapor/kg_dryAir]
+        public const double HumidityRatio_Min = 0;
+        public const double HumidityRatio_Max = 0.035;
+        public const double HumidityRatio_Interval = 0.005;
 
         public const double PartialVapourPressure_Interval = 0.5; //TODO: [MACIEK] rename to CodeName PartialVapourPressure, use SI units [Pa]
 

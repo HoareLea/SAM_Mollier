@@ -10,7 +10,7 @@ namespace SAM.Core.Mollier
 
         //Dry Bulb Temperature and Humidity Ratio
         public MollierRange MollierRange { get; set; } = Create.MollierRange();
-        public double HumidityRatio_Interval { get; set; } = Default.HumidityRatio_Interval / 1000;
+        public double HumidityRatio_Interval { get; set; } = Default.HumidityRatio_Interval;
         public double DryBulbTemperature_Interval { get; set; } = Default.DryBulbTemperature_Interval;
 
         //Density
@@ -18,8 +18,8 @@ namespace SAM.Core.Mollier
         public double Density_Interval { get; set; } = Default.Density_Interval;
 
         //Enthalpy
-        public Range<double> EnthalpyRange { get; set; } = new Range<double>(Default.Enthalpy_Min * 1000, Default.Enthalpy_Max * 1000);
-        public double Enthalpy_Interval { get; set; } = Default.Enthalpy_Interval * 1000;
+        public Range<double> EnthalpyRange { get; set; } = new Range<double>(Default.Enthalpy_Min, Default.Enthalpy_Max);
+        public double Enthalpy_Interval { get; set; } = Default.Enthalpy_Interval;
 
 
         //Specific Volume
