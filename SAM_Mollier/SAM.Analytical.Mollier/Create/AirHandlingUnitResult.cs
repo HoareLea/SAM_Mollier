@@ -298,7 +298,8 @@ namespace SAM.Analytical.Mollier
 
             AirSupplyMethod airSupplyMethod = Analytical.Query.AirSupplyMethod(adjacencyCluster, airHandlingUnitName);
 
-            if (!airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterSupplyTemperature, out double winterSupplyTemperature) || double.IsNaN(winterSupplyTemperature))
+            double winterSupplyTemperature = airHandlingUnit.WinterSupplyTemperature;
+            if (double.IsNaN(winterSupplyTemperature))
             {
                 if (heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
                 {
@@ -315,9 +316,14 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.WinterSupplyTemperature, winterSupplyTemperature);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatingCoil, out bool summerHeatingCoil))
+            bool summerHeatingCoil = false;
+            double winterHeatingCoilSupplyTemperature = double.NaN;
+
+            HeatingCoil heatingCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Supply)?.FirstOrDefault();
+            if (heatingCoil != null)
             {
-                result.SetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, summerHeatingCoil);
+                summerHeatingCoil = heatingCoil.Summer;
+                winterHeatingCoilSupplyTemperature = heatingCoil.WinterOffTemperature;
             }
 
             double summerSupplyTemperature_Temp = double.NaN;
@@ -327,10 +333,7 @@ namespace SAM.Analytical.Mollier
             }
             else
             {
-                if (!airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerSupplyTemperature, out summerSupplyTemperature_Temp) || double.IsNaN(summerSupplyTemperature_Temp))
-                {
-                    summerSupplyTemperature_Temp = double.NaN;
-                }
+                summerSupplyTemperature_Temp = airHandlingUnit.SummerSupplyTemperature;
             }
 
             if(!double.IsNaN(summerSupplyTemperature_Temp))
@@ -338,47 +341,84 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, summerSupplyTemperature_Temp);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.FrostCoilOffTemperature, out double frostCoilOffTemperature) && !double.IsNaN(frostCoilOffTemperature))
+            HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
+            if(frostCoil != null && !double.IsNaN(frostCoil.WinterOffTemperature))
             {
-                result.SetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, frostCoilOffTemperature);
+                result.SetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, frostCoil.WinterOffTemperature);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoverySensibleEfficiency, out double winterHeatRecoverySensibleEfficiency) && !double.IsNaN(winterHeatRecoverySensibleEfficiency))
+            double winterHeatRecoveryDryBulbTemperature = double.NaN;
+            double winterHeatRecoveryRelativeHumidity = double.NaN;
+            double summerHeatRecoveryDryBulbTemperature = double.NaN;
+            double summerHeatRecoveryRelativeHumidity = double.NaN;
+
+            HeatRecoveryUnit heatRecoveryUnit = airHandlingUnit.GetSimpleEquipments<HeatRecoveryUnit>(FlowClassification.Supply)?.FirstOrDefault();
+            if(heatRecoveryUnit != null)
             {
-                result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoverySensibleEfficiency, winterHeatRecoverySensibleEfficiency);
+                if(!double.IsNaN(heatRecoveryUnit.WinterSensibleEfficiency))
+                {
+                    result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoverySensibleEfficiency, heatRecoveryUnit.WinterSensibleEfficiency);
+                }
+
+                if (!double.IsNaN(heatRecoveryUnit.WinterLatentEfficiency))
+                {
+                    result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryLatentEfficiency, heatRecoveryUnit.WinterLatentEfficiency);
+                }
+
+                if (!double.IsNaN(heatRecoveryUnit.SummerSensibleEfficiency))
+                {
+                    result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoverySensibleEfficiency, heatRecoveryUnit.SummerSensibleEfficiency);
+                }
+
+                if (!double.IsNaN(heatRecoveryUnit.SummerLatentEfficiency))
+                {
+                    result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryLatentEfficiency, heatRecoveryUnit.SummerLatentEfficiency);
+                }
+
+                if (!double.IsNaN(heatRecoveryUnit.WinterDryBulbTemperature))
+                {
+                    winterHeatRecoveryDryBulbTemperature = heatRecoveryUnit.WinterDryBulbTemperature;
+                }
+
+                if (!double.IsNaN(heatRecoveryUnit.WinterRelativeHumidity))
+                {
+                    winterHeatRecoveryRelativeHumidity = heatRecoveryUnit.WinterRelativeHumidity;
+                }
+
+                if (!double.IsNaN(heatRecoveryUnit.SummerDryBulbTemperature))
+                {
+                    summerHeatRecoveryDryBulbTemperature = heatRecoveryUnit.SummerDryBulbTemperature;
+                }
+
+                if (!double.IsNaN(heatRecoveryUnit.SummerRelativeHumidity))
+                {
+                    summerHeatRecoveryRelativeHumidity = heatRecoveryUnit.SummerRelativeHumidity;
+                }
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.CoolingCoilContactFactor, out double coolingCoilContactFactor) && !double.IsNaN(coolingCoilContactFactor))
+            double coolingCoilFluidReturnTemperature = double.NaN;
+
+            CoolingCoil coolingCoil = airHandlingUnit.GetSimpleEquipments<CoolingCoil>(FlowClassification.Supply)?.FirstOrDefault();
+            if(coolingCoil != null)
             {
-                result.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingCoilContactFactor);
+                if (!double.IsNaN(coolingCoil.ContactFactor))
+                {
+                    result.SetValue(AirHandlingUnitResultParameter.CoolingCoilContactFactor, coolingCoil.ContactFactor);
+                }
+
+                if (!double.IsNaN(coolingCoil.FluidSupplyTemperature))
+                {
+                    result.SetValue(AirHandlingUnitResultParameter.CoolingCoilFluidFlowTemperature, coolingCoil.FluidSupplyTemperature);
+                }
+
+                if (!double.IsNaN(coolingCoil.FluidReturnTemperature))
+                {
+                    result.SetValue(AirHandlingUnitResultParameter.CoolingCoilFluidReturnTemperature, coolingCoil.FluidReturnTemperature);
+                    coolingCoilFluidReturnTemperature = coolingCoil.FluidReturnTemperature;
+                }
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoveryLatentEfficiency, out double winterHeatRecoveryLatentEfficiency) && !double.IsNaN(winterHeatRecoveryLatentEfficiency))
-            {
-                result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryLatentEfficiency, winterHeatRecoveryLatentEfficiency);
-            }
-
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatRecoverySensibleEfficiency, out double summerHeatRecoverySensibleEfficiency) && !double.IsNaN(summerHeatRecoverySensibleEfficiency))
-            {
-                result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoverySensibleEfficiency, summerHeatRecoverySensibleEfficiency);
-            }
-
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatRecoveryLatentEfficiency, out double summerHeatRecoveryLatentEfficiency) && !double.IsNaN(summerHeatRecoveryLatentEfficiency))
-            {
-                result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryLatentEfficiency, summerHeatRecoveryLatentEfficiency);
-            }
-
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.CoolingCoilFluidFlowTemperature, out double coolingCoilFluidSupplyTemperature) && !double.IsNaN(coolingCoilFluidSupplyTemperature))
-            {
-                result.SetValue(AirHandlingUnitResultParameter.CoolingCoilFluidFlowTemperature, coolingCoilFluidSupplyTemperature);
-            }
-
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.CoolingCoilFluidReturnTemperature, out double coolingCoilFluidReturnTemperature) && !double.IsNaN(coolingCoilFluidReturnTemperature))
-            {
-                result.SetValue(AirHandlingUnitResultParameter.CoolingCoilFluidReturnTemperature, coolingCoilFluidReturnTemperature);
-            }
-
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatingCoilSupplyTemperature, out double winterHeatingCoilSupplyTemperature) && !double.IsNaN(coolingCoilFluidReturnTemperature))
+            if (!double.IsNaN(winterHeatingCoilSupplyTemperature) && !double.IsNaN(coolingCoilFluidReturnTemperature))
             {
                 result.SetValue(AirHandlingUnitResultParameter.WinterHeatingCoilSupplyTemperature, winterHeatingCoilSupplyTemperature);
             }
@@ -450,7 +490,7 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.WinterDesignDayIndex, winterDesignDayIndex);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoveryDryBulbTemperature, out double winterHeatRecoveryDryBulbTemperature) && !double.IsNaN(winterHeatRecoveryDryBulbTemperature))
+            if (!double.IsNaN(winterHeatRecoveryDryBulbTemperature))
             {
                 result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, winterHeatRecoveryDryBulbTemperature);
             }
@@ -459,7 +499,7 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, winterSpaceTemperature - 1);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.WinterHeatRecoveryRelativeHumidity, out double winterHeatRecoveryRelativeHumidity) && !double.IsNaN(winterHeatRecoveryRelativeHumidity))
+            if (double.IsNaN(winterHeatRecoveryRelativeHumidity))
             {
                 result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryRelativeHumidity, winterHeatRecoveryRelativeHumidity);
             }
@@ -468,7 +508,7 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryRelativeHumidity, winterSpaceRelativeHumidity);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatRecoveryDryBulbTemperature, out double summerHeatRecoveryDryBulbTemperature) && !double.IsNaN(summerHeatRecoveryDryBulbTemperature))
+            if (!double.IsNaN(summerHeatRecoveryDryBulbTemperature))
             {
                 result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryDryBulbTemperature, summerHeatRecoveryDryBulbTemperature);
             }
@@ -477,7 +517,7 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryDryBulbTemperature, summerSpaceTemperature + 1);
             }
 
-            if (airHandlingUnit.TryGetValue(AirHandlingUnitParameter.SummerHeatRecoveryRelativeHumidity, out double summerHeatRecoveryRelativeHumidity) && !double.IsNaN(summerHeatRecoveryRelativeHumidity))
+            if (!double.IsNaN(summerHeatRecoveryRelativeHumidity))
             {
                 result.SetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryRelativeHumidity, summerHeatRecoveryRelativeHumidity);
             }
