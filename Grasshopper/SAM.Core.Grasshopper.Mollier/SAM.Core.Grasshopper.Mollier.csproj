@@ -73,8 +73,10 @@
     <Compile Include="Classes\GooMollierChartObject.cs" />
     <Compile Include="Classes\GooMollierGroup.cs" />
     <Compile Include="Classes\GooMollierPoint.cs" />
+    <Compile Include="Classes\GooMollierObject.cs" />
     <Compile Include="Classes\GooMollierProcess.cs" />
     <Compile Include="Classes\MollierChartObject.cs" />
+    <Compile Include="Component\SAMMollierCreateMollierGroup.cs" />
     <Compile Include="Component\SAMMollierMollierPointProperty.cs" />
     <Compile Include="Component\SAMMollierMollierPointsByPercentage.cs" />
     <Compile Include="Component\SAMMollierCreateDiagram.cs" />
