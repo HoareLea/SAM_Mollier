@@ -8,6 +8,7 @@ using Grasshopper.Kernel.Types;
 using System.Linq;
 using SAM.Core.Grasshopper.Mollier;
 using SAM.Core.Mollier;
+using SAM.Core;
 
 namespace SAM.Analytical.Grasshopper.Mollier
 {
@@ -164,6 +165,8 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not find or create Air Handling Unit");
                 return;
             }
+
+            airHandlingUnit = airHandlingUnit.Clone();
 
             double value = double.NaN;
 
@@ -403,6 +406,8 @@ namespace SAM.Analytical.Grasshopper.Mollier
                     heatingCoil.Summer = summerHeatingCoil.Value;
                 }
             }
+
+            adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
 
             adjacencyCluster.AddObject(airHandlingUnit);
             analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
