@@ -32,7 +32,7 @@ namespace SAM.Analytical.Mollier
                     && winterFrostOffCoilTemperature > winterDesignTemperature)
                 {
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, winterFrostOffCoilTemperature);
-                    if (heatingProcess != null)
+                    if (heatingProcess != null && !heatingProcess.Start.AlmostEqual(heatingProcess.End))
                     {
                         mollierGroup_Winter.Add(heatingProcess);
                         start = heatingProcess.End;
@@ -76,7 +76,7 @@ namespace SAM.Analytical.Mollier
                 if (room_Winter != null)
                 {
                     HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, room_Winter, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
-                    if (heatRecoveryProcess != null)
+                    if (heatRecoveryProcess != null && !heatRecoveryProcess.Start.AlmostEqual(heatRecoveryProcess.End))
                     {
                         mollierGroup_Winter.Add(heatRecoveryProcess);
                         start = heatRecoveryProcess.End;
@@ -112,7 +112,7 @@ namespace SAM.Analytical.Mollier
                     double dryBulbTemperature = winterHeatingCoilSupplyTemperature - Query.PickupTemperature(winterHeatingCoilSupplyTemperature, spf);
 
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature);
-                    if (heatingProcess != null)
+                    if (heatingProcess != null && !heatingProcess.Start.AlmostEqual(heatingProcess.End))
                     {
                         mollierGroup_Winter.Add(heatingProcess);
                         start = heatingProcess.End;
@@ -138,7 +138,7 @@ namespace SAM.Analytical.Mollier
                 if (room_Winter != null)
                 {
                     IsotermicHumidificationProcess isotermicHumidificationProcess = Core.Mollier.Create.IsotermicHumidificationProcess_ByRelativeHumidity(start, room_Winter.RelativeHumidity);
-                    if (isotermicHumidificationProcess != null)
+                    if (isotermicHumidificationProcess != null && !isotermicHumidificationProcess.Start.AlmostEqual(isotermicHumidificationProcess.End))
                     {
                         mollierGroup_Winter.Add(isotermicHumidificationProcess);
                         start = isotermicHumidificationProcess.End;
@@ -155,7 +155,7 @@ namespace SAM.Analytical.Mollier
                 double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(winterHeatingCoilSupplyTemperature, spf);
 
                 HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
-                if (heatingProcess_Fan != null)
+                if (heatingProcess_Fan != null && !heatingProcess_Fan.Start.AlmostEqual(heatingProcess_Fan.End))
                 {
                     mollierGroup_Winter.Add(heatingProcess_Fan);
                     start = heatingProcess_Fan.End;
@@ -171,7 +171,7 @@ namespace SAM.Analytical.Mollier
                 if (room_Winter != null)
                 {
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Winter);
-                    if (undefinedProcess != null)
+                    if (undefinedProcess != null && !undefinedProcess.Start.AlmostEqual(undefinedProcess.End))
                     {
                         mollierGroup_Winter.Add(undefinedProcess);
                         start = undefinedProcess.End;
@@ -208,7 +208,7 @@ namespace SAM.Analytical.Mollier
                 if (room_Summer != null)
                 {
                     HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, room_Summer, summerHeatRecoverySensibleEfficiency, summerHeatRecoveryLatentEfficiency);
-                    if (heatRecoveryProcess != null)
+                    if (heatRecoveryProcess != null && !heatRecoveryProcess.Start.AlmostEqual(heatRecoveryProcess.End))
                     {
                         mollierGroup_Summer.Add(heatRecoveryProcess);
                         start = heatRecoveryProcess.End;
@@ -224,7 +224,7 @@ namespace SAM.Analytical.Mollier
                     if (returnAirFlow > Core.Tolerance.Distance)
                     {
                         MixingProcess mixingProcess = Core.Mollier.Create.MixingProcess(start, room_Summer, supplyAirFlow, returnAirFlow);
-                        if (mixingProcess != null)
+                        if (mixingProcess != null && !mixingProcess.Start.AlmostEqual(mixingProcess.End))
                         {
                             mollierGroup_Summer.Add(mixingProcess);
                             start = mixingProcess.End;
@@ -240,7 +240,7 @@ namespace SAM.Analytical.Mollier
                     double dryBulbTemperature = summerSupplyTempearture - Query.PickupTemperature(summerSupplyTempearture, spf);
 
                     CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature, coolingCoilContactFactor);
-                    if (coolingProcess != null)
+                    if (coolingProcess != null && !coolingProcess.Start.AlmostEqual(coolingProcess.End))
                     {
                         mollierGroup_Summer.Add(coolingProcess);
                         start = coolingProcess.End;
@@ -280,7 +280,7 @@ namespace SAM.Analytical.Mollier
                 {
                     double temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature;
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(start, temperatureDifference);
-                    if (heatingProcess != null)
+                    if (heatingProcess != null && !heatingProcess.Start.AlmostEqual(heatingProcess.End))
                     {
                         mollierGroup_Summer.Add(heatingProcess);
                         start = heatingProcess.End;
@@ -303,7 +303,7 @@ namespace SAM.Analytical.Mollier
                 double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(summerSupplyTempearture, spf);
 
                 HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
-                if (heatingProcess_Fan != null)
+                if (heatingProcess_Fan != null && !heatingProcess_Fan.Start.AlmostEqual(heatingProcess_Fan.End))
                 {
                     mollierGroup_Summer.Add(heatingProcess_Fan);
                     start = heatingProcess_Fan.End;
@@ -319,7 +319,7 @@ namespace SAM.Analytical.Mollier
                 if (room_Summer != null)
                 {
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Summer);
-                    if (undefinedProcess != null)
+                    if (undefinedProcess != null && !undefinedProcess.Start.AlmostEqual(undefinedProcess.End))
                     {
                         mollierGroup_Summer.Add(undefinedProcess);
                         start = undefinedProcess.End;
