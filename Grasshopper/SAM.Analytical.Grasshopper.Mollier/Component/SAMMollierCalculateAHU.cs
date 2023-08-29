@@ -62,6 +62,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooAirHandlingUnitParam() { Name = "airHandlingUnit", NickName = "airHandlingUnit", Description = "SAM Analytical AirHandlingUnit", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierPoints", NickName = "mollierPoints", Description = "Mollier Points", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "mollierProcesses", NickName = "mollierProcesses", Description = "Mollier Processes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatLoss", NickName = "sensibleHeatLoss", Description = "Sensible Heat Loss for connected Spaces [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatGain", NickName = "sensibleHeatGain", Description = "Sensible Heat Gain for connected Spaces [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -427,6 +428,12 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Supply temperture is below ADP, consider lowering medium supply and return temperature");
                 }
+            }
+
+            index = Params.IndexOfOutputParam("mollierPoints");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, mollierGroup?.GetMollierPoints()?.ConvertAll(x => new GooMollierPoint(x)));
             }
 
             index = Params.IndexOfOutputParam("mollierProcesses");

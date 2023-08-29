@@ -176,6 +176,8 @@ namespace SAM.Analytical.Mollier
                         mollierGroup_Winter.Add(undefinedProcess);
                         start = undefinedProcess.End;
                     }
+
+                    mollierGroup_Winter.Add(room_Winter);
                 }
 
             }
@@ -324,6 +326,8 @@ namespace SAM.Analytical.Mollier
                         mollierGroup_Summer.Add(undefinedProcess);
                         start = undefinedProcess.End;
                     }
+
+                    mollierGroup_Summer.Add(room_Summer);
                 }
             }
 
