@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.10";
+        public override string LatestComponentVersion => "1.0.11";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -460,13 +460,13 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 index = Params.IndexOfOutputParam("sensibleHeatLoss");
                 if (index != -1)
                 {
-                    dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.SensibleHeatLoss) / 1000);
+                    dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.WinterSensibleLoad) / 1000);
                 }
 
                 index = Params.IndexOfOutputParam("sensibleHeatGain");
                 if (index != -1)
                 {
-                    dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.SensibleHeatGain) / 1000);
+                    dataAccess.SetData(index, airHandlingUnitResult.GetValue<double>(AirHandlingUnitResultParameter.SummerSensibleLoad) / 1000);
                 }
 
                 index = Params.IndexOfOutputParam("summerDesignTemperature");

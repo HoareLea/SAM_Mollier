@@ -3,6 +3,7 @@ using SAM.Weather;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace SAM.Analytical.Mollier
 {
@@ -42,10 +43,10 @@ namespace SAM.Analytical.Mollier
 
             AirHandlingUnitResult result = AirHandlingUnitResult(analyticalModel, airHandlingUnitName, space, null);
 
-            Func<double, double> func = new Func<double, double>((double summerSupplyTemperature_Temp) => 
+            Func<double, double> func = new Func<double, double>((double summerSupplyTemperature_Temp) =>
             {
                 AirHandlingUnitResult airHandlingUnitResult = AirHandlingUnitResult(analyticalModel, airHandlingUnitName, space, summerSupplyTemperature_Temp);
-                if(airHandlingUnitResult == null)
+                if (airHandlingUnitResult == null)
                 {
                     return double.NaN;
                 }
@@ -53,12 +54,12 @@ namespace SAM.Analytical.Mollier
                 if (airHandlingUnitCalculationMethod == AirHandlingUnitCalculationMethod.HumidityRatioAndChilledWaterTemperature)
                 {
                     double summerSupplyFanTemperature = airHandlingUnitResult.SummerSupplyFanTemperature();
-                    if(!double.IsNaN(summerSupplyFanTemperature))
+                    if (!double.IsNaN(summerSupplyFanTemperature))
                     {
                         MollierPoint mollierPoint_ApparatusDewPoint = airHandlingUnitResult.ApparatusDewPoint();
                         if (mollierPoint_ApparatusDewPoint != null)
                         {
-                            if(mollierPoint_ApparatusDewPoint.DryBulbTemperature > summerSupplyFanTemperature)
+                            if (mollierPoint_ApparatusDewPoint.DryBulbTemperature > summerSupplyFanTemperature)
                             {
                                 return double.NaN;
                             }
@@ -71,7 +72,7 @@ namespace SAM.Analytical.Mollier
                 return supplyFanRelativeHumidity;
             });
 
-            double summerSupplyTemperature= double.NaN;
+            double summerSupplyTemperature = double.NaN;
 
             switch (airHandlingUnitCalculationMethod)
             {
@@ -104,7 +105,7 @@ namespace SAM.Analytical.Mollier
             }
 
             AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObject((AirHandlingUnit x) => x.Name == airHandlingUnitName);
-            if(airHandlingUnit == null)
+            if (airHandlingUnit == null)
             {
                 return null;
             }
@@ -112,14 +113,17 @@ namespace SAM.Analytical.Mollier
             AirHandlingUnitResult result = new AirHandlingUnitResult(airHandlingUnitName, Query.Source(), airHandlingUnit.Guid.ToString());
 
             Analytical.Query.Spaces(adjacencyCluster, airHandlingUnitName, out List<Space> spaces_Supply, out List<Space> spaces_Exhaust);
-            if(space != null)
+            if (space != null)
             {
                 spaces_Supply?.RemoveAll(x => x.Guid != space.Guid);
                 spaces_Exhaust?.RemoveAll(x => x.Guid != space.Guid);
             }
 
-            double sensibleHeatLoss = 0;
-            double sensibleHeatGain = 0;
+            double winterLatentLoad = 0;
+            double summerLatentLoad = 0;
+
+            double winterSensibleLoad = 0;
+            double summerSensibleLoad = 0;
             double outsideSupplyAirFlow = 0;
             double supplyAirFlow = 0;
             List<double> coolingDesignTemperatures = new List<double>();
@@ -143,14 +147,14 @@ namespace SAM.Analytical.Mollier
                                 case LoadType.Heating:
                                     if (spaceSimulationResult.TryGetValue(SpaceSimulationResultParameter.DesignLoad, out designLoad) && !double.IsNaN(designLoad))
                                     {
-                                        sensibleHeatLoss += designLoad;
+                                        winterSensibleLoad += designLoad;
                                     }
                                     break;
 
                                 case LoadType.Cooling:
                                     if (spaceSimulationResult.TryGetValue(SpaceSimulationResultParameter.DesignLoad, out designLoad) && !double.IsNaN(designLoad))
                                     {
-                                        sensibleHeatGain += designLoad;
+                                        summerSensibleLoad += designLoad;
                                     }
                                     break;
 
@@ -159,14 +163,14 @@ namespace SAM.Analytical.Mollier
                     }
                     else
                     {
-                        if(space_Supply.TryGetValue(Analytical.SpaceParameter.DesignCoolingLoad, out double designCoolingLoad) && !double.IsNaN(designCoolingLoad))
+                        if (space_Supply.TryGetValue(Analytical.SpaceParameter.DesignCoolingLoad, out double designCoolingLoad) && !double.IsNaN(designCoolingLoad))
                         {
-                            sensibleHeatGain += designCoolingLoad;
+                            summerSensibleLoad += designCoolingLoad;
                         }
 
                         if (space_Supply.TryGetValue(Analytical.SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && !double.IsNaN(designHeatingLoad))
                         {
-                            sensibleHeatLoss += designHeatingLoad;
+                            winterSensibleLoad += designHeatingLoad;
                         }
                     }
 
@@ -176,7 +180,7 @@ namespace SAM.Analytical.Mollier
                         outsideSupplyAirFlow += supplyAirFlow_Space;
 
                         supplyAirFlow_Space = adjacencyCluster.CalculatedSupplyAirFlow(space_Supply);
-                        if(!double.IsNaN(supplyAirFlow_Space))
+                        if (!double.IsNaN(supplyAirFlow_Space))
                         {
                             supplyAirFlow += supplyAirFlow_Space;
                         }
@@ -191,12 +195,12 @@ namespace SAM.Analytical.Mollier
             }
 
             double exhaustAirFlow = 0;
-            if(spaces_Exhaust != null && spaces_Exhaust.Count != 0)
+            if (spaces_Exhaust != null && spaces_Exhaust.Count != 0)
             {
                 foreach (Space space_Exhaust in spaces_Exhaust)
                 {
                     double exhaustAirFlow_Space = space_Exhaust.CalculatedExhaustAirFlow();
-                    exhaustAirFlow_Space = double.IsNaN(exhaustAirFlow_Space) ? double.MinValue: exhaustAirFlow_Space;
+                    exhaustAirFlow_Space = double.IsNaN(exhaustAirFlow_Space) ? double.MinValue : exhaustAirFlow_Space;
 
                     double supplyAirFlow_Space = adjacencyCluster.CalculatedSupplyAirFlow(space_Exhaust);
                     supplyAirFlow_Space = double.IsNaN(supplyAirFlow_Space) ? double.MinValue : supplyAirFlow_Space;
@@ -225,27 +229,27 @@ namespace SAM.Analytical.Mollier
             double enthalpy_Min = double.NaN;
 
             List<DesignDay> designDays = adjacencyCluster.GetObjects<DesignDay>();
-            if(designDays != null && designDays.Count != 0)
+            if (designDays != null && designDays.Count != 0)
             {
                 foreach (DesignDay designDay in designDays)
                 {
-                    if(!designDay.Contains(WeatherDataType.DryBulbTemperature)  || !designDay.Contains(WeatherDataType.RelativeHumidity))
+                    if (!designDay.Contains(WeatherDataType.DryBulbTemperature) || !designDay.Contains(WeatherDataType.RelativeHumidity))
                     {
                         continue;
                     }
 
-                    for(int i = 0; i < 24; i++)
+                    for (int i = 0; i < 24; i++)
                     {
                         double dryBulbTemperature = designDay[WeatherDataType.DryBulbTemperature, i];
                         double relativeHumidity = designDay[WeatherDataType.RelativeHumidity, i];
 
                         double enthalpy = Core.Mollier.Query.Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
-                        if(double.IsNaN(enthalpy))
+                        if (double.IsNaN(enthalpy))
                         {
                             continue;
                         }
 
-                        if(double.IsNaN(enthalpy_Max) || enthalpy > enthalpy_Max)
+                        if (double.IsNaN(enthalpy_Max) || enthalpy > enthalpy_Max)
                         {
                             summerDesignTemperature = dryBulbTemperature;
                             summerDesignRelativeHumidity = relativeHumidity;
@@ -265,8 +269,8 @@ namespace SAM.Analytical.Mollier
                     }
                 }
             }
-            
-            if(double.IsNaN(summerDesignTemperature))
+
+            if (double.IsNaN(summerDesignTemperature))
             {
                 summerDesignTemperature = 32.1;
             }
@@ -286,8 +290,8 @@ namespace SAM.Analytical.Mollier
                 winterDesignRelativeHumidity = 86.9;
             }
 
-            result.SetValue(AirHandlingUnitResultParameter.SensibleHeatGain, sensibleHeatGain);
-            result.SetValue(AirHandlingUnitResultParameter.SensibleHeatLoss, sensibleHeatLoss);
+            result.SetValue(AirHandlingUnitResultParameter.SummerSensibleLoad, summerSensibleLoad);
+            result.SetValue(AirHandlingUnitResultParameter.WinterSensibleLoad, winterSensibleLoad);
             result.SetValue(AirHandlingUnitResultParameter.SummerDesignTemperature, summerDesignTemperature);
             result.SetValue(AirHandlingUnitResultParameter.SummerDesignRelativeHumidity, summerDesignRelativeHumidity);
             result.SetValue(AirHandlingUnitResultParameter.WinterDesignTemperature, winterDesignTemperature);
@@ -304,9 +308,9 @@ namespace SAM.Analytical.Mollier
                 if (heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
                 {
                     winterSupplyTemperature = heatingDesignTemperatures.Min();
-                    if(airSupplyMethod == AirSupplyMethod.Total)
+                    if (airSupplyMethod == AirSupplyMethod.Total)
                     {
-                        winterSupplyTemperature += sensibleHeatLoss / (supplyAirFlow * 1.2 * 1.005) / 1000;
+                        winterSupplyTemperature += winterSensibleLoad / (supplyAirFlow * 1.2 * 1.005) / 1000;
                     }
                 }
             }
@@ -326,7 +330,7 @@ namespace SAM.Analytical.Mollier
             }
 
             double summerSupplyTemperature_Temp = double.NaN;
-            if(summerSupplyTemperature != null && summerSupplyTemperature.HasValue && !double.IsNaN(summerSupplyTemperature.Value))
+            if (summerSupplyTemperature != null && summerSupplyTemperature.HasValue && !double.IsNaN(summerSupplyTemperature.Value))
             {
                 summerSupplyTemperature_Temp = summerSupplyTemperature.Value;
             }
@@ -335,13 +339,13 @@ namespace SAM.Analytical.Mollier
                 summerSupplyTemperature_Temp = airHandlingUnit.SummerSupplyTemperature;
             }
 
-            if(!double.IsNaN(summerSupplyTemperature_Temp))
+            if (!double.IsNaN(summerSupplyTemperature_Temp))
             {
                 result.SetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, summerSupplyTemperature_Temp);
             }
 
             HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
-            if(frostCoil != null && !double.IsNaN(frostCoil.WinterOffTemperature))
+            if (frostCoil != null && !double.IsNaN(frostCoil.WinterOffTemperature))
             {
                 result.SetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, frostCoil.WinterOffTemperature);
             }
@@ -352,9 +356,9 @@ namespace SAM.Analytical.Mollier
             double summerHeatRecoveryRelativeHumidity = double.NaN;
 
             HeatRecoveryUnit heatRecoveryUnit = airHandlingUnit.GetSimpleEquipments<HeatRecoveryUnit>(FlowClassification.Supply)?.FirstOrDefault();
-            if(heatRecoveryUnit != null)
+            if (heatRecoveryUnit != null)
             {
-                if(!double.IsNaN(heatRecoveryUnit.WinterSensibleEfficiency))
+                if (!double.IsNaN(heatRecoveryUnit.WinterSensibleEfficiency))
                 {
                     result.SetValue(AirHandlingUnitResultParameter.WinterHeatRecoverySensibleEfficiency, heatRecoveryUnit.WinterSensibleEfficiency);
                 }
@@ -398,7 +402,7 @@ namespace SAM.Analytical.Mollier
             double coolingCoilFluidReturnTemperature = double.NaN;
 
             CoolingCoil coolingCoil = airHandlingUnit.GetSimpleEquipments<CoolingCoil>(FlowClassification.Supply)?.FirstOrDefault();
-            if(coolingCoil != null)
+            if (coolingCoil != null)
             {
                 if (!double.IsNaN(coolingCoil.ContactFactor))
                 {
@@ -433,7 +437,7 @@ namespace SAM.Analytical.Mollier
                 winterHeatingCoilSupplyTemperature = heatingDesignTemperature;
                 if (airSupplyMethod == AirSupplyMethod.Total)
                 {
-                    winterHeatingCoilSupplyTemperature += sensibleHeatLoss / (supplyAirFlow * 1.2 * 1.005) / 1000;
+                    winterHeatingCoilSupplyTemperature += winterSensibleLoad / (supplyAirFlow * 1.2 * 1.005) / 1000;
                 }
 
                 if (!double.IsNaN(winterHeatingCoilSupplyTemperature))
@@ -450,7 +454,7 @@ namespace SAM.Analytical.Mollier
             if (heatingDesignRelativeHumidities != null && heatingDesignRelativeHumidities.Count != 0)
             {
                 double value = heatingDesignRelativeHumidities.Min();
-                if(Core.Query.AlmostEqual(value, 100))
+                if (Core.Query.AlmostEqual(value, 100))
                 {
                     value = 20;
                 }
@@ -487,6 +491,82 @@ namespace SAM.Analytical.Mollier
             if (winterDesignDayIndex != -1)
             {
                 result.SetValue(AirHandlingUnitResultParameter.WinterDesignDayIndex, winterDesignDayIndex);
+            }
+
+            if (spaces_Supply != null && spaces_Supply.Count != 0)
+            {
+                result.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceTemperature, out double summerInsideTemperature);
+                result.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceRelativeHumidty, out double summerInsideRelativeHumidity);
+                MollierPoint inside_Summer = !double.IsNaN(summerInsideTemperature) && !double.IsNaN(summerInsideRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(summerInsideTemperature, summerInsideRelativeHumidity, pressure) : null;
+
+                result.TryGetValue(AirHandlingUnitResultParameter.SummerDesignTemperature, out double summerOutsideTemperature);
+                result.TryGetValue(AirHandlingUnitResultParameter.SummerDesignRelativeHumidity, out double summerOutsideRelativeHumidity);
+                MollierPoint outside_Summer = !double.IsNaN(summerOutsideTemperature) && !double.IsNaN(summerOutsideRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(summerOutsideTemperature, summerOutsideRelativeHumidity, pressure) : null;
+
+
+                result.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, out double winterInsideTemperature);
+                result.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceRelativeHumidty, out double winterInsideRelativeHumidity);
+                MollierPoint inside_Winter = !double.IsNaN(winterInsideTemperature) && !double.IsNaN(winterInsideRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterInsideTemperature, winterInsideRelativeHumidity, pressure) : null;
+
+                result.TryGetValue(AirHandlingUnitResultParameter.WinterDesignTemperature, out double winterOutsideTemperature);
+                result.TryGetValue(AirHandlingUnitResultParameter.WinterDesignRelativeHumidity, out double winterOutsideRelativeHumidity);
+                MollierPoint outside_Winter = !double.IsNaN(winterDesignTemperature) && !double.IsNaN(winterOutsideRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterDesignTemperature, winterOutsideRelativeHumidity, pressure) : null;
+
+                if (winterLatentLoad == 0)
+                {
+                    foreach (Space space_Supply in spaces_Supply)
+                    {
+                        double load = Query.LatentLoad(space_Supply, outside_Winter, inside_Winter);
+                        if (!double.IsNaN(load)) 
+                        {
+                            winterLatentLoad += load;
+                        }
+                    }
+
+                    result.SetValue(AirHandlingUnitResultParameter.WinterLatentLoad, winterLatentLoad);
+                }
+
+                if (summerLatentLoad == 0)
+                {
+                    foreach (Space space_Supply in spaces_Supply)
+                    {
+                        double load = Query.LatentLoad(space_Supply, outside_Summer, inside_Summer);
+                        if (!double.IsNaN(load))
+                        {
+                            summerLatentLoad += load;
+                        }
+                    }
+
+                    result.SetValue(AirHandlingUnitResultParameter.SummerLatentLoad, summerLatentLoad);
+                }
+
+                if (winterSensibleLoad == 0)
+                {
+                    foreach (Space space_Supply in spaces_Supply)
+                    {
+                        double load = Query.SensibleLoad(space_Supply, outside_Winter, inside_Winter);
+                        if (!double.IsNaN(load))
+                        {
+                            winterSensibleLoad += load;
+                        }
+                    }
+
+                    result.SetValue(AirHandlingUnitResultParameter.WinterSensibleLoad, winterSensibleLoad);
+                }
+
+                if (summerSensibleLoad == 0)
+                {
+                    foreach (Space space_Supply in spaces_Supply)
+                    {
+                        double load = Query.SensibleLoad(space_Supply, outside_Summer, inside_Summer);
+                        if (!double.IsNaN(load))
+                        {
+                            summerSensibleLoad += load;
+                        }
+                    }
+
+                    result.SetValue(AirHandlingUnitResultParameter.SummerSensibleLoad, summerSensibleLoad);
+                }
             }
 
             result.UpdateProcesses();

@@ -168,7 +168,9 @@ namespace SAM.Analytical.Mollier
                 }
 
                 //TO ROOM
-                if (room_Winter != null)
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSensibleLoad, out double winterSensibleLoad);
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterLatentLoad, out double winterLatentLoad);
+                if (!double.IsNaN(winterLatentLoad) && !double.IsNaN(winterSensibleLoad))
                 {
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Winter);
                     if (undefinedProcess != null && !undefinedProcess.Start.AlmostEqual(undefinedProcess.End))
@@ -176,7 +178,11 @@ namespace SAM.Analytical.Mollier
                         mollierGroup_Winter.Add(undefinedProcess);
                         start = undefinedProcess.End;
                     }
+                }
 
+                //TO ROOM
+                if (room_Winter != null)
+                {
                     mollierGroup_Winter.Add(room_Winter);
                 }
 
@@ -317,16 +323,26 @@ namespace SAM.Analytical.Mollier
                     airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.SummerSupplyFanRelativeHumidty, start.RelativeHumidity);
                 }
 
-                //TO ROOM
-                if (room_Summer != null)
+                if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSensibleLoad, out double sensibleHeatGain) && !double.IsNaN(sensibleHeatGain))
                 {
-                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Summer);
+
+                }
+
+                //TO ROOM
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSensibleLoad, out double summerSensibleLoad);
+                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerLatentLoad, out double summerLatentLoad);
+                if(!double.IsNaN(summerLatentLoad) && !double.IsNaN(summerSensibleLoad))
+                {
+                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
                     if (undefinedProcess != null && !undefinedProcess.Start.AlmostEqual(undefinedProcess.End))
                     {
                         mollierGroup_Summer.Add(undefinedProcess);
                         start = undefinedProcess.End;
                     }
-
+                }
+               
+                if (room_Summer != null)
+                {
                     mollierGroup_Summer.Add(room_Summer);
                 }
             }

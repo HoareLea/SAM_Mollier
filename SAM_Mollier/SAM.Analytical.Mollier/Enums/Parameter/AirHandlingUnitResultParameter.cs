@@ -6,8 +6,10 @@ namespace SAM.Analytical.Mollier
     [AssociatedTypes(typeof(AirHandlingUnitResult)), Description("AirHandlingUnitResult Parameter")]
     public enum AirHandlingUnitResultParameter
     {
-        [ParameterProperties("Sensible Heat Loss", "Sensible Heat Loss [W]"), ParameterValue(Core.ParameterType.Double)] SensibleHeatLoss,
-        [ParameterProperties("Senisble Heat Gain", "Sensible Heat Gain [W]"), ParameterValue(Core.ParameterType.Double)] SensibleHeatGain,
+        [ParameterProperties("Sensible Heat Loss", "Sensible Heat Loss [W]"), ParameterValue(Core.ParameterType.Double)] WinterSensibleLoad,
+        [ParameterProperties("Senisble Heat Gain", "Sensible Heat Gain [W]"), ParameterValue(Core.ParameterType.Double)] SummerSensibleLoad,
+        [ParameterProperties("Winter Latent Load", "Winter Latent Load [W]"), ParameterValue(Core.ParameterType.Double)] WinterLatentLoad,
+        [ParameterProperties("Summer Latent Load", "Summer Latent Load [W]"), ParameterValue(Core.ParameterType.Double)] SummerLatentLoad,
         [ParameterProperties("Summer Design Temperature", "Summer Design Temperature [C]"), ParameterValue(Core.ParameterType.Double)] SummerDesignTemperature,
         [ParameterProperties("Summer Design Relative Humidity", "Summer Design Relative Humidity [%]"), ParameterValue(Core.ParameterType.Double)] SummerDesignRelativeHumidity,
         [ParameterProperties("Summer Design Day Name", "Summer Design Day Name"), ParameterValue(Core.ParameterType.String)] SummerDesignDayName,
