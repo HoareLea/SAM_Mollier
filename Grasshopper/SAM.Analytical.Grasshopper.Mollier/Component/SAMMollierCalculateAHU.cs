@@ -298,10 +298,20 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 airHandlingUnit.WinterSupplyTemperature = winterSupplyTemperature;
             }
 
-            HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
-            if(frostCoil != null)
+            if (!double.IsNaN(frostCoilOffTemperature))
             {
-                if (!double.IsNaN(frostCoilOffTemperature))
+                HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
+                if (frostCoil == null)
+                {
+                    List<ISimpleEquipment> simpleEquipments = airHandlingUnit.GetSimpleEquipments(FlowClassification.Intake);
+                    if(simpleEquipments != null)
+                    {
+                        frostCoil = new HeatingCoil("Frost Coil", double.NaN, double.NaN, 0.9, frostCoilOffTemperature);
+                        airHandlingUnit.InsertBeforeSimpleEquipment(FlowClassification.Intake, frostCoil, simpleEquipments.First());
+                    }
+                }
+
+                if (frostCoil != null)
                 {
                     frostCoil.WinterOffTemperature = frostCoilOffTemperature;
                 }
