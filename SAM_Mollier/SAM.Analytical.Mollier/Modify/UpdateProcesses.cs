@@ -54,8 +54,8 @@ namespace SAM.Analytical.Mollier
                     }
                 }
 
-                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, out double winterHeatRecoveryDryBulbTemperature);
-                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryRelativeHumidity, out double winterHeatRecoveryRelativeHumidity);
+                //airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryDryBulbTemperature, out double winterHeatRecoveryDryBulbTemperature);
+                //airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoveryRelativeHumidity, out double winterHeatRecoveryRelativeHumidity);
 
                 if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterHeatRecoverySensibleEfficiency, out double winterHeatRecoverySensibleEfficiency) || double.IsNaN(winterHeatRecoverySensibleEfficiency))
                 {
@@ -67,25 +67,21 @@ namespace SAM.Analytical.Mollier
                     winterHeatRecoveryLatentEfficiency = 0;
                 }
 
-                //HEAT RECOVERY
-                if (!double.IsNaN(winterHeatRecoveryRelativeHumidity) && !double.IsNaN(winterHeatRecoveryDryBulbTemperature))
-                {
-                    MollierPoint @return = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterHeatRecoveryDryBulbTemperature, winterHeatRecoveryRelativeHumidity, pressure);
-                    if (@return != null)
-                    {
-                        HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, @return, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
-                        if (heatRecoveryProcess != null)
-                        {
-                            mollierGroup_Winter.Add(heatRecoveryProcess);
-                            start = heatRecoveryProcess.End;
-                        }
-                    }
-                }
-
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, out double winterSpaceTemperature);
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterSpaceRelativeHumidty, out double winterSpaceRelativeHumidity);
 
                 MollierPoint room_Winter = !double.IsNaN(winterSpaceTemperature) && !double.IsNaN(winterSpaceRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(winterSpaceTemperature, winterSpaceRelativeHumidity, pressure) : null;
+
+                //HEAT RECOVERY
+                if (room_Winter != null)
+                {
+                    HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, room_Winter, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
+                    if (heatRecoveryProcess != null)
+                    {
+                        mollierGroup_Winter.Add(heatRecoveryProcess);
+                        start = heatRecoveryProcess.End;
+                    }
+                }
 
                 //MIXING
                 if (room_Winter != null)
@@ -193,9 +189,6 @@ namespace SAM.Analytical.Mollier
             {
                 MollierPoint start = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(summerDesignTemperature, summerDesignRelativeHumidity, pressure);
 
-                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryDryBulbTemperature, out double summerHeatRecoveryDryBulbTemperature);
-                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatRecoveryRelativeHumidity, out double summerHeatRecoveryRelativeHumidity);
-
                 if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatRecoverySensibleEfficiency, out double summerHeatRecoverySensibleEfficiency) || double.IsNaN(summerHeatRecoverySensibleEfficiency))
                 {
                     summerHeatRecoverySensibleEfficiency = 0;
@@ -206,25 +199,21 @@ namespace SAM.Analytical.Mollier
                     summerHeatRecoveryLatentEfficiency = 0;
                 }
 
-                //HEAT RECOVERY
-                if (!double.IsNaN(summerHeatRecoveryRelativeHumidity) && !double.IsNaN(summerHeatRecoveryDryBulbTemperature))
-                {
-                    MollierPoint @return = Core.Mollier.Create.MollierPoint_ByRelativeHumidity(summerHeatRecoveryDryBulbTemperature, summerHeatRecoveryRelativeHumidity, pressure);
-                    if (@return != null)
-                    {
-                        HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, @return, summerHeatRecoverySensibleEfficiency, summerHeatRecoveryLatentEfficiency);
-                        if (heatRecoveryProcess != null)
-                        {
-                            mollierGroup_Summer.Add(heatRecoveryProcess);
-                            start = heatRecoveryProcess.End;
-                        }
-                    }
-                }
-
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceTemperature, out double summerSpaceTemperature);
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSpaceRelativeHumidty, out double summerSpaceRelativeHumidity);
 
                 MollierPoint room_Summer = !double.IsNaN(summerSpaceTemperature) && !double.IsNaN(summerSpaceRelativeHumidity) ? Core.Mollier.Create.MollierPoint_ByRelativeHumidity(summerSpaceTemperature, summerSpaceRelativeHumidity, pressure) : null;
+
+                //HEAT RECOVERY
+                if (room_Summer != null)
+                {
+                    HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, room_Summer, summerHeatRecoverySensibleEfficiency, summerHeatRecoveryLatentEfficiency);
+                    if (heatRecoveryProcess != null)
+                    {
+                        mollierGroup_Summer.Add(heatRecoveryProcess);
+                        start = heatRecoveryProcess.End;
+                    }
+                }
 
                 //MIXING
                 if (room_Summer != null)
@@ -286,6 +275,7 @@ namespace SAM.Analytical.Mollier
                     }
                 }
 
+                //HEATING COIL SUMMER
                 if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, out bool summerHeatingCoil) && summerHeatingCoil)
                 {
                     double temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature;
