@@ -9,6 +9,8 @@ using System.Linq;
 using SAM.Core.Grasshopper.Mollier;
 using SAM.Core.Mollier;
 using SAM.Core;
+using Grasshopper;
+using Grasshopper.Kernel.Data;
 
 namespace SAM.Analytical.Grasshopper.Mollier
 {
@@ -22,7 +24,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.11";
+        public override string LatestComponentVersion => "1.0.12";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -62,8 +64,8 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooAirHandlingUnitParam() { Name = "airHandlingUnit", NickName = "airHandlingUnit", Description = "SAM Analytical AirHandlingUnit", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierPoints", NickName = "mollierPoints", Description = "Mollier Points", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "mollierProcesses", NickName = "mollierProcesses", Description = "Mollier Processes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierPoints", NickName = "mollierPoints", Description = "Mollier Points", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "mollierProcesses", NickName = "mollierProcesses", Description = "Mollier Processes", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatLoss", NickName = "sensibleHeatLoss", Description = "Sensible Heat Loss for connected Spaces [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatGain", NickName = "sensibleHeatGain", Description = "Sensible Heat Gain for connected Spaces [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerDesignTemperature", NickName = "summerDesignTemperature", Description = "Summer Design Temperature [C]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -430,16 +432,30 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 }
             }
 
+            DataTree<GooMollierProcess> dataTree_MollierProcess = new DataTree<GooMollierProcess>();
+            DataTree<GooMollierPoint> dataTree_MollierPoint = new DataTree<GooMollierPoint>();
+            List<MollierGroup> mollierGroups = mollierGroup.GetObjects<MollierGroup>(false);
+
+            MollierGroup mollierGroup_Summer = mollierGroups.Find(x => x.Name == "Summer");
+            MollierGroup mollierGroup_Winter = mollierGroups.Find(x => x.Name == "Winter");
+
+            mollierGroup_Winter?.GetMollierProcesses()?.ConvertAll(x => new GooMollierProcess(x))?.ForEach(x => dataTree_MollierProcess.Add(x, new GH_Path(0)));
+            mollierGroup_Summer?.GetMollierProcesses()?.ConvertAll(x => new GooMollierProcess(x))?.ForEach(x => dataTree_MollierProcess.Add(x, new GH_Path(1)));
+
+            mollierGroup_Winter?.GetMollierPoints()?.ConvertAll(x => new GooMollierPoint(x))?.ForEach(x => dataTree_MollierPoint.Add(x, new GH_Path(0)));
+            mollierGroup_Summer?.GetMollierPoints()?.ConvertAll(x => new GooMollierPoint(x))?.ForEach(x => dataTree_MollierPoint.Add(x, new GH_Path(1)));
+
+
             index = Params.IndexOfOutputParam("mollierPoints");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, mollierGroup?.GetMollierPoints()?.ConvertAll(x => new GooMollierPoint(x)));
+                dataAccess.SetDataTree(index, dataTree_MollierPoint);
             }
 
             index = Params.IndexOfOutputParam("mollierProcesses");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, mollierGroup?.GetMollierProcesses()?.ConvertAll(x => new GooMollierProcess(x)));
+                dataAccess.SetDataTree(index, dataTree_MollierProcess);
             }
 
 
