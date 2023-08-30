@@ -421,19 +421,22 @@ namespace SAM.Analytical.Mollier
                 }
             }
 
+            //---SATRT MOVED from 1
+            double heatingDesignTemperature = double.NaN;
+            if (heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
+            {
+                heatingDesignTemperature = heatingDesignTemperatures.Min();
+                result.SetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, heatingDesignTemperature);
+            }
+            //---END MOVED from 1
+
             if (!double.IsNaN(winterHeatingCoilSupplyTemperature) && !double.IsNaN(coolingCoilFluidReturnTemperature))
             {
                 result.SetValue(AirHandlingUnitResultParameter.WinterHeatingCoilSupplyTemperature, winterHeatingCoilSupplyTemperature);
             }
             else
             {
-                double heatingDesignTemperature = double.NaN;
-                if (heatingDesignTemperatures != null && heatingDesignTemperatures.Count != 0)
-                {
-                    heatingDesignTemperature = heatingDesignTemperatures.Min();
-                    result.SetValue(AirHandlingUnitResultParameter.WinterSpaceTemperature, heatingDesignTemperature);
-                }
-
+                // 1
                 winterHeatingCoilSupplyTemperature = heatingDesignTemperature;
                 if (airSupplyMethod == AirSupplyMethod.Total)
                 {
