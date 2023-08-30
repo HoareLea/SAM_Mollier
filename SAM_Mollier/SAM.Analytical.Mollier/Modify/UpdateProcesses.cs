@@ -172,7 +172,7 @@ namespace SAM.Analytical.Mollier
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.WinterLatentLoad, out double winterLatentLoad);
                 if (!double.IsNaN(winterLatentLoad) && !double.IsNaN(winterSensibleLoad))
                 {
-                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, room_Winter);
+                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, winterSensibleLoad, winterLatentLoad);
                     if (undefinedProcess != null && !undefinedProcess.Start.AlmostEqual(undefinedProcess.End))
                     {
                         mollierGroup_Winter.Add(undefinedProcess);
@@ -286,7 +286,7 @@ namespace SAM.Analytical.Mollier
                 //HEATING COIL SUMMER
                 if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, out bool summerHeatingCoil) && summerHeatingCoil)
                 {
-                    double temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature;
+                    double temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature - Query.PickupTemperature(start.DryBulbTemperature, spf);
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(start, temperatureDifference);
                     if (heatingProcess != null && !heatingProcess.Start.AlmostEqual(heatingProcess.End))
                     {
