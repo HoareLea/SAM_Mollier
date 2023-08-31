@@ -419,6 +419,11 @@ namespace SAM.Analytical.Mollier
                     result.SetValue(AirHandlingUnitResultParameter.CoolingCoilFluidReturnTemperature, coolingCoil.FluidReturnTemperature);
                     coolingCoilFluidReturnTemperature = coolingCoil.FluidReturnTemperature;
                 }
+
+                if (!double.IsNaN(coolingCoil.SummerOffTemperature))
+                {
+                    result.SetValue(AirHandlingUnitResultParameter.SummerCoolingCoilOffTemperature, coolingCoil.SummerOffTemperature);
+                }
             }
 
             //---SATRT MOVED from 1

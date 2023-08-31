@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.13";
+        public override string LatestComponentVersion => "1.0.14";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analytcailModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_airHandlingUnit", NickName = "_airHandlingUnit", Description = "SAM Analytical AirHandlingUnit or name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 //result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterSupplyTemperature_", NickName = "winterSupplyTemperature_", Description = "Winter Supply Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerSupplyTemperature_", NickName = "summerSupplyTemperature_", Description = "Summer Supply Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                //result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerSupplyTemperature_", NickName = "summerSupplyTemperature_", Description = "Summer Supply Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "frostCoilOffTemperature_", NickName = "frostCoilOffTemperature_", Description = "Frost Coil Off Temperture [C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatRecoverySensibleEfficiency_", NickName = "winterHeatRecoverySensibleEfficiency_", Description = "Winter Heat Recovery Sensible Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatRecoveryLatentEfficiency_", NickName = "winterHeatRecoveryLatentEfficiency_", Description = "Winter Heat Recovery Latent Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -49,6 +49,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerHeatRecoveryLatentEfficiency_", NickName = "summerHeatRecoveryLatentEfficiency_", Description = "Summer Heat Recovery Latent Efficiency [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidFlowTemperature_", NickName = "coolingCoilFluidFlowTemperature_", Description = "Cooling Coil Fluid Flow Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "coolingCoilFluidReturnTemperature_", NickName = "coolingCoilFluidReturnTemperature_", Description = "Cooling Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "summerCoolingCoilOffTemperature_", NickName = "summerCoolingCoilOffTemperature_", Description = "Summer Cooling Coil Off/leaving Temperture [°C]  \n*If not connected default operation implemented", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidFlowTemperature_", NickName = "heatingCoilFluidFlowTemperature_", Description = "Heating Coil Fluid Flow Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingCoilFluidReturnTemperature_", NickName = "heatingCoilFluidReturnTemperature_", Description = "Heating Coil Fluid Return Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "winterHeatingCoilSupplyTemperature_", NickName = "winterHeatingCoilSupplyTemperature_", Description = "Winter Heating Coil Supply Temperature [°C]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -169,11 +170,11 @@ namespace SAM.Analytical.Grasshopper.Mollier
 
             double value = double.NaN;
 
-            double summerSupplyTemperature = double.NaN;
-            index = Params.IndexOfInputParam("summerSupplyTemperature_");
+            double summerCoolingCoilOffTemperature = double.NaN;
+            index = Params.IndexOfInputParam("summerCoolingCoilOffTemperature_");
             if (index != -1 && dataAccess.GetData(index, ref value) && !double.IsNaN(value))
             {
-                summerSupplyTemperature = value;
+                summerCoolingCoilOffTemperature = value;
             }
 
             //double winterSupplyTemperature = double.NaN;
@@ -290,16 +291,6 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 summerHeatingCoil = @bool;
             }
 
-            if (!double.IsNaN(summerSupplyTemperature))
-            {
-                airHandlingUnit.SummerSupplyTemperature = summerSupplyTemperature;
-            }
-
-            //if (!double.IsNaN(winterSupplyTemperature))
-            //{
-            //    airHandlingUnit.WinterSupplyTemperature = winterSupplyTemperature;
-            //}
-
             if (!double.IsNaN(frostCoilOffTemperature))
             {
                 HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
@@ -379,6 +370,11 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 if (!double.IsNaN(coolingCoilFluidReturnTemperature))
                 {
                     coolingCoil.FluidReturnTemperature = coolingCoilFluidReturnTemperature;
+                }
+
+                if (!double.IsNaN(summerCoolingCoilOffTemperature))
+                {
+                    coolingCoil.SummerOffTemperature = summerCoolingCoilOffTemperature;
                 }
             }
 
@@ -645,7 +641,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("summerSupplyTemperature");
             if (index != -1)
             {
-                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out summerSupplyTemperature))
+                if (!airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTemperature))
                 {
                     summerSupplyTemperature = double.NaN;
                 }
