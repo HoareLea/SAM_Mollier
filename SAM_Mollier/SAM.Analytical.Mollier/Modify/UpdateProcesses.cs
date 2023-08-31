@@ -113,10 +113,10 @@ namespace SAM.Analytical.Mollier
                 if (!double.IsNaN(winterHeatingCoilSupplyTemperature))
                 {
                     double temperatureDifference = 0;
-                    if(supplyAirFlow == outsideSupplyAirFlow)
+                    if(supplyAirFlow == outsideSupplyAirFlow && winterHeatingCoilSupplyTemperature == winterSpaceTemperature)
                     {
                         UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, winterSensibleLoad, winterLatentLoad);
-                        temperatureDifference = System.Math.Abs(undefinedProcess.Start.DryBulbTemperature - undefinedProcess.End.DryBulbTemperature);
+                        temperatureDifference = (undefinedProcess.End.DryBulbTemperature - undefinedProcess.Start.DryBulbTemperature);
                     }
 
                     double dryBulbTemperature = winterHeatingCoilSupplyTemperature - Query.PickupTemperature(winterHeatingCoilSupplyTemperature, spf) + temperatureDifference;
@@ -274,8 +274,8 @@ namespace SAM.Analytical.Mollier
 
                     double dryBulbTemperature = !double.IsNaN(summerCoolingCoilOffTemperature) ? summerCoolingCoilOffTemperature : room_Summer.DewPointTemperature();
 
-                    //CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature, coolingCoilContactFactor);
-                    CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess_ByMediumAndDryBulbTemperature(start, coolingCoilFluidFlowTemperature, coolingCoilFluidReturnTemperature, dryBulbTemperature);
+                    CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature, coolingCoilContactFactor);
+                    //CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess_ByMediumAndDryBulbTemperature(start, coolingCoilFluidFlowTemperature, coolingCoilFluidReturnTemperature, dryBulbTemperature);
                     if (coolingProcess != null && !coolingProcess.Start.AlmostEqual(coolingProcess.End))
                     {
                         mollierGroup_Summer.Add(coolingProcess);
