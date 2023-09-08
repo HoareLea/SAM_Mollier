@@ -31,12 +31,18 @@
             }
             if (exhaust)
             {
-
+                dryBulbTemperature = @return.DryBulbTemperature - ((@return.DryBulbTemperature - supply.DryBulbTemperature) * sensibleHeatRecoveryEfficiency / 100);
+                humidityRatio = @return.HumidityRatio - ((@return.HumidityRatio - supply.HumidityRatio) * latentHeatRecoveryEfficiency / 100);
             }
             MollierPoint end = new MollierPoint(dryBulbTemperature, humidityRatio, supply.Pressure);
             if (end == null)
             {
                 return null;
+            }
+
+            if(exhaust)
+            {
+                return new HeatRecoveryProcess(@return, end);
             }
 
             return new HeatRecoveryProcess(supply, end);

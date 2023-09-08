@@ -1,6 +1,6 @@
 ﻿namespace SAM.Core.Mollier
 {
-    public interface IUIMollierObject : IJSAMObject
+    public interface IUIMollierObject : IMollierObject
     {
         UIMollierAppearance UIMollierAppearance { get; }
     }

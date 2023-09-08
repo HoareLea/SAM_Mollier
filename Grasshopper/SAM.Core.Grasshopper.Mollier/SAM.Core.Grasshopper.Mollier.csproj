@@ -77,6 +77,7 @@
     <Compile Include="Classes\GooMollierProcess.cs" />
     <Compile Include="Classes\MollierChartObject.cs" />
     <Compile Include="Component\SAMMollierCreateMollierGroup.cs" />
+    <Compile Include="Component\SAMMollierEpsilonBySensibleAndLatentLoad.cs" />
     <Compile Include="Component\SAMMollierMollierPointProperty.cs" />
     <Compile Include="Component\SAMMollierMollierPointsByPercentage.cs" />
     <Compile Include="Component\SAMMollierCreateDiagram.cs" />

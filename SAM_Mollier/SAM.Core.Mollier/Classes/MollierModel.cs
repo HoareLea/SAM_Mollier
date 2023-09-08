@@ -8,15 +8,51 @@ namespace SAM.Core.Mollier
         private MollierSettings mollierSettings;
         private Dictionary<Type, List<IMollierObject>> dictionary;
 
+        public MollierModel()
+        {
+            dictionary = new Dictionary<Type, List<IMollierObject>>();
+        }
         public MollierModel(string name, MollierSettings mollierSettings)
             :base(name)
         {
-            this.mollierSettings = mollierSettings == null ? null : new MollierSettings(mollierSettings); 
+            this.mollierSettings = mollierSettings == null ? null : new MollierSettings(mollierSettings);
+            dictionary = new Dictionary<Type, List<IMollierObject>>();
+        }
+        public MollierModel(string name, MollierSettings mollierSettings, Dictionary<Type, List<IMollierObject>> dictionary)
+            :base(name)
+        {
+            this.mollierSettings = mollierSettings == null ? null : new MollierSettings(mollierSettings);
+            this.dictionary = dictionary;
         }
 
         public bool Add(IMollierObject mollierObject)
         {
-            throw new NotImplementedException();
+            if(mollierObject == null)
+            {
+                return false;
+            }
+
+            if(!dictionary.ContainsKey(mollierObject.GetType()))
+            {
+                dictionary[mollierObject.GetType()] = new List<IMollierObject>();
+            }
+            dictionary[mollierObject.GetType()].Add(mollierObject);
+
+            return true;
+        }
+
+        public bool AddRange(IEnumerable<IMollierObject> mollierObjects)
+        {
+            if(mollierObjects == null)
+            {
+                return false;
+            }
+
+            foreach(IMollierObject mollierObject in mollierObjects)
+            {
+                Add(mollierObject);
+            }
+            return true;
         }
 
         public void Regenerate()
@@ -25,8 +61,6 @@ namespace SAM.Core.Mollier
             {
                 return;
             }
-
-
         }
 
 
@@ -62,6 +96,15 @@ namespace SAM.Core.Mollier
             }
 
             return result;
+        }
+
+        public void Clear()
+        {
+            if (dictionary == null)
+            {
+                return;
+            }
+            dictionary.Clear();
         }
 
     }

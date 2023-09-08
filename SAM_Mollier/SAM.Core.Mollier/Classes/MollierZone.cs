@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Mollier
 {
-    public class MollierZone : IJSAMObject
+    public class MollierZone : IMollierGroupable
     {
         private List<MollierPoint> mollierPoints;
 

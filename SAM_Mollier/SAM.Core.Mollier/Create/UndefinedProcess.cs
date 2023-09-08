@@ -55,7 +55,47 @@
             return UndefinedProcess(start, end);
 
         }
+        /// <summary>
+        /// Returns new UndefinedProcess based on given input
+        /// </summary>
+        /// <param name="end">End MollierPoint</param>
+        /// <param name="latentLoad">Latent Load [W]</param>
+        /// <param name="airMassFlow">Air Mass Flow [kg/s]</param>
+        /// <param name="sensibleLoad">Sensible Load [W]</param>
+        /// <returns>UndefinedProcess</returns>
+        public static UndefinedProcess UndefinedProcess_ByEnd(this MollierPoint end, double airMassFlow, double sensibleLoad, double latentLoad)
+        {
+            if (end == null || !end.IsValid())
+            {
+                return null;
+            }
+            if (double.IsNaN(airMassFlow) || double.IsNaN(sensibleLoad) || double.IsNaN(latentLoad))
+            {
+                return null;
+            }
 
+            double dryBulbTemperature = end.DryBulbTemperature - ((sensibleLoad / 1000) / (airMassFlow * Query.SpecificHeatCapacity_Air(end)));
+            if (double.IsNaN(dryBulbTemperature))
+            {
+                return null;
+            }
+
+
+            double humidityRatio = Query.HumidityRatio_ByEnd(end, latentLoad, airMassFlow);
+            if (double.IsNaN(humidityRatio))
+            {
+                return null;
+            }
+
+            MollierPoint start = new MollierPoint(dryBulbTemperature, humidityRatio, end.Pressure);
+
+            if(!start.IsValid())
+            {
+                return null;
+            }
+
+            return new UndefinedProcess(start, end);
+        }
         public static UndefinedProcess UndefinedProcess_BySensibleHeatRatio(this MollierPoint mollierPoint, double sensibleHeatRatio, double dryBulbTemperature_Start, double dryBulbTemperature_End, double humidityRatio_Start, double humidityRatio_End)
         {
             if(mollierPoint == null || double.IsNaN(sensibleHeatRatio) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(dryBulbTemperature_End))

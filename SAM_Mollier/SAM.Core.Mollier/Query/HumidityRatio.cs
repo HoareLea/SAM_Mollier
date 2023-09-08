@@ -144,6 +144,22 @@
 
             return mollierPoint.HumidityRatio + ((latentLoad /1000) / (airMassFlow * 2450));  //latent heat of vaporization r0 for 20degC TO DO replce with formula 
         }
+        /// <summary>
+        /// Calculates dry bulb temperature
+        /// </summary>
+        /// <param name="mollierPoint">MollierPoint</param>
+        /// <param name="latentLoad">Latent Load [W]</param>
+        /// <param name="airMassFlow">Air Mass Flow [kg/s]</param>
+        /// <returns></returns>
+        public static double HumidityRatio_ByEnd(this MollierPoint mollierPoint, double latentLoad, double airMassFlow)
+        {
+            if (mollierPoint == null || double.IsNaN(latentLoad) || double.IsNaN(airMassFlow))
+            {
+                return double.NaN;
+            }
+
+            return mollierPoint.HumidityRatio - ((latentLoad / 1000) / (airMassFlow * 2450));  //latent heat of vaporization r0 for 20degC TO DO replce with formula 
+        }
 
         /// <summary>
         /// Calculates humidity ratio by partial vapour pressure  
