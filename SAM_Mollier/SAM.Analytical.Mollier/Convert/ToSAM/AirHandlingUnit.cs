@@ -88,8 +88,8 @@ namespace SAM.Analytical.Mollier
                 }
             }
 
-            List<IMollierGroup> mollierGroups_Summer = mollierProcesses_Summer.Group(true, tolerance);
-            List<IMollierGroup> mollierGroups_Winter = mollierProcesses_Winter.Group(true, tolerance);
+            List<IMollierGroup> mollierGroups_Summer = mollierProcesses_Summer.Group_(true, tolerance);
+            List<IMollierGroup> mollierGroups_Winter = mollierProcesses_Winter.Group_(true, tolerance);
 
             if((mollierGroups_Summer == null || mollierProcesses_Summer.Count == 0) && (mollierGroups_Winter == null || mollierProcesses_Winter.Count == 0))
             {

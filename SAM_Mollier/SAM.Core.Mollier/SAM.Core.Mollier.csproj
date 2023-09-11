@@ -57,6 +57,7 @@
     <Compile Include="Classes\MollierRange.cs" />
     <Compile Include="Classes\MollierSettings.cs" />
     <Compile Include="Classes\UIMollierAppearance.cs" />
+    <Compile Include="Classes\UIMollierZone.cs" />
     <Compile Include="Classes\UIMollierPoint.cs" />
     <Compile Include="Classes\UICoolingProcess.cs" />
     <Compile Include="Classes\UIMollierCurve.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Enums\MollierProcessType.cs" />
     <Compile Include="Interfaces\IMollierGroupable.cs" />
     <Compile Include="Interfaces\IMollierCurve.cs" />
+    <Compile Include="Interfaces\IMollierZone.cs" />
     <Compile Include="Interfaces\IUIMollierObject.cs" />
     <Compile Include="Interfaces\IMollierObject.cs" />
     <Compile Include="Interfaces\IMollierGroup.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Interfaces\IMollierProcess.cs" />
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
+    <Compile Include="Modify\GroupMollierProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\Group.cs" />
     <Compile Include="Query\Next.cs" />
@@ -169,7 +172,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Convert\" />
-    <Folder Include="Modify\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
