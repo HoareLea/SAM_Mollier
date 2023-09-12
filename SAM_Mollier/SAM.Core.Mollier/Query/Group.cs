@@ -56,6 +56,10 @@ namespace SAM.Core.Mollier
 
         public static List<IMollierGroup> Group(this IEnumerable<IMollierProcess> mollierProcesses, double tolerance = Tolerance.MacroDistance)
         {
+            if(mollierProcesses == null)
+            {
+                return null;
+            }
             List<IMollierGroup> result = new List<IMollierGroup>();
 
             List<int> nextProcessID = new List<int>();

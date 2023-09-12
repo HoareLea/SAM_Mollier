@@ -55,7 +55,7 @@ namespace SAM.Core.Mollier
             return true;
         }
 
-        public bool Remove(IMollierObject mollierObject)
+        public bool Remove(IMollierObject mollierObject, bool includeNestedObjects = true)
         {
             if(mollierObject == null)
             {
@@ -63,17 +63,18 @@ namespace SAM.Core.Mollier
             }
             
             List<IMollierObject> mollierObjects = GetMollierObjects(mollierObject.GetType());
-            foreach(IMollierObject mollierObject_Temp in mollierObjects)
+            for(int i = mollierObjects.Count - 1; i >= 0; i--)
             {
-                if(mollierObject.AlmostEqual(mollierObject_Temp))
+                IMollierObject mollierObject_Temp = mollierObjects[i];
+                if (mollierObject.AlmostEqual(mollierObject_Temp))
                 {
                     mollierObjects.Remove(mollierObject_Temp);
+                    dictionary[mollierObject.GetType()].Remove(mollierObject_Temp);
                 }
-
             }
 
             List<IMollierGroup> mollierGroups = GetMollierObjects<IMollierGroup>();
-            if(mollierGroups == null || !(mollierObject is IMollierGroupable))
+            if(mollierGroups == null || !(mollierObject is IMollierGroupable) || !includeNestedObjects)
             {
                 return false;
             }
@@ -84,106 +85,6 @@ namespace SAM.Core.Mollier
             }
             return false;
         }
-
-        //public bool Remove(IMollierObject mollierObject)
-        //{
-        //    if(mollierObject == null)
-        //    {
-        //        return false;
-        //    }
-        //    bool deleted = false;
-        //    // todo: add cnt
-
-        //    if (mollierObject is IMollierPoint)
-        //    {
-        //        // Remove point from points
-        //        List<IMollierPoint> mollierPoints = GetMollierObjects<IMollierPoint>();
-        //        foreach(IMollierPoint mollierPoint in mollierPoints)
-        //        {
-        //            if(mollierPoint.AlmostEqual((IMollierPoint)mollierObject))
-        //            {
-        //                dictionary[mollierPoint.GetType()].Remove(mollierPoint);
-        //                deleted = true;
-        //            }
-        //        }
-
-        //        // Remove point from groups
-        //        List<MollierGroup> mollierGroups = GetMollierObjects<MollierGroup>();
-        //        foreach (MollierGroup mollierGroup in mollierGroups)
-        //        {
-        //            List<IMollierPoint> mollierPoints_2 = mollierGroup.GetMollierPoints();
-
-        //            foreach (IMollierPoint mollierPoint in mollierPoints_2)
-        //            {
-        //                if (mollierPoint.AlmostEqual((IMollierPoint)mollierObject))
-        //                {
-        //                    mollierGroup.Remove(mollierPoint);
-        //                    deleted = true;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else if (mollierObject is IMollierProcess)
-        //    {
-        //        // Remove process from processes
-        //        List<IMollierProcess> mollierProcesses = GetMollierObjects<IMollierProcess>();
-        //        foreach (IMollierProcess mollierProcess in mollierProcesses)
-        //        { 
-        //            if (mollierProcess.AlmostEqual((IMollierProcess)mollierObject))
-        //            {
-        //                dictionary[mollierProcess.GetType()].Remove(mollierProcess);
-        //                deleted = true;
-        //            }
-        //        }
-
-        //        // Remove process from groups
-        //        List<MollierGroup> mollierGroups = GetMollierObjects<MollierGroup>();
-        //        List<IMollierProcess> newMollierProcesses = new List<IMollierProcess>();
-
-        //        foreach (MollierGroup mollierGroup in mollierGroups)
-        //        {
-        //            List<IMollierProcess> mollierProcesses_2 = mollierGroup.GetMollierProcesses();
-
-        //            foreach (IMollierProcess mollierProcess in mollierProcesses_2)
-        //            {
-        //                if (mollierProcess.AlmostEqual((IMollierProcess)mollierObject))
-        //                {
-        //                    mollierGroup.Remove(mollierProcess);
-        //                    deleted = true;
-        //                }
-        //                else
-        //                {
-        //                    newMollierProcesses.Add(mollierProcess);
-        //                }
-        //            }
-        //        }
-                
-        //        List<IMollierGroup> newMollierGroups = Query.Group(newMollierProcesses);
-        //        Clear<IMollierGroup>();
-        //        AddRange(newMollierGroups);
-
-                
-        //    }
-        //    else if (mollierObject is IMollierZone)
-        //    {
-        //        // Remove process from processes
-        //        List<IMollierZone> mollierZones = GetMollierObjects<IMollierZone>();
-        //        foreach (IMollierZone mollierZone in mollierZones)
-        //        {
-        //            if (mollierZone.AlmostEqual((IMollierZone)mollierObject))
-        //            {
-        //                dictionary[mollierZone.GetType()].Remove(mollierZone);
-        //                deleted = true;
-        //            }
-        //        }
-        //    }
-        //    else if(mollierObject is IMollierGroup)
-        //    {
-
-        //    }
-
-        //    return deleted;
-        //}
 
         public void Clear()
         {
