@@ -4,6 +4,26 @@ namespace SAM.Core.Mollier
 {
     public static partial class Query
     {
+        public static bool AlmostEqual(this IMollierObject mollierObject_1, IMollierObject mollierObject_2, double tolerance = Tolerance.MacroDistance)
+        {
+            if(mollierObject_1 is IMollierPoint && mollierObject_2 is IMollierPoint)
+            {
+                return ((IMollierPoint)mollierObject_1).AlmostEqual((IMollierPoint)mollierObject_2, tolerance);
+            }
+            else if(mollierObject_1 is IMollierProcess && mollierObject_2 is IMollierProcess)
+            {
+                return ((IMollierProcess)mollierObject_1).AlmostEqual((IMollierProcess)mollierObject_2, tolerance);
+            }
+            else if(mollierObject_1 is IMollierZone && mollierObject_2 is IMollierZone)
+            {
+                return ((IMollierZone)mollierObject_1).AlmostEqual((IMollierZone)mollierObject_2, tolerance);
+            }
+            else if(mollierObject_1 is IMollierGroup && mollierObject_2 is IMollierGroup)
+            {
+                return ((IMollierGroup)mollierObject_1).AlmostEqual((IMollierGroup)mollierObject_2, tolerance);
+            }
+            return false;
+        }
         public static bool AlmostEqual(this IMollierPoint mollierPoint_1, IMollierPoint mollierPoint_2, double tolerance = Tolerance.MacroDistance)
         {
             if (mollierPoint_1 == mollierPoint_2)

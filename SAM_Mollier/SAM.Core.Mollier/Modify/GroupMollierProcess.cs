@@ -8,9 +8,9 @@ namespace SAM.Core.Mollier
 {
     public static partial class Modify
     {
-        public static MollierModel GroupMollierProcess(this MollierModel mollierModel, UIMollierProcess uIMollierProcess)
+        public static MollierModel GroupMollierProcesses(this MollierModel mollierModel, IEnumerable<IMollierProcess> mollierProcesses)
         {
-            if(uIMollierProcess == null)
+            if(mollierProcesses == null)
             {
                 return mollierModel;
             }
@@ -20,23 +20,23 @@ namespace SAM.Core.Mollier
             if(mollierGroups == null)
             {
                 MollierGroup mollierGroup = new MollierGroup("");
-                mollierGroup.Add(uIMollierProcess);
                 mollierModel.Add(mollierGroup);
-                return mollierModel;
+                mollierGroups = new List<MollierGroup> { mollierGroup };
             }
 
-            List<IMollierProcess> mollierProcesses = new List<IMollierProcess>() { uIMollierProcess };
+            List<IMollierProcess> newMollierProcesses = new List<IMollierProcess>(mollierProcesses);
 
             foreach(MollierGroup mollierGroup in mollierGroups)
             {
-                mollierProcesses.AddRange(mollierGroup.GetMollierProcesses());
+                newMollierProcesses.AddRange(mollierGroup.GetMollierProcesses());
             }
             
-            mollierModel.ClearGroups();
-            List<IMollierGroup> newMollierGroups = Query.Group(mollierProcesses);
+            mollierModel.Clear<IMollierGroup>();
+            List<IMollierGroup> newMollierGroups = Query.Group(newMollierProcesses);
             mollierModel.AddRange(newMollierGroups);
 
             return mollierModel;
         }
+    
     }
 }

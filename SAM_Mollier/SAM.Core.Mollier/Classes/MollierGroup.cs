@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,30 +31,41 @@ namespace SAM.Core.Mollier
             FromJObject(jObject);
         }
 
-        public List<T> GetObjects<T>(bool includeNestedObjects = true) where T: IMollierGroupable
+        // TODO: [Maciek]
+        public List<IMollierGroupable> GetObjects(Type type, bool includeNestedObjects = true)
         {
-            List<T> result = new List<T>();
-            foreach(IMollierGroupable mollierGroupable in this)
+            if(type == null)
             {
-                if(mollierGroupable is T)
+                return null;
+            }
+
+            List<IMollierGroupable> result = new List<IMollierGroupable>();
+            foreach (IMollierGroupable mollierGroupable in this)
+            {
+                if (type.IsAssignableFrom(mollierGroupable.GetType()))
                 {
-                    result.Add((T)mollierGroupable);
+                    result.Add(mollierGroupable);
                 }
 
-                if(includeNestedObjects)
+                if (includeNestedObjects)
                 {
-                    if(mollierGroupable is MollierGroup)
+                    if (mollierGroupable is MollierGroup)
                     {
-                        List<T> objects = ((MollierGroup)mollierGroupable).GetObjects<T>();
-                        if(objects != null)
+                        List<IMollierGroupable> objects = ((MollierGroup)mollierGroupable).GetObjects(type, includeNestedObjects); ;
+                        if (objects != null)
                         {
                             result.AddRange(objects);
                         }
                     }
                 }
             }
-
             return result;
+        }
+
+
+        public List<T> GetObjects<T>(bool includeNestedObjects = true) where T: IMollierGroupable
+        {
+            return GetObjects(typeof(T), includeNestedObjects)?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
         }
 
         public List<IMollierProcess> GetMollierProcesses()
@@ -66,6 +78,25 @@ namespace SAM.Core.Mollier
             return GetObjects<IMollierPoint>(true);
         }
 
+        public void RemoveObject(IMollierGroupable mollierGroupable, bool includeNestedObjects = true)
+        {
+            int i = 0; 
+            while(i < Count)
+            {
+                if(includeNestedObjects && this[i] is MollierGroup)
+                {
+                    RemoveObject(this[i], includeNestedObjects);
+                }
+                if (mollierGroupable.AlmostEqual(this[i]))
+                {
+                    RemoveAt(i);
+                }
+                else
+                {
+                    i++;
+                }
+            }
+        } 
         public bool FromJObject(JObject jObject)
         {
             if(jObject == null)
