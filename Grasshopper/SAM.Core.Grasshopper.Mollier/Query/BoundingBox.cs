@@ -38,6 +38,12 @@ namespace SAM.Core.Grasshopper.Mollier
                 return BoundingBox((IMollierCurve)uIMollierObject, chartType, z);
             }
 
+            if(uIMollierObject is IMollierGroup)
+            {
+               // TODO: implement this case, now cant return list of bounding box
+               // return BoundingBox((IMollierGroup)uIMollierObject, chartType, z);
+            }
+
             throw new System.NotImplementedException();
         }
 

@@ -113,6 +113,13 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
+            if(Value.UIMollierObject is UIMollierGroup)
+            {
+                // TODO: implement it 
+                throw new NotImplementedException();
+            }
+
+
 
             throw new NotImplementedException();
         }
