@@ -74,7 +74,6 @@
     <Compile Include="Classes\HeatRecoveryProcess.cs" />
     <Compile Include="Classes\MollierProcess.cs" />
     <Compile Include="Classes\HeatingProcess.cs" />
-    <Compile Include="Convert\ToSAM_UI\IMollierObject.cs" />
     <Compile Include="Create\ConstantEnthalpyCurves.cs" />
     <Compile Include="Create\ConstantTemperatureCurve.cs" />
     <Compile Include="Create\ConstantTemperatureCurves.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="Interfaces\IMollierProcess.cs" />
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
-    <Compile Include="Modify\GroupMollierProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\Group.cs" />
     <Compile Include="Query\Next.cs" />
@@ -172,7 +170,10 @@
     <Compile Include="Variables\Zero.cs" />
     <Compile Include="Variables\Standard.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Convert\" />
+    <Folder Include="Modify\" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.2</Version>
