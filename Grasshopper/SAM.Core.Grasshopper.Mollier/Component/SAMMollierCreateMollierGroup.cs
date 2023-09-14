@@ -77,7 +77,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
 
             string name = "New Group";
-            index = Params.IndexOfInputParam("_name _");
+            index = Params.IndexOfInputParam("_name_");
             if (index == -1 || !dataAccess.GetData(index, ref name))
             {
                 name = "New Group";
