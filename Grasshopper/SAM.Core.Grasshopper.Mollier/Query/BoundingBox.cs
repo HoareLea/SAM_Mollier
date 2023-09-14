@@ -17,39 +17,35 @@ namespace SAM.Core.Grasshopper.Mollier
 
         }
 
-        public static BoundingBox BoundingBox(this IMollierObject uIMollierObject, ChartType chartType = ChartType.Mollier, double z = 0)
+        public static BoundingBox BoundingBox(this IMollierObject mollierObject, ChartType chartType = ChartType.Mollier, double z = 0)
         {
-            if(uIMollierObject == null || chartType == ChartType.Undefined || double.IsNaN(z))
+            if(mollierObject == null || chartType == ChartType.Undefined || double.IsNaN(z))
             {
                 return global::Rhino.Geometry.BoundingBox.Empty;
             }
 
-            if(uIMollierObject is IMollierPoint)
+            if(mollierObject is IMollierPoint)
             {
-                return BoundingBox((IMollierPoint)uIMollierObject,chartType, z);
+                return BoundingBox((IMollierPoint)mollierObject, chartType, z);
             }
 
-            if (uIMollierObject is IMollierProcess)
+            if (mollierObject is IMollierProcess)
             {
-                return BoundingBox((IMollierProcess)uIMollierObject, chartType, z);
+                return BoundingBox((IMollierProcess)mollierObject, chartType, z);
             }
 
-            if (uIMollierObject is IMollierCurve)
+            if (mollierObject is IMollierCurve)
             {
-                return BoundingBox((IMollierCurve)uIMollierObject, chartType, z);
+                return BoundingBox((IMollierCurve)mollierObject, chartType, z);
             }
 
-            if(uIMollierObject is IMollierGroup)
+            if(mollierObject is IMollierGroup)
             {
                 List<IMollierGroupable> mollierObjects = new List<IMollierGroupable>();
 
-                if(uIMollierObject is UIMollierGroup)
+                if(mollierObject is MollierGroup)
                 {
-                    mollierObjects = ((UIMollierGroup)uIMollierObject).GetObjects<IMollierGroupable>();
-                }
-                else if(uIMollierObject is MollierGroup)
-                {
-                    mollierObjects = ((MollierGroup)uIMollierObject).GetObjects<IMollierGroupable>();
+                    mollierObjects = ((UIMollierGroup)mollierObject).GetObjects<IMollierGroupable>();
                 }
                 else
                 {
