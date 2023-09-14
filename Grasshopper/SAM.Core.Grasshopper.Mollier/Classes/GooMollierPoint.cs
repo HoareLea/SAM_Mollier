@@ -27,7 +27,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 if (Value is UIMollierPoint)
                 {
-                    target = (Y)(object)((UIMollierPoint)Value).MollierPoint;
+                    target = (Y)(object)(UIMollierPoint)Value;
                     return true;
                 }
             }

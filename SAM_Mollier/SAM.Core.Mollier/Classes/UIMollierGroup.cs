@@ -44,7 +44,7 @@ namespace SAM.Core.Mollier
         }
         public override bool FromJObject(JObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if(jObject == null || !base.FromJObject(jObject))
             {
                 return false;
             }

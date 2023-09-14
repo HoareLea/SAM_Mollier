@@ -50,25 +50,8 @@ namespace SAM.Core.Mollier
                 return false;
             }
 
-            List<MollierPoint> zonePoints_1 = null;
-            List<MollierPoint> zonePoints_2 = null;
-            if (mollierZone_1 is UIMollierZone)
-            {
-                zonePoints_1 = ((UIMollierZone)mollierZone_1).MollierZone.MollierPoints;
-            }
-            else if(mollierZone_1 is MollierZone)
-            {
-                zonePoints_1 = ((MollierZone)mollierZone_1).MollierPoints;
-            }
-
-            if (mollierZone_2 is UIMollierZone)
-            {
-                zonePoints_2 = ((UIMollierZone)mollierZone_2).MollierZone.MollierPoints;
-            }
-            else if (mollierZone_2 is MollierZone)
-            {
-                zonePoints_2 = ((MollierZone)mollierZone_2).MollierPoints;
-            }
+            List<MollierPoint> zonePoints_1 = (mollierZone_1 as MollierZone).MollierPoints;
+            List<MollierPoint> zonePoints_2 = (mollierZone_2 as MollierZone).MollierPoints;
 
             if(zonePoints_1 == null && zonePoints_2 == null)
             {

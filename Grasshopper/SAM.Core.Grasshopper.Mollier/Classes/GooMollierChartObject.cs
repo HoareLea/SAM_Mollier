@@ -74,7 +74,7 @@ namespace SAM.Core.Grasshopper.Mollier
             System.Drawing.Color color = Value.UIMollierAppearance.Color;
             if(Value.UIMollierObject is UIMollierPoint)
             {
-                MollierPoint mollierPoint = ((UIMollierPoint)Value.UIMollierObject)?.MollierPoint;
+                MollierPoint mollierPoint = (UIMollierPoint)Value.UIMollierObject;
                 if(mollierPoint == null)
                 {
                     return;
@@ -158,7 +158,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
             if (Value.UIMollierObject is UIMollierPoint)
             {
-                MollierPoint mollierPoint = ((UIMollierPoint)Value.UIMollierObject)?.MollierPoint;
+                MollierPoint mollierPoint = (UIMollierPoint)Value.UIMollierObject;
                 if (mollierPoint == null)
                 {
                     return false;

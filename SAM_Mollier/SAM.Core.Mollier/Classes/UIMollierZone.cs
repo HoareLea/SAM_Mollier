@@ -3,51 +3,43 @@ using System.Drawing;
 
 namespace SAM.Core.Mollier
 {
-    public class UIMollierZone : IMollierZone, IUIMollierObject
+    public class UIMollierZone : MollierZone, IUIMollierObject
     {
-        private MollierZone mollierZone;
-
         private UIMollierAppearance uIMollierAppearance;
 
         public UIMollierZone(UIMollierZone uIMollierZone)
+            :base(uIMollierZone)
         {
             if(uIMollierZone != null)
             {
-                mollierZone = uIMollierZone.MollierZone?.Clone();
                 uIMollierAppearance = uIMollierZone.UIMollierAppearance?.Clone();
             }
         }
         public UIMollierZone(MollierZone mollierZone)
+            : base(mollierZone)
         {
-            this.mollierZone = mollierZone?.Clone();
             uIMollierAppearance = new UIMollierAppearance();
         }
         public UIMollierZone(MollierZone mollierZone, Color color)
+            : base(mollierZone)
         {
-            this.mollierZone = mollierZone?.Clone();
             uIMollierAppearance = new UIMollierAppearance(color);
         }
         public UIMollierZone(MollierZone mollierZone, Color color, string text)
+            : base(mollierZone)
         {
-            this.mollierZone = mollierZone?.Clone();
             uIMollierAppearance = new UIMollierAppearance(color, text);
         }
 
         public UIMollierZone(MollierZone mollierZone, UIMollierAppearance uIMollierAppearance)
+            : base(mollierZone)
         {
-            this.mollierZone = mollierZone?.Clone();
             this.uIMollierAppearance = uIMollierAppearance?.Clone();
         }
         public UIMollierZone(JObject jObject)
+            : base(jObject)
         {
             FromJObject(jObject);
-        }
-        public MollierZone MollierZone
-        {
-            get
-            {
-                return mollierZone;
-            }
         }
         public UIMollierAppearance UIMollierAppearance
         {
@@ -63,15 +55,12 @@ namespace SAM.Core.Mollier
         }
         public bool FromJObject(JObject jObject)
         {
-            if (jObject == null)
+            if (jObject == null || !base.FromJObject(jObject))
             {
                 return false;
             }
 
-            if (jObject.ContainsKey("MollierZone"))
-            {
-                mollierZone = new MollierZone(jObject.Value<JObject>("MollierZone"));
-            }
+            
             if (jObject.ContainsKey("UIMollierAppearance"))
             {
                 uIMollierAppearance = new UIMollierAppearance(jObject.Value<JObject>("UIMollierAppearance"));
@@ -82,13 +71,13 @@ namespace SAM.Core.Mollier
 
         public JObject ToJObject()
         {
-            JObject result = new JObject();
-            result.Add("_type", Core.Query.FullTypeName(this));
+            JObject result = base.ToJObject();
 
-            if (mollierZone != null)
+            if (result == null)
             {
-                result.Add("MollierZone", mollierZone.ToJObject());
+                return null;
             }
+
             if (uIMollierAppearance != null)
             {
                 result.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());

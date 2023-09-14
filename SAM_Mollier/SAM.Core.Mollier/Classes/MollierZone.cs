@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Mollier
 {
-    public class MollierZone : IMollierGroupable
+    public class MollierZone : IMollierZone, IMollierGroupable
     {
         private List<MollierPoint> mollierPoints;
 
@@ -21,7 +21,6 @@ namespace SAM.Core.Mollier
 
         public MollierZone(MollierZone mollierZone)
         {
-            //mollierPoints = mollierZone?.mollierPoints?.ConvertAll(x => new MollierPoint(x));
             mollierPoints = new List<MollierPoint>();
             List<MollierPoint> points = mollierZone.mollierPoints;
             foreach(MollierPoint point in points)
