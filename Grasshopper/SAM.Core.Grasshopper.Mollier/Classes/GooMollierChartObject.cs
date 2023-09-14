@@ -115,8 +115,26 @@ namespace SAM.Core.Grasshopper.Mollier
 
             if(Value.UIMollierObject is UIMollierGroup)
             {
-                // TODO: implement it 
-                throw new NotImplementedException();
+                UIMollierGroup uIMollierGroup = (UIMollierGroup)Value.UIMollierObject;
+                List<IMollierProcess> mollierProcesses = uIMollierGroup.GetMollierProcesses();
+                foreach(IMollierProcess mollierProcess in mollierProcesses)
+                {
+                    if(mollierProcess != null)
+                    {
+                        Polyline polyline = mollierProcess.ToRhino_Polyline(Value.ChartType, Value.Z);
+                        args.Pipeline.DrawPolyline(polyline, mollierProcess.Color());
+                    }
+                }
+
+                List<IMollierPoint> mollierPoints = uIMollierGroup.GetMollierPoints();
+                foreach (IMollierPoint mollierPoint in mollierPoints)
+                {
+                    if (mollierPoint != null)
+                    {
+                        Point3d point3d = mollierPoint.ToRhino_Point3d(Value.ChartType, Value.Z);
+                        args.Pipeline.DrawPoint(point3d, mollierPoint.Color());
+                    }
+                }
             }
 
 

@@ -4,27 +4,27 @@ using System.Drawing;
 
 namespace SAM.Core.Mollier
 {
-    public class UIMollierGroup : Collection<IMollierGroupable>, IMollierGroup, IUIMollierObject
+    public class UIMollierGroup : MollierGroup, IUIMollierObject
     {
-
-        private MollierGroup mollierGroup;
         private UIMollierAppearance uIMollierAppearance;
         public UIMollierGroup(MollierGroup mollierGroup)
+            : base(mollierGroup)
         {
-            this.mollierGroup = mollierGroup;
+
         }   
         public UIMollierGroup(UIMollierGroup uIMollierGroup)
+            : base(uIMollierGroup)
         {
-            mollierGroup = uIMollierGroup.mollierGroup;
+
         }
         public UIMollierGroup(MollierGroup mollierGroup, UIMollierAppearance uIMollierAppearance)
+            : base(mollierGroup)
         {
-            this.mollierGroup = mollierGroup;
             this.uIMollierAppearance = uIMollierAppearance;
         }
         public UIMollierGroup(MollierGroup mollierGroup, Color color)
+            : base(mollierGroup)
         {
-            this.mollierGroup = mollierGroup;
             this.uIMollierAppearance = new UIMollierAppearance(color, mollierGroup.Name);
         }
 
@@ -42,26 +42,11 @@ namespace SAM.Core.Mollier
                 }
             }
         }
-        public MollierGroup MollierGroup
+        public override bool FromJObject(JObject jObject)
         {
-            get
+            if(!base.FromJObject(jObject))
             {
-                return mollierGroup;
-            }
-            set
-            {
-                if(value != null)
-                {
-                    mollierGroup = value;
-                }
-            }
-        }
-        public virtual bool FromJObject(JObject jObject)
-        {
-
-            if (jObject.ContainsKey("MollierGroup"))
-            {
-                mollierGroup = Core.Query.IJSAMObject(jObject.Value<JObject>("MollierGroup")) as MollierGroup;
+                return false;
             }
 
             if (jObject.ContainsKey("UIMollierAppearance"))
@@ -72,13 +57,13 @@ namespace SAM.Core.Mollier
             return true;
         }
 
-        public virtual JObject ToJObject()
+        public override JObject ToJObject()
         {
-            JObject result = new JObject();
-
-            if (mollierGroup != null)
+            JObject result = base.ToJObject();
+            
+            if(result == null)
             {
-                result.Add("MollierGroup", mollierGroup.ToJObject());
+                return null;
             }
 
             if (uIMollierAppearance != null)

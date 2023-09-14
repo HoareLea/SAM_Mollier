@@ -1,5 +1,6 @@
 ﻿using Rhino.Geometry;
 using SAM.Core.Mollier;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
@@ -16,7 +17,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
         }
 
-        public static BoundingBox BoundingBox(this IUIMollierObject uIMollierObject, ChartType chartType = ChartType.Mollier, double z = 0)
+        public static BoundingBox BoundingBox(this IMollierObject uIMollierObject, ChartType chartType = ChartType.Mollier, double z = 0)
         {
             if(uIMollierObject == null || chartType == ChartType.Undefined || double.IsNaN(z))
             {
@@ -40,8 +41,30 @@ namespace SAM.Core.Grasshopper.Mollier
 
             if(uIMollierObject is IMollierGroup)
             {
-               // TODO: implement this case, now cant return list of bounding box
-               // return BoundingBox((IMollierGroup)uIMollierObject, chartType, z);
+                List<IMollierGroupable> mollierObjects = new List<IMollierGroupable>();
+
+                if(uIMollierObject is UIMollierGroup)
+                {
+                    mollierObjects = ((UIMollierGroup)uIMollierObject).GetObjects<IMollierGroupable>();
+                }
+                else if(uIMollierObject is MollierGroup)
+                {
+                    mollierObjects = ((MollierGroup)uIMollierObject).GetObjects<IMollierGroupable>();
+                }
+                else
+                {
+                    throw new System.NotImplementedException();
+                }
+
+                List<BoundingBox> boudingBoxes = mollierObjects.ConvertAll(x => BoundingBox(x, chartType, z));
+                BoundingBox result = global::Rhino.Geometry.BoundingBox.Empty;
+
+                foreach(BoundingBox boundingBox in boudingBoxes)
+                {
+                    result.Union(boundingBox);
+                }
+
+                return result;
             }
 
             throw new System.NotImplementedException();
