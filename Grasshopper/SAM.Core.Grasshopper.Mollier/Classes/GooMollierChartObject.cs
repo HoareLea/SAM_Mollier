@@ -74,7 +74,7 @@ namespace SAM.Core.Grasshopper.Mollier
             System.Drawing.Color color = Value.UIMollierAppearance.Color;
             if(Value.UIMollierObject is UIMollierPoint)
             {
-                MollierPoint mollierPoint = ((UIMollierPoint)Value.UIMollierObject)?.MollierPoint;
+                MollierPoint mollierPoint = (UIMollierPoint)Value.UIMollierObject;
                 if(mollierPoint == null)
                 {
                     return;
@@ -87,7 +87,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            if (Value.UIMollierObject is UIMollierProcess)
+            else if (Value.UIMollierObject is UIMollierProcess)
             {
                 Polyline polyline = ((UIMollierProcess)Value.UIMollierObject)?.ToRhino_Polyline(Value.ChartType, Value.Z);
                 if(polyline == null)
@@ -100,7 +100,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            if(Value.UIMollierObject is UIMollierCurve)
+            else if(Value.UIMollierObject is UIMollierCurve)
             {
                 Polyline polyline = ((UIMollierCurve)Value.UIMollierObject).ToRhino_Polyline(Value.ChartType, Value.Z);
                 if (polyline == null)
@@ -113,8 +113,34 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
+            else if(Value.UIMollierObject is UIMollierGroup)
+            {
+                UIMollierGroup uIMollierGroup = (UIMollierGroup)Value.UIMollierObject;
+                List<IMollierProcess> mollierProcesses = uIMollierGroup.GetMollierProcesses();
+                foreach(IMollierProcess mollierProcess in mollierProcesses)
+                {
+                    if(mollierProcess != null)
+                    {
+                        Polyline polyline = mollierProcess.ToRhino_Polyline(Value.ChartType, Value.Z);
+                        args.Pipeline.DrawPolyline(polyline, mollierProcess.Color());
+                    }
+                }
 
-            throw new NotImplementedException();
+                List<IMollierPoint> mollierPoints = uIMollierGroup.GetMollierPoints();
+                foreach (IMollierPoint mollierPoint in mollierPoints)
+                {
+                    if (mollierPoint != null)
+                    {
+                        Point3d point3d = mollierPoint.ToRhino_Point3d(Value.ChartType, Value.Z);
+                        args.Pipeline.DrawPoint(point3d, mollierPoint.Color());
+                    }
+                }
+            }
+
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
@@ -133,7 +159,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
             if (Value.UIMollierObject is UIMollierPoint)
             {
-                MollierPoint mollierPoint = ((UIMollierPoint)Value.UIMollierObject)?.MollierPoint;
+                MollierPoint mollierPoint = (UIMollierPoint)Value.UIMollierObject;
                 if (mollierPoint == null)
                 {
                     return false;

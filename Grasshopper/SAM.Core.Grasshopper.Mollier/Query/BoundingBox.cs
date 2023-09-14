@@ -1,5 +1,6 @@
 ﻿using Rhino.Geometry;
 using SAM.Core.Mollier;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper.Mollier
 {
@@ -16,26 +17,50 @@ namespace SAM.Core.Grasshopper.Mollier
 
         }
 
-        public static BoundingBox BoundingBox(this IUIMollierObject uIMollierObject, ChartType chartType = ChartType.Mollier, double z = 0)
+        public static BoundingBox BoundingBox(this IMollierObject mollierObject, ChartType chartType = ChartType.Mollier, double z = 0)
         {
-            if(uIMollierObject == null || chartType == ChartType.Undefined || double.IsNaN(z))
+            if(mollierObject == null || chartType == ChartType.Undefined || double.IsNaN(z))
             {
                 return global::Rhino.Geometry.BoundingBox.Empty;
             }
 
-            if(uIMollierObject is IMollierPoint)
+            if(mollierObject is IMollierPoint)
             {
-                return BoundingBox((IMollierPoint)uIMollierObject,chartType, z);
+                return BoundingBox((IMollierPoint)mollierObject, chartType, z);
             }
 
-            if (uIMollierObject is IMollierProcess)
+            if (mollierObject is IMollierProcess)
             {
-                return BoundingBox((IMollierProcess)uIMollierObject, chartType, z);
+                return BoundingBox((IMollierProcess)mollierObject, chartType, z);
             }
 
-            if (uIMollierObject is IMollierCurve)
+            if (mollierObject is IMollierCurve)
             {
-                return BoundingBox((IMollierCurve)uIMollierObject, chartType, z);
+                return BoundingBox((IMollierCurve)mollierObject, chartType, z);
+            }
+
+            if(mollierObject is IMollierGroup)
+            {
+                List<IMollierGroupable> mollierObjects = new List<IMollierGroupable>();
+
+                if(mollierObject is MollierGroup)
+                {
+                    mollierObjects = ((UIMollierGroup)mollierObject).GetObjects<IMollierGroupable>();
+                }
+                else
+                {
+                    throw new System.NotImplementedException();
+                }
+
+                List<BoundingBox> boudingBoxes = mollierObjects.ConvertAll(x => BoundingBox(x, chartType, z));
+                BoundingBox result = global::Rhino.Geometry.BoundingBox.Empty;
+
+                foreach(BoundingBox boundingBox in boudingBoxes)
+                {
+                    result.Union(boundingBox);
+                }
+
+                return result;
             }
 
             throw new System.NotImplementedException();

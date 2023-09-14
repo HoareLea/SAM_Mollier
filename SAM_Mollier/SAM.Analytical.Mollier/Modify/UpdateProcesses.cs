@@ -76,7 +76,7 @@ namespace SAM.Analytical.Mollier
                 //HEAT RECOVERY
                 if (room_Winter != null)
                 {
-                    HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, room_Winter, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
+                    HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess_Supply(start, room_Winter, winterHeatRecoverySensibleEfficiency, winterHeatRecoveryLatentEfficiency);
                     if (heatRecoveryProcess != null && !heatRecoveryProcess.Start.AlmostEqual(heatRecoveryProcess.End))
                     {
                         mollierGroup_Winter.Add(heatRecoveryProcess);
@@ -228,7 +228,7 @@ namespace SAM.Analytical.Mollier
                 //HEAT RECOVERY
                 if (room_Summer != null)
                 {
-                    HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess(start, room_Summer, summerHeatRecoverySensibleEfficiency, summerHeatRecoveryLatentEfficiency);
+                    HeatRecoveryProcess heatRecoveryProcess = Core.Mollier.Create.HeatRecoveryProcess_Supply(start, room_Summer, summerHeatRecoverySensibleEfficiency, summerHeatRecoveryLatentEfficiency);
                     if (heatRecoveryProcess != null && !heatRecoveryProcess.Start.AlmostEqual(heatRecoveryProcess.End))
                     {
                         mollierGroup_Summer.Add(heatRecoveryProcess);

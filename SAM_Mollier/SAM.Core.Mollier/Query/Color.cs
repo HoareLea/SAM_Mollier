@@ -60,21 +60,20 @@ namespace SAM.Core.Mollier
                 return System.Drawing.Color.Empty;
             }
 
-            MollierPoint mollierPoint_Temp = mollierPoint is UIMollierPoint ? ((UIMollierPoint)mollierPoint).MollierPoint : mollierPoint as MollierPoint;
+            MollierPoint mollierPoint_Temp = mollierPoint as MollierPoint;
             if(mollierPoint_Temp == null)
             {
                 return System.Drawing.Color.Empty;
             }
 
-            if(mollierPoint is UIMollierPoint)
+            if (mollierPoint is UIMollierPoint)
             {
                 UIMollierAppearance uIMollierAppearance = ((UIMollierPoint)mollierPoint).UIMollierAppearance;
                 if (uIMollierAppearance != null)
-                { 
+                {
                     return uIMollierAppearance.Color;
                 }
             }
-
 
             return System.Drawing.Color.DarkBlue;
 

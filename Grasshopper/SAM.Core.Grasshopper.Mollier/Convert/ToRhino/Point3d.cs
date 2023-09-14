@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return global::Rhino.Geometry.Point3d.Unset;
             }
 
-            MollierPoint mollierPoint_Temp = mollierPoint is UIMollierPoint ? ((UIMollierPoint)mollierPoint).MollierPoint : mollierPoint as MollierPoint;
+            MollierPoint mollierPoint_Temp = mollierPoint as MollierPoint;
             if (mollierPoint_Temp == null)
             {
                 return global::Rhino.Geometry.Point3d.Unset;

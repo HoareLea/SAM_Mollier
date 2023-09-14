@@ -141,7 +141,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 maximum_connected_nodes = true;
             }
 
-            MollierPoint mollierPoint_Temp = mollierPoint is UIMollierPoint ? ((UIMollierPoint)mollierPoint).MollierPoint : mollierPoint as MollierPoint;
+            MollierPoint mollierPoint_Temp = mollierPoint as MollierPoint;
 
             double pressure = Standard.Pressure;
             if (mollierPoint != null)
