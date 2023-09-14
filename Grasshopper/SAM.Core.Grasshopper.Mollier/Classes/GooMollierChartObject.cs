@@ -87,7 +87,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            if (Value.UIMollierObject is UIMollierProcess)
+            else if (Value.UIMollierObject is UIMollierProcess)
             {
                 Polyline polyline = ((UIMollierProcess)Value.UIMollierObject)?.ToRhino_Polyline(Value.ChartType, Value.Z);
                 if(polyline == null)
@@ -100,7 +100,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            if(Value.UIMollierObject is UIMollierCurve)
+            else if(Value.UIMollierObject is UIMollierCurve)
             {
                 Polyline polyline = ((UIMollierCurve)Value.UIMollierObject).ToRhino_Polyline(Value.ChartType, Value.Z);
                 if (polyline == null)
@@ -113,7 +113,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            if(Value.UIMollierObject is UIMollierGroup)
+            else if(Value.UIMollierObject is UIMollierGroup)
             {
                 UIMollierGroup uIMollierGroup = (UIMollierGroup)Value.UIMollierObject;
                 List<IMollierProcess> mollierProcesses = uIMollierGroup.GetMollierProcesses();
@@ -137,9 +137,10 @@ namespace SAM.Core.Grasshopper.Mollier
                 }
             }
 
-
-
-            throw new NotImplementedException();
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
