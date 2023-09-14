@@ -19,6 +19,7 @@ namespace SAM.Core.Mollier
         {
             if(mollierGroup != null)
             {
+                Name = mollierGroup.Name;
                 foreach(IMollierGroupable mollierGroupable in mollierGroup)
                 {
                     Add(mollierGroupable);
