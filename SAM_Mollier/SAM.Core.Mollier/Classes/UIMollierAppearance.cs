@@ -9,6 +9,8 @@ namespace SAM.Core.Mollier
         
         public string Label { get; set; }
 
+        public bool Visible { get; set; } = true;
+
         public UIMollierAppearance()
         {
             Color = Color.Empty;
@@ -77,6 +79,12 @@ namespace SAM.Core.Mollier
                 Label = jObject.Value<string>("Label");
             }
 
+            if (jObject.ContainsKey("Visible"))
+            {
+                Visible = jObject.Value<bool>("Visible");
+            }
+
+
             return true;
         }
         
@@ -94,6 +102,8 @@ namespace SAM.Core.Mollier
             {
                 jObject.Add("Label", Label);
             }
+
+            jObject.Add("Visible", Visible);
 
             return jObject;
         }

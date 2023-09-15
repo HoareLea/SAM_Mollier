@@ -14,7 +14,6 @@ namespace SAM.Core.Mollier
         {
             Name = name;
         }
-
         public MollierGroup(MollierGroup mollierGroup)
         {
             if(mollierGroup != null)
@@ -26,13 +25,12 @@ namespace SAM.Core.Mollier
                 }
             }
         }
-
         public MollierGroup(JObject jObject)
         {
             FromJObject(jObject);
         }
 
-        // TODO: [Maciek]
+
         public List<IMollierGroupable> GetObjects(Type type, bool includeNestedObjects = true)
         {
             if(type == null)
@@ -62,23 +60,10 @@ namespace SAM.Core.Mollier
             }
             return result;
         }
-
-
         public List<T> GetObjects<T>(bool includeNestedObjects = true) where T: IMollierGroupable
         {
             return GetObjects(typeof(T), includeNestedObjects)?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
         }
-
-        public List<IMollierProcess> GetMollierProcesses()
-        {
-            return GetObjects<IMollierProcess>(true);
-        }
-
-        public List<IMollierPoint> GetMollierPoints()
-        {
-            return GetObjects<IMollierPoint>(true);
-        }
-
         public void RemoveObject(IMollierGroupable mollierGroupable, bool includeNestedObjects = true)
         {
             int i = 0; 
@@ -86,7 +71,7 @@ namespace SAM.Core.Mollier
             {
                 if(includeNestedObjects && this[i] is MollierGroup)
                 {
-                    RemoveObject(this[i], includeNestedObjects);
+                    ((MollierGroup)this[i]).RemoveObject(mollierGroupable, includeNestedObjects);
                 }
                 if (mollierGroupable.AlmostEqual(this[i]))
                 {
@@ -98,6 +83,31 @@ namespace SAM.Core.Mollier
                 }
             }
         } 
+        public void Update(IMollierGroupable mollierGroupable1, IMollierGroupable mollierGroupable2, bool includeNestedObjects = true)
+        {
+            for(int i = Count - 1; i >= 0; i--)
+            {
+                if(includeNestedObjects && this[i] is MollierGroup)
+                {
+                    ((MollierGroup)this[i]).Update(mollierGroupable1, mollierGroupable2, includeNestedObjects);
+                }
+
+                if (this[i] == mollierGroupable1)
+                {
+                    this[i] = mollierGroupable2;
+                }
+            }
+        }
+        
+        public IEnumerator<IMollierGroupable> GetEnumerator()
+        {
+            return base.GetEnumerator();
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         public virtual bool FromJObject(JObject jObject)
         {
             if(jObject == null)
@@ -118,12 +128,6 @@ namespace SAM.Core.Mollier
 
             return true;
         }
-
-        public IEnumerator<IMollierGroupable> GetEnumerator()
-        {
-            return base.GetEnumerator();
-        }
-
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
@@ -145,9 +149,5 @@ namespace SAM.Core.Mollier
             return jObject;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
     }
 }

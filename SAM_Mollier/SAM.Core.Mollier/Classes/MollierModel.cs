@@ -40,7 +40,6 @@ namespace SAM.Core.Mollier
 
             return true;
         }
-
         public bool AddRange(IEnumerable<IMollierObject> mollierObjects)
         {
             if(mollierObjects == null)
@@ -54,7 +53,6 @@ namespace SAM.Core.Mollier
             }
             return true;
         }
-
         public bool Remove(IMollierObject mollierObject, bool includeNestedObjects = true)
         {
             if(mollierObject == null)
@@ -85,15 +83,56 @@ namespace SAM.Core.Mollier
             }
             return false;
         }
+        public void Regenerate()
+        {
+            if(dictionary == null || dictionary.Count == 0)
+            {
+                return;
+            }
+        }
+        public void Update(IMollierObject mollierObject1, IMollierObject mollierObject2, bool includeNestedObjects = true)
+        {
+            if(mollierObject1 == null || mollierObject2 == null || mollierObject1.GetType() != mollierObject2.GetType())
+            {
+                return;
+            }
+
+
+            foreach (KeyValuePair<Type, List<IMollierObject>> keyValuePair in dictionary)
+            {
+                if (keyValuePair.Value == null || keyValuePair.Value.Count == 0)
+                {
+                    continue;
+                }
+                if(includeNestedObjects && (keyValuePair.Key == typeof(MollierGroup) || keyValuePair.Key == typeof(UIMollierGroup)))
+                {
+                    foreach(MollierGroup mollierGroup in keyValuePair.Value)
+                    {
+                        mollierGroup.Update((IMollierGroupable)mollierObject1, (IMollierGroupable)mollierObject2, includeNestedObjects);
+                    }
+                }
+
+                if (!mollierObject1.GetType().IsAssignableFrom(keyValuePair.Key))
+                {
+                    continue;
+                }
+
+                for(int i = keyValuePair.Value.Count - 1; i >= 0; i--)
+                {
+                    if (keyValuePair.Value[i] == mollierObject1)
+                    {
+                        keyValuePair.Value[i] = mollierObject2;
+                    }
+                }
+            }
+        }
 
         public void Clear()
         {
             dictionary?.Clear();
         }
-        
         public void Clear<T>() where T: IMollierGroupable
         {
-
             if (dictionary != null)
             {
                 foreach(KeyValuePair<Type, List<IMollierObject>> keyValuePair in dictionary)
@@ -106,15 +145,7 @@ namespace SAM.Core.Mollier
                 }
             }
         }
-        public void Regenerate()
-        {
-            if(dictionary == null || dictionary.Count == 0)
-            {
-                return;
-            }
-        }
-
-        public List<IMollierObject> GetMollierObjects(Type type)
+        public List<IMollierObject> GetMollierObjects(Type type, bool includeNestedObjects = true)
         {
             if (dictionary == null || dictionary.Count == 0 || type == null)
             {
@@ -128,6 +159,15 @@ namespace SAM.Core.Mollier
                 {
                     continue;
                 }
+
+                if((keyValuePair.Key.IsAssignableFrom(typeof(MollierGroup)) || keyValuePair.Key.IsAssignableFrom(typeof(UIMollierGroup))) && includeNestedObjects)
+                {
+                    List<IMollierObject> mollierObjects = keyValuePair.Value;
+                    foreach (IMollierObject mollierObject in mollierObjects)
+                    {
+                        result.AddRange(((MollierGroup)mollierObject).GetObjects(type));
+                    }
+                }    
 
                 if (!type.IsAssignableFrom(keyValuePair.Key))
                 {
@@ -147,11 +187,9 @@ namespace SAM.Core.Mollier
 
             return result;
         }
-
-
-        public List<T> GetMollierObjects<T>() where T : IMollierObject
+        public List<T> GetMollierObjects<T>(bool includeNestedObjects = true) where T : IMollierObject
         {
-            return GetMollierObjects(typeof(T))?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
+            return GetMollierObjects(typeof(T), includeNestedObjects)?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
         }
 
 
