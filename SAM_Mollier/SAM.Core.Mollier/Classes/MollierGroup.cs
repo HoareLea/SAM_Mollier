@@ -82,19 +82,26 @@ namespace SAM.Core.Mollier
                     i++;
                 }
             }
-        } 
-        public void Update(IMollierGroupable mollierGroupable1, IMollierGroupable mollierGroupable2, bool includeNestedObjects = true)
+        }
+        /// <summary>
+        /// Replaces every occurrence of the MollierObject_Old by mollierObject_New
+        /// Method has an additional option to search any depth trough all elements
+        /// </summary>
+        /// <param name="mollierObject_Old">Old mollier object</param>
+        /// <param name="mollierObject_New">New mollier object</param>
+        /// <param name="includeNestedObjects">includeNestedObjects</param>
+        public void Update(IMollierGroupable mollierGroupable_Old, IMollierGroupable mollierGroupable_New, bool includeNestedObjects = true)
         {
             for(int i = Count - 1; i >= 0; i--)
             {
                 if(includeNestedObjects && this[i] is MollierGroup)
                 {
-                    ((MollierGroup)this[i]).Update(mollierGroupable1, mollierGroupable2, includeNestedObjects);
+                    ((MollierGroup)this[i]).Update(mollierGroupable_Old, mollierGroupable_New, includeNestedObjects);
                 }
 
-                if (this[i] == mollierGroupable1)
+                if (this[i] == mollierGroupable_Old)
                 {
-                    this[i] = mollierGroupable2;
+                    this[i] = mollierGroupable_New;
                 }
             }
         }

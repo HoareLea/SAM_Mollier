@@ -90,9 +90,16 @@ namespace SAM.Core.Mollier
                 return;
             }
         }
-        public void Update(IMollierObject mollierObject1, IMollierObject mollierObject2, bool includeNestedObjects = true)
+        /// <summary>
+        /// Replaces every occurrence of the MollierObject_Old by mollierObject_New
+        /// Method has an additional option to search any depth trough all elements
+        /// </summary>
+        /// <param name="mollierObject_Old">Old mollier object</param>
+        /// <param name="mollierObject_New">New mollier object</param>
+        /// <param name="includeNestedObjects">includeNestedObjects</param>
+        public void Update(IMollierObject mollierObject_Old, IMollierObject mollierObject_New, bool includeNestedObjects = true)
         {
-            if(mollierObject1 == null || mollierObject2 == null || mollierObject1.GetType() != mollierObject2.GetType())
+            if(mollierObject_Old == null || mollierObject_New == null || mollierObject_Old.GetType() != mollierObject_New.GetType())
             {
                 return;
             }
@@ -108,20 +115,20 @@ namespace SAM.Core.Mollier
                 {
                     foreach(MollierGroup mollierGroup in keyValuePair.Value)
                     {
-                        mollierGroup.Update((IMollierGroupable)mollierObject1, (IMollierGroupable)mollierObject2, includeNestedObjects);
+                        mollierGroup.Update((IMollierGroupable)mollierObject_Old, (IMollierGroupable)mollierObject_New, includeNestedObjects);
                     }
                 }
 
-                if (!mollierObject1.GetType().IsAssignableFrom(keyValuePair.Key))
+                if (!mollierObject_Old.GetType().IsAssignableFrom(keyValuePair.Key))
                 {
                     continue;
                 }
 
                 for(int i = keyValuePair.Value.Count - 1; i >= 0; i--)
                 {
-                    if (keyValuePair.Value[i] == mollierObject1)
+                    if (keyValuePair.Value[i] == mollierObject_Old)
                     {
-                        keyValuePair.Value[i] = mollierObject2;
+                        keyValuePair.Value[i] = mollierObject_New;
                     }
                 }
             }
