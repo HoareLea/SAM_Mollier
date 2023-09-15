@@ -435,11 +435,11 @@ namespace SAM.Analytical.Grasshopper.Mollier
             MollierGroup mollierGroup_Summer = mollierGroups.Find(x => x.Name == "Summer");
             MollierGroup mollierGroup_Winter = mollierGroups.Find(x => x.Name == "Winter");
 
-            mollierGroup_Winter?.GetMollierProcesses()?.ConvertAll(x => new GooMollierProcess(x))?.ForEach(x => dataTree_MollierProcess.Add(x, new GH_Path(0)));
-            mollierGroup_Summer?.GetMollierProcesses()?.ConvertAll(x => new GooMollierProcess(x))?.ForEach(x => dataTree_MollierProcess.Add(x, new GH_Path(1)));
+            mollierGroup_Winter?.GetObjects<IMollierProcess>()?.ConvertAll(x => new GooMollierProcess(x))?.ForEach(x => dataTree_MollierProcess.Add(x, new GH_Path(0)));
+            mollierGroup_Summer?.GetObjects<IMollierProcess>()?.ConvertAll(x => new GooMollierProcess(x))?.ForEach(x => dataTree_MollierProcess.Add(x, new GH_Path(1)));
 
-            mollierGroup_Winter?.GetMollierPoints()?.ConvertAll(x => new GooMollierPoint(x))?.ForEach(x => dataTree_MollierPoint.Add(x, new GH_Path(0)));
-            mollierGroup_Summer?.GetMollierPoints()?.ConvertAll(x => new GooMollierPoint(x))?.ForEach(x => dataTree_MollierPoint.Add(x, new GH_Path(1)));
+            mollierGroup_Winter?.GetObjects<IMollierPoint>()?.ConvertAll(x => new GooMollierPoint(x))?.ForEach(x => dataTree_MollierPoint.Add(x, new GH_Path(0)));
+            mollierGroup_Summer?.GetObjects<IMollierPoint>()?.ConvertAll(x => new GooMollierPoint(x))?.ForEach(x => dataTree_MollierPoint.Add(x, new GH_Path(1)));
 
 
             index = Params.IndexOfOutputParam("mollierPoints");

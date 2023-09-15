@@ -40,7 +40,6 @@ namespace SAM.Core.Mollier
 
             return true;
         }
-
         public bool AddRange(IEnumerable<IMollierObject> mollierObjects)
         {
             if(mollierObjects == null)
@@ -54,7 +53,6 @@ namespace SAM.Core.Mollier
             }
             return true;
         }
-
         public bool Remove(IMollierObject mollierObject, bool includeNestedObjects = true)
         {
             if(mollierObject == null)
@@ -85,15 +83,63 @@ namespace SAM.Core.Mollier
             }
             return false;
         }
+        public void Regenerate()
+        {
+            if(dictionary == null || dictionary.Count == 0)
+            {
+                return;
+            }
+        }
+        /// <summary>
+        /// Replaces every occurrence of the MollierObject_Old by mollierObject_New
+        /// Method has an additional option to search any depth trough all elements
+        /// </summary>
+        /// <param name="mollierObject_Old">Old mollier object</param>
+        /// <param name="mollierObject_New">New mollier object</param>
+        /// <param name="includeNestedObjects">includeNestedObjects</param>
+        public void Update<T>(T mollierObject_Old, T mollierObject_New, bool includeNestedObjects = true) where T : IMollierObject
+        {
+            if(mollierObject_Old == null || mollierObject_New == null || mollierObject_Old.GetType() != mollierObject_New.GetType())
+            {
+                return;
+            }
+
+
+            foreach (KeyValuePair<Type, List<IMollierObject>> keyValuePair in dictionary)
+            {
+                if (keyValuePair.Value == null || keyValuePair.Value.Count == 0)
+                {
+                    continue;
+                }
+                if(includeNestedObjects && (keyValuePair.Key == typeof(MollierGroup) || keyValuePair.Key == typeof(UIMollierGroup)))
+                {
+                    foreach(MollierGroup mollierGroup in keyValuePair.Value)
+                    {
+                        mollierGroup.Update((IMollierGroupable)mollierObject_Old, (IMollierGroupable)mollierObject_New, includeNestedObjects);
+                    }
+                }
+
+                if (!mollierObject_Old.GetType().IsAssignableFrom(keyValuePair.Key))
+                {
+                    continue;
+                }
+
+                for(int i = keyValuePair.Value.Count - 1; i >= 0; i--)
+                {
+                    if (keyValuePair.Value[i] == (object)mollierObject_Old)
+                    {
+                        keyValuePair.Value[i] = mollierObject_New;
+                    }
+                }
+            }
+        }
 
         public void Clear()
         {
             dictionary?.Clear();
         }
-        
         public void Clear<T>() where T: IMollierGroupable
         {
-
             if (dictionary != null)
             {
                 foreach(KeyValuePair<Type, List<IMollierObject>> keyValuePair in dictionary)
@@ -106,15 +152,7 @@ namespace SAM.Core.Mollier
                 }
             }
         }
-        public void Regenerate()
-        {
-            if(dictionary == null || dictionary.Count == 0)
-            {
-                return;
-            }
-        }
-
-        public List<IMollierObject> GetMollierObjects(Type type)
+        public List<IMollierObject> GetMollierObjects(Type type, bool includeNestedObjects = true)
         {
             if (dictionary == null || dictionary.Count == 0 || type == null)
             {
@@ -128,6 +166,15 @@ namespace SAM.Core.Mollier
                 {
                     continue;
                 }
+
+                if((keyValuePair.Key.IsAssignableFrom(typeof(MollierGroup)) || keyValuePair.Key.IsAssignableFrom(typeof(UIMollierGroup))) && includeNestedObjects)
+                {
+                    List<IMollierObject> mollierObjects = keyValuePair.Value;
+                    foreach (IMollierObject mollierObject in mollierObjects)
+                    {
+                        result.AddRange(((MollierGroup)mollierObject).GetObjects(type));
+                    }
+                }    
 
                 if (!type.IsAssignableFrom(keyValuePair.Key))
                 {
@@ -147,11 +194,9 @@ namespace SAM.Core.Mollier
 
             return result;
         }
-
-
-        public List<T> GetMollierObjects<T>() where T : IMollierObject
+        public List<T> GetMollierObjects<T>(bool includeNestedObjects = true) where T : IMollierObject
         {
-            return GetMollierObjects(typeof(T))?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
+            return GetMollierObjects(typeof(T), includeNestedObjects)?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
         }
 
 

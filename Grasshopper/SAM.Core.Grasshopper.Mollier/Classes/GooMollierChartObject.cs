@@ -116,7 +116,7 @@ namespace SAM.Core.Grasshopper.Mollier
             else if(Value.UIMollierObject is UIMollierGroup)
             {
                 UIMollierGroup uIMollierGroup = (UIMollierGroup)Value.UIMollierObject;
-                List<IMollierProcess> mollierProcesses = uIMollierGroup.GetMollierProcesses();
+                List<IMollierProcess> mollierProcesses = uIMollierGroup.GetObjects<IMollierProcess>();
                 foreach(IMollierProcess mollierProcess in mollierProcesses)
                 {
                     if(mollierProcess != null)
@@ -126,7 +126,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
                 }
 
-                List<IMollierPoint> mollierPoints = uIMollierGroup.GetMollierPoints();
+                List<IMollierPoint> mollierPoints = uIMollierGroup.GetObjects<IMollierPoint>();
                 foreach (IMollierPoint mollierPoint in mollierPoints)
                 {
                     if (mollierPoint != null)
