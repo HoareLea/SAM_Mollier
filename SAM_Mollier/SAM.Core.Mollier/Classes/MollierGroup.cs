@@ -87,10 +87,10 @@ namespace SAM.Core.Mollier
         /// Replaces every occurrence of the MollierObject_Old by mollierObject_New
         /// Method has an additional option to search any depth trough all elements
         /// </summary>
-        /// <param name="mollierObject_Old">Old mollier object</param>
-        /// <param name="mollierObject_New">New mollier object</param>
+        /// <param name="mollierGroupable_Old">Old mollier object</param>
+        /// <param name="mollierGroupable_New">New mollier object</param>
         /// <param name="includeNestedObjects">includeNestedObjects</param>
-        public void Update(IMollierGroupable mollierGroupable_Old, IMollierGroupable mollierGroupable_New, bool includeNestedObjects = true)
+        public void Update<T>(T mollierGroupable_Old, T mollierGroupable_New, bool includeNestedObjects = true) where T : IMollierGroupable
         {
             for(int i = Count - 1; i >= 0; i--)
             {
@@ -99,7 +99,7 @@ namespace SAM.Core.Mollier
                     ((MollierGroup)this[i]).Update(mollierGroupable_Old, mollierGroupable_New, includeNestedObjects);
                 }
 
-                if (this[i] == mollierGroupable_Old)
+                if (this[i] == (object)mollierGroupable_Old)
                 {
                     this[i] = mollierGroupable_New;
                 }

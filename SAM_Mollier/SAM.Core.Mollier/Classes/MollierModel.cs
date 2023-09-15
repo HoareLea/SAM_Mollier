@@ -97,7 +97,7 @@ namespace SAM.Core.Mollier
         /// <param name="mollierObject_Old">Old mollier object</param>
         /// <param name="mollierObject_New">New mollier object</param>
         /// <param name="includeNestedObjects">includeNestedObjects</param>
-        public void Update(IMollierObject mollierObject_Old, IMollierObject mollierObject_New, bool includeNestedObjects = true)
+        public void Update<T>(T mollierObject_Old, T mollierObject_New, bool includeNestedObjects = true) where T : IMollierObject
         {
             if(mollierObject_Old == null || mollierObject_New == null || mollierObject_Old.GetType() != mollierObject_New.GetType())
             {
@@ -126,7 +126,7 @@ namespace SAM.Core.Mollier
 
                 for(int i = keyValuePair.Value.Count - 1; i >= 0; i--)
                 {
-                    if (keyValuePair.Value[i] == mollierObject_Old)
+                    if (keyValuePair.Value[i] == (object)mollierObject_Old)
                     {
                         keyValuePair.Value[i] = mollierObject_New;
                     }

@@ -35,6 +35,7 @@ namespace SAM.Core.Mollier
             {
                 Color = uIMollierAppearance.Color;
                 Label = uIMollierAppearance.Label;
+                Visible = uIMollierAppearance.Visible;
             }
         }
 
@@ -42,8 +43,8 @@ namespace SAM.Core.Mollier
         {
             if (uIMollierAppearance != null)
             {
-
                 Label = uIMollierAppearance.Label;
+                Visible = uIMollierAppearance.Visible;
             }
 
             Color = color;
