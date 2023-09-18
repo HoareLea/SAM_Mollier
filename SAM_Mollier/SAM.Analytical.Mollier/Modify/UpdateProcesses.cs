@@ -165,11 +165,11 @@ namespace SAM.Analytical.Mollier
                 //HEATING (FAN)
                 double dryBulbTemperature_Fan = start.DryBulbTemperature + Core.Mollier.Query.PickupTemperature(spf);
 
-                HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
-                if (heatingProcess_Fan != null && !heatingProcess_Fan.Start.AlmostEqual(heatingProcess_Fan.End))
+                FanProcess fanProcess = Core.Mollier.Create.FanProcess(start, dryBulbTemperature_Fan);
+                if (fanProcess != null && !fanProcess.Start.AlmostEqual(fanProcess.End))
                 {
-                    mollierGroup_Winter.Add(heatingProcess_Fan);
-                    start = heatingProcess_Fan.End;
+                    mollierGroup_Winter.Add(fanProcess);
+                    start = fanProcess.End;
                 }
 
                 if(start != null)
@@ -346,11 +346,11 @@ namespace SAM.Analytical.Mollier
                 //HEATING (FAN)
                 double dryBulbTemperature_Fan = start.DryBulbTemperature + Core.Mollier.Query.PickupTemperature(spf);
 
-                HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
-                if (heatingProcess_Fan != null && !heatingProcess_Fan.Start.AlmostEqual(heatingProcess_Fan.End))
+                FanProcess fanProcess = Core.Mollier.Create.FanProcess(start, dryBulbTemperature_Fan);
+                if (fanProcess != null && !fanProcess.Start.AlmostEqual(fanProcess.End))
                 {
-                    mollierGroup_Summer.Add(heatingProcess_Fan);
-                    start = heatingProcess_Fan.End;
+                    mollierGroup_Summer.Add(fanProcess);
+                    start = fanProcess.End;
                 }
 
                 if (start != null)
