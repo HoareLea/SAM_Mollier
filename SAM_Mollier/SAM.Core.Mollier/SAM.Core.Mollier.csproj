@@ -51,9 +51,12 @@
     <Compile Include="Classes\ConstantEnthalpyCurve.cs" />
     <Compile Include="Classes\ConstantTemperatureCurve.cs" />
     <Compile Include="Classes\ConstantValueCurve.cs" />
+    <Compile Include="Classes\FanProcess.cs" />
     <Compile Include="Classes\MollierGroup.cs" />
     <Compile Include="Classes\MollierCurve.cs" />
     <Compile Include="Classes\MollierModel.cs" />
+    <Compile Include="Classes\RoomProcess.cs" />
+    <Compile Include="Classes\SpecificProcess.cs" />
     <Compile Include="Classes\MollierRange.cs" />
     <Compile Include="Classes\MollierSettings.cs" />
     <Compile Include="Classes\UIMollierAppearance.cs" />
@@ -77,11 +80,13 @@
     <Compile Include="Create\ConstantEnthalpyCurves.cs" />
     <Compile Include="Create\ConstantTemperatureCurve.cs" />
     <Compile Include="Create\ConstantTemperatureCurves.cs" />
+    <Compile Include="Create\FanProcess.cs" />
     <Compile Include="Create\MollierRange.cs" />
     <Compile Include="Create\HeatRecoveryProcess .cs" />
     <Compile Include="Create\SteamHumidificationProcess.cs" />
     <Compile Include="Create\IsotermicHumidificationProcess.cs" />
     <Compile Include="Create\AdiabaticHumidificationProcess.cs" />
+    <Compile Include="Create\RoomProcess.cs" />
     <Compile Include="Create\UndefinedProcess.cs" />
     <Compile Include="Create\MixingProcess.cs" />
     <Compile Include="Create\CoolingProcess.cs" />
@@ -105,6 +110,7 @@
     <Compile Include="Query\Group.cs" />
     <Compile Include="Query\Next.cs" />
     <Compile Include="Query\LatentLoad.cs" />
+    <Compile Include="Query\PickupTemperature.cs" />
     <Compile Include="Query\Sort.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\MollierProcesses.cs" />

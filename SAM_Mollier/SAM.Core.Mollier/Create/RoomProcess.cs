@@ -2,25 +2,25 @@
 {
     public static partial class Create
     {
-        public static UndefinedProcess UndefinedProcess(this MollierPoint start, MollierPoint stop)
+        public static RoomProcess RoomProcess(this MollierPoint start, MollierPoint stop)
         {
             if (start == null || stop == null)
             {
                 return null;
             }
 
-            return new UndefinedProcess(start, stop);
+            return new RoomProcess(start, stop);
         }
 
         /// <summary>
-        /// Returns new UndefinedProcess based on given input
+        /// Returns new RoomProcess based on given input
         /// </summary>
         /// <param name="start">Start MollierPoint</param>
         /// <param name="latentLoad">Latent Load [W]</param>
         /// <param name="airMassFlow">Air Mass Flow [kg/s]</param>
         /// <param name="sensibleLoad">Sensible Load [W]</param>
-        /// <returns>UndefinedProcess</returns>
-        public static UndefinedProcess UndefinedProcess(this MollierPoint start, double airMassFlow, double sensibleLoad, double latentLoad)
+        /// <returns>RoomProcess</returns>
+        public static RoomProcess RoomProcess(this MollierPoint start, double airMassFlow, double sensibleLoad, double latentLoad)
         {
             if(start == null || !start.IsValid())
             {
@@ -52,19 +52,19 @@
                 return null;
             }
 
-            return UndefinedProcess(start, end);
+            return RoomProcess(start, end);
 
         }
-        
+
         /// <summary>
-        /// Returns new UndefinedProcess based on given input
+        /// Returns new RoomProcess based on given input
         /// </summary>
         /// <param name="end">End MollierPoint</param>
         /// <param name="latentLoad">Latent Load [W]</param>
         /// <param name="airMassFlow">Air Mass Flow [kg/s]</param>
         /// <param name="sensibleLoad">Sensible Load [W]</param>
-        /// <returns>UndefinedProcess</returns>
-        public static UndefinedProcess UndefinedProcess_ByEnd(this MollierPoint end, double airMassFlow, double sensibleLoad, double latentLoad)
+        /// <returns>RoomProcess</returns>
+        public static RoomProcess RoomProcess_ByEnd(this MollierPoint end, double airMassFlow, double sensibleLoad, double latentLoad)
         {
             if (end == null || !end.IsValid())
             {
@@ -95,10 +95,10 @@
                 return null;
             }
 
-            return new UndefinedProcess(start, end);
+            return new RoomProcess(start, end);
         }
         
-        public static UndefinedProcess UndefinedProcess_BySensibleHeatRatio(this MollierPoint mollierPoint, double sensibleHeatRatio, double dryBulbTemperature_Start, double dryBulbTemperature_End, double humidityRatio_Start, double humidityRatio_End)
+        public static RoomProcess RoomProcess_BySensibleHeatRatio(this MollierPoint mollierPoint, double sensibleHeatRatio, double dryBulbTemperature_Start, double dryBulbTemperature_End, double humidityRatio_Start, double humidityRatio_End)
         {
             if(mollierPoint == null || double.IsNaN(sensibleHeatRatio) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(dryBulbTemperature_End))
             {
@@ -107,7 +107,7 @@
 
             if(sensibleHeatRatio == 0)
             {
-                return new UndefinedProcess(new MollierPoint(mollierPoint.DryBulbTemperature, humidityRatio_Start, mollierPoint.Pressure), new MollierPoint(mollierPoint.DryBulbTemperature, humidityRatio_End, mollierPoint.Pressure));
+                return new RoomProcess(new MollierPoint(mollierPoint.DryBulbTemperature, humidityRatio_Start, mollierPoint.Pressure), new MollierPoint(mollierPoint.DryBulbTemperature, humidityRatio_End, mollierPoint.Pressure));
             }
 
             //START
@@ -221,10 +221,10 @@
             }
 
 
-            return new UndefinedProcess(mollierPoint_Start, mollierPoint_End);
+            return new RoomProcess(mollierPoint_Start, mollierPoint_End);
         }
     
-        public static UndefinedProcess UndefinedProcess_ByEpsilonAndEnthalpyDifference(this MollierPoint mollierPoint, double epsilon, double enthalpyDifference)
+        public static RoomProcess RoomProcess_ByEpsilonAndEnthalpyDifference(this MollierPoint mollierPoint, double epsilon, double enthalpyDifference)
         {
             if(mollierPoint == null || double.IsNaN(epsilon) || double.IsNaN(enthalpyDifference) || epsilon == 0)
             {
@@ -240,10 +240,10 @@
                 return null;
             }
 
-            return new UndefinedProcess(mollierPoint, mollierPoint_End);
+            return new RoomProcess(mollierPoint, mollierPoint_End);
         }
 
-        public static UndefinedProcess UndefinedProcess_ByEpsilonAndHumidityRatioDifference(this MollierPoint mollierPoint, double epsilon, double humidityRatioDifference, bool start = true)
+        public static RoomProcess RoomProcess_ByEpsilonAndHumidityRatioDifference(this MollierPoint mollierPoint, double epsilon, double humidityRatioDifference, bool start = true)
         {
             if (mollierPoint == null || double.IsNaN(epsilon) || double.IsNaN(humidityRatioDifference))
             {
@@ -261,7 +261,7 @@
                 return null;
             }
 
-            return new UndefinedProcess(mollierPoint, mollierPoint_End);
+            return new RoomProcess(mollierPoint, mollierPoint_End);
         }
     }
 }

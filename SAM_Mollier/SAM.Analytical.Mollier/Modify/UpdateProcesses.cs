@@ -119,7 +119,7 @@ namespace SAM.Analytical.Mollier
                         temperatureDifference = (undefinedProcess.End.DryBulbTemperature - undefinedProcess.Start.DryBulbTemperature);
                     }
 
-                    double dryBulbTemperature = winterHeatingCoilSupplyTemperature - Query.PickupTemperature(winterHeatingCoilSupplyTemperature, spf) + temperatureDifference;
+                    double dryBulbTemperature = winterHeatingCoilSupplyTemperature - Core.Mollier.Query.PickupTemperature(spf) + temperatureDifference;
 
                     HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature);
                     if (heatingProcess != null && !heatingProcess.Start.AlmostEqual(heatingProcess.End))
@@ -163,7 +163,7 @@ namespace SAM.Analytical.Mollier
                 }
 
                 //HEATING (FAN)
-                double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(winterHeatingCoilSupplyTemperature, spf);
+                double dryBulbTemperature_Fan = start.DryBulbTemperature + Core.Mollier.Query.PickupTemperature(spf);
 
                 HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
                 if (heatingProcess_Fan != null && !heatingProcess_Fan.Start.AlmostEqual(heatingProcess_Fan.End))
@@ -183,11 +183,11 @@ namespace SAM.Analytical.Mollier
                 //TO ROOM
                 if (!double.IsNaN(winterLatentLoad) && !double.IsNaN(winterSensibleLoad))
                 {
-                    UndefinedProcess undefinedProcess_Room = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, -winterSensibleLoad, winterLatentLoad);
-                    if (undefinedProcess_Room != null && !undefinedProcess_Room.Start.AlmostEqual(undefinedProcess_Room.End))
+                    RoomProcess roomProcess_Room = Core.Mollier.Create.RoomProcess(start, supplyAirFlow, -winterSensibleLoad, winterLatentLoad);
+                    if (roomProcess_Room != null && !roomProcess_Room.Start.AlmostEqual(roomProcess_Room.End))
                     {
-                        mollierGroup_Winter.Add(undefinedProcess_Room);
-                        start = undefinedProcess_Room.End;
+                        mollierGroup_Winter.Add(roomProcess_Room);
+                        start = roomProcess_Room.End;
                     }
                 }
 
@@ -317,7 +317,7 @@ namespace SAM.Analytical.Mollier
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
                     double temperatureDifference = System.Math.Abs(undefinedProcess.Start.DryBulbTemperature - undefinedProcess.End.DryBulbTemperature);
 
-                    temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature - Query.PickupTemperature(start.DryBulbTemperature, spf) - temperatureDifference;
+                    temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature - Core.Mollier.Query.PickupTemperature(spf) - temperatureDifference;
                     if(temperatureDifference > 0)
                     {
                         HeatingProcess heatingProcess = Core.Mollier.Create.HeatingProcess_ByTemperatureDifference(start, temperatureDifference);
@@ -344,7 +344,7 @@ namespace SAM.Analytical.Mollier
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTemperature);
 
                 //HEATING (FAN)
-                double dryBulbTemperature_Fan = start.DryBulbTemperature + Query.PickupTemperature(summerSupplyTemperature, spf);
+                double dryBulbTemperature_Fan = start.DryBulbTemperature + Core.Mollier.Query.PickupTemperature(spf);
 
                 HeatingProcess heatingProcess_Fan = Core.Mollier.Create.HeatingProcess(start, dryBulbTemperature_Fan);
                 if (heatingProcess_Fan != null && !heatingProcess_Fan.Start.AlmostEqual(heatingProcess_Fan.End))
@@ -368,11 +368,11 @@ namespace SAM.Analytical.Mollier
 
                 if(!double.IsNaN(summerLatentLoad) && !double.IsNaN(summerSensibleLoad))
                 {
-                    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
-                    if (undefinedProcess != null && !undefinedProcess.Start.AlmostEqual(undefinedProcess.End))
+                    RoomProcess roomProcess = Core.Mollier.Create.RoomProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
+                    if (roomProcess != null && !roomProcess.Start.AlmostEqual(roomProcess.End))
                     {
-                        mollierGroup_Summer.Add(undefinedProcess);
-                        start = undefinedProcess.End;
+                        mollierGroup_Summer.Add(roomProcess);
+                        start = roomProcess.End;
                     }
                 }
                
