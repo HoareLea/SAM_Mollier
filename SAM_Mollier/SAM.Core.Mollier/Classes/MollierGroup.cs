@@ -106,6 +106,8 @@ namespace SAM.Core.Mollier
             }
         }
         
+
+
         public IEnumerator<IMollierGroupable> GetEnumerator()
         {
             return base.GetEnumerator();

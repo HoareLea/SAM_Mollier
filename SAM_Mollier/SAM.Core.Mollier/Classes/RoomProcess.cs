@@ -4,6 +4,8 @@ namespace SAM.Core.Mollier
 {
     public class RoomProcess : SpecificProcess
     {
+        public override ChartDataType ChartDataType => ChartDataType.RoomProcess;
+
         internal RoomProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {
