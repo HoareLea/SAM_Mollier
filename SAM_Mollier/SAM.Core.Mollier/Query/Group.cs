@@ -96,7 +96,7 @@ namespace SAM.Core.Mollier
             List<int> startingProcessesID = new List<int>();
             for (int i = 0; i < mollierProcesses.Count(); i++)
             {
-                if (previousProcessCount[i] == 0 && !(mollierProcesses.ElementAt(i) is UndefinedProcess))
+                if (previousProcessCount[i] == 0 && !(mollierProcesses.ElementAt(i) is RoomProcess))
                 {
                     startingProcessesID.Add(i);
                 }

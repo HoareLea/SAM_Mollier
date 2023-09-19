@@ -60,7 +60,7 @@ namespace SAM.Core.Mollier
                 return false;
             }
             
-            List<IMollierObject> mollierObjects = GetMollierObjects(mollierObject.GetType());
+            List<IMollierObject> mollierObjects = GetMollierObjects(mollierObject.GetType(), false);
             for(int i = mollierObjects.Count - 1; i >= 0; i--)
             {
                 IMollierObject mollierObject_Temp = mollierObjects[i];
@@ -88,6 +88,19 @@ namespace SAM.Core.Mollier
             if(dictionary == null || dictionary.Count == 0)
             {
                 return;
+            }
+        }
+
+        public void Update<T>(IEnumerable<Tuple<T, T>> mollierObjects, bool includeNestedObjects = true) where T : IMollierObject
+        {
+            if(mollierObjects == null)
+            {
+                return;
+            }
+
+            foreach(var objectsPair in mollierObjects)
+            {
+                Update(objectsPair.Item1, objectsPair.Item2, includeNestedObjects);
             }
         }
         /// <summary>

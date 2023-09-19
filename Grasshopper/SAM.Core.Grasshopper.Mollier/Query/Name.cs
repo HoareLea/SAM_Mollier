@@ -42,7 +42,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return "Humidification Isotermal Steam";
             }
 
-            if (mollierProcess_Temp is UndefinedProcess)
+            if (mollierProcess_Temp is RoomProcess)
             {
                 return "Room";
             }

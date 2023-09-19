@@ -3,9 +3,7 @@
 namespace SAM.Core.Mollier
 {
     public abstract class SpecificProcess : MollierProcess
-    {
-        public override ChartDataType ChartDataType => ChartDataType.SpecificProcess;
-
+    { 
         internal SpecificProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {
