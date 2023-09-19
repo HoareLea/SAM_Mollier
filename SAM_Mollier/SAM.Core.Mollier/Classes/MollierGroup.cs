@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SAM.Core.Mollier
 {
@@ -14,6 +15,7 @@ namespace SAM.Core.Mollier
         {
             Name = name;
         }
+        
         public MollierGroup(MollierGroup mollierGroup)
         {
             if(mollierGroup != null)
@@ -25,6 +27,7 @@ namespace SAM.Core.Mollier
                 }
             }
         }
+        
         public MollierGroup(JObject jObject)
         {
             FromJObject(jObject);
@@ -50,7 +53,7 @@ namespace SAM.Core.Mollier
                 {
                     if (mollierGroupable is MollierGroup)
                     {
-                        List<IMollierGroupable> objects = ((MollierGroup)mollierGroupable).GetObjects(type, includeNestedObjects); ;
+                        List<IMollierGroupable> objects = ((MollierGroup)mollierGroupable).GetObjects(type, includeNestedObjects);
                         if (objects != null)
                         {
                             result.AddRange(objects);
@@ -60,10 +63,12 @@ namespace SAM.Core.Mollier
             }
             return result;
         }
+        
         public List<T> GetObjects<T>(bool includeNestedObjects = true) where T: IMollierGroupable
         {
             return GetObjects(typeof(T), includeNestedObjects)?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
         }
+        
         public void RemoveObject(IMollierGroupable mollierGroupable, bool includeNestedObjects = true)
         {
             int i = 0; 
@@ -90,6 +95,7 @@ namespace SAM.Core.Mollier
         /// <param name="mollierGroupable_Old">Old mollier object</param>
         /// <param name="mollierGroupable_New">New mollier object</param>
         /// <param name="includeNestedObjects">includeNestedObjects</param>
+        
         public void Update<T>(T mollierGroupable_Old, T mollierGroupable_New, bool includeNestedObjects = true) where T : IMollierGroupable
         {
             for(int i = Count - 1; i >= 0; i--)
@@ -107,15 +113,24 @@ namespace SAM.Core.Mollier
         }
         
 
-
         public IEnumerator<IMollierGroupable> GetEnumerator()
         {
             return base.GetEnumerator();
         }
+        
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
+
+        List<IMollierGroupable> Objects
+        {
+            get
+            {
+                return this.ToList();
+            }
+        }
+
 
         public virtual bool FromJObject(JObject jObject)
         {
@@ -137,6 +152,7 @@ namespace SAM.Core.Mollier
 
             return true;
         }
+        
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
@@ -157,6 +173,5 @@ namespace SAM.Core.Mollier
 
             return jObject;
         }
-
     }
 }
