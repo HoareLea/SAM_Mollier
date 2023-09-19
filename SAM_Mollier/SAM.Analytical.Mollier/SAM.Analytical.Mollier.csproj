@@ -62,8 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AirHandlingUnitResult.cs" />
+    <Compile Include="Create\SimpleEquipment.cs" />
     <Compile Include="Convert\ToSAM\Polygon2D.cs" />
-    <Compile Include="Convert\ToSAM\AirHandlingUnit.cs" />
+    <Compile Include="Create\AirHandlingUnit.cs" />
     <Compile Include="Convert\ToSAM\Segment2D.cs" />
     <Compile Include="Convert\ToSAM\Point2D.cs" />
     <Compile Include="Create\AirHandlingUnitResult.cs" />

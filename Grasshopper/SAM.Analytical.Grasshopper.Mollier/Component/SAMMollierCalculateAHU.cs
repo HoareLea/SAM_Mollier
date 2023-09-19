@@ -293,14 +293,14 @@ namespace SAM.Analytical.Grasshopper.Mollier
 
             if (!double.IsNaN(frostCoilOffTemperature))
             {
-                HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
+                HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Supply)?.FirstOrDefault();
                 if (frostCoil == null)
                 {
-                    List<ISimpleEquipment> simpleEquipments = airHandlingUnit.GetSimpleEquipments(FlowClassification.Intake);
+                    List<ISimpleEquipment> simpleEquipments = airHandlingUnit.GetSimpleEquipments(FlowClassification.Supply);
                     if(simpleEquipments != null)
                     {
                         frostCoil = new HeatingCoil("Frost Coil", double.NaN, double.NaN, 0.9, frostCoilOffTemperature);
-                        airHandlingUnit.InsertBeforeSimpleEquipment(FlowClassification.Intake, frostCoil, simpleEquipments.First());
+                        airHandlingUnit.InsertBeforeSimpleEquipment(FlowClassification.Supply, frostCoil, simpleEquipments.First());
                     }
                 }
 

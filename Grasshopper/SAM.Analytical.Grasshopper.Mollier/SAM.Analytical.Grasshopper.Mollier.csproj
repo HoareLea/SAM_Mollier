@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Component\SAMMollierAirHandlingUnitCalculationMethod.cs" />
     <Compile Include="Component\SAMMollierAddMechanicalSystems.cs" />
+    <Compile Include="Component\SAMMollierCreateAHU.cs" />
     <Compile Include="Component\SAMMollierCalculateLoads.cs" />
     <Compile Include="Component\SAMMollierCalculateAHU.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />

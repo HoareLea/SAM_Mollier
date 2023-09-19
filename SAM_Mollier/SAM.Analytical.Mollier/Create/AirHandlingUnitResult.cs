@@ -344,7 +344,7 @@ namespace SAM.Analytical.Mollier
                 result.SetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, summerSupplyTemperature_Temp);
             }
 
-            HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
+            HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Supply)?.FirstOrDefault();
             if (frostCoil != null && !double.IsNaN(frostCoil.WinterOffTemperature))
             {
                 result.SetValue(AirHandlingUnitResultParameter.FrostCoilOffTemperature, frostCoil.WinterOffTemperature);
