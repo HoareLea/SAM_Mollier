@@ -40,7 +40,7 @@
             }
 
             //flow 1 required by Michal 03/08/2023
-            return MixingProcess(point_1, point_2, (flow_1 == 0 && flow_2 == 0) ? 0 : flow_1 / (flow_1 + flow_2));
+            return MixingProcess(point_1, point_2, (flow_1 == 0 && flow_2 == 0) ? 0 : flow_2 / (flow_1 + flow_2));
         }
     }
 }
