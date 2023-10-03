@@ -32,8 +32,8 @@ namespace SAM.Analytical.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_outside", NickName = "_outside", Description = "SAM outside MollierPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_inside", NickName = "_inside", Description = "SAM Inside MollierPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "outside_", NickName = "outside_", Description = "Outside condition as MollierPoint\n *used for infiltration calculation", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "inside_", NickName = "inside_", Description = "Room inside condition as MollierPoint\n *used for infiltration calculation", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_space", NickName = "_space", Description = "SAM Analytical Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -69,7 +69,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
         /// </summary>
         public SAMMollierCalculateLoads()
           : base("SAMMollier.CalculateLoads", "SAMMollier.CalculateLoads",
-              "Calculate Space Loads",
+              "Calculate space loads, including infiltration, by providing input values for inside and outside conditions",
               "SAM", "Mollier")
         {
         }
