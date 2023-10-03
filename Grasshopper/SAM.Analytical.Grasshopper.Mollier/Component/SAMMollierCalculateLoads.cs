@@ -32,8 +32,8 @@ namespace SAM.Analytical.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "outside_", NickName = "outside_", Description = "Outside condition as MollierPoint\n *used for infiltration calculation", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "inside_", NickName = "inside_", Description = "Room inside condition as MollierPoint\n *used for infiltration calculation", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "outside_", NickName = "outside_", Description = "Outside condition as MollierPoint\n *used for infiltration calculation", Access = GH_ParamAccess.item, Optional=true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "inside_", NickName = "inside_", Description = "Room inside condition as MollierPoint\n *used for infiltration calculation", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_space", NickName = "_space", Description = "SAM Analytical Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -93,14 +93,14 @@ namespace SAM.Analytical.Grasshopper.Mollier
             }
 
             MollierPoint inside = null;
-            index = Params.IndexOfInputParam("_inside");
+            index = Params.IndexOfInputParam("inside_");
             if (index == -1 || !dataAccess.GetData(index, ref inside) || inside == null)
             {
                 inside = null;
             }
 
             MollierPoint outside = null;
-            index = Params.IndexOfInputParam("_outside");
+            index = Params.IndexOfInputParam("outside_");
             if (index == -1 || !dataAccess.GetData(index, ref outside) || outside == null)
             {
                 outside = null;
