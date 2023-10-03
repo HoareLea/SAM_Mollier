@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,8 +32,8 @@ namespace SAM.Analytical.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_outside", NickName = "_outside", Description = "SAM outside MollierPoint", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_inside", NickName = "_inside", Description = "SAM Inside MollierPoint", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_outside", NickName = "_outside", Description = "SAM outside MollierPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_inside", NickName = "_inside", Description = "SAM Inside MollierPoint", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_space", NickName = "_space", Description = "SAM Analytical Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -44,8 +44,8 @@ namespace SAM.Analytical.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlow", NickName = "supplyAirFlow", Description = "Supply Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlow", NickName = "exhaustAirFlow", Description = "Exhaust Air Flow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlow", NickName = "supplyAirFlow", Description = "Supply Air Flow [m3/s]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlow", NickName = "exhaustAirFlow", Description = "Exhaust Air Flow [m3/s]", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleLoad", NickName = "sensibleLoad", Description = "Sensible Load [W]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensibleLoad", NickName = "equipmentSensibleLoad", Description = "Equipment Sensible Load [W]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
@@ -92,36 +92,27 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 return;
             }
 
-            index = Params.IndexOfInputParam("_inside");
-            if (index == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             MollierPoint inside = null;
-            if (!dataAccess.GetData(index, ref inside) || inside == null)
+            index = Params.IndexOfInputParam("_inside");
+            if (index == -1 || !dataAccess.GetData(index, ref inside) || inside == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-
-            index = Params.IndexOfInputParam("_outside");
-            if (index == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                inside = null;
             }
 
             MollierPoint outside = null;
-            if (!dataAccess.GetData(index, ref outside) || outside == null)
+            index = Params.IndexOfInputParam("_outside");
+            if (index == -1 || !dataAccess.GetData(index, ref outside) || outside == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                outside = null;
             }
 
-            Analytical.Mollier.Query.TryGetInfiltrationGains(space, outside, inside, out double infiltrationLatentGain, out double infiltrationSensibleGain);
+            double infiltrationLatentGain = 0;
+            double infiltrationSensibleGain = 0;
+
+            if(inside != null && outside != null)
+            {
+                Analytical.Mollier.Query.TryGetInfiltrationGains(space, outside, inside, out infiltrationLatentGain, out infiltrationSensibleGain);
+            }
 
             double equipmentLatentGain = Analytical.Query.CalculatedEquipmentLatentGain(space);
             double occupancyLatentGain = Analytical.Query.OccupancyLatentGain(space);
