@@ -20,11 +20,11 @@
         }
 
         /// <summary>
-        /// Calculates latent load [kg/s]
+        /// Calculates latent load [kW]
         /// </summary>
         /// <param name="humidityRatioDifference">Humidity ratio difference [kg/kg]</param>
         /// <param name="massFlow">Mass flow [kg/s]</param>
-        /// <returns>Latent load [kg/s]</returns>
+        /// <returns>Latent load [kW]</returns>
         public static double LatentLoad_ByMassFlow(double humidityRatioDifference, double massFlow)
         {
             if(double.IsNaN(massFlow) || double.IsNaN(humidityRatioDifference))
@@ -32,7 +32,7 @@
                 return double.NaN;
             }
 
-            return massFlow * humidityRatioDifference;
+            return massFlow * humidityRatioDifference * Zero.VapourizationLatentHeat / 1000;
         }
     }
 }

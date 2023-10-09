@@ -117,10 +117,10 @@
             MollierPoint mollierPoint_Start_DryBulbTemperature = null;
             if (sensibleHeatRatio != 0)
             {
-                double enthaply = Query.Enthalpy_BySensibleHeatRatioAndDryBulbTemperature(mollierPoint.Pressure, sensibleHeatRatio, specificHeat_Start, mollierPoint, dryBulbTemperature_Start);
-                if (!double.IsNaN(enthaply))
+                double enthalpy = Query.Enthalpy_BySensibleHeatRatioAndDryBulbTemperature(mollierPoint.Pressure, sensibleHeatRatio, specificHeat_Start, mollierPoint, dryBulbTemperature_Start);
+                if (!double.IsNaN(enthalpy))
                 {
-                    double humidityRatio = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_Start, enthaply);
+                    double humidityRatio = Query.HumidityRatio_ByEnthalpy(dryBulbTemperature_Start, enthalpy);
                     if (!double.IsNaN(humidityRatio))
                     {
                         mollierPoint_Start_DryBulbTemperature = new MollierPoint(dryBulbTemperature_Start, humidityRatio, mollierPoint.Pressure);

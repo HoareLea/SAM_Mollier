@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -44,7 +44,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "totalLoad", NickName = "totalLoad", Description = "Total load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleLoad", NickName = "sensibleLoad", Description = "Sensible load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "latentLoad", NickName = "latentLoad", Description = "Latent load [kg/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "latentLoad", NickName = "latentLoad", Description = "Latent load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δh", NickName = "Δh", Description = "Enthalpy difference Δh [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δt", NickName = "Δt", Description = "Dry bulb temperature difference Δt [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δx", NickName = "Δx", Description = "Humidity ratio difference Δx [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
