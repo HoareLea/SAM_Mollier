@@ -6,8 +6,8 @@ namespace SAM.Core.Mollier
     {
         public override ChartDataType ChartDataType => ChartDataType.IsotermicHumidificationProcess;
 
-        internal IsotermicHumidificationProcess(MollierPoint start, MollierPoint end)
-            : base(start, end)
+        internal IsotermicHumidificationProcess(MollierPoint start, MollierPoint end, double efficiency = 1)
+            : base(start, end, efficiency)
         {
 
         }

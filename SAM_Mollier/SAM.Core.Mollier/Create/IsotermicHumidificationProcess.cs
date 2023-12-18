@@ -2,7 +2,7 @@
 {
     public static partial class Create
     {
-        public static IsotermicHumidificationProcess IsotermicHumidificationProcess_ByHumidityRatioDifference(this MollierPoint start, double humidityRatioDifference)
+        public static IsotermicHumidificationProcess IsotermicHumidificationProcess_ByHumidityRatioDifference(this MollierPoint start, double humidityRatioDifference, double efficiency = 1)
         {
             if (start == null || double.IsNaN(humidityRatioDifference))
             {
@@ -15,10 +15,10 @@
                 return null;
             }
 
-            return new IsotermicHumidificationProcess(start, end);
+            return new IsotermicHumidificationProcess(start, end, efficiency);
         }
 
-        public static IsotermicHumidificationProcess IsotermicHumidificationProcess_ByRelativeHumidity(this MollierPoint start, double relativeHumidity)
+        public static IsotermicHumidificationProcess IsotermicHumidificationProcess_ByRelativeHumidity(this MollierPoint start, double relativeHumidity, double efficiency = 1)
         {
             if (start == null || double.IsNaN(relativeHumidity))
             {
@@ -38,7 +38,7 @@
                 return null;
             }
 
-            return new IsotermicHumidificationProcess(start, end);
+            return new IsotermicHumidificationProcess(start, end, efficiency);
         }
     }
 }

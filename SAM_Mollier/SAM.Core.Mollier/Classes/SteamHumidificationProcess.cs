@@ -8,8 +8,8 @@ namespace SAM.Core.Mollier
     /// </summary>
     public class SteamHumidificationProcess : IsotermicHumidificationProcess
     {
-        internal SteamHumidificationProcess(MollierPoint start, MollierPoint end)
-            : base(start, end)
+        internal SteamHumidificationProcess(MollierPoint start, MollierPoint end, double efficiency = 1)
+            : base(start, end, efficiency)
         {
 
         }

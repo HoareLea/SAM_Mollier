@@ -2,7 +2,7 @@
 {
     public static partial class Create
     {
-        public static MixingProcess MixingProcess(this MollierPoint point_1, MollierPoint point_2, double ratio)
+        public static MixingProcess MixingProcess(this MollierPoint point_1, MollierPoint point_2, double ratio, double efficiency = 1)
         {
             if (point_1 == null || point_2 == null || double.IsNaN(ratio))
             {
@@ -29,10 +29,10 @@
                 return null;
             }
 
-            return new MixingProcess(point_1, end);
+            return new MixingProcess(point_1, end, efficiency);
         }
 
-        public static MixingProcess MixingProcess(this MollierPoint point_1, MollierPoint point_2, double flow_1, double flow_2)
+        public static MixingProcess MixingProcess(this MollierPoint point_1, MollierPoint point_2, double flow_1, double flow_2, double efficiency = 1)
         {
             if (point_1 == null || point_2 == null || double.IsNaN(flow_1) || double.IsNaN(flow_2))
             {
@@ -40,7 +40,7 @@
             }
 
             //flow 1 required by Michal 03/08/2023
-            return MixingProcess(point_1, point_2, (flow_1 == 0 && flow_2 == 0) ? 0 : flow_2 / (flow_1 + flow_2));
+            return MixingProcess(point_1, point_2, (flow_1 == 0 && flow_2 == 0) ? 0 : flow_2 / (flow_1 + flow_2), efficiency);
         }
     }
 }

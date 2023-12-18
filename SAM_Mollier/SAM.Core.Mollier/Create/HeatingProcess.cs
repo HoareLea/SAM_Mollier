@@ -2,7 +2,7 @@
 {
     public static partial class Create
     {
-        public static HeatingProcess HeatingProcess(this MollierPoint start, double dryBulbTemperature)
+        public static HeatingProcess HeatingProcess(this MollierPoint start, double dryBulbTemperature, double efficiency = 1)
         {
             if (start == null || double.IsNaN(dryBulbTemperature))
             {
@@ -20,10 +20,10 @@
                 return null;
             }
 
-            return new HeatingProcess(start, end);
+            return new HeatingProcess(start, end, efficiency);
         }
 
-        public static HeatingProcess HeatingProcess_ByTemperatureDifference(this MollierPoint start, double temperatureDifference)
+        public static HeatingProcess HeatingProcess_ByTemperatureDifference(this MollierPoint start, double temperatureDifference, double efficiency = 1)
         {
             if (start == null || double.IsNaN(temperatureDifference))
             {
@@ -37,10 +37,10 @@
                 return null;
             }
 
-            return new HeatingProcess(start, end);
+            return new HeatingProcess(start, end, efficiency);
         }
 
-        public static HeatingProcess HeatingProcess_ByEnthalpyDifference(this MollierPoint start, double enthalpyDifference)
+        public static HeatingProcess HeatingProcess_ByEnthalpyDifference(this MollierPoint start, double enthalpyDifference, double efficiency = 1)
         {
             if (start == null || double.IsNaN(enthalpyDifference))
             {
@@ -53,7 +53,7 @@
                 return null;
             }
 
-            return new HeatingProcess(start, end);
+            return new HeatingProcess(start, end, efficiency);
         }
     }
 }

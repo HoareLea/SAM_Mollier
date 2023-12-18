@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public class FanProcess : HeatingProcess
     {
-        internal FanProcess(MollierPoint start, MollierPoint end)
+        internal FanProcess(MollierPoint start, MollierPoint end, double efficiency = 1)
             : base(start, end)
         {
 

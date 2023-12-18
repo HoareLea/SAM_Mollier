@@ -2,7 +2,7 @@
 {
     public static partial class Create
     {
-        public static SteamHumidificationProcess SteamHumidificationProcess_ByHumidityRatioDifference(this MollierPoint start, double humidityRatioDifference)
+        public static SteamHumidificationProcess SteamHumidificationProcess_ByHumidityRatioDifference(this MollierPoint start, double humidityRatioDifference, double efficiency = 1)
         {
             if (start == null || double.IsNaN(humidityRatioDifference))
             {
@@ -15,10 +15,10 @@
                 return null;
             }
 
-            return SteamHumidificationProcess(isotermicHumidificationProcess);
+            return SteamHumidificationProcess(isotermicHumidificationProcess, efficiency);
         }
 
-        public static SteamHumidificationProcess SteamHumidificationProcess_ByRelativeHumidity(this MollierPoint start, double relativeHumidity)
+        public static SteamHumidificationProcess SteamHumidificationProcess_ByRelativeHumidity(this MollierPoint start, double relativeHumidity, double efficiency = 1)
         {
             if (start == null || double.IsNaN(relativeHumidity))
             {
@@ -31,10 +31,10 @@
                 return null;
             }
 
-            return SteamHumidificationProcess(isotermicHumidificationProcess);
+            return SteamHumidificationProcess(isotermicHumidificationProcess, efficiency);
         }
 
-        public static SteamHumidificationProcess SteamHumidificationProcess(IsotermicHumidificationProcess isotermicHumidificationProcess)
+        public static SteamHumidificationProcess SteamHumidificationProcess(IsotermicHumidificationProcess isotermicHumidificationProcess, double efficiency = 1)
         {
             if (isotermicHumidificationProcess == null)
             {
@@ -72,7 +72,7 @@
                 return null;
             }
 
-            return new SteamHumidificationProcess(start_Temp, end_Temp);
+            return new SteamHumidificationProcess(start_Temp, end_Temp, efficiency);
         }
     }
 }
