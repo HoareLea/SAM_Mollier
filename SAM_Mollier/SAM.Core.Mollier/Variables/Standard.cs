@@ -16,7 +16,7 @@
         public const double Temperature = 20;
 
         /// <summary>
-        /// Specific Heat of water vapour at constant pressure and temeprature 20C [J\kg*K]
+        /// Specific Heat of water vapour at constant pressure and temperature 20C [J\kg*K]
         /// </summary>
         public const double SpecificHeat_Water = 4184.4;
     }
