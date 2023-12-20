@@ -132,5 +132,10 @@
 
             return new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
         }
+
+        public static MollierPoint MollierPoint_ByConstants(MollierPoint mollierPoint, double vapourizationLatentHeat = Zero.VapourizationLatentHeat, double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour, double specificHeat_Air = Zero.SpecificHeat_Air, double specificHeat_Water = Zero.SpecificHeat_Water)
+        {
+            return new MollierPoint(mollierPoint, vapourizationLatentHeat, specificHeat_WaterVapour, specificHeat_Air, specificHeat_Water);
+        }
     }
 }
