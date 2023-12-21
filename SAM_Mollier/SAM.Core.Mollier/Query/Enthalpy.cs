@@ -42,16 +42,19 @@ namespace SAM.Core.Mollier
             {
                 if(dryBulbTemperature > 0)
                 {
-                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio) * specificHeat_Water * dryBulbTemperature);
+                    //Flussigkeitsnebel
+                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio) * specificHeat_Water * dryBulbTemperature);//Glueck 2.31
                 }
                 else
                 {
-                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (-meltingHeat_Ice + specificHeat_Ice * dryBulbTemperature);
+                    //Eisnebel
+                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (-meltingHeat_Ice + specificHeat_Ice * dryBulbTemperature); //Glueck 2.36
                 }
             }
             else
             {
-                result = specificHeat_Air * dryBulbTemperature + humidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature); //From Recknagel Sprenger 07/08 page 133
+                //Feutcht Luft
+                result = specificHeat_Air * dryBulbTemperature + humidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature); //Glueck 2.27 or From Recknagel Sprenger 07/08 page 133
             }
 
             if(double.IsNaN(result))
