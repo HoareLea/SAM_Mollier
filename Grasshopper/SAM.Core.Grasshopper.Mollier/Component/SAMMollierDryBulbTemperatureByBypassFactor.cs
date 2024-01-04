@@ -58,7 +58,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         public SAMMollierDryBulbTemperatureByBypassFactor()
           : base("SAMMollier.DryBulbTemperatureByBypassFactor", "SAMMollier.DryBulbTemperatureByBypassFactor",
-              "Calculate from ByPass factor Dry Bulb Temperature.\nIt is used to adjust process by ByPass Factor",
+              "Calculate from ByPass factor Dry Bulb Temperature.\nIt is used to adjust process by ByPass Factor. \nUse as input for porcess by DryBulbTemperature",
               "SAM", "Mollier")
         {
         }
