@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,9 +45,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "TotalLoad", NickName = "TotalLoad", Description = "Total load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SensibleLoad", NickName = "SensibleLoad", Description = "Sensible load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "LatentLoad", NickName = "LatentLoad", Description = "Latent load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "MoistureHainsMassFlow", NickName = "MoistureHainsMassFlow", Description = "Moisture hains mass flow [kg/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Condensation", NickName = "Condensation", Description = "Condensation [l/h]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "MoistureGainsMassFlow", NickName = "MoistureHainsMassFlow", Description = "Moisture gains mass flow [kg/s]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Condensation", NickName = "Condensation", Description = "Condensation [l/h]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δh", NickName = "Δh", Description = "Enthalpy difference Δh [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δt", NickName = "Δt", Description = "Dry bulb temperature difference Δt [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δx", NickName = "Δx", Description = "Humidity ratio difference Δx [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
@@ -146,8 +146,9 @@ namespace SAM.Core.Grasshopper.Mollier
                 dataAccess.SetData(index, epsilon);
             }
 
-            double moistureHainsMassFlow = Core.Mollier.Query.MoistureGainsMassFlow(latentLoad, Zero.VapourizationLatentHeat);
-            index = Params.IndexOfOutputParam("MoistureHainsMassFlow");
+            //Default r0=2501 [kJ/kg] is used
+            double moistureHainsMassFlow = Core.Mollier.Query.MoistureGainsMassFlow(latentLoad, Zero.VapourizationLatentHeat/1000);
+            index = Params.IndexOfOutputParam("MoistureGainsMassFlow");
             if (index != -1)
             {
                 dataAccess.SetData(index, moistureHainsMassFlow);
