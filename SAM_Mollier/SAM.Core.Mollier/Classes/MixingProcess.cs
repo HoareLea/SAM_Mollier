@@ -5,11 +5,10 @@ namespace SAM.Core.Mollier
     public class MixingProcess : MollierProcess
     {
         public override ChartDataType ChartDataType => ChartDataType.MixingProcess;
-        private double efficiency = 1;
-        internal MixingProcess(MollierPoint start, MollierPoint end, double efficiency = 1)
-            : base(start, Query.EndByEfficiency(start, end, efficiency))
+        internal MixingProcess(MollierPoint start, MollierPoint end)
+            : base(start, end)
         {
-            this.efficiency = efficiency;
+
         }
 
         public MixingProcess(JObject jObject)
@@ -30,11 +29,6 @@ namespace SAM.Core.Mollier
                 return false;
             }
 
-            if (jObject.ContainsKey("Efficiency"))
-            {
-                efficiency = jObject.Value<double>("Efficiency");
-            }
-
             return true;
         }
 
@@ -44,11 +38,6 @@ namespace SAM.Core.Mollier
             if (result == null)
             {
                 return result;
-            }
-
-            if (!double.IsNaN(efficiency))
-            {
-                result.Add("Efficiency", efficiency);
             }
 
             return result;

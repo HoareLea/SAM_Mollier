@@ -11,7 +11,7 @@
         /// <param name="sensibleHeatRecoveryEfficiency">Sensible Heat Recovery Efficiency [%]</param>
         /// <param name="latentHeatRecoveryEfficiency">Latent Heat Recovery Efficiency [%]</param>
         /// <returns>HeatRecoveryProcess</returns>
-        public static HeatRecoveryProcess HeatRecoveryProcess_Supply(this MollierPoint intake, MollierPoint extract, double sensibleHeatRecoveryEfficiency, double latentHeatRecoveryEfficiency, double efficiency = 1)
+        public static HeatRecoveryProcess HeatRecoveryProcess_Supply(this MollierPoint intake, MollierPoint extract, double sensibleHeatRecoveryEfficiency, double latentHeatRecoveryEfficiency)
         {
             if (intake == null || extract == null || double.IsNaN(sensibleHeatRecoveryEfficiency) || double.IsNaN(latentHeatRecoveryEfficiency))
             {
@@ -45,11 +45,11 @@
             //    return new HeatRecoveryProcess(@return, end);
             //}
 
-            return new HeatRecoveryProcess(intake, end, efficiency);
+            return new HeatRecoveryProcess(intake, end);
         }
 
 
-        public static HeatRecoveryProcess HeatRecoveryProcess_Extract(this MollierPoint extract, MollierPoint intake, double sensibleHeatRecoveryEfficiency, double latentHeatRecoveryEfficiency, double efficiency = 1)
+        public static HeatRecoveryProcess HeatRecoveryProcess_Extract(this MollierPoint extract, MollierPoint intake, double sensibleHeatRecoveryEfficiency, double latentHeatRecoveryEfficiency)
         {
             if (intake == null || extract == null || double.IsNaN(sensibleHeatRecoveryEfficiency) || double.IsNaN(latentHeatRecoveryEfficiency))
             {
@@ -86,7 +86,7 @@
             }
 
             //Create extract heat recovery process between Extract Point and Exhaust
-            return new HeatRecoveryProcess(extract, end, efficiency);
+            return new HeatRecoveryProcess(extract, end);
         }
     }
 }

@@ -2,14 +2,14 @@
 {
     public static partial class Create
     {
-        public static RoomProcess RoomProcess(this MollierPoint start, MollierPoint stop, double efficiency = 1)
+        public static RoomProcess RoomProcess(this MollierPoint start, MollierPoint stop)
         {
             if (start == null || stop == null)
             {
                 return null;
             }
 
-            return new RoomProcess(start, stop, efficiency);
+            return new RoomProcess(start, stop);
         }
 
         /// <summary>
@@ -20,7 +20,7 @@
         /// <param name="airMassFlow">Air Mass Flow [kg/s]</param>
         /// <param name="sensibleLoad">Sensible Load [W]</param>
         /// <returns>RoomProcess</returns>
-        public static RoomProcess RoomProcess(this MollierPoint start, double airMassFlow, double sensibleLoad, double latentLoad, double efficiency = 1)
+        public static RoomProcess RoomProcess(this MollierPoint start, double airMassFlow, double sensibleLoad, double latentLoad)
         {
             if(start == null || !start.IsValid())
             {
@@ -52,7 +52,7 @@
                 return null;
             }
 
-            return RoomProcess(start, end, efficiency);
+            return RoomProcess(start, end);
 
         }
 
@@ -64,7 +64,7 @@
         /// <param name="airMassFlow">Air Mass Flow [kg/s]</param>
         /// <param name="sensibleLoad">Sensible Load [W]</param>
         /// <returns>RoomProcess</returns>
-        public static RoomProcess RoomProcess_ByEnd(this MollierPoint end, double airMassFlow, double sensibleLoad, double latentLoad, double efficiency = 1)
+        public static RoomProcess RoomProcess_ByEnd(this MollierPoint end, double airMassFlow, double sensibleLoad, double latentLoad)
         {
             if (end == null || !end.IsValid())
             {
@@ -95,10 +95,10 @@
                 return null;
             }
 
-            return new RoomProcess(start, end, efficiency);
+            return new RoomProcess(start, end);
         }
         
-        public static RoomProcess RoomProcess_BySensibleHeatRatio(this MollierPoint mollierPoint, double sensibleHeatRatio, double dryBulbTemperature_Start, double dryBulbTemperature_End, double humidityRatio_Start, double humidityRatio_End, double efficiency = 1)
+        public static RoomProcess RoomProcess_BySensibleHeatRatio(this MollierPoint mollierPoint, double sensibleHeatRatio, double dryBulbTemperature_Start, double dryBulbTemperature_End, double humidityRatio_Start, double humidityRatio_End)
         {
             if(mollierPoint == null || double.IsNaN(sensibleHeatRatio) || double.IsNaN(dryBulbTemperature_Start) || double.IsNaN(dryBulbTemperature_End))
             {
@@ -221,10 +221,10 @@
             }
 
 
-            return new RoomProcess(mollierPoint_Start, mollierPoint_End, efficiency);
+            return new RoomProcess(mollierPoint_Start, mollierPoint_End);
         }
     
-        public static RoomProcess RoomProcess_ByEpsilonAndEnthalpyDifference(this MollierPoint mollierPoint, double epsilon, double enthalpyDifference, double efficiency = 1)
+        public static RoomProcess RoomProcess_ByEpsilonAndEnthalpyDifference(this MollierPoint mollierPoint, double epsilon, double enthalpyDifference)
         {
             if(mollierPoint == null || double.IsNaN(epsilon) || double.IsNaN(enthalpyDifference) || epsilon == 0)
             {
@@ -240,10 +240,10 @@
                 return null;
             }
 
-            return new RoomProcess(mollierPoint, mollierPoint_End, efficiency);
+            return new RoomProcess(mollierPoint, mollierPoint_End);
         }
 
-        public static RoomProcess RoomProcess_ByEpsilonAndHumidityRatioDifference(this MollierPoint mollierPoint, double epsilon, double humidityRatioDifference, bool start = true, double efficiency = 1)
+        public static RoomProcess RoomProcess_ByEpsilonAndHumidityRatioDifference(this MollierPoint mollierPoint, double epsilon, double humidityRatioDifference, bool start = true)
         {
             if (mollierPoint == null || double.IsNaN(epsilon) || double.IsNaN(humidityRatioDifference))
             {
@@ -261,7 +261,7 @@
                 return null;
             }
 
-            return new RoomProcess(mollierPoint, mollierPoint_End, efficiency);
+            return new RoomProcess(mollierPoint, mollierPoint_End);
         }
     }
 }

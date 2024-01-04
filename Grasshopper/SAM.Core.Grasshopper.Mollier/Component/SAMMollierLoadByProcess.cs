@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -42,9 +42,12 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "totalLoad", NickName = "totalLoad", Description = "Total load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleLoad", NickName = "sensibleLoad", Description = "Sensible load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "latentLoad", NickName = "latentLoad", Description = "Latent load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "TotalLoad", NickName = "TotalLoad", Description = "Total load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SensibleLoad", NickName = "SensibleLoad", Description = "Sensible load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "LatentLoad", NickName = "LatentLoad", Description = "Latent load [kW]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "MoistureHainsMassFlow", NickName = "MoistureHainsMassFlow", Description = "Moisture hains mass flow [kg/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Condensation", NickName = "Condensation", Description = "Condensation [l/h]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δh", NickName = "Δh", Description = "Enthalpy difference Δh [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δt", NickName = "Δt", Description = "Dry bulb temperature difference Δt [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δx", NickName = "Δx", Description = "Humidity ratio difference Δx [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
@@ -98,7 +101,7 @@ namespace SAM.Core.Grasshopper.Mollier
             double temperatureDifference = mollierProcess.End.DryBulbTemperature - mollierProcess.Start.DryBulbTemperature;
             double sensibleLoad = Core.Mollier.Query.SensibleLoad_ByMassFlow(mollierPoint, temperatureDifference, massFlow) / 1000;
             sensibleLoad = Core.Query.Round(sensibleLoad, 0.01);
-            index = Params.IndexOfOutputParam("sensibleLoad");
+            index = Params.IndexOfOutputParam("SensibleLoad");
             if (index != -1)
             {
                 dataAccess.SetData(index, sensibleLoad);
@@ -112,7 +115,7 @@ namespace SAM.Core.Grasshopper.Mollier
             double enthalpyDifference = mollierProcess.End.Enthalpy - mollierProcess.Start.Enthalpy;
             double totalLoad = Core.Mollier.Query.TotalLoad_ByMassFlow(enthalpyDifference, massFlow) / 1000;
             totalLoad = Core.Query.Round(totalLoad, 0.01);
-            index = Params.IndexOfOutputParam("totalLoad");
+            index = Params.IndexOfOutputParam("TotalLoad");
             if (index != -1)
             {
                 dataAccess.SetData(index, totalLoad);
@@ -125,7 +128,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
             double humidityRatioDifference = mollierProcess.End.HumidityRatio - mollierProcess.Start.HumidityRatio;
             double latentLoad = Core.Mollier.Query.LatentLoad_ByMassFlow(humidityRatioDifference, massFlow);
-            index = Params.IndexOfOutputParam("latentLoad");
+            index = Params.IndexOfOutputParam("LatentLoad");
             if (index != -1)
             {
                 dataAccess.SetData(index, latentLoad);
@@ -141,6 +144,20 @@ namespace SAM.Core.Grasshopper.Mollier
             if (index != -1)
             {
                 dataAccess.SetData(index, epsilon);
+            }
+
+            double moistureHainsMassFlow = Core.Mollier.Query.MoistureGainsMassFlow(latentLoad, Zero.VapourizationLatentHeat);
+            index = Params.IndexOfOutputParam("MoistureHainsMassFlow");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, moistureHainsMassFlow);
+            }
+            double waterDensity = 998.19;
+            double condensation = moistureHainsMassFlow / waterDensity * 1000 * 3600;
+            index = Params.IndexOfOutputParam("Condensation");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, condensation);
             }
 
         }

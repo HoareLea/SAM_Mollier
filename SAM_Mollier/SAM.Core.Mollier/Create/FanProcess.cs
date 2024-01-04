@@ -2,14 +2,14 @@
 {
     public static partial class Create
     {
-        public static FanProcess FanProcess(this MollierPoint start, double spf, double efficiency = 1)
+        public static FanProcess FanProcess(this MollierPoint start, double spf)
         {
             if (start == null || double.IsNaN(spf))
             {
                 return null;
             }
 
-            return new FanProcess(start, new MollierPoint(start.PickupTemperature(spf), start.HumidityRatio, start.Pressure), efficiency);
+            return new FanProcess(start, new MollierPoint(start.PickupTemperature(spf), start.HumidityRatio, start.Pressure));
         }
 
         /// <summary>
@@ -21,14 +21,14 @@
         /// <param name="specificHeatCapacity">Specific Heat Capacity of Air [kJ/kgK]</param>
         /// <param name="efficiency">Process efficiency 0-1</param>
         /// <returns></returns>
-        public static FanProcess FanProcess(this MollierPoint start, double spf, double density, double specificHeatCapacity, double efficiency = 1)
+        public static FanProcess FanProcess(this MollierPoint start, double spf, double density, double specificHeatCapacity)
         {
             if (start == null || double.IsNaN(spf))
             {
                 return null;
             }
 
-            return new FanProcess(start, new MollierPoint(start.DryBulbTemperature + Query.PickupTemperature(spf, density, specificHeatCapacity), start.HumidityRatio, start.Pressure), efficiency);
+            return new FanProcess(start, new MollierPoint(start.DryBulbTemperature + Query.PickupTemperature(spf, density, specificHeatCapacity), start.HumidityRatio, start.Pressure));
         }
     }
 }

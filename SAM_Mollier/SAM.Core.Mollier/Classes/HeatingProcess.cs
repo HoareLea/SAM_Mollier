@@ -5,11 +5,10 @@ namespace SAM.Core.Mollier
     public class HeatingProcess : MollierProcess
     {
         public override ChartDataType ChartDataType => ChartDataType.HeatingProcess;
-        private double efficiency = 1;
-        internal HeatingProcess(MollierPoint start, MollierPoint end, double efficiency = 1)
-            : base(start, Query.EndByEfficiency(start, end, efficiency))
+        internal HeatingProcess(MollierPoint start, MollierPoint end)
+            : base(start, end)
         {
-            this.efficiency = efficiency;
+
         }
         public HeatingProcess(JObject jObject)
             :base(jObject)
@@ -29,11 +28,6 @@ namespace SAM.Core.Mollier
                 return false;
             }
 
-            if (jObject.ContainsKey("Efficiency"))
-            {
-                efficiency = jObject.Value<double>("Efficiency");
-            }
-
             return true;
         }
 
@@ -43,11 +37,6 @@ namespace SAM.Core.Mollier
             if (result == null)
             {
                 return result;
-            }
-
-            if (!double.IsNaN(efficiency))
-            {
-                result.Add("Efficiency", efficiency);
             }
 
             return result;

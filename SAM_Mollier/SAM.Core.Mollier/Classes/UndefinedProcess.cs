@@ -5,11 +5,10 @@ namespace SAM.Core.Mollier
     public class UndefinedProcess : MollierProcess
     {
         public override ChartDataType ChartDataType => ChartDataType.UndefinedProcess;
-        private double efficiency = 1;
-        internal UndefinedProcess(MollierPoint start, MollierPoint end, double efficiency = 1)
-            : base(start, Query.EndByEfficiency(start, end, efficiency))
+        internal UndefinedProcess(MollierPoint start, MollierPoint end)
+            : base(start, end)
         {
-            this.efficiency = efficiency;
+
         }
 
         public UndefinedProcess(JObject jObject)
@@ -30,11 +29,6 @@ namespace SAM.Core.Mollier
                 return false;
             }
 
-            if (jObject.ContainsKey("Efficiency"))
-            {
-                efficiency = jObject.Value<double>("Efficiency");
-            }
-
             return true;
         }
 
@@ -44,11 +38,6 @@ namespace SAM.Core.Mollier
             if (result == null)
             {
                 return result;
-            }
-
-            if (!double.IsNaN(efficiency))
-            {
-                result.Add("Efficiency", efficiency);
             }
 
             return result;
