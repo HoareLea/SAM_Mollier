@@ -19,6 +19,7 @@
         /// <param name="spf">Specific Fan Power [W/l/s]</param>
         /// <param name="density">Moist Air Density ρ [kg_MoistAir/m3]</param>
         /// <param name="specificHeatCapacity">Specific Heat Capacity of Air [kJ/kgK]</param>
+        /// <param name="efficiency">Process efficiency 0-1</param>
         /// <returns></returns>
         public static FanProcess FanProcess(this MollierPoint start, double spf, double density, double specificHeatCapacity)
         {

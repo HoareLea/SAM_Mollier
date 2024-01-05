@@ -8,6 +8,13 @@ namespace SAM.Core.Mollier
         private double humidityRatio;
         private double pressure;
 
+        // Constants used in calculations
+        private double vapourizationLatentHeat = Zero.VapourizationLatentHeat;
+        private double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour;
+        private double specificHeat_Air = Zero.SpecificHeat_Air;
+        private double specificHeat_Water = Zero.SpecificHeat_Water;
+
+
         /// <summary>
         /// Create new MollierPoint
         /// </summary>
@@ -26,13 +33,37 @@ namespace SAM.Core.Mollier
             FromJObject(jObject);
         }
 
-        public MollierPoint(MollierPoint mollierPoint)
+        /// <summary>
+        /// Constructor with ability to change constants, default is 0 degrees constants
+        /// </summary>
+        /// <param name="mollierPoint"></param>
+        /// <param name="vapourizationLatentHeat"></param>
+        /// <param name="specificHeat_WaterVapour"></param>
+        /// <param name="specificHeat_Air"></param>
+        /// <param name="specificHeat_Water"></param>
+        public MollierPoint(MollierPoint mollierPoint, double vapourizationLatentHeat = Zero.VapourizationLatentHeat, double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour, double specificHeat_Air = Zero.SpecificHeat_Air, double specificHeat_Water = Zero.SpecificHeat_Water)
         {
-            if(mollierPoint != null)
+            if (mollierPoint != null)
             {
                 dryBulbTemperature = mollierPoint.dryBulbTemperature;
                 humidityRatio = mollierPoint.humidityRatio;
                 pressure = mollierPoint.pressure;
+            }
+            if (!double.IsNaN(vapourizationLatentHeat))
+            {
+                this.vapourizationLatentHeat = vapourizationLatentHeat;
+            }
+            if (!double.IsNaN(specificHeat_WaterVapour))
+            {
+                this.specificHeat_WaterVapour = specificHeat_WaterVapour;
+            }
+            if (!double.IsNaN(specificHeat_Air))
+            {
+                this.specificHeat_Air = specificHeat_Air;
+            }
+            if (!double.IsNaN(specificHeat_Water))
+            {
+                this.specificHeat_Water = specificHeat_Water;
             }
         }
 
@@ -48,7 +79,7 @@ namespace SAM.Core.Mollier
                     return double.NaN;
                 }
 
-                return Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure);
+                return Query.Enthalpy(dryBulbTemperature, humidityRatio, pressure, vapourizationLatentHeat, specificHeat_WaterVapour, specificHeat_Air, specificHeat_Water);
             }
         }
 

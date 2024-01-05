@@ -21,5 +21,25 @@ namespace SAM.Core.Mollier
         {
 
         }
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject result = base.ToJObject();
+            if (result == null)
+            {
+                return result;
+            }
+
+            return result;
+        }
     }
 }

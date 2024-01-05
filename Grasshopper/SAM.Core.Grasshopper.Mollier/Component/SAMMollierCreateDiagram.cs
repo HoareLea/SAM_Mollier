@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.8";
+        public override string LatestComponentVersion => "1.0.9";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -55,6 +55,11 @@ namespace SAM.Core.Grasshopper.Mollier
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_pressure_", NickName = "_pressure_", Description = "Pressure [Pa]", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(Standard.Pressure);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Bool = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "showFogEnthalpy_", NickName = "showFogEnthalpy_", Description = "Show Fog Enthalpy", Access = GH_ParamAccess.item, Optional = true };
+                param_Bool.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Bool, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -82,8 +87,8 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Density Values", NickName = "densities", Description = "Values of density lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Density Points", NickName = "densityPoints", Description = "MollierPoints used to create density lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new GooMollierChartObjectParam() { Name = "Enthalpy Lines", NickName = "enthalpyLines", Description = "Contains enthalpy lines as curves", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Enthalpy Values", NickName = "enthalpies", Description = "Values of enthalpy lines", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooMollierChartObjectParam() { Name = "Enthalpy Lines", NickName = "enthalpyLines", Description = "Contains enthalpy lines as curves", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Enthalpy Values", NickName = "enthalpies", Description = "Values of enthalpy lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "Enthalpy Points", NickName = "enthalpyPoints", Description = "MollierPoints used to create enthalpy lines", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
                 result.Add(new GH_SAMParam(new GooMollierChartObjectParam() { Name = "Specific Volume Lines", NickName = "specificVolumeLines", Description = "Contains specific volume lines as curves", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
@@ -164,8 +169,17 @@ namespace SAM.Core.Grasshopper.Mollier
                 }
             }
 
+            bool showFogEnthalpy = false;
+            index = Params.IndexOfInputParam("showFogEnthalpy_");
+            if (index == -1 || !dataAccess.GetData(index, ref showFogEnthalpy))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+            Phase[] phases = showFogEnthalpy ? new Phase[] { Core.Mollier.Phase.Gas, Core.Mollier.Phase.Liquid } : new Phase[] { Core.Mollier.Phase.Gas };
+
             List<double> values;
-            DataTree<GooMollierPoint> dataTree;
+            DataTree<GooMollierPoint> dataTree_MollierPoints;
             List<GooMollierChartObject> gooMollierChartObjects = null;
 
             List<ConstantValueCurve> constantValueCurves = null;
@@ -181,7 +195,7 @@ namespace SAM.Core.Grasshopper.Mollier
             //CREATING DENSITY OUTPUT
 
             values = null;
-            dataTree = null;
+            dataTree_MollierPoints = null;
             gooMollierChartObjects = null;
 
             constantValueCurves = Core.Mollier.Create.ConstantValueCurves_Density(mollierRange, new Range<double>(Default.Density_Min, Default.Density_Max), Default.Density_Interval, pressure);
@@ -194,7 +208,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
-                dataTree = new DataTree<GooMollierPoint>();
+                dataTree_MollierPoints = new DataTree<GooMollierPoint>();
                 gooMollierChartObjects = new List<GooMollierChartObject>();
                 for (int i = 0; i < constantValueCurves.Count; i++)
                 {
@@ -206,7 +220,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    mollierPoints?.ForEach(x => dataTree_MollierPoints.Add(new GooMollierPoint(x), path));
 
                     gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
@@ -215,7 +229,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("Density Points");
             if (index != -1)
             {
-                dataAccess.SetDataTree(index, dataTree);
+                dataAccess.SetDataTree(index, dataTree_MollierPoints);
             }
 
             index = Params.IndexOfOutputParam("Density Values");
@@ -233,59 +247,74 @@ namespace SAM.Core.Grasshopper.Mollier
             //CREATING ENTHALPY OUTPUT
 
             values = null;
-            dataTree = null;
+            dataTree_MollierPoints = null;
             gooMollierChartObjects = null;
 
-            constantValueCurves = Core.Mollier.Create.ConstantEnthalpyCurves_ByHumidityRatioRange(mollierRange, Default.Enthalpy_Interval, pressure).Cast<ConstantValueCurve>().ToList();
-            if (constantValueCurves != null)
+            dataTree_MollierPoints = new DataTree<GooMollierPoint>(); 
+
+            DataTree<double> dataTree_Values = new DataTree<double>();
+            DataTree<GooMollierChartObject> dataTree_MollierChartObject = new DataTree<GooMollierChartObject>();
+
+            int j = 0;
+            foreach(Phase phase in phases)
             {
-                //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
-                constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
-
-                System.Drawing.Color color = Default.Enthalpy_Color;
-
-                values = constantValueCurves.ConvertAll(x => x.Value);
-
-                dataTree = new DataTree<GooMollierPoint>();
-                gooMollierChartObjects = new List<GooMollierChartObject>();
-                for (int i = 0; i < constantValueCurves.Count; i++)
+                List<ConstantEnthalpyCurve> constantEnthalpyCurves = Core.Mollier.Create.ConstantEnthalpyCurves_ByHumidityRatioRange(mollierRange, Default.Enthalpy_Interval, pressure, phase).Cast<ConstantEnthalpyCurve>().ToList();
+                if (constantEnthalpyCurves != null)
                 {
-                    List<MollierPoint> mollierPoints = constantValueCurves[i]?.MollierPoints;
-                    if (mollierPoints == null || mollierPoints.Count == 0)
+                    //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
+                    constantEnthalpyCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+
+                    System.Drawing.Color color = Default.Enthalpy_Color;
+
+                    values = constantEnthalpyCurves.ConvertAll(x => x.Value);
+                    GH_Path path = new GH_Path(j);
+                    values?.ForEach(x => dataTree_Values.Add(x, path));
+                    
+
+                    //dataTree_MollierPoints = new DataTree<GooMollierPoint>();
+                    //gooMollierChartObjects = new List<GooMollierChartObject>();
+                    for (int i = 0; i < constantEnthalpyCurves.Count; i++)
                     {
-                        gooMollierChartObjects.Add(null);
-                        continue;
+                        List<MollierPoint> mollierPoints = constantEnthalpyCurves[i]?.MollierPoints;
+                        if (mollierPoints == null || mollierPoints.Count == 0)
+                        {
+                            gooMollierChartObjects.Add(null);
+                            continue;
+                        }
+
+                        GH_Path path_MollierPoint = new GH_Path(j,i);
+                        mollierPoints?.ForEach(x => dataTree_MollierPoints.Add(new GooMollierPoint(x), path_MollierPoint));
+
+                        //gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantEnthalpyCurves[i], color), chartType, 0)));
+                        dataTree_MollierChartObject.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantEnthalpyCurves[i], color), chartType, 0)), path);
                     }
 
-                    GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
-
-                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                    j++;
                 }
             }
 
             index = Params.IndexOfOutputParam("Enthalpy Points");
             if (index != -1)
             {
-                dataAccess.SetDataTree(index, dataTree);
+                dataAccess.SetDataTree(index, dataTree_MollierPoints);
             }
 
             index = Params.IndexOfOutputParam("Enthalpy Values");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, values);
+                dataAccess.SetDataTree(index, dataTree_Values);
             }
 
             index = Params.IndexOfOutputParam("Enthalpy Lines");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, gooMollierChartObjects);
+                dataAccess.SetDataTree(index, dataTree_MollierChartObject);
             }
 
             //CREATING SPECIFIC VOLUME OUTPUT
 
             values = null;
-            dataTree = null;
+            dataTree_MollierPoints = null;
             gooMollierChartObjects = null;
 
             constantValueCurves = Core.Mollier.Create.ConstantValueCurves_SpecificVolume(mollierRange, new Range<double>(Default.SpecificVolume_Min, Default.SpecificVolume_Max), Default.SpecificVolume_Interval, pressure);
@@ -298,7 +327,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
-                dataTree = new DataTree<GooMollierPoint>();
+                dataTree_MollierPoints = new DataTree<GooMollierPoint>();
                 gooMollierChartObjects = new List<GooMollierChartObject>();
                 for (int i = 0; i < constantValueCurves.Count; i++)
                 {
@@ -310,7 +339,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    mollierPoints?.ForEach(x => dataTree_MollierPoints.Add(new GooMollierPoint(x), path));
 
                     gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
@@ -319,7 +348,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("Specific Volume Points");
             if (index != -1)
             {
-                dataAccess.SetDataTree(index, dataTree);
+                dataAccess.SetDataTree(index, dataTree_MollierPoints);
             }
 
             index = Params.IndexOfOutputParam("Specific Volume Values");
@@ -338,7 +367,7 @@ namespace SAM.Core.Grasshopper.Mollier
             //CREATING WET BULB TEMPERATURE OUTPUT
 
             values = null;
-            dataTree = null;
+            dataTree_MollierPoints = null;
             gooMollierChartObjects = null;
 
             constantValueCurves = Core.Mollier.Create.ConstantValueCurves_WetBulbTemperature(mollierRange, Default.DryBulbTemperature_Interval, pressure);
@@ -351,7 +380,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
-                dataTree = new DataTree<GooMollierPoint>();
+                dataTree_MollierPoints = new DataTree<GooMollierPoint>();
                 gooMollierChartObjects = new List<GooMollierChartObject>();
                 for (int i = 0; i < constantValueCurves.Count; i++)
                 {
@@ -363,7 +392,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    mollierPoints?.ForEach(x => dataTree_MollierPoints.Add(new GooMollierPoint(x), path));
 
                     gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
@@ -372,7 +401,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("Wet Bulb Temperature Points");
             if (index != -1)
             {
-                dataAccess.SetDataTree(index, dataTree);
+                dataAccess.SetDataTree(index, dataTree_MollierPoints);
             }
 
             index = Params.IndexOfOutputParam("Wet Bulb Temperature Values");
@@ -391,7 +420,7 @@ namespace SAM.Core.Grasshopper.Mollier
             //CREATING RELATIVE HUMIDITY OUTPUT
 
             values = null;
-            dataTree = null;
+            dataTree_MollierPoints = null;
             gooMollierChartObjects = null;
 
             constantValueCurves = Core.Mollier.Create.ConstantValueCurves_RelativeHumidity(mollierRange, new Range<double>(10, 100), 10, pressure);
@@ -404,7 +433,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
-                dataTree = new DataTree<GooMollierPoint>();
+                dataTree_MollierPoints = new DataTree<GooMollierPoint>();
                 gooMollierChartObjects = new List<GooMollierChartObject>();
                 for (int i = 0; i < constantValueCurves.Count; i++)
                 {
@@ -416,7 +445,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    mollierPoints?.ForEach(x => dataTree_MollierPoints.Add(new GooMollierPoint(x), path));
 
                     gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
@@ -425,7 +454,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("Relative Humidity Points");
             if (index != -1)
             {
-                dataAccess.SetDataTree(index, dataTree);
+                dataAccess.SetDataTree(index, dataTree_MollierPoints);
             }
 
             index = Params.IndexOfOutputParam("Relative Humidity Values");
@@ -444,7 +473,7 @@ namespace SAM.Core.Grasshopper.Mollier
             //CREATING DRY BULB TEMPERATURE OUTPUT
 
             values = null;
-            dataTree = null;
+            dataTree_MollierPoints = null;
             gooMollierChartObjects = null;
 
             constantValueCurves = Core.Mollier.Create.ConstantTemperatureCurves_DryBulbTemperature(mollierRange, Default.DryBulbTemperature_Interval, pressure)?.ConvertAll(x => x as ConstantValueCurve);
@@ -457,7 +486,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 values = constantValueCurves.ConvertAll(x => x.Value);
 
-                dataTree = new DataTree<GooMollierPoint>();
+                dataTree_MollierPoints = new DataTree<GooMollierPoint>();
                 gooMollierChartObjects = new List<GooMollierChartObject>();
                 for (int i = 0; i < constantValueCurves.Count; i++)
                 {
@@ -469,7 +498,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     }
 
                     GH_Path path = new GH_Path(i);
-                    mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
+                    mollierPoints?.ForEach(x => dataTree_MollierPoints.Add(new GooMollierPoint(x), path));
 
                     gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
                 }
@@ -478,7 +507,7 @@ namespace SAM.Core.Grasshopper.Mollier
             index = Params.IndexOfOutputParam("Dry Bulb Temperature Points");
             if (index != -1)
             {
-                dataAccess.SetDataTree(index, dataTree);
+                dataAccess.SetDataTree(index, dataTree_MollierPoints);
             }
 
             index = Params.IndexOfOutputParam("Dry Bulb Temperature Values");

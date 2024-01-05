@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Create
     {
-        public static CoolingProcess CoolingProcess_ByTemperatureDifference(this MollierPoint start, double temperatureDifference)
+        public static CoolingProcess CoolingProcess_ByTemperatureDifference(this MollierPoint start, double temperatureDifference, double efficiency = 1)
         {
             if (start == null || double.IsNaN(temperatureDifference))
             {
@@ -14,7 +14,7 @@ namespace SAM.Core.Mollier
             return CoolingProcess(start, start.DryBulbTemperature - temperatureDifference);
         }
 
-        public static CoolingProcess CoolingProcess_ByEnthalpyDifference(this MollierPoint start, double enthalpyDifference)
+        public static CoolingProcess CoolingProcess_ByEnthalpyDifference(this MollierPoint start, double enthalpyDifference, double efficiency = 1)
         {
             if (start == null || double.IsNaN(enthalpyDifference))
             {
@@ -45,7 +45,7 @@ namespace SAM.Core.Mollier
             return new CoolingProcess(start, mollierPoint_End, 1);
         }
 
-        public static CoolingProcess CoolingProcess_ByMedium(this MollierPoint start, double flowTemperature, double returnTemperature, double efficiency)
+        public static CoolingProcess CoolingProcess_ByMedium(this MollierPoint start, double flowTemperature, double returnTemperature, double efficiency = 1)
         {
             if (start == null || double.IsNaN(efficiency) || double.IsNaN(flowTemperature) || double.IsNaN(returnTemperature))
             {
@@ -86,7 +86,7 @@ namespace SAM.Core.Mollier
             return new CoolingProcess(start, end, efficiency);
         }
 
-        public static CoolingProcess CoolingProcess_ByMediumAndDryBulbTemperature(this MollierPoint start, double flowTemperature, double returnTemperature, double dryBulbTemperature)
+        public static CoolingProcess CoolingProcess_ByMediumAndDryBulbTemperature(this MollierPoint start, double flowTemperature, double returnTemperature, double dryBulbTemperature, double efficiency = 1)
         {
             if(start == null)
             {
@@ -113,17 +113,17 @@ namespace SAM.Core.Mollier
 
                 MollierPoint mollierPoint_End = new MollierPoint(dryBulbTemperature, humidityRatio, start.Pressure);
 
-                double efficiency = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);
+                double adp_efficiency = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);
                 
-                result = CoolingProcess_ByMedium(start, flowTemperature, returnTemperature, efficiency);
+                result = CoolingProcess_ByMedium(start, flowTemperature, returnTemperature, adp_efficiency);
             }
             else
             {
                 MollierPoint mollierPoint_End = MollierPoint_ByRelativeHumidity(dryBulbTemperature, 100, start.Pressure);
 
-                double efficiency = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);
+                double adp_efficiency = (start.Enthalpy - mollierPoint_End.Enthalpy) / (start.Enthalpy - mollierPoint_ADP.Enthalpy);
 
-                result = new CoolingProcess(start, mollierPoint_End, efficiency);
+                result = new CoolingProcess(start, mollierPoint_End, adp_efficiency);
             }
 
             return result;

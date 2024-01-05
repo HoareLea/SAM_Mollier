@@ -7,7 +7,7 @@ namespace SAM.Core.Mollier
         public override ChartDataType ChartDataType => ChartDataType.CoolingProcess;
 
         private double efficiency = 1;
-        internal CoolingProcess(MollierPoint start, MollierPoint end, double efficiency)
+        internal CoolingProcess(MollierPoint start, MollierPoint end, double efficiency = 1)
             : base(start, end)
         {
             this.efficiency = efficiency;

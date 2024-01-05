@@ -11,7 +11,7 @@ namespace SAM.Core.Mollier
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Pressure [Pa]</param>
         /// <returns>Enthalpy [J/kg]</returns>
-        public static double Enthalpy(double dryBulbTemperature, double humidityRatio, double pressure)
+        public static double Enthalpy(double dryBulbTemperature, double humidityRatio, double pressure, double vapourizationLatentHeat = Zero.VapourizationLatentHeat, double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour, double specificHeat_Air = Zero.SpecificHeat_Air, double specificHeat_Water = Zero.SpecificHeat_Water)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
             {
@@ -29,10 +29,10 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
-            double vapourizationLatentHeat = Zero.VapourizationLatentHeat / 1000; //[kJ/kg]
-            double specificHeat_Air = Zero.SpecificHeat_Air / 1000; //[kJ/kg*K]
-            double specificHeat_WaterVapour = Zero.SpecificHeat_WaterVapour / 1000; //[kJ/kg*K]
-            double specificHeat_Water = Zero.SpecificHeat_Water / 1000; //[kJ/kg*K]
+            vapourizationLatentHeat /= 1000; //[kJ/kg]
+            specificHeat_Air /= 1000; //[kJ/kg*K]
+            specificHeat_WaterVapour /= 1000; //[kJ/kg*K]
+            specificHeat_Water /= 1000; //[kJ/kg*K]
             double specificHeat_Ice = Zero.SpecificHeat_Ice / 1000; //[kJ/kg*K]
             double meltingHeat_Ice = Zero.MeltingHeat_Ice / 1000; //[kJ/kg*K]
 
@@ -42,16 +42,19 @@ namespace SAM.Core.Mollier
             {
                 if(dryBulbTemperature > 0)
                 {
-                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio) * specificHeat_Water * dryBulbTemperature);
+                    //Flussigkeitsnebel
+                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + ((humidityRatio - saturationHumidityRatio) * specificHeat_Water * dryBulbTemperature);//Glueck 2.31
                 }
                 else
                 {
-                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (-meltingHeat_Ice + specificHeat_Ice * dryBulbTemperature);
+                    //Eisnebel
+                    result = specificHeat_Air * dryBulbTemperature + saturationHumidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature) + (humidityRatio - saturationHumidityRatio) * (-meltingHeat_Ice + specificHeat_Ice * dryBulbTemperature); //Glueck 2.36
                 }
             }
             else
             {
-                result = specificHeat_Air * dryBulbTemperature + humidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature); //From Recknagel Sprenger 07/08 page 133
+                //Feutcht Luft
+                result = specificHeat_Air * dryBulbTemperature + humidityRatio * (vapourizationLatentHeat + specificHeat_WaterVapour * dryBulbTemperature); //Glueck 2.27 or From Recknagel Sprenger 07/08 page 133
             }
 
             if(double.IsNaN(result))
@@ -61,7 +64,6 @@ namespace SAM.Core.Mollier
 
             return result * 1000;
         }
-
         /// <summary>
         /// Calculates enthalpy from dry bulb temperature, relative humidity and pressure.
         /// </summary>

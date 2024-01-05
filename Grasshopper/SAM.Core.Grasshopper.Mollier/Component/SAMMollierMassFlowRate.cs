@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -34,7 +34,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 
                 global::Grasshopper.Kernel.Parameters.Param_Number param_Number = null;
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_density", NickName = "_density", Description = "Density [kg/m3]", Access = GH_ParamAccess.item, Optional = true };
-                param_Number.SetPersistentData(1.2);
+                param_Number.SetPersistentData(1.210);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
                
                 return result.ToArray();
