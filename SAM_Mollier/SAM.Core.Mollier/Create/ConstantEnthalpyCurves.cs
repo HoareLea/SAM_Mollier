@@ -159,7 +159,7 @@ namespace SAM.Core.Mollier
             return result;
         }
 
-        public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves_ByHumidityRatioRange(this MollierRange mollierRange, double enthalpyStep, double pressure)
+        public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves_ByHumidityRatioRange(this MollierRange mollierRange, double enthalpyStep, double pressure, params Phase[] phases)
         {
             if (double.IsNaN(enthalpyStep) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
@@ -181,31 +181,7 @@ namespace SAM.Core.Mollier
             enthalpy_Min = enthalpy_Min - (enthalpy_Min % enthalpyStep) - enthalpyStep;
             enthalpy_Max = enthalpy_Max - (enthalpy_Max % enthalpyStep) + enthalpyStep;
 
-            return ConstantEnthalpyCurves(mollierRange, new Range<double>(enthalpy_Max, enthalpy_Min), enthalpyStep, pressure);
-        }
-
-        public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves(this MollierRange mollierRange, Range<double> enthalpyRange, double step, double pressure)
-        {
-            if (enthalpyRange == null || double.IsNaN(enthalpyRange.Min) || double.IsNaN(enthalpyRange.Max) || double.IsNaN(step) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
-            {
-                return null;
-            }
-
-            List<ConstantEnthalpyCurve> result = new List<ConstantEnthalpyCurve>();
-
-            double enthalpy = enthalpyRange.Min;
-            while (enthalpy <= enthalpyRange.Max)
-            {
-                List<ConstantEnthalpyCurve> constantEnthalpyCurves = ConstantEnthalpyCurves(mollierRange, enthalpy, pressure);
-                if (constantEnthalpyCurves != null && constantEnthalpyCurves.Count > 0)
-                {
-                    result.AddRange(constantEnthalpyCurves);
-                }
-
-                enthalpy += step;
-            }
-
-            return result;
+            return ConstantEnthalpyCurves(mollierRange, new Range<double>(enthalpy_Max, enthalpy_Min), pressure, enthalpyStep, phases);
         }
 
     }
