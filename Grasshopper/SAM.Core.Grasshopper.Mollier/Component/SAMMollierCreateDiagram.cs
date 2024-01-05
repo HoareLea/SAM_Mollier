@@ -236,21 +236,23 @@ namespace SAM.Core.Grasshopper.Mollier
             dataTree = null;
             gooMollierChartObjects = null;
 
-            constantValueCurves = Core.Mollier.Create.ConstantEnthalpyCurves_ByHumidityRatioRange(mollierRange, Default.Enthalpy_Interval, pressure).Cast<ConstantValueCurve>().ToList();
-            if (constantValueCurves != null)
+            List<ConstantEnthalpyCurve> constantEnthalpyCurves = Core.Mollier.Create.ConstantEnthalpyCurves_ByHumidityRatioRange(mollierRange, Default.Enthalpy_Interval, pressure).Cast<ConstantEnthalpyCurve>().ToList();
+            if (constantEnthalpyCurves != null)
             {
                 //constantValueCurves = constantValueCurves.ConvertAll(x => x.Clamp(humidityRatioRange, dryBulbTemperatureRange));
-                constantValueCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+                constantEnthalpyCurves.RemoveAll(x => x == null || double.IsNaN(x.Value));
+
+                constantEnthalpyCurves.RemoveAll(x => x.Phase != Core.Mollier.Phase.Gas);
 
                 System.Drawing.Color color = Default.Enthalpy_Color;
 
-                values = constantValueCurves.ConvertAll(x => x.Value);
+                values = constantEnthalpyCurves.ConvertAll(x => x.Value);
 
                 dataTree = new DataTree<GooMollierPoint>();
                 gooMollierChartObjects = new List<GooMollierChartObject>();
-                for (int i = 0; i < constantValueCurves.Count; i++)
+                for (int i = 0; i < constantEnthalpyCurves.Count; i++)
                 {
-                    List<MollierPoint> mollierPoints = constantValueCurves[i]?.MollierPoints;
+                    List<MollierPoint> mollierPoints = constantEnthalpyCurves[i]?.MollierPoints;
                     if (mollierPoints == null || mollierPoints.Count == 0)
                     {
                         gooMollierChartObjects.Add(null);
@@ -260,7 +262,7 @@ namespace SAM.Core.Grasshopper.Mollier
                     GH_Path path = new GH_Path(i);
                     mollierPoints?.ForEach(x => dataTree.Add(new GooMollierPoint(x), path));
 
-                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantValueCurves[i], color), chartType, 0)));
+                    gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantEnthalpyCurves[i], color), chartType, 0)));
                 }
             }
 
