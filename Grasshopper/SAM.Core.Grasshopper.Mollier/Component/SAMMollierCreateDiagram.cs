@@ -282,7 +282,7 @@ namespace SAM.Core.Grasshopper.Mollier
                             continue;
                         }
 
-                        GH_Path path_MollierPoint = new GH_Path(j, i);
+                        GH_Path path_MollierPoint = new GH_Path(j,i);
                         mollierPoints?.ForEach(x => dataTree_MollierPoints.Add(new GooMollierPoint(x), path_MollierPoint));
 
                         //gooMollierChartObjects.Add(new GooMollierChartObject(new MollierChartObject(new UIMollierCurve(constantEnthalpyCurves[i], color), chartType, 0)));
