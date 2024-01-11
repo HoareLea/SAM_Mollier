@@ -8,7 +8,7 @@
             {
                 return null;
             }
-            return Geometry.Create.LinearEquation(mollierProcess.Start?.ToSAM_Point2D(), mollierProcess.End?.ToSAM_Point2D());
+            return Geometry.Planar.Create.LinearEquation(mollierProcess.Start?.ToSAM_Point2D(), mollierProcess.End?.ToSAM_Point2D());
         }
     }
 }

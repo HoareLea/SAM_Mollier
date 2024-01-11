@@ -43,7 +43,7 @@ namespace SAM.Analytical.Mollier
             }
 
 
-            List<Point2D> point2Ds = Geometry.Query.Intersections(linearEquation, polynomialEquation_SaturatedAir);
+            List<Point2D> point2Ds = Geometry.Planar.Query.Intersections(linearEquation, polynomialEquation_SaturatedAir);
             if (point2Ds == null || point2Ds.Count == 0)
             {
                 return null;
