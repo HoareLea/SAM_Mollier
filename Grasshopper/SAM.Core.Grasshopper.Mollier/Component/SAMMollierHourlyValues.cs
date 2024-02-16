@@ -16,12 +16,12 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Mollier;
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -29,7 +29,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMMollierHourlyValues()
-          : base("SAMMollier.HourlyValues", "SAMMollier.HourlyValues", "Gets hourly values", "SAM WIP", "Analytical")
+          : base("SAMMollier.HourlyValues", "SAMMollier.HourlyValues", "Gets hourly values by MollierPointProperty enum", "SAM", "Analytical")
         {
         }
 
@@ -89,7 +89,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-            if(Core.Query.TryGetEnum(text, out MollierPointProperty mollierPointProperty))
+            if(!Core.Query.TryGetEnum(text, out MollierPointProperty mollierPointProperty))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
