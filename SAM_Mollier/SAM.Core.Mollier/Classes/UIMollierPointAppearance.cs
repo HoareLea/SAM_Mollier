@@ -26,6 +26,13 @@ namespace SAM.Core.Mollier
 
         }
 
+        public UIMollierPointAppearance(UIMollierAppearance uIMollierAppearance, int borderSize, Color borderColor)
+            : base(uIMollierAppearance)
+        {
+            BorderSize = borderSize;
+            BorderColor = borderColor;
+        }
+
         public UIMollierPointAppearance(UIMollierPointAppearance uIMollierPointAppearance)
             :base(uIMollierPointAppearance)
         {

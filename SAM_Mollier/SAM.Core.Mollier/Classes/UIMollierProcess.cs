@@ -5,43 +5,43 @@ namespace SAM.Core.Mollier
 {
     public class UIMollierProcess : UIMollierCurve, IUIMollierObject, IMollierProcess
     {
-        private UIMollierAppearance uIMollierAppearance_Start;
+        private UIMollierPointAppearance uIMollierPointAppearance_Start;
 
-        private UIMollierAppearance uIMollierAppearance_End;
+        private UIMollierPointAppearance uIMollierPointAppearance_End;
 
         public UIMollierPoint GetUIMollierPoint_Start()
         {
-            return new UIMollierPoint(Start, uIMollierAppearance_Start);
+            return new UIMollierPoint(Start, uIMollierPointAppearance_Start);
         }
 
         public UIMollierPoint GetUIMollierPoint_End()
         {
-            return new UIMollierPoint(End, uIMollierAppearance_End);
+            return new UIMollierPoint(End, uIMollierPointAppearance_End);
         }
 
-        public UIMollierAppearance UIMollierAppearance_Start
+        public UIMollierPointAppearance UIMollierPointAppearance_Start
         {
             get
             {
-                return uIMollierAppearance_Start;
+                return uIMollierPointAppearance_Start;
             }
 
             set
             {
-                uIMollierAppearance_Start = value;
+                uIMollierPointAppearance_Start = value;
             }
         }
 
-        public UIMollierAppearance UIMollierAppearance_End
+        public UIMollierPointAppearance UIMollierPointAppearance_End
         {
             get
             {
-                return uIMollierAppearance_End;
+                return uIMollierPointAppearance_End;
             }
 
             set
             {
-                uIMollierAppearance_End = value;
+                uIMollierPointAppearance_End = value;
             }
         }
 
@@ -56,8 +56,8 @@ namespace SAM.Core.Mollier
         public UIMollierProcess(MollierProcess mollierProcess, Color color)
             :base(mollierProcess, color)
         {
-            uIMollierAppearance_Start = new UIMollierAppearance(color);
-            uIMollierAppearance_End = new UIMollierAppearance(color);
+            uIMollierPointAppearance_Start = new UIMollierPointAppearance(color);
+            uIMollierPointAppearance_End = new UIMollierPointAppearance(color);
         }
 
         public UIMollierProcess(UIMollierProcess uIMollierProcess)
@@ -65,8 +65,8 @@ namespace SAM.Core.Mollier
         {
             if(uIMollierProcess != null)
             {
-                uIMollierAppearance_Start = uIMollierProcess.uIMollierAppearance_Start?.Clone();
-                uIMollierAppearance_End = uIMollierProcess.uIMollierAppearance_End?.Clone();
+                uIMollierPointAppearance_Start = uIMollierProcess.uIMollierPointAppearance_Start?.Clone();
+                uIMollierPointAppearance_End = uIMollierProcess.uIMollierPointAppearance_End?.Clone();
             }
         }
 
@@ -84,14 +84,14 @@ namespace SAM.Core.Mollier
                 return false;
             }
 
-            if (jObject.ContainsKey("UIMollierAppearance_Start"))
+            if (jObject.ContainsKey("UIMollierPointAppearance_Start"))
             {
-                uIMollierAppearance_Start = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierAppearance_Start")) as UIMollierAppearance;
+                uIMollierPointAppearance_Start = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierPointAppearance_Start")) as UIMollierPointAppearance;
             }
 
-            if (jObject.ContainsKey("UIMollierAppearance_End"))
+            if (jObject.ContainsKey("UIMollierPointAppearance_End"))
             {
-                uIMollierAppearance_End = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierAppearance_End")) as UIMollierAppearance;
+                uIMollierPointAppearance_End = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierPointAppearance_End")) as UIMollierPointAppearance;
             }
 
             return true;
@@ -105,14 +105,14 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if (uIMollierAppearance_Start != null)
+            if (uIMollierPointAppearance_Start != null)
             {
-                result.Add("UIMollierAppearance_Start", uIMollierAppearance_Start.ToJObject());
+                result.Add("UIMollierPointAppearance_Start", uIMollierPointAppearance_Start.ToJObject());
             }
 
-            if (uIMollierAppearance_End != null)
+            if (uIMollierPointAppearance_End != null)
             {
-                result.Add("UIMollierAppearance_End", uIMollierAppearance_End.ToJObject());
+                result.Add("UIMollierPointAppearance_End", uIMollierPointAppearance_End.ToJObject());
             }
 
             return result;

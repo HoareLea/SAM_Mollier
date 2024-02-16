@@ -29,8 +29,8 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 UIMollierProcess uIMollierProcess = Value as UIMollierProcess;
                 uIMollierProcess.UIMollierAppearance.Label = process_Label;
-                uIMollierProcess.UIMollierAppearance_Start.Label = start_Label;
-                uIMollierProcess.UIMollierAppearance_End.Label = end_Label;
+                uIMollierProcess.UIMollierPointAppearance_Start.Label = start_Label;
+                uIMollierProcess.UIMollierPointAppearance_End.Label = end_Label;
             }
         }
         public GooMollierProcess(IMollierProcess mollierProcess, Color color)

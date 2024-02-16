@@ -5,44 +5,60 @@ namespace SAM.Core.Mollier
 {
     public class UIMollierPoint : MollierPoint, IUIMollierObject
     {
-        private UIMollierAppearance uIMollierAppearance;
+        private UIMollierPointAppearance uIMollierPointAppearance;
 
         public UIMollierAppearance UIMollierAppearance
         {
             get
             {
-                return uIMollierAppearance;
+                return uIMollierPointAppearance;
             }
 
             set
             {
-                uIMollierAppearance = value;
+                if(value == null)
+                {
+                    uIMollierPointAppearance = null;
+                }
+                else if(value is UIMollierPointAppearance)
+                {
+                    uIMollierPointAppearance = new UIMollierPointAppearance((UIMollierPointAppearance)value);
+                }
+                else if (value is UIMollierAppearance)
+                {
+                    if(uIMollierPointAppearance == null)
+                    {
+                        uIMollierPointAppearance = new UIMollierPointAppearance();
+                    }
+
+                    uIMollierPointAppearance = new UIMollierPointAppearance(value, uIMollierPointAppearance.BorderSize, uIMollierPointAppearance.BorderColor);
+                }
             }
         }
 
         public UIMollierPoint(MollierPoint mollierPoint, Color color, string label)
             : base(mollierPoint)
         {
-            uIMollierAppearance = new UIMollierAppearance(color, label);
+            uIMollierPointAppearance = new UIMollierPointAppearance(color, label);
         }
 
         public UIMollierPoint(MollierPoint mollierPoint, Color color)
             : base(mollierPoint)
         {
 
-            uIMollierAppearance = new UIMollierAppearance(color);
+            uIMollierPointAppearance = new UIMollierPointAppearance(color);
         }
 
-        public UIMollierPoint(MollierPoint mollierPoint, UIMollierAppearance uIMollierAppearance)
+        public UIMollierPoint(MollierPoint mollierPoint, UIMollierPointAppearance uIMollierPointAppearance)
             : base(mollierPoint)
         {
-            this.uIMollierAppearance = uIMollierAppearance?.Clone();
+            this.uIMollierPointAppearance = uIMollierPointAppearance?.Clone();
         }
 
         public UIMollierPoint(MollierPoint mollierPoint)
             : base(mollierPoint)
         {
-            uIMollierAppearance = new UIMollierAppearance();
+            uIMollierPointAppearance = new UIMollierPointAppearance();
         }   
 
         public UIMollierPoint(UIMollierPoint uIMollierPoint)
@@ -50,7 +66,7 @@ namespace SAM.Core.Mollier
         {
             if(uIMollierPoint != null)
             {
-                uIMollierAppearance = uIMollierPoint.uIMollierAppearance?.Clone();
+                uIMollierPointAppearance = uIMollierPoint.uIMollierPointAppearance?.Clone();
             }
         }
 
@@ -67,9 +83,9 @@ namespace SAM.Core.Mollier
                 return false;
             }
 
-            if (jObject.ContainsKey("UIMollierAppearance"))
+            if (jObject.ContainsKey("UIMollierPointAppearance"))
             {
-                uIMollierAppearance = new UIMollierAppearance(jObject.Value<JObject>("UIMollierAppearance"));
+                uIMollierPointAppearance = new UIMollierPointAppearance(jObject.Value<JObject>("UIMollierPointAppearance"));
             }
 
             return true;
@@ -83,9 +99,9 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            if (uIMollierAppearance != null)
+            if (uIMollierPointAppearance != null)
             {
-                result.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());
+                result.Add("UIMollierPointAppearance", uIMollierPointAppearance.ToJObject());
             }
 
             return result;
