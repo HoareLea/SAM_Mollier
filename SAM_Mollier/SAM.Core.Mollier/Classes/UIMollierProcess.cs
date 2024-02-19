@@ -60,6 +60,13 @@ namespace SAM.Core.Mollier
             uIMollierPointAppearance_End = new UIMollierPointAppearance(color);
         }
 
+        public UIMollierProcess(MollierProcess mollierProcess, UIMollierAppearance uIMollierAppearance)
+            : base(mollierProcess, uIMollierAppearance)
+        {
+            uIMollierPointAppearance_Start = new UIMollierPointAppearance(uIMollierAppearance.Color);
+            uIMollierPointAppearance_End = new UIMollierPointAppearance(uIMollierAppearance.Color);
+        }
+
         public UIMollierProcess(UIMollierProcess uIMollierProcess)
             :base(uIMollierProcess)
         {
