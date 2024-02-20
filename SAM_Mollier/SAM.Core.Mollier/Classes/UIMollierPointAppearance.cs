@@ -101,7 +101,7 @@ namespace SAM.Core.Mollier
                 return result;
             }
 
-            if (Color != Color.Empty)
+            if (BorderColor != Color.Empty)
             {
                 result.Add("BorderColor", (new SAMColor(BorderColor)).ToJObject());
             }
