@@ -67,6 +67,16 @@ namespace SAM.Core.Mollier
             }
         }
 
+        public MollierPoint(MollierPoint mollierPoint)
+        {
+            if (mollierPoint != null)
+            {
+                dryBulbTemperature = mollierPoint.dryBulbTemperature;
+                humidityRatio = mollierPoint.humidityRatio;
+                pressure = mollierPoint.pressure;
+            }
+        }
+
         /// <summary>
         /// Enthalpy [J/kg]
         /// </summary>
