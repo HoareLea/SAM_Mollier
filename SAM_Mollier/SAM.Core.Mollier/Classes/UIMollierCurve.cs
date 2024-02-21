@@ -87,6 +87,12 @@ namespace SAM.Core.Mollier
             }
         }
 
+        public UIMollierCurve(MollierCurve mollierCurve, UIMollierAppearance uIMollierAppearance)
+        {
+            this.mollierCurve = mollierCurve?.Clone();
+            this.uIMollierAppearance = uIMollierAppearance?.Clone();
+        }
+
         public UIMollierCurve(JObject jObject)
         {
             FromJObject(jObject);

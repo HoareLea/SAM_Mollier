@@ -5,22 +5,22 @@ namespace SAM.Core.Mollier
 {
     public class UIMollierAppearance : IJSAMObject
     {
-        public Color Color { get; set; }
-        
-        public string Label { get; set; }
+        public int Size { get; set; } = 1;
+
+        public Color Color { get; set; } = Color.Empty;
+
+        public string Label { get; set; } = null;
 
         public bool Visible { get; set; } = true;
 
         public UIMollierAppearance()
         {
-            Color = Color.Empty;
-            Label = null;
+
         }
 
         public UIMollierAppearance(Color color)
         {
             Color = color;
-            Label = null;
         }
 
         public UIMollierAppearance(Color color, string label)
@@ -36,6 +36,7 @@ namespace SAM.Core.Mollier
                 Color = uIMollierAppearance.Color;
                 Label = uIMollierAppearance.Label;
                 Visible = uIMollierAppearance.Visible;
+                Size = uIMollierAppearance.Size;
             }
         }
 
@@ -45,6 +46,7 @@ namespace SAM.Core.Mollier
             {
                 Label = uIMollierAppearance.Label;
                 Visible = uIMollierAppearance.Visible;
+                Size = uIMollierAppearance.Size;
             }
 
             Color = color;
@@ -55,7 +57,7 @@ namespace SAM.Core.Mollier
             FromJObject(jObject);
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
             {
@@ -85,11 +87,15 @@ namespace SAM.Core.Mollier
                 Visible = jObject.Value<bool>("Visible");
             }
 
+            if (jObject.ContainsKey("Size"))
+            {
+                Size = jObject.Value<int>("Size");
+            }
 
             return true;
         }
         
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
@@ -105,6 +111,8 @@ namespace SAM.Core.Mollier
             }
 
             jObject.Add("Visible", Visible);
+
+            jObject.Add("Size", Size);
 
             return jObject;
         }

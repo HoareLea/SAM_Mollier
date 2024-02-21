@@ -59,6 +59,7 @@
     <Compile Include="Classes\SpecificProcess.cs" />
     <Compile Include="Classes\MollierRange.cs" />
     <Compile Include="Classes\MollierSettings.cs" />
+    <Compile Include="Classes\UIMollierPointAppearance.cs" />
     <Compile Include="Classes\UIMollierAppearance.cs" />
     <Compile Include="Classes\UIMollierGroup.cs" />
     <Compile Include="Classes\UIMollierZone.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Classes\CoolingProcess.cs" />
     <Compile Include="Classes\AdiabaticHumidificationProcess.cs" />
     <Compile Include="Classes\HumidificationProcess.cs" />
+    <Compile Include="Classes\VisibilitySettings.cs" />
     <Compile Include="Classes\UndefinedProcess.cs" />
     <Compile Include="Classes\MixingProcess.cs" />
     <Compile Include="Classes\HeatRecoveryProcess.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="Create\CoolingProcess.cs" />
     <Compile Include="Create\MollierPoint.cs" />
     <Compile Include="Create\HeatingProcess.cs" />
+    <Compile Include="Enums\ChartParameterType.cs" />
     <Compile Include="Enums\MollierPointProperty.cs" />
     <Compile Include="Enums\ChartDataType.cs" />
     <Compile Include="Enums\Phase.cs" />
@@ -99,6 +102,9 @@
     <Compile Include="Interfaces\IMollierGroupable.cs" />
     <Compile Include="Interfaces\IMollierCurve.cs" />
     <Compile Include="Interfaces\IMollierZone.cs" />
+    <Compile Include="Interfaces\IChartVisibilitySetting.cs" />
+    <Compile Include="Interfaces\IUserVisibilitySetting.cs" />
+    <Compile Include="Interfaces\IVisibilitySetting.cs" />
     <Compile Include="Interfaces\IUIMollierObject.cs" />
     <Compile Include="Interfaces\IMollierObject.cs" />
     <Compile Include="Interfaces\IMollierGroup.cs" />
@@ -107,6 +113,8 @@
     <Compile Include="Enums\ChartType.cs" />
     <Compile Include="Classes\MollierPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\ChartParameterType.cs" />
+    <Compile Include="Query\ChartDataType.cs" />
     <Compile Include="Query\EndByEfficiency.cs" />
     <Compile Include="Query\Group.cs" />
     <Compile Include="Query\Next.cs" />

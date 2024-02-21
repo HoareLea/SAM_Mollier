@@ -4,7 +4,7 @@ namespace SAM.Core.Mollier
 {
     public static partial class Create
     { 
-        public static List<ConstantTemperatureCurve> ConstantTemperatureCurves_DryBulbTemperature(this MollierRange mollierRange, double step, double pressure)
+        public static List<ConstantTemperatureCurve> ConstantTemperatureCurves_DryBulbTemperature(this MollierRange mollierRange, double step, double pressure, VisibilitySettings visibilitySettings = null, string templateName = null)
         {
             if (double.IsNaN(step) || double.IsNaN(pressure) || mollierRange == null || !mollierRange.IsValid())
             {
@@ -16,26 +16,23 @@ namespace SAM.Core.Mollier
             double dryBulbTemperature = mollierRange.DryBulbTemperature_Min;
             while (dryBulbTemperature <= mollierRange.DryBulbTemperature_Max)
             {
-                ConstantTemperatureCurve constantTemperatureCurve = ConstantTemperatureCurve_DryBulbTemperature(mollierRange, dryBulbTemperature, pressure);
-                if (constantTemperatureCurve != null)
+                bool visible = true;
+                if(visibilitySettings != null && templateName != null)
                 {
-                    result.Add(constantTemperatureCurve);
+                    visible = visibilitySettings.GetVisible(templateName, ChartDataType.DryBulbTemperature, dryBulbTemperature);
                 }
 
+                if(visible)
+                {
+                    ConstantTemperatureCurve constantTemperatureCurve = ConstantTemperatureCurve_DryBulbTemperature(mollierRange, dryBulbTemperature, pressure);
+                    if (constantTemperatureCurve != null)
+                    {
+                        result.Add(constantTemperatureCurve);
+                    }
+                }
+                
                 dryBulbTemperature += step;
             }
-
-            //ConstantTemperatureCurve constantTemperatureCurve_Liquid = ConstantTemperatureCurve_Liquid(dryBulbTemperatureRange.Min, pressure);
-            //if (constantTemperatureCurve_Liquid != null)
-            //{
-            //    result.Add(constantTemperatureCurve_Liquid);
-            //}
-
-            //ConstantTemperatureCurve constantTemperatureCurve_Solid = ConstantTemperatureCurve_Solid(dryBulbTemperatureRange.Min, pressure);
-            //if (constantTemperatureCurve_Solid != null)
-            //{
-            //    result.Add(constantTemperatureCurve_Solid);
-            //}
 
             return result;
         }
