@@ -135,7 +135,7 @@ namespace SAM.Core.Mollier
             return result;
         }
 
-        public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves(this MollierRange mollierRange, Range<double> enthalpyRange, double pressure, double enthalpyStep, params Phase[] phases)
+        public static List<ConstantEnthalpyCurve> ConstantEnthalpyCurves(this MollierRange mollierRange, Range<double> enthalpyRange, double pressure, double enthalpyStep, IEnumerable<Phase> phases, VisibilitySettings visibilitySettings = null, string templateName = null)
         {
             if(enthalpyRange == null)
             {
@@ -147,10 +147,19 @@ namespace SAM.Core.Mollier
             double enthalpy = enthalpyRange.Min;
             while (enthalpy <= enthalpyRange.Max)
             {
-                List<ConstantEnthalpyCurve> constantValueCurves = ConstantEnthalpyCurves(mollierRange, enthalpy, pressure, phases);
-                if (constantValueCurves != null)
+                bool visible = true;
+                if (visibilitySettings != null && templateName != null)
                 {
-                    result.AddRange(constantValueCurves);
+                    visible = visibilitySettings.GetVisible(templateName, ChartDataType.Enthalpy, enthalpy);
+                }
+
+                if(visible)
+                {
+                    List<ConstantEnthalpyCurve> constantValueCurves = ConstantEnthalpyCurves(mollierRange, enthalpy, pressure, phases?.ToArray());
+                    if (constantValueCurves != null)
+                    {
+                        result.AddRange(constantValueCurves);
+                    }
                 }
 
                 enthalpy += enthalpyStep;
