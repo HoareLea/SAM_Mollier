@@ -32,6 +32,15 @@
                 case Mollier.ChartDataType.Enthalpy:
                     return value % 10000 != 0 ? Mollier.ChartParameterType.Line : Mollier.ChartParameterType.BoldLine;
 
+                case Mollier.ChartDataType.Density:
+                    return Mollier.ChartParameterType.Line;
+
+                case Mollier.ChartDataType.WetBulbTemperature:
+                    return Mollier.ChartParameterType.Line;
+
+                case Mollier.ChartDataType.SpecificVolume:
+                    return Mollier.ChartParameterType.Line;
+
             }
 
             return Mollier.ChartParameterType.Undefined;
