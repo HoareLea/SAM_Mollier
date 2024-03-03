@@ -23,5 +23,6 @@ namespace SAM.Core.Mollier
         [Description("Isotermic Humidification Process")] IsotermicHumidificationProcess,
         [Description("Undefined Process")] UndefinedProcess,
         [Description("Room Process")] RoomProcess,
+        [Description("Sensible Heat Ratio")] SensibleHeatRatio,
     }
 }

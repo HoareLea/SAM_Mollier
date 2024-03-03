@@ -54,7 +54,9 @@
     <Compile Include="Classes\FanProcess.cs" />
     <Compile Include="Classes\MollierGroup.cs" />
     <Compile Include="Classes\MollierCurve.cs" />
+    <Compile Include="Classes\MollierSensibleHeatRatioLine.cs" />
     <Compile Include="Classes\MollierModel.cs" />
+    <Compile Include="Classes\MollierLine.cs" />
     <Compile Include="Classes\RoomProcess.cs" />
     <Compile Include="Classes\SpecificProcess.cs" />
     <Compile Include="Classes\MollierRange.cs" />
