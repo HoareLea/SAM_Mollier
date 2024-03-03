@@ -12,11 +12,11 @@
             switch (chartDataType)
             {
                 case Mollier.ChartDataType.RelativeHumidity:
-                    if (value == 50)
-                    {
-                        return Mollier.ChartParameterType.MediumLine;
-                    }
-                    else if (value != 100 && value != 50)
+                    //if (value == 50)
+                    //{
+                    //    return Mollier.ChartParameterType.MediumLine;
+                    //}
+                    if (value != 100 && value != 50)
                     {
                         return Mollier.ChartParameterType.Line;
                     }
