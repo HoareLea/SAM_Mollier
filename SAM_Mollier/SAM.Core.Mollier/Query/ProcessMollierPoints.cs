@@ -90,12 +90,38 @@ namespace SAM.Core.Mollier
 
             if (!Core.Query.AlmostEqual(mollierPoint_Start.HumidityRatio, mollierPoint_End.HumidityRatio, tolerance))
             {
-                double dryBulbTemperature_Start_Saturation = DryBulbTemperature_ByHumidityRatio(mollierPoint_Start.HumidityRatio, 100, pressure);
+                MollierPoint mollierPoint_75 = null;
+                MollierPoint mollierPoint_85 = null;
 
-                // divied by 8 is 1/8 of length from top
-                double dryBulbTemperature_1 = mollierPoint_Start.DryBulbTemperature - ((mollierPoint_Start.DryBulbTemperature - dryBulbTemperature_Start_Saturation) / 8);
-                MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature_1, mollierPoint_Start.HumidityRatio, pressure);
-                result.Add(mollierPoint_1);
+                if (!(mollierPoint_Start.RelativeHumidity > 80))
+                {
+                    double dryBulbTemperature_Temp = mollierPoint_Start.RelativeHumidity < 75 ? DryBulbTemperature_ByHumidityRatio(mollierPoint_Start.HumidityRatio, 75, mollierPoint_Start.Pressure) : mollierPoint_Start.DryBulbTemperature;
+                    if (mollierPoint_Start.RelativeHumidity < 85)
+                    {
+                        mollierPoint_85 = Create.MollierPoint_ByRelativeHumidity(dryBulbTemperature_Temp - 2.5, 85, mollierPoint_Start.Pressure);
+                        if (mollierPoint_Start.RelativeHumidity < 75)
+                        {
+                            mollierPoint_75 = Create.MollierPoint_ByRelativeHumidity(dryBulbTemperature_Temp, 75, mollierPoint_Start.Pressure);
+                        }
+                    }
+
+                    if (mollierPoint_85 != null)
+                    {
+                        if (mollierPoint_75 != null)
+                        {
+                            result.Add(mollierPoint_75);
+                        }
+
+                        result.Add(mollierPoint_85);
+                    }
+                }
+
+                //double dryBulbTemperature_Start_Saturation = DryBulbTemperature_ByHumidityRatio(mollierPoint_Start.HumidityRatio, 100, pressure);
+
+                //// divied by 8 is 1/8 of length from top
+                //double dryBulbTemperature_1 = mollierPoint_Start.DryBulbTemperature - ((mollierPoint_Start.DryBulbTemperature - dryBulbTemperature_Start_Saturation) / 8);
+                //MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature_1, mollierPoint_Start.HumidityRatio, pressure);
+                //result.Add(mollierPoint_1);
 
                 double relativeHumidity_End = 95;
 
