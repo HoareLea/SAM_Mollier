@@ -92,13 +92,14 @@ namespace SAM.Core.Mollier
             {
                 double dryBulbTemperature_Start_Saturation = DryBulbTemperature_ByHumidityRatio(mollierPoint_Start.HumidityRatio, 100, pressure);
 
-                double dryBulbTemperature_1 = mollierPoint_Start.DryBulbTemperature - ((mollierPoint_Start.DryBulbTemperature - dryBulbTemperature_Start_Saturation) / 3);
+                // divied by 8 is 1/8 of length from top
+                double dryBulbTemperature_1 = mollierPoint_Start.DryBulbTemperature - ((mollierPoint_Start.DryBulbTemperature - dryBulbTemperature_Start_Saturation) / 8);
                 MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature_1, mollierPoint_Start.HumidityRatio, pressure);
                 result.Add(mollierPoint_1);
 
                 double relativeHumidity_End = 95;
 
-                double humidityRatio_2 = mollierPoint_Start.HumidityRatio - ((mollierPoint_Start.HumidityRatio - mollierPoint_End.HumidityRatio) / 3);
+                double humidityRatio_2 = mollierPoint_Start.HumidityRatio - ((mollierPoint_Start.HumidityRatio - mollierPoint_End.HumidityRatio) / 4);
 
                 double relativeHumidityStep = 5;
                 double humidityRatioStep = 0.0001;
@@ -119,12 +120,14 @@ namespace SAM.Core.Mollier
                 }
 
                 double dryBulbTemperature_2 = DryBulbTemperature_ByHumidityRatio(humidityRatio_2, relativeHumidity_End, pressure);
+
                 MollierPoint mollierPoint_2 = new MollierPoint(dryBulbTemperature_2, humidityRatio_2, pressure);
                 result.Add(mollierPoint_2);
 
                 double dryBulbTemperatureStep = 0.5;
 
-                double dryBulbTemperature = dryBulbTemperature_2 + dryBulbTemperatureStep;
+                double dryBulbTemperature = dryBulbTemperature_2 - dryBulbTemperatureStep;
+
                 while(dryBulbTemperature > mollierPoint_End.DryBulbTemperature)
                 {
                     double humidityRatio_Temp = HumidityRatio(dryBulbTemperature, relativeHumidity_End, pressure);
@@ -133,7 +136,7 @@ namespace SAM.Core.Mollier
                         result.Add(new MollierPoint(dryBulbTemperature, humidityRatio_Temp, pressure));
                     }
 
-                    dryBulbTemperature += dryBulbTemperatureStep;
+                    dryBulbTemperature -= dryBulbTemperatureStep;
                 }
             }
 
