@@ -11,7 +11,7 @@ namespace SAM.Core.Mollier
                 return null;
             }
 
-            return CoolingProcess(start, start.DryBulbTemperature - temperatureDifference);
+            return CoolingProcess(start, start.DryBulbTemperature - temperatureDifference, efficiency);
         }
 
         public static CoolingProcess CoolingProcess_ByEnthalpyDifference(this MollierPoint start, double enthalpyDifference, double efficiency = 1)
