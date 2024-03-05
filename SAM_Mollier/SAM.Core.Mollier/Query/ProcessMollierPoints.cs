@@ -92,20 +92,22 @@ namespace SAM.Core.Mollier
             {
                 double dryBulbTemperature_Start_Saturation = DryBulbTemperature_ByHumidityRatio(mollierPoint_Start.HumidityRatio, 100, pressure);
 
-                double dryBulbTemperature_1 = mollierPoint_Start.DryBulbTemperature - ((mollierPoint_Start.DryBulbTemperature - dryBulbTemperature_Start_Saturation) / 3);
+                // divied by 8 is 1/8 of length from top
+                double dryBulbTemperature_1 = mollierPoint_Start.DryBulbTemperature - ((mollierPoint_Start.DryBulbTemperature - dryBulbTemperature_Start_Saturation) / 8);
                 MollierPoint mollierPoint_1 = new MollierPoint(dryBulbTemperature_1, mollierPoint_Start.HumidityRatio, pressure);
                 result.Add(mollierPoint_1);
 
                 double relativeHumidity = 95;
 
-                double humidityRatio_2 = mollierPoint_Start.HumidityRatio - ((mollierPoint_Start.HumidityRatio - mollierPoint_End.HumidityRatio) / 3);
+                // divied by 5 is 1/5 of length from top when start 95%
+                double humidityRatio_2 = mollierPoint_Start.HumidityRatio - ((mollierPoint_Start.HumidityRatio - mollierPoint_End.HumidityRatio) / 4);
                 double dryBulbTemperature_2 = DryBulbTemperature_ByHumidityRatio(humidityRatio_2, relativeHumidity, pressure);
                 MollierPoint mollierPoint_2 = new MollierPoint(dryBulbTemperature_2, humidityRatio_2, pressure);
                 result.Add(mollierPoint_2);
 
                 double step = 0.5;
 
-                double dryBulbTemperature = dryBulbTemperature_2 + step;
+                double dryBulbTemperature = dryBulbTemperature_2 - step;
                 while(dryBulbTemperature > mollierPoint_End.DryBulbTemperature)
                 {
                     double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
@@ -118,7 +120,7 @@ namespace SAM.Core.Mollier
                         }
                     }
 
-                    dryBulbTemperature += step;
+                    dryBulbTemperature -= step;
                 }
             }
 
