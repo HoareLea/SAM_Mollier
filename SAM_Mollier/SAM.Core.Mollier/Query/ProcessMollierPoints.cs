@@ -99,7 +99,7 @@ namespace SAM.Core.Mollier
 
                 double relativeHumidity_End = 95;
 
-                double humidityRatio_2 = mollierPoint_Start.HumidityRatio - ((mollierPoint_Start.HumidityRatio - mollierPoint_End.HumidityRatio) / 4);
+                double humidityRatio_2 = mollierPoint_Start.HumidityRatio - ((mollierPoint_Start.HumidityRatio - mollierPoint_End.HumidityRatio) / 3);
 
                 double relativeHumidityStep = 5;
                 double humidityRatioStep = 0.0001;
