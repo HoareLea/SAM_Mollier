@@ -41,5 +41,45 @@
 
             return specificHeat * (temperature_Out - temperature_In) / (enthalpy_Out - enthaply_In);
         }
+
+        public static double SensibleHeatRatio(this MollierPoint mollierPoint_1, MollierPoint mollierPoint_2)
+        {
+            if(mollierPoint_1 == null || mollierPoint_2 == null)
+            {
+                return double.NaN;
+            }
+
+            double sensibleLoad = SensibleLoad(mollierPoint_1, mollierPoint_2.DryBulbTemperature - mollierPoint_1.DryBulbTemperature, 1);
+            if(double.IsNaN(sensibleLoad))
+            {
+                return double.NaN;
+            }
+
+            double latentLoad = LatentLoad(mollierPoint_1, (mollierPoint_2.HumidityRatio - mollierPoint_1.HumidityRatio) * 1000, 1);
+            if (double.IsNaN(latentLoad))
+            {
+                return double.NaN;
+            }
+
+            latentLoad *= 1000;
+
+            if (latentLoad == 0 && sensibleLoad == 0)
+            {
+                return 0;
+            }
+
+            return SensibleHeatRatio(sensibleLoad, latentLoad);
+        }
+
+        public static double SensibleHeatRatio(this MollierProcess mollierProcess)
+        {
+            if (mollierProcess == null)
+            {
+                return double.NaN;
+            }
+
+            return SensibleHeatRatio(mollierProcess.Start, mollierProcess.End);
+
+        }
     }
 }
