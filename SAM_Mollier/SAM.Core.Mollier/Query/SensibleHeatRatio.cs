@@ -20,7 +20,7 @@
                 return double.NaN;
             }
 
-            return  sensibleGain / (sensibleGain + latentGain);
+            return  sensibleGain / (System.Math.Abs(sensibleGain) + System.Math.Abs(latentGain));
         }
 
         /// <summary>
@@ -55,7 +55,7 @@
                 return double.NaN;
             }
 
-            double latentLoad = LatentLoad(mollierPoint_1, (mollierPoint_2.HumidityRatio - mollierPoint_1.HumidityRatio) * 1000, 1);
+            double latentLoad = LatentLoad_ByMassFlow((mollierPoint_2.HumidityRatio - mollierPoint_1.HumidityRatio) , 1 * mollierPoint_1.Density());
             if (double.IsNaN(latentLoad))
             {
                 return double.NaN;
