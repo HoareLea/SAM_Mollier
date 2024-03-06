@@ -49,13 +49,21 @@
                 return double.NaN;
             }
 
-            double sensibleLoad = SensibleLoad(mollierPoint_1, mollierPoint_2.DryBulbTemperature - mollierPoint_1.DryBulbTemperature, 1);
+            MollierPoint mollierPoint_1_Temp = mollierPoint_1;
+            MollierPoint mollierPoint_2_Temp = mollierPoint_2;
+            if(mollierPoint_1.DryBulbTemperature > mollierPoint_2.DryBulbTemperature)
+            {
+                mollierPoint_1_Temp = mollierPoint_2;
+                mollierPoint_2_Temp = mollierPoint_1;
+            }
+
+            double sensibleLoad = SensibleLoad(mollierPoint_1_Temp, mollierPoint_2_Temp.DryBulbTemperature - mollierPoint_1_Temp.DryBulbTemperature, 1);
             if(double.IsNaN(sensibleLoad))
             {
                 return double.NaN;
             }
 
-            double latentLoad = LatentLoad_ByMassFlow((mollierPoint_2.HumidityRatio - mollierPoint_1.HumidityRatio) , 1 * mollierPoint_1.Density());
+            double latentLoad = LatentLoad_ByMassFlow((mollierPoint_2_Temp.HumidityRatio - mollierPoint_1_Temp.HumidityRatio) , 1 * mollierPoint_1_Temp.Density());
             if (double.IsNaN(latentLoad))
             {
                 return double.NaN;
