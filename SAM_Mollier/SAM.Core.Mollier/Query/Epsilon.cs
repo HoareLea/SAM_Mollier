@@ -2,6 +2,18 @@
 {
     public static partial class Query
     {
+        //TO DO confirm this equation
+        public static double Epsilon_BySensibleAndLatentGain(double sensibleGain, double latentGain)
+        {
+            if (latentGain < 0)
+            {
+                sensibleGain = -sensibleGain;
+            }
+
+            return Zero.VapourizationLatentHeat / 1000 * (latentGain + sensibleGain) / latentGain;
+        }
+
+
         public static double Epsilon(this MollierPoint mollierPoint_1, MollierPoint mollierPoint_2)
         {
             if (mollierPoint_1 == null || mollierPoint_2 == null)
