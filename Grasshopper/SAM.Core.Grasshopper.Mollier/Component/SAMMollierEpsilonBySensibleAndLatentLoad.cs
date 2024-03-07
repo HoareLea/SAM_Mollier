@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -43,6 +43,7 @@ namespace SAM.Core.Grasshopper.Mollier
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "epsilon", NickName = "ε", Description = "Slope coefficient Epsilon ε [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatRatio", NickName = "sensibleHeatRatio", Description = "Sensible Heat Ratio [-]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -53,7 +54,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         public SAMMollierEpsilonBySensibleAndLatentLoad()
           : base("SAMMollier.EpsilonBySensibleAndLatentLoad", "SAMMollier.EpsilonBySensibleAndLatentLoad",
-              "Utility function to calculate slope coefficient Epsilon ε [kJ/kg].",
+              "Utility function to calculate slope coefficient Epsilon ε [kJ/kg] and Sensible Heat Ratio [-].",
               "SAM", "Mollier")
         {
         }
@@ -88,15 +89,19 @@ namespace SAM.Core.Grasshopper.Mollier
                 return;
             }
 
-
-            // TODO create method that calculates epsilon by latent and sensible
-
-            double epsilon = 2500.8 * (latentLoad + sensibleLoad) / latentLoad;
+            double epsilon = Core.Mollier.Query.Epsilon_BySensibleAndLatentGain(sensibleLoad, latentLoad);
 
             index = Params.IndexOfOutputParam("epsilon");
             if (index != -1)
             {
                 dataAccess.SetData(index, epsilon);
+            }
+
+            double sensibleHeatRatio = Core.Mollier.Query.SensibleHeatRatio(sensibleLoad, latentLoad);
+            index = Params.IndexOfOutputParam("sensibleHeatRatio");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, sensibleHeatRatio);
             }
         }
     }
