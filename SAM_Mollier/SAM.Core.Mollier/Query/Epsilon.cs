@@ -32,7 +32,7 @@
             return enthalpyDifference / humidityRatioDifference;
         }
 
-        public static double Epsilon(this MollierProcess mollierProcess)
+        public static double Epsilon(this IMollierProcess mollierProcess)
         {
             if(mollierProcess == null)
             {

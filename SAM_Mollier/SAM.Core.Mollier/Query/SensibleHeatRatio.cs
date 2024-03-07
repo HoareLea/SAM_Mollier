@@ -84,7 +84,7 @@
             return SensibleHeatRatio(sensibleLoad, latentLoad);
         }
 
-        public static double SensibleHeatRatio(this MollierProcess mollierProcess)
+        public static double SensibleHeatRatio(this IMollierProcess mollierProcess)
         {
             if (mollierProcess == null)
             {
