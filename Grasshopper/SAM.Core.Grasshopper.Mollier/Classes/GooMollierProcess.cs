@@ -31,6 +31,28 @@ namespace SAM.Core.Grasshopper.Mollier
                 uIMollierProcess.UIMollierAppearance.Label = process_Label;
                 uIMollierProcess.UIMollierPointAppearance_Start.Label = start_Label;
                 uIMollierProcess.UIMollierPointAppearance_End.Label = end_Label;
+
+                if(color.IsEmpty)
+                {
+                    Color color_Temp = Core.Mollier.Query.Color(uIMollierProcess);
+                    if (!color_Temp.IsEmpty)
+                    {
+                        if (uIMollierProcess.UIMollierAppearance.Color.IsEmpty)
+                        {
+                            uIMollierProcess.UIMollierAppearance.Color = color_Temp;
+                        }
+
+                        if (uIMollierProcess.UIMollierPointAppearance_Start.Color.IsEmpty)
+                        {
+                            uIMollierProcess.UIMollierPointAppearance_Start.Color = color_Temp;
+                        }
+
+                        if (uIMollierProcess.UIMollierPointAppearance_End.Color.IsEmpty)
+                        {
+                            uIMollierProcess.UIMollierPointAppearance_End.Color = color_Temp;
+                        }
+                    }
+                }
             }
         }
         public GooMollierProcess(IMollierProcess mollierProcess, Color color)
