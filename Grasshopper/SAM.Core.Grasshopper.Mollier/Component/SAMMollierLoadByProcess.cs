@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -51,6 +51,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δh", NickName = "Δh", Description = "Enthalpy difference Δh [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δt", NickName = "Δt", Description = "Dry bulb temperature difference Δt [°C]", Access = GH_ParamAccess.item}, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Δx", NickName = "Δx", Description = "Humidity ratio difference Δx [g/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "sensibleHeatRatio", NickName = "sensibleHeatRatio", Description = "Sensible Heat Ratio [-]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ε", NickName = "ε", Description = "Epsilon - Enthalpy to humidity ratio proportion [kJ/kg]", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -144,6 +145,12 @@ namespace SAM.Core.Grasshopper.Mollier
             if (index != -1)
             {
                 dataAccess.SetData(index, epsilon);
+            }
+
+            index = Params.IndexOfOutputParam("sensibleHeatRatio");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, mollierProcess.SensibleHeatRatio());
             }
 
             //Default r0=2501 [kJ/kg] is used
