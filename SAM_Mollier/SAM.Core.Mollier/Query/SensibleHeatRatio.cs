@@ -20,6 +20,11 @@
                 return double.NaN;
             }
 
+            if (latentGain < 0)
+            {
+                sensibleGain = -sensibleGain;
+            }
+
             return  sensibleGain / (System.Math.Abs(sensibleGain) + System.Math.Abs(latentGain));
         }
 
@@ -51,23 +56,11 @@
 
             MollierPoint mollierPoint_1_Temp = mollierPoint_1;
             MollierPoint mollierPoint_2_Temp = mollierPoint_2;
-            //if(mollierPoint_1.DryBulbTemperature > mollierPoint_2.DryBulbTemperature)
+            //if(mollierPoint_1.HumidityRatio > mollierPoint_2.HumidityRatio)
             //{
             //    mollierPoint_1_Temp = mollierPoint_2;
             //    mollierPoint_2_Temp = mollierPoint_1;
-
-            //    //if (mollierPoint_1.HumidityRatio >= mollierPoint_2.HumidityRatio - Tolerance.Distance)
-            //    //{
-            //    //    mollierPoint_1_Temp = mollierPoint_2;
-            //    //    mollierPoint_2_Temp = mollierPoint_1;
-            //    //}
             //}
-
-            if(mollierPoint_1.HumidityRatio > mollierPoint_2.HumidityRatio)
-            {
-                mollierPoint_1_Temp = mollierPoint_2;
-                mollierPoint_2_Temp = mollierPoint_1;
-            }
 
             double sensibleLoad = SensibleLoad(mollierPoint_1_Temp, mollierPoint_2_Temp.DryBulbTemperature - mollierPoint_1_Temp.DryBulbTemperature, 1);
             if(double.IsNaN(sensibleLoad))
