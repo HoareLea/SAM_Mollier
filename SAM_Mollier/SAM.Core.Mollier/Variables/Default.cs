@@ -34,6 +34,7 @@
         public const double PartialVapourPressure_Interval = 0.5; //TODO: [MACIEK] rename to CodeName PartialVapourPressure, use SI units [Pa]
 
         public static System.Drawing.Color RelativeHumidity_Color { get; } = System.Drawing.Color.LightBlue;
+        public static System.Drawing.Color RelativeHumidity_MediumLine_Color { get; } = System.Drawing.Color.FromArgb(255, 68, 142, 240);
 
     }
 }
