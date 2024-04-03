@@ -7,7 +7,7 @@ namespace SAM.Core.Mollier
         [Description("Undefined")] Undefined,
         [Description("Heating")] Heating,
         [Description("Cooling")] Cooling,
-        [Description("Isotermic Humidification (by steam)")] IsotermicHumidification,
+        [Description("Isothermic Humidification (by steam)")] IsothermicHumidification,
         [Description("Adiabatic Humidification (by water spray)")] AdiabaticHumidification,
         [Description("Heat Recovery")] HeatRecovery,
         [Description("Mixing")] Mixing,

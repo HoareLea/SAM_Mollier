@@ -40,9 +40,9 @@
             {
                 process = Mollier.ChartDataType.AdiabaticHumidificationProcess;
             }
-            if (mollierProcess is IsotermicHumidificationProcess)
+            if (mollierProcess is IsothermicHumidificationProcess)
             {
-                process = Mollier.ChartDataType.IsotermicHumidificationProcess;
+                process = Mollier.ChartDataType.IsothermicHumidificationProcess;
             }
             return process;
         }

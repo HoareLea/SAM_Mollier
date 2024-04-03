@@ -20,7 +20,7 @@ namespace SAM.Core.Mollier
         [Description("Mixing Process")] MixingProcess,
         [Description("Steam Humidification Process")] SteamHumidificationProcess,
         [Description("Adiabatic Humidification Process")] AdiabaticHumidificationProcess,
-        [Description("Isotermic Humidification Process")] IsotermicHumidificationProcess,
+        [Description("Isothermic Humidification Process")] IsothermicHumidificationProcess,
         [Description("Undefined Process")] UndefinedProcess,
         [Description("Room Process")] RoomProcess,
         [Description("Sensible Heat Ratio")] SensibleHeatRatio,
