@@ -4,9 +4,9 @@ namespace SAM.Core.Mollier
 {
 
     /// <summary>
-    /// Pseudo isothermic humidification proces by Steam where the small rise in dry-bulb temperature is due to the sensible heating effect of the steam.
+    /// Pseudo isothermal humidification proces by Steam where the small rise in dry-bulb temperature is due to the sensible heating effect of the steam.
     /// </summary>
-    public class SteamHumidificationProcess : IsothermicHumidificationProcess
+    public class SteamHumidificationProcess : IsothermalHumidificationProcess
     {
         internal SteamHumidificationProcess(MollierPoint start, MollierPoint end)
             : base(start, end)

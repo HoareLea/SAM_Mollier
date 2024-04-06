@@ -148,14 +148,14 @@ namespace SAM.Analytical.Mollier
                 if (room_Winter != null)
                 {
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, winterSensibleLoad, winterLatentLoad);
-                    IsothermicHumidificationProcess isothermicHumidificationProcess = Core.Mollier.Create.IsothermicHumidificationProcess_ByHumidityRatioDifference(start, room_Winter.HumidityRatio - start.HumidityRatio + (undefinedProcess.Start.HumidityRatio - undefinedProcess.End.HumidityRatio));
-                    if (isothermicHumidificationProcess != null && !isothermicHumidificationProcess.Start.AlmostEqual(isothermicHumidificationProcess.End))
+                    IsothermalHumidificationProcess isothermalHumidificationProcess = Core.Mollier.Create.IsothermalHumidificationProcess_ByHumidityRatioDifference(start, room_Winter.HumidityRatio - start.HumidityRatio + (undefinedProcess.Start.HumidityRatio - undefinedProcess.End.HumidityRatio));
+                    if (isothermalHumidificationProcess != null && !isothermalHumidificationProcess.Start.AlmostEqual(isothermalHumidificationProcess.End))
                     {
-                        mollierGroup_Winter.Add(isothermicHumidificationProcess);
-                        start = isothermicHumidificationProcess.End;
+                        mollierGroup_Winter.Add(isothermalHumidificationProcess);
+                        start = isothermalHumidificationProcess.End;
                     }
 
-                    double humidificationDuty = Core.Mollier.Query.Duty(isothermicHumidificationProcess, supplyAirFlow);
+                    double humidificationDuty = Core.Mollier.Query.Duty(isothermalHumidificationProcess, supplyAirFlow);
                     if(!double.IsNaN(humidificationDuty))
                     {
                         airHandlingUnitResult.SetValue(AirHandlingUnitResultParameter.HumidificationDuty, humidificationDuty);

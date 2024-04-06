@@ -2,24 +2,24 @@
 
 namespace SAM.Core.Mollier
 {
-    public class IsothermicHumidificationProcess : HumidificationProcess
+    public class IsothermalHumidificationProcess : HumidificationProcess
     {
-        public override ChartDataType ChartDataType => ChartDataType.IsothermicHumidificationProcess;
+        public override ChartDataType ChartDataType => ChartDataType.IsothermalHumidificationProcess;
 
-        internal IsothermicHumidificationProcess(MollierPoint start, MollierPoint end)
+        internal IsothermalHumidificationProcess(MollierPoint start, MollierPoint end)
             : base(start, end)
         {
 
         }
 
-        public IsothermicHumidificationProcess(JObject jObject)
+        public IsothermalHumidificationProcess(JObject jObject)
             :base(jObject)
         {
 
         }
 
-        public IsothermicHumidificationProcess(IsothermicHumidificationProcess isothermicHumidificationProcess)
-            : base(isothermicHumidificationProcess)
+        public IsothermalHumidificationProcess(IsothermalHumidificationProcess isothermalHumidificationProcess)
+            : base(isothermalHumidificationProcess)
         {
 
         }

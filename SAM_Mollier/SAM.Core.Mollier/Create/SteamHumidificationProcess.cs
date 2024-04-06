@@ -9,13 +9,13 @@
                 return null;
             }
 
-            IsothermicHumidificationProcess isothermicHumidificationProcess = IsothermicHumidificationProcess_ByHumidityRatioDifference(start, humidityRatioDifference);
-            if(isothermicHumidificationProcess == null)
+            IsothermalHumidificationProcess isothermalHumidificationProcess = IsothermalHumidificationProcess_ByHumidityRatioDifference(start, humidityRatioDifference);
+            if(isothermalHumidificationProcess == null)
             {
                 return null;
             }
 
-            return SteamHumidificationProcess(isothermicHumidificationProcess);
+            return SteamHumidificationProcess(isothermalHumidificationProcess);
         }
 
         public static SteamHumidificationProcess SteamHumidificationProcess_ByRelativeHumidity(this MollierPoint start, double relativeHumidity)
@@ -25,29 +25,29 @@
                 return null;
             }
 
-            IsothermicHumidificationProcess isothermicHumidificationProcess = IsothermicHumidificationProcess_ByRelativeHumidity(start, relativeHumidity);
-            if (isothermicHumidificationProcess == null)
+            IsothermalHumidificationProcess isothermalHumidificationProcess = IsothermalHumidificationProcess_ByRelativeHumidity(start, relativeHumidity);
+            if (isothermalHumidificationProcess == null)
             {
                 return null;
             }
 
-            return SteamHumidificationProcess(isothermicHumidificationProcess);
+            return SteamHumidificationProcess(isothermalHumidificationProcess);
         }
 
-        public static SteamHumidificationProcess SteamHumidificationProcess(IsothermicHumidificationProcess isothermicHumidificationProcess)
+        public static SteamHumidificationProcess SteamHumidificationProcess(IsothermalHumidificationProcess isothermalHumidificationProcess)
         {
-            if (isothermicHumidificationProcess == null)
+            if (isothermalHumidificationProcess == null)
             {
                 return null;
             }
 
-            MollierPoint start_Temp = isothermicHumidificationProcess.Start;
+            MollierPoint start_Temp = isothermalHumidificationProcess.Start;
             if(start_Temp == null)
             {
                 return null;
             }
 
-            MollierPoint end_Temp = isothermicHumidificationProcess.End;
+            MollierPoint end_Temp = isothermalHumidificationProcess.End;
             if(end_Temp == null)
             {
                 return null;

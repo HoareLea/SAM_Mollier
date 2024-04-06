@@ -37,7 +37,7 @@ namespace SAM.Core.Grasshopper.Mollier
                 return "Humidification Adiabatic";
             }
 
-            if (mollierProcess_Temp is IsothermicHumidificationProcess)
+            if (mollierProcess_Temp is IsothermalHumidificationProcess)
             {
                 return "Humidification Isothermal Steam";
             }
