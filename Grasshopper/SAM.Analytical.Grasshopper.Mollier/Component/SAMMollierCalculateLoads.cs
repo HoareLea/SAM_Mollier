@@ -106,6 +106,12 @@ namespace SAM.Analytical.Grasshopper.Mollier
                 outside = null;
             }
 
+            if (inside.Pressure != outside.Pressure)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "inside and outside pressure have to be the same");
+                return;
+            }
+
             double infiltrationLatentGain = 0;
             double infiltrationSensibleGain = 0;
 
