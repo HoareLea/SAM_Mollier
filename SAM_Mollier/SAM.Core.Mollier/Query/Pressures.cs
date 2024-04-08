@@ -26,7 +26,7 @@ namespace SAM.Core.Mollier
                 }
                 else if(mollierObject is IMollierGroup)
                 {
-                    HashSet<double> pressures = Pressures(((IMollierGroup)mollierObjects));
+                    HashSet<double> pressures = Pressures(((IMollierGroup)mollierObject));
                     pressures?.ToList().ForEach(x => result.Add(x));
                 }
             }
