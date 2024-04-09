@@ -30,8 +30,8 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "massFlow_", NickName = "massFlow_", Description = "Mass Flow [kg/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "volumetricFlowRate_", NickName = "volumetricFlowRate_", Description = "Volumetric Flow Rate [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "massFlow_", NickName = "massFlow_", Description = "Mass Flow [kg/s]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "volumetricFlowRate_", NickName = "volumetricFlowRate_", Description = "Volumetric Flow Rate [m3/s]", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_mollierPoint", NickName = "_mollierPoint", Description = "MollierPoint", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -64,7 +64,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
             double massFlow = double.NaN;
 
-            index = Params.IndexOfInputParam("_massFlow");
+            index = Params.IndexOfInputParam("massFlow_");
             double massFlow_Temp = double.NaN;
             if(index != -1 && dataAccess.GetData(index, ref massFlow_Temp))
             {
