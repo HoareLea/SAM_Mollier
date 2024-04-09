@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Dynamic;
-using System.Runtime.CompilerServices;
 
 namespace SAM.Core.Mollier
 {

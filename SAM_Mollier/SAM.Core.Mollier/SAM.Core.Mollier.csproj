@@ -122,6 +122,7 @@
     <Compile Include="Query\Next.cs" />
     <Compile Include="Query\LatentLoad.cs" />
     <Compile Include="Query\PickupTemperature.cs" />
+    <Compile Include="Query\Pressures.cs" />
     <Compile Include="Query\Sort.cs" />
     <Compile Include="Query\AlmostEqual.cs" />
     <Compile Include="Query\MollierProcesses.cs" />

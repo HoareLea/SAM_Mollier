@@ -1,4 +1,5 @@
-﻿namespace SAM.Core.Mollier
+﻿//TO DO this to be rename to Normal whc h means 0degC
+namespace SAM.Core.Mollier
 {
     /// <summary>
     /// Fluid properties at constant pressure and temperature - fundamental values 

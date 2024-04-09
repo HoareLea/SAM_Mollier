@@ -72,6 +72,17 @@ namespace SAM.Core.Grasshopper.Mollier
 
         public override bool CastTo<Y>(ref Y target)
         {
+            if(Value is UIMollierProcess)
+            {
+                UIMollierProcess uIMollierProcess = (UIMollierProcess)Value;
+
+                if (uIMollierProcess.MollierProcess is Y)
+                {
+                    target = (Y)(object)uIMollierProcess.MollierProcess;
+                    return true;
+                }
+            }
+
             return base.CastTo(ref target);
         }
     }
