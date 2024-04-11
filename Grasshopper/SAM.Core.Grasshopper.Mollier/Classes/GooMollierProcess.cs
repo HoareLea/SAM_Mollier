@@ -32,32 +32,43 @@ namespace SAM.Core.Grasshopper.Mollier
                 uIMollierProcess.UIMollierPointAppearance_Start.Label = start_Label;
                 uIMollierProcess.UIMollierPointAppearance_End.Label = end_Label;
 
-                if(color.IsEmpty)
-                {
-                    Color color_Temp = Core.Mollier.Query.Color(uIMollierProcess);
-                    if (!color_Temp.IsEmpty)
-                    {
-                        if (uIMollierProcess.UIMollierAppearance.Color.IsEmpty)
-                        {
-                            uIMollierProcess.UIMollierAppearance.Color = color_Temp;
-                        }
+                uIMollierProcess.UIMollierPointAppearance_Start.Color = Color.Empty;
+                uIMollierProcess.UIMollierPointAppearance_End.Color = Color.Empty;
 
-                        if (uIMollierProcess.UIMollierPointAppearance_Start.Color.IsEmpty)
-                        {
-                            uIMollierProcess.UIMollierPointAppearance_Start.Color = color_Temp;
-                        }
+                //if(color.IsEmpty)
+                //{
+                //    Color color_Temp = Core.Mollier.Query.Color(uIMollierProcess);
+                //    if (!color_Temp.IsEmpty)
+                //    {
+                //        if (uIMollierProcess.UIMollierAppearance.Color.IsEmpty)
+                //        {
+                //            uIMollierProcess.UIMollierAppearance.Color = color_Temp;
+                //        }
 
-                        if (uIMollierProcess.UIMollierPointAppearance_End.Color.IsEmpty)
-                        {
-                            uIMollierProcess.UIMollierPointAppearance_End.Color = color_Temp;
-                        }
-                    }
-                }
+                //        if (uIMollierProcess.UIMollierPointAppearance_Start.Color.IsEmpty)
+                //        {
+                //            uIMollierProcess.UIMollierPointAppearance_Start.Color = color_Temp;
+                //        }
+
+                //        if (uIMollierProcess.UIMollierPointAppearance_End.Color.IsEmpty)
+                //        {
+                //            uIMollierProcess.UIMollierPointAppearance_End.Color = color_Temp;
+                //        }
+                //    }
+                //}
             }
         }
+
         public GooMollierProcess(IMollierProcess mollierProcess, Color color)
             : base(color == Color.Empty ? mollierProcess : new UIMollierProcess(mollierProcess as MollierProcess, color))
         {
+
+            if (Value is UIMollierProcess)
+            {
+                UIMollierProcess uIMollierProcess = Value as UIMollierProcess;
+                uIMollierProcess.UIMollierPointAppearance_Start.Color = Color.Empty;
+                uIMollierProcess.UIMollierPointAppearance_End.Color = Color.Empty;
+            }
         }
 
         public override IGH_Goo Duplicate()
