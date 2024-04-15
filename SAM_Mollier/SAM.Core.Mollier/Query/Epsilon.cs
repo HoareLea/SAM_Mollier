@@ -13,7 +13,6 @@
             return Zero.VapourizationLatentHeat / 1000 * (latentGain + sensibleGain) / latentGain;
         }
 
-
         public static double Epsilon(this MollierPoint mollierPoint_1, MollierPoint mollierPoint_2)
         {
             if (mollierPoint_1 == null || mollierPoint_2 == null)
@@ -42,6 +41,46 @@
             return Epsilon(mollierProcess.Start, mollierProcess.End);
 
         }
+
+        public static double Epsilon(this MollierSensibleHeatRatioLine mollierSensibleHeatRatioLine)
+        {
+            if(mollierSensibleHeatRatioLine == null)
+            {
+                return double.NaN;
+            }
+
+            MollierPoint mollierPoint = mollierSensibleHeatRatioLine.MollierPoints[0];
+            if (mollierPoint == null)
+            {
+                return double.NaN;
+            }
+
+            double sensibleHeatRatio = mollierSensibleHeatRatioLine.SensibleHeatRatio;
+
+            double sensibleLoad = 1;
+
+            IMollierProcess mollierProcess = null;
+
+            double latentLoad = sensibleLoad * ((1 - System.Math.Abs(sensibleHeatRatio)) / System.Math.Abs(sensibleHeatRatio));
+            if (double.IsInfinity(latentLoad))
+            {
+                mollierProcess = Create.IsothermalHumidificationProcess_ByRelativeHumidity(mollierPoint, 100);
+            }
+            else
+            {
+
+
+                if (sensibleHeatRatio < 0)
+                {
+                    sensibleLoad = -1;
+                }
+
+                mollierProcess = Create.RoomProcess_ByEnd(mollierPoint, 1, sensibleLoad * 1000, latentLoad * 1000);
+            }
+
+            return Epsilon(mollierProcess);
+        }
+
 
         /// <summary>
         /// Calculates slope coefficient Epsilon ε [kJ/kg] by Steam Temperature.

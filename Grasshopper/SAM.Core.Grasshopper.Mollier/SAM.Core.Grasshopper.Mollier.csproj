@@ -70,7 +70,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\GooMollierChartObject.cs" />
     <Compile Include="Classes\GooMollierGroup.cs" />
     <Compile Include="Classes\GooMollierPoint.cs" />
     <Compile Include="Classes\GooMollierObject.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="Component\SAMMollierEpsilonBySensibleAndLatentLoad.cs" />
     <Compile Include="Component\SAMMollierMollierPointProperty.cs" />
     <Compile Include="Component\SAMMollierMollierPointsByPercentage.cs" />
-    <Compile Include="Component\SAMMollierCreateDiagram.cs" />
     <Compile Include="Component\SAMMollierApparatusDewPoint.cs" />
     <Compile Include="Component\SAMMollierLoadByProcess.cs" />
     <Compile Include="Component\SAMMollierEpsilonByWaterTemperature.cs" />
