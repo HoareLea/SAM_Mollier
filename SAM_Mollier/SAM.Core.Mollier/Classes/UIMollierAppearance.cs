@@ -127,7 +127,7 @@ namespace SAM.Core.Mollier
 
             if (UIMollierLabelAppearance != null)
             {
-                jObject.Add("Label", UIMollierLabelAppearance.ToJObject());
+                jObject.Add("UIMollierLabelAppearance", UIMollierLabelAppearance.ToJObject());
             }
 
             jObject.Add("Visible", Visible);
