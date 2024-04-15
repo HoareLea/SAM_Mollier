@@ -6,6 +6,8 @@ namespace SAM.Core.Mollier
 {
     public class UIMollierCurve : IMollierCurve, IUIMollierObject
     {
+        private System.Guid guid = System.Guid.NewGuid();
+
         private MollierCurve mollierCurve;
 
         private UIMollierAppearance uIMollierAppearance;
@@ -84,6 +86,7 @@ namespace SAM.Core.Mollier
             {
                 mollierCurve = uIMollierCurve.MollierCurve?.Clone();
                 uIMollierAppearance = uIMollierCurve.uIMollierAppearance?.Clone();
+                guid = uIMollierCurve.guid;
             }
         }
 
@@ -96,6 +99,14 @@ namespace SAM.Core.Mollier
         public UIMollierCurve(JObject jObject)
         {
             FromJObject(jObject);
+        }
+
+        public System.Guid Guid
+        {
+            get
+            {
+                return guid;
+            }
         }
 
         public virtual bool FromJObject(JObject jObject)
@@ -115,25 +126,35 @@ namespace SAM.Core.Mollier
                 uIMollierAppearance = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierAppearance")) as UIMollierAppearance;
             }
 
+            if (jObject.ContainsKey("Guid"))
+            {
+                guid = Core.Query.Guid(jObject, "Guid");
+            }
+
             return true;
         }
         
         public virtual JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Core.Query.FullTypeName(this));
+            JObject result = new JObject();
+            result.Add("_type", Core.Query.FullTypeName(this));
 
             if (mollierCurve != null)
             {
-                jObject.Add("MollierCurve", mollierCurve.ToJObject());
+                result.Add("MollierCurve", mollierCurve.ToJObject());
             }
 
             if (uIMollierAppearance != null)
             {
-                jObject.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());
+                result.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());
             }
 
-            return jObject;
+            if (guid != System.Guid.Empty)
+            {
+                result.Add("Guid", guid);
+            }
+
+            return result;
         }
     }
 }

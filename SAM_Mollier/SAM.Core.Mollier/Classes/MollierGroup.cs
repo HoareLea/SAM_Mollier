@@ -82,12 +82,43 @@ namespace SAM.Core.Mollier
                 {
                     RemoveAt(i);
                 }
+                else if(mollierGroupable is IUIMollierObject && this[i]?.GetType() == mollierGroupable.GetType() && ((IUIMollierObject)this[i]).Guid == ((IUIMollierObject)mollierGroupable).Guid)
+                {
+                    RemoveAt(i);
+                }
                 else
                 {
                     i++;
                 }
             }
         }
+
+        public void Update(IUIMollierObject uIMollierObject, bool includeNestedObjects = true)
+        {
+            if(!(uIMollierObject is IMollierGroupable))
+            {
+                return;
+            }
+
+            int i = 0;
+            while (i < Count)
+            {
+                if (includeNestedObjects && this[i] is MollierGroup)
+                {
+                    ((MollierGroup)this[i]).Update(uIMollierObject, includeNestedObjects);
+                }
+
+                if (this[i]?.GetType() == uIMollierObject.GetType() && ((IUIMollierObject)this[i]).Guid == uIMollierObject.Guid)
+                {
+                    this[i] = uIMollierObject as IMollierGroupable;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+        }
+
         /// <summary>
         /// Replaces every occurrence of the MollierObject_Old by mollierObject_New
         /// Method has an additional option to search any depth trough all elements
@@ -95,7 +126,6 @@ namespace SAM.Core.Mollier
         /// <param name="mollierGroupable_Old">Old mollier object</param>
         /// <param name="mollierGroupable_New">New mollier object</param>
         /// <param name="includeNestedObjects">includeNestedObjects</param>
-        
         public void Update<T>(T mollierGroupable_Old, T mollierGroupable_New, bool includeNestedObjects = true) where T : IMollierGroupable
         {
             for(int i = Count - 1; i >= 0; i--)

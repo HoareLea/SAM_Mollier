@@ -5,6 +5,8 @@ namespace SAM.Core.Mollier
 {
     public class UIMollierZone : MollierZone, IUIMollierObject
     {
+        private System.Guid guid = System.Guid.NewGuid();
+        
         private UIMollierAppearance uIMollierAppearance;
 
         public UIMollierZone(UIMollierZone uIMollierZone)
@@ -13,18 +15,22 @@ namespace SAM.Core.Mollier
             if(uIMollierZone != null)
             {
                 uIMollierAppearance = uIMollierZone.UIMollierAppearance?.Clone();
+                guid = uIMollierZone.guid;
             }
         }
+
         public UIMollierZone(MollierZone mollierZone)
             : base(mollierZone)
         {
             uIMollierAppearance = new UIMollierAppearance();
         }
+        
         public UIMollierZone(MollierZone mollierZone, Color color)
             : base(mollierZone)
         {
             uIMollierAppearance = new UIMollierAppearance(color);
         }
+        
         public UIMollierZone(MollierZone mollierZone, Color color, string text)
             : base(mollierZone)
         {
@@ -36,11 +42,13 @@ namespace SAM.Core.Mollier
         {
             this.uIMollierAppearance = uIMollierAppearance?.Clone();
         }
+
         public UIMollierZone(JObject jObject)
             : base(jObject)
         {
             FromJObject(jObject);
         }
+
         public UIMollierAppearance UIMollierAppearance
         {
             get
@@ -53,6 +61,15 @@ namespace SAM.Core.Mollier
                 uIMollierAppearance = value;
             }
         }
+
+        public System.Guid Guid
+        {
+            get
+            {
+                return guid;
+            }
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null || !base.FromJObject(jObject))
@@ -60,10 +77,14 @@ namespace SAM.Core.Mollier
                 return false;
             }
 
-            
             if (jObject.ContainsKey("UIMollierAppearance"))
             {
                 uIMollierAppearance = new UIMollierAppearance(jObject.Value<JObject>("UIMollierAppearance"));
+            }
+
+            if(jObject.ContainsKey("Guid"))
+            {
+                guid = Core.Query.Guid(jObject, "Guid");
             }
 
             return true;
@@ -81,6 +102,11 @@ namespace SAM.Core.Mollier
             if (uIMollierAppearance != null)
             {
                 result.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());
+            }
+
+            if(guid != System.Guid.Empty)
+            {
+                result.Add("Guid", guid);
             }
 
             return result;

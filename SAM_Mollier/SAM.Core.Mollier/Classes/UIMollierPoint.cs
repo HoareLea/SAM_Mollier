@@ -5,6 +5,8 @@ namespace SAM.Core.Mollier
 {
     public class UIMollierPoint : MollierPoint, IUIMollierObject
     {
+        private System.Guid guid = System.Guid.NewGuid();
+
         private UIMollierPointAppearance uIMollierPointAppearance;
 
         public UIMollierAppearance UIMollierAppearance
@@ -67,6 +69,7 @@ namespace SAM.Core.Mollier
             if(uIMollierPoint != null)
             {
                 uIMollierPointAppearance = uIMollierPoint.uIMollierPointAppearance?.Clone();
+                guid = uIMollierPoint.guid;
             }
         }
 
@@ -74,6 +77,14 @@ namespace SAM.Core.Mollier
             : base(jObject)
         {
             FromJObject(jObject);
+        }
+
+        public System.Guid Guid
+        {
+            get
+            {
+                return guid;
+            }
         }
 
         public bool FromJObject(JObject jObject)
@@ -86,6 +97,11 @@ namespace SAM.Core.Mollier
             if (jObject.ContainsKey("UIMollierPointAppearance"))
             {
                 uIMollierPointAppearance = new UIMollierPointAppearance(jObject.Value<JObject>("UIMollierPointAppearance"));
+            }
+
+            if (jObject.ContainsKey("Guid"))
+            {
+                guid = Core.Query.Guid(jObject, "Guid");
             }
 
             return true;
@@ -102,6 +118,11 @@ namespace SAM.Core.Mollier
             if (uIMollierPointAppearance != null)
             {
                 result.Add("UIMollierPointAppearance", uIMollierPointAppearance.ToJObject());
+            }
+
+            if (guid != System.Guid.Empty)
+            {
+                result.Add("Guid", guid);
             }
 
             return result;

@@ -2,6 +2,8 @@
 {
     public interface IUIMollierObject : IMollierObject
     {
+        System.Guid Guid { get; }
+
         UIMollierAppearance UIMollierAppearance { get; }
     }
 }
