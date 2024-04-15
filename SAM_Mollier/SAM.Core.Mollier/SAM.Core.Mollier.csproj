@@ -61,6 +61,7 @@
     <Compile Include="Classes\SpecificProcess.cs" />
     <Compile Include="Classes\MollierRange.cs" />
     <Compile Include="Classes\MollierSettings.cs" />
+    <Compile Include="Classes\UIMollierLabelAppearance.cs" />
     <Compile Include="Classes\UIMollierPointAppearance.cs" />
     <Compile Include="Classes\UIMollierAppearance.cs" />
     <Compile Include="Classes\UIMollierGroup.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Interfaces\IMollierZone.cs" />
     <Compile Include="Interfaces\IChartVisibilitySetting.cs" />
     <Compile Include="Interfaces\IUserVisibilitySetting.cs" />
+    <Compile Include="Interfaces\IUIMollierAppearance.cs" />
     <Compile Include="Interfaces\IVisibilitySetting.cs" />
     <Compile Include="Interfaces\IUIMollierObject.cs" />
     <Compile Include="Interfaces\IMollierObject.cs" />

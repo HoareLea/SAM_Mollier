@@ -3,15 +3,15 @@ using System.Drawing;
 
 namespace SAM.Core.Mollier
 {
-    public class UIMollierAppearance : IJSAMObject
+    public class UIMollierAppearance : IUIMollierAppearance
     {
         public int Size { get; set; } = 1;
 
         public Color Color { get; set; } = Color.Empty;
 
-        public string Label { get; set; } = null;
-
         public bool Visible { get; set; } = true;
+
+        public UIMollierLabelAppearance UIMollierLabelAppearance { get; set; } = null;
 
         public UIMollierAppearance()
         {
@@ -26,7 +26,7 @@ namespace SAM.Core.Mollier
         public UIMollierAppearance(Color color, string label)
         {
             Color = color;
-            Label = label;
+            UIMollierLabelAppearance = new UIMollierLabelAppearance(Color.Empty, label);
         }
 
         public UIMollierAppearance(UIMollierAppearance uIMollierAppearance)
@@ -34,7 +34,7 @@ namespace SAM.Core.Mollier
             if(uIMollierAppearance != null)
             {
                 Color = uIMollierAppearance.Color;
-                Label = uIMollierAppearance.Label;
+                UIMollierLabelAppearance = uIMollierAppearance.UIMollierLabelAppearance == null ? null :  new UIMollierLabelAppearance(uIMollierAppearance.UIMollierLabelAppearance);
                 Visible = uIMollierAppearance.Visible;
                 Size = uIMollierAppearance.Size;
             }
@@ -44,7 +44,7 @@ namespace SAM.Core.Mollier
         {
             if (uIMollierAppearance != null)
             {
-                Label = uIMollierAppearance.Label;
+                UIMollierLabelAppearance = uIMollierAppearance.UIMollierLabelAppearance == null ? null : new UIMollierLabelAppearance(uIMollierAppearance.UIMollierLabelAppearance);
                 Visible = uIMollierAppearance.Visible;
                 Size = uIMollierAppearance.Size;
             }
@@ -55,6 +55,26 @@ namespace SAM.Core.Mollier
         public UIMollierAppearance(JObject jObject)
         {
             FromJObject(jObject);
+        }
+
+        public string Label
+        {
+            get
+            {
+                return UIMollierLabelAppearance?.Text;
+            }
+
+            set
+            {
+                if(UIMollierLabelAppearance == null)
+                {
+                    UIMollierLabelAppearance = new UIMollierLabelAppearance(value);
+                }
+                else
+                {
+                    UIMollierLabelAppearance.Text = value;
+                }
+            }
         }
 
         public virtual bool FromJObject(JObject jObject)
@@ -77,9 +97,9 @@ namespace SAM.Core.Mollier
                 }
             }
 
-            if (jObject.ContainsKey("Label"))
+            if (jObject.ContainsKey("UIMollierLabelAppearance"))
             {
-                Label = jObject.Value<string>("Label");
+                UIMollierLabelAppearance = new UIMollierLabelAppearance(jObject.Value<JObject>("UIMollierLabelAppearance"));
             }
 
             if (jObject.ContainsKey("Visible"))
@@ -105,9 +125,9 @@ namespace SAM.Core.Mollier
                 jObject.Add("Color", (new SAMColor(Color)).ToJObject());
             }
 
-            if (Label != null)
+            if (UIMollierLabelAppearance != null)
             {
-                jObject.Add("Label", Label);
+                jObject.Add("Label", UIMollierLabelAppearance.ToJObject());
             }
 
             jObject.Add("Visible", Visible);
