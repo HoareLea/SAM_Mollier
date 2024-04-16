@@ -172,7 +172,7 @@ namespace SAM.Core.Mollier
             }
 
             List<IMollierGroup> mollierGroups = GetMollierObjects<IMollierGroup>();
-            if (mollierGroups == null || !(mollierObject is IMollierGroupable) || !includeNestedObjects)
+            if (mollierGroups == null || !(uIMollierObject is IMollierGroupable) || !includeNestedObjects)
             {
                 return;
             }
