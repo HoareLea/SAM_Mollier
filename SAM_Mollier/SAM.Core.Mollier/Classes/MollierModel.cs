@@ -172,14 +172,12 @@ namespace SAM.Core.Mollier
             }
 
             List<IMollierGroup> mollierGroups = GetMollierObjects<IMollierGroup>();
-            if (mollierGroups == null || !(uIMollierObject is IMollierGroupable) || !includeNestedObjects)
+            if(mollierGroups != null)
             {
-                return;
-            }
-
-            foreach (IMollierGroup mollierGroup in mollierGroups)
-            {
-                ((MollierGroup)mollierGroup).Update(uIMollierObject, true);
+                foreach (IMollierGroup mollierGroup in mollierGroups)
+                {
+                    ((MollierGroup)mollierGroup).Update(uIMollierObject, true);
+                }
             }
         }
 
