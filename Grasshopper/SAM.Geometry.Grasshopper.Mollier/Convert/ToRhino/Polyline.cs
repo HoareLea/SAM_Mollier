@@ -38,7 +38,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
             }
             else
             {
-                result = mollierProcess?.ToRhino_Polyline(chartType, z);
+                result = Core.Grasshopper.Mollier.Convert.ToRhino_Polyline(mollierProcess, chartType, z);
             }
 
             return result;
