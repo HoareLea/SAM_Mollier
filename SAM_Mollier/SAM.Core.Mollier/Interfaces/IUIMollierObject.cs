@@ -1,9 +1,11 @@
-﻿namespace SAM.Core.Mollier
+﻿using SAM.Core.Mollier;
+
+namespace SAM.Core.Mollier
 {
     public interface IUIMollierObject : IMollierObject
     {
         System.Guid Guid { get; }
 
-        UIMollierAppearance UIMollierAppearance { get; }
+        IUIMollierAppearance UIMollierAppearance { get; }
     }
 }

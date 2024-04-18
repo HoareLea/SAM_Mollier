@@ -130,7 +130,7 @@ namespace SAM.Core.Mollier
                 {
                     continue;
                 }
-                if(includeNestedObjects && (keyValuePair.Key == typeof(MollierGroup) || keyValuePair.Key == typeof(UIMollierGroup)))
+                if(includeNestedObjects && (keyValuePair.Key.IsAssignableFrom(typeof(MollierGroup))))
                 {
                     foreach(MollierGroup mollierGroup in keyValuePair.Value)
                     {
@@ -218,7 +218,7 @@ namespace SAM.Core.Mollier
                     continue;
                 }
 
-                if((keyValuePair.Key.IsAssignableFrom(typeof(MollierGroup)) || keyValuePair.Key.IsAssignableFrom(typeof(UIMollierGroup))) && includeNestedObjects)
+                if(keyValuePair.Key.IsAssignableFrom(typeof(MollierGroup)) && includeNestedObjects)
                 {
                     List<IMollierObject> mollierObjects = keyValuePair.Value;
                     foreach (IMollierObject mollierObject in mollierObjects)

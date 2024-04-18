@@ -71,26 +71,53 @@ namespace SAM.Core.Mollier
         
         public void RemoveObject(IMollierGroupable mollierGroupable, bool includeNestedObjects = true)
         {
-            int i = 0; 
-            while(i < Count)
+            if (mollierGroupable == null)
             {
-                if(includeNestedObjects && this[i] is MollierGroup)
+                return;
+            }
+
+            int count = Count;
+
+            for (int i = count - 1; i >= 0; i--)
+            {
+                if (includeNestedObjects && this[i] is MollierGroup)
                 {
                     ((MollierGroup)this[i]).RemoveObject(mollierGroupable, includeNestedObjects);
                 }
+
                 if (mollierGroupable.AlmostEqual(this[i]))
                 {
                     RemoveAt(i);
+                    continue;
                 }
-                else if(mollierGroupable is IUIMollierObject && this[i]?.GetType() == mollierGroupable.GetType() && ((IUIMollierObject)this[i]).Guid == ((IUIMollierObject)mollierGroupable).Guid)
+
+                if (mollierGroupable is IUIMollierObject && this[i]?.GetType() == mollierGroupable.GetType() && ((IUIMollierObject)this[i]).Guid == ((IUIMollierObject)mollierGroupable).Guid)
                 {
                     RemoveAt(i);
-                }
-                else
-                {
-                    i++;
+                    continue;
                 }
             }
+
+            //int i = 0; 
+            //while(i < Count)
+            //{
+            //    if(includeNestedObjects && this[i] is MollierGroup)
+            //    {
+            //        ((MollierGroup)this[i]).RemoveObject(mollierGroupable, includeNestedObjects);
+            //    }
+            //    if (mollierGroupable.AlmostEqual(this[i]))
+            //    {
+            //        RemoveAt(i);
+            //    }
+            //    else if(mollierGroupable is IUIMollierObject && this[i]?.GetType() == mollierGroupable.GetType() && ((IUIMollierObject)this[i]).Guid == ((IUIMollierObject)mollierGroupable).Guid)
+            //    {
+            //        RemoveAt(i);
+            //    }
+            //    else
+            //    {
+            //        i++;
+            //    }
+            //}
         }
 
         public void Update(IUIMollierObject uIMollierObject, bool includeNestedObjects = true)
@@ -100,8 +127,7 @@ namespace SAM.Core.Mollier
                 return;
             }
 
-            int i = 0;
-            while (i < Count)
+            for (int i = 0; i < Count; i++)
             {
                 if (includeNestedObjects && this[i] is MollierGroup)
                 {
@@ -112,11 +138,26 @@ namespace SAM.Core.Mollier
                 {
                     this[i] = uIMollierObject as IMollierGroupable;
                 }
-                else
-                {
-                    i++;
-                }
             }
+
+
+            //int i = 0;
+            //while (i < Count)
+            //{
+            //    if (includeNestedObjects && this[i] is MollierGroup)
+            //    {
+            //        ((MollierGroup)this[i]).Update(uIMollierObject, includeNestedObjects);
+            //    }
+
+            //    if (this[i]?.GetType() == uIMollierObject.GetType() && ((IUIMollierObject)this[i]).Guid == uIMollierObject.Guid)
+            //    {
+            //        this[i] = uIMollierObject as IMollierGroupable;
+            //    }
+            //    else
+            //    {
+            //        i++;
+            //    }
+            //}
         }
 
         /// <summary>

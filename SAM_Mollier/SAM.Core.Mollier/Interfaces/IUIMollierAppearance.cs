@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using SAM.Core;
+using System.Drawing;
 
 namespace SAM.Core.Mollier
 {

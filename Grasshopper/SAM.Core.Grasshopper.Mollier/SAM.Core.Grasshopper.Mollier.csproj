@@ -71,42 +71,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GooMollierGroup.cs" />
-    <Compile Include="Classes\GooMollierPoint.cs" />
     <Compile Include="Classes\GooMollierObject.cs" />
-    <Compile Include="Classes\GooMollierProcess.cs" />
     <Compile Include="Classes\MollierChartObject.cs" />
     <Compile Include="Component\SAMMollierCreateMollierGroup.cs" />
     <Compile Include="Component\SAMMollierDryBulbTemperatureByBypassFactor.cs" />
     <Compile Include="Component\SAMMollierEpsilonBySensibleAndLatentLoad.cs" />
     <Compile Include="Component\SAMMollierMollierPointProperty.cs" />
-    <Compile Include="Component\SAMMollierMollierPointsByPercentage.cs" />
-    <Compile Include="Component\SAMMollierApparatusDewPoint.cs" />
-    <Compile Include="Component\SAMMollierLoadByProcess.cs" />
     <Compile Include="Component\SAMMollierEpsilonByWaterTemperature.cs" />
     <Compile Include="Component\SAMMollierMassFlowRate.cs" />
     <Compile Include="Component\SAMMollierMoistureGainsMassFlow.cs" />
     <Compile Include="Component\SAMMollierEpsilon.cs" />
-    <Compile Include="Component\SAMMollierDryAirMassFlowByMollierPoint.cs" />
     <Compile Include="Component\SAMMollierDryAirMassFlow.cs" />
     <Compile Include="Component\SAMMollierDiagramTemperature.cs" />
-    <Compile Include="Component\SAMMollierHourlyValues.cs" />
     <Compile Include="Component\SAMMollierSpecificHeat.cs" />
     <Compile Include="Component\SAMMollierEpsilonBySteamTemperature.cs" />
     <Compile Include="Component\SAMMollierDryBulbTemperature.cs" />
-    <Compile Include="Component\SAMMollierPsychrometrics.cs" />
     <Compile Include="Convert\ToRhino\Point3d.cs" />
     <Compile Include="Convert\ToRhino\Polyline.cs" />
     <Compile Include="Create\MollierChartObject.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
-    <Compile Include="Modify\BakeGeometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Query\BoundingBox.cs" />
-    <Compile Include="Query\Name.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -135,6 +124,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
+    <Folder Include="Modify\" />
+    <Folder Include="Query\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SAM_Names.png" />
