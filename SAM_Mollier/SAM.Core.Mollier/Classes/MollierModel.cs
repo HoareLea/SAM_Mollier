@@ -160,7 +160,7 @@ namespace SAM.Core.Mollier
                 return;
             }
 
-            T mollierObject = GetUIMollierObject<T>(uIMollierObject.Guid, true);
+            T mollierObject = GetUIMollierObject<T>(uIMollierObject.Guid, false);
             if(mollierObject != null)
             {
                 dictionary[mollierObject.GetType()].Remove(mollierObject);
