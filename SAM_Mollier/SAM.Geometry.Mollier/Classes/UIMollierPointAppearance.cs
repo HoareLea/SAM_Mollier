@@ -21,10 +21,10 @@ namespace SAM.Geometry.Mollier
 
         }
 
-        public UIMollierPointAppearance(Color color, string label)
-            :base(color, label)
+        public UIMollierPointAppearance(Color color, Color labelColor, string label)
+            :base(color)
         {
-
+            UIMollierLabelAppearance = new UIMollierLabelAppearance(labelColor, label);
         }
 
         public UIMollierPointAppearance(UIMollierAppearance uIMollierAppearance)

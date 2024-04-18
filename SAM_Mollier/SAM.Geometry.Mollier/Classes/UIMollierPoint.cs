@@ -40,10 +40,10 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public UIMollierPoint(MollierPoint mollierPoint, Color color, string label)
+        public UIMollierPoint(MollierPoint mollierPoint, Color color, Color labelColor, string label)
             : base(mollierPoint)
         {
-            uIMollierPointAppearance = new UIMollierPointAppearance(color, label);
+            uIMollierPointAppearance = new UIMollierPointAppearance(color, labelColor, label);
         }
 
         public UIMollierPoint(MollierPoint mollierPoint, Color color)
