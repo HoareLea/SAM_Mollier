@@ -19,7 +19,9 @@ namespace SAM.Geometry.Grasshopper.Mollier
                 return ToRhino_Polyline((UIMollierProcess)mollierProcess, chartType, z);
             }
 
-            return ToRhino_Polyline(mollierProcess is UIMollierProcess ? ((UIMollierProcess)mollierProcess).MollierProcess : mollierProcess as MollierProcess, chartType, z);
+            return Core.Grasshopper.Mollier.Convert.ToRhino_Polyline(mollierProcess, chartType, z);
+
+            //return ToRhino_Polyline(mollierProcess is UIMollierProcess ? ((UIMollierProcess)mollierProcess).MollierProcess : mollierProcess as MollierProcess, chartType, z);
         }
 
         public static Polyline ToRhino_Polyline(this UIMollierProcess uIMollierProcess, ChartType chartType, double z = 0)
