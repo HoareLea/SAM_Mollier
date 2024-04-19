@@ -3,6 +3,8 @@
     public static partial class Query
     {
         //TO DO confirm this equation
+        //Zero.VapourizationLatentHeat + Zero.SpecificHeat_WaterVapour * (TemperatureConductivity - temp_ref) where temp_ref = 0
+        //this should be used to more accurately show latent change that may influence also temperature
         public static double Epsilon_BySensibleAndLatentGain(double sensibleGain, double latentGain)
         {
             if (latentGain < 0)
