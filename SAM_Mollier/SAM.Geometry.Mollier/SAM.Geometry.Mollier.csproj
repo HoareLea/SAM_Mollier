@@ -62,8 +62,12 @@
     <Compile Include="Classes\UIMollierPointAppearance.cs" />
     <Compile Include="Classes\UIMollierProcess.cs" />
     <Compile Include="Classes\UIMollierZone.cs" />
+    <Compile Include="Create\Reference.cs" />
+    <Compile Include="Enums\ProcessReferenceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\UIMollierObject.cs" />
     <Compile Include="Query\Color.cs" />
+    <Compile Include="Query\UIMollierPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

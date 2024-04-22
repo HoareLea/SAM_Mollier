@@ -27,6 +27,12 @@ namespace SAM.Geometry.Mollier
             UIMollierLabelAppearance = new UIMollierLabelAppearance(labelColor, label);
         }
 
+        public UIMollierPointAppearance(UIMollierLabelAppearance uIMollierLabelAppearance)
+            : base()
+        {
+            UIMollierLabelAppearance = uIMollierLabelAppearance == null ? null : new UIMollierLabelAppearance(uIMollierLabelAppearance);
+        }
+
         public UIMollierPointAppearance(UIMollierAppearance uIMollierAppearance)
             : base(uIMollierAppearance)
         {

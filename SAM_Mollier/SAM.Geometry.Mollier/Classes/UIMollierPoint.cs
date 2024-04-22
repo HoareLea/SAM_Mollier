@@ -11,7 +11,7 @@ namespace SAM.Geometry.Mollier
 
         private UIMollierPointAppearance uIMollierPointAppearance;
 
-        public IUIMollierAppearance UIMollierAppearance
+        public virtual IUIMollierAppearance UIMollierAppearance
         {
             get
             {
@@ -81,6 +81,12 @@ namespace SAM.Geometry.Mollier
             FromJObject(jObject);
         }
 
+        public UIMollierPoint(UIMollierProcess uIMollierProcess, ProcessReferenceType processReferenceType)
+            :this(Query.UIMollierPoint(uIMollierProcess, processReferenceType))
+        {
+
+        }
+
         public System.Guid Guid
         {
             get
@@ -89,7 +95,7 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null || !base.FromJObject(jObject))
             {
@@ -109,7 +115,7 @@ namespace SAM.Geometry.Mollier
             return true;
         }
         
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject result = base.ToJObject();
             if (result == null)

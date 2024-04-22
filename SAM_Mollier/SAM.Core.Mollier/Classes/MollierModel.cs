@@ -251,22 +251,71 @@ namespace SAM.Core.Mollier
                 return default;
             }
 
-            List<IMollierObject> mollierObjects = GetMollierObjects(typeof(T), includeNestedObjects);
-            if(mollierObjects == null || mollierObjects.Count == 0)
+            IUIMollierObject uIMollierObject = GetUIMollierObject(typeof(T), guid, includeNestedObjects);
+            if(uIMollierObject == null)
             {
                 return default;
             }
 
-            foreach(IMollierObject mollierObject in mollierObjects)
+            if(!(uIMollierObject is T))
             {
-                if(!(mollierObject is T))
+                return default;
+            }
+
+            return (T)uIMollierObject;
+
+            //List<IMollierObject> mollierObjects = GetMollierObjects(typeof(T), includeNestedObjects);
+            //if(mollierObjects == null || mollierObjects.Count == 0)
+            //{
+            //    return default;
+            //}
+
+            //foreach(IMollierObject mollierObject in mollierObjects)
+            //{
+            //    if(!(mollierObject is T))
+            //    {
+            //        continue;
+            //    }
+
+            //    T uIMollierObject = (T)mollierObject;
+
+            //    if(uIMollierObject.Guid == guid)
+            //    {
+            //        return uIMollierObject;
+            //    }
+            //}
+
+            //return default;
+        }
+
+        public IUIMollierObject GetUIMollierObject(Type type, Guid guid, bool includeNestedObjects = true)
+        {
+            if (dictionary == null || guid == Guid.Empty || type == null)
+            {
+                return default;
+            }
+
+            List<IMollierObject> mollierObjects = GetMollierObjects(type, includeNestedObjects);
+            if (mollierObjects == null || mollierObjects.Count == 0)
+            {
+                return default;
+            }
+
+            foreach (IMollierObject mollierObject in mollierObjects)
+            {
+                if (!(mollierObject is IUIMollierObject))
                 {
                     continue;
                 }
 
-                T uIMollierObject = (T)mollierObject;
-                
-                if(uIMollierObject.Guid == guid)
+                if(!type.IsAssignableFrom(mollierObject.GetType()))
+                {
+                    continue;
+                }
+
+                IUIMollierObject uIMollierObject = (IUIMollierObject)mollierObject;
+
+                if (uIMollierObject.Guid == guid)
                 {
                     return uIMollierObject;
                 }
@@ -279,7 +328,5 @@ namespace SAM.Core.Mollier
         {
             return GetMollierObjects(typeof(T), includeNestedObjects)?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
         }
-
-
     }
 }
