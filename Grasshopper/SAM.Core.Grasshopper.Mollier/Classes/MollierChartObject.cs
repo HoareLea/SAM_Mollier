@@ -57,7 +57,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
         }
 
-        public UIMollierAppearance UIMollierAppearance
+        public IUIMollierAppearance UIMollierAppearance
         {
             get
             {

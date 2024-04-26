@@ -12,12 +12,14 @@ namespace SAM.Core.Mollier
         {
             dictionary = new Dictionary<Type, List<IMollierObject>>();
         }
+        
         public MollierModel(string name, MollierSettings mollierSettings)
             :base(name)
         {
             this.mollierSettings = mollierSettings == null ? null : new MollierSettings(mollierSettings);
             dictionary = new Dictionary<Type, List<IMollierObject>>();
         }
+        
         public MollierModel(string name, MollierSettings mollierSettings, Dictionary<Type, List<IMollierObject>> dictionary)
             :base(name)
         {
@@ -40,6 +42,7 @@ namespace SAM.Core.Mollier
 
             return true;
         }
+        
         public bool AddRange(IEnumerable<IMollierObject> mollierObjects)
         {
             if(mollierObjects == null)
@@ -53,6 +56,7 @@ namespace SAM.Core.Mollier
             }
             return true;
         }
+        
         public bool Remove(IMollierObject mollierObject, bool includeNestedObjects = true)
         {
             if(mollierObject == null)
@@ -83,6 +87,7 @@ namespace SAM.Core.Mollier
             }
             return false;
         }
+        
         public void Regenerate()
         {
             if(dictionary == null || dictionary.Count == 0)
@@ -103,6 +108,7 @@ namespace SAM.Core.Mollier
                 Update(objectsPair.Item1, objectsPair.Item2, includeNestedObjects);
             }
         }
+        
         /// <summary>
         /// Replaces every occurrence of the MollierObject_Old by mollierObject_New
         /// Method has an additional option to search any depth trough all elements
@@ -124,7 +130,7 @@ namespace SAM.Core.Mollier
                 {
                     continue;
                 }
-                if(includeNestedObjects && (keyValuePair.Key == typeof(MollierGroup) || keyValuePair.Key == typeof(UIMollierGroup)))
+                if(includeNestedObjects && (typeof(MollierGroup).IsAssignableFrom(keyValuePair.Key)))
                 {
                     foreach(MollierGroup mollierGroup in keyValuePair.Value)
                     {
@@ -147,10 +153,39 @@ namespace SAM.Core.Mollier
             }
         }
 
+        public void Update<T>(T uIMollierObject, bool includeNestedObjects = true) where T : IUIMollierObject
+        {
+            if (uIMollierObject == null)
+            {
+                return;
+            }
+
+            T mollierObject = GetUIMollierObject<T>(uIMollierObject.Guid, false);
+            if(mollierObject != null)
+            {
+                dictionary[mollierObject.GetType()].Remove(mollierObject);
+                dictionary[uIMollierObject.GetType()].Add(uIMollierObject);
+                if (!includeNestedObjects)
+                {
+                    return;
+                }
+            }
+
+            List<IMollierGroup> mollierGroups = GetMollierObjects<IMollierGroup>();
+            if(mollierGroups != null)
+            {
+                foreach (IMollierGroup mollierGroup in mollierGroups)
+                {
+                    ((MollierGroup)mollierGroup).Update(uIMollierObject, true);
+                }
+            }
+        }
+
         public void Clear()
         {
             dictionary?.Clear();
         }
+        
         public void Clear<T>() where T: IMollierGroupable
         {
             if (dictionary != null)
@@ -165,6 +200,7 @@ namespace SAM.Core.Mollier
                 }
             }
         }
+        
         public List<IMollierObject> GetMollierObjects(Type type, bool includeNestedObjects = true)
         {
             if (dictionary == null || dictionary.Count == 0 || type == null)
@@ -180,7 +216,7 @@ namespace SAM.Core.Mollier
                     continue;
                 }
 
-                if((keyValuePair.Key.IsAssignableFrom(typeof(MollierGroup)) || keyValuePair.Key.IsAssignableFrom(typeof(UIMollierGroup))) && includeNestedObjects)
+                if(typeof(MollierGroup).IsAssignableFrom(keyValuePair.Key) && includeNestedObjects)
                 {
                     List<IMollierObject> mollierObjects = keyValuePair.Value;
                     foreach (IMollierObject mollierObject in mollierObjects)
@@ -207,11 +243,90 @@ namespace SAM.Core.Mollier
 
             return result;
         }
+
+        public T GetUIMollierObject<T>(Guid guid, bool includeNestedObjects = true) where T : IUIMollierObject
+        {
+            if(dictionary == null || guid == Guid.Empty)
+            {
+                return default;
+            }
+
+            IUIMollierObject uIMollierObject = GetUIMollierObject(typeof(T), guid, includeNestedObjects);
+            if(uIMollierObject == null)
+            {
+                return default;
+            }
+
+            if(!(uIMollierObject is T))
+            {
+                return default;
+            }
+
+            return (T)uIMollierObject;
+
+            //List<IMollierObject> mollierObjects = GetMollierObjects(typeof(T), includeNestedObjects);
+            //if(mollierObjects == null || mollierObjects.Count == 0)
+            //{
+            //    return default;
+            //}
+
+            //foreach(IMollierObject mollierObject in mollierObjects)
+            //{
+            //    if(!(mollierObject is T))
+            //    {
+            //        continue;
+            //    }
+
+            //    T uIMollierObject = (T)mollierObject;
+
+            //    if(uIMollierObject.Guid == guid)
+            //    {
+            //        return uIMollierObject;
+            //    }
+            //}
+
+            //return default;
+        }
+
+        public IUIMollierObject GetUIMollierObject(Type type, Guid guid, bool includeNestedObjects = true)
+        {
+            if (dictionary == null || guid == Guid.Empty || type == null)
+            {
+                return default;
+            }
+
+            List<IMollierObject> mollierObjects = GetMollierObjects(type, includeNestedObjects);
+            if (mollierObjects == null || mollierObjects.Count == 0)
+            {
+                return default;
+            }
+
+            foreach (IMollierObject mollierObject in mollierObjects)
+            {
+                if (!(mollierObject is IUIMollierObject))
+                {
+                    continue;
+                }
+
+                if(!type.IsAssignableFrom(mollierObject.GetType()))
+                {
+                    continue;
+                }
+
+                IUIMollierObject uIMollierObject = (IUIMollierObject)mollierObject;
+
+                if (uIMollierObject.Guid == guid)
+                {
+                    return uIMollierObject;
+                }
+            }
+
+            return default;
+        }
+
         public List<T> GetMollierObjects<T>(bool includeNestedObjects = true) where T : IMollierObject
         {
             return GetMollierObjects(typeof(T), includeNestedObjects)?.FindAll(x => x is T)?.ConvertAll(x => (T)(object)x);
         }
-
-
     }
 }

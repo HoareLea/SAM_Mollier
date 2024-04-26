@@ -11,6 +11,7 @@ using SAM.Core.Mollier;
 using SAM.Core;
 using Grasshopper;
 using Grasshopper.Kernel.Data;
+using SAM.Geometry.Grasshopper.Mollier;
 
 namespace SAM.Analytical.Grasshopper.Mollier
 {
