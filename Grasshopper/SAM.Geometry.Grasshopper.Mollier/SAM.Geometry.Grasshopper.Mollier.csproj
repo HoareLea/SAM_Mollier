@@ -34,29 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RhinoCommon.6.32.20340.21001\lib\net45\Eto.dll</HintPath>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </Reference>
-    <Reference Include="GH_IO, Version=6.32.20340.21000, Culture=neutral, PublicKeyToken=6a29997d2e6b4f97, processorArchitecture=MSIL">
-      <ExcludeAssets>runtime</ExcludeAssets>
-      <HintPath>..\..\packages\Grasshopper.6.32.20340.21001\lib\net45\GH_IO.dll</HintPath>
-    </Reference>
-    <Reference Include="Grasshopper, Version=6.32.20340.21000, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
-      <ExcludeAssets>runtime</ExcludeAssets>
-      <HintPath>..\..\packages\Grasshopper.6.32.20340.21001\lib\net45\Grasshopper.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.UI, Version=6.32.20340.21000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <ExcludeAssets>runtime</ExcludeAssets>
-      <HintPath>..\..\packages\RhinoCommon.6.32.20340.21001\lib\net45\Rhino.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="RhinoCommon, Version=6.32.20340.21000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <ExcludeAssets>runtime</ExcludeAssets>
-      <HintPath>..\..\packages\RhinoCommon.6.32.20340.21001\lib\net45\RhinoCommon.dll</HintPath>
-    </Reference>
     <Reference Include="SAM.Core, Version=1.0.8866.22088, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SAM\build\SAM.Core.dll</HintPath>
@@ -121,7 +98,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Resources\Filter24.png" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +127,14 @@
   <ItemGroup>
     <None Include="Resources\SAM_Small.png" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Grasshopper">
+      <Version>6.32.20340.21001</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)\$(ProjectName).gha"
@@ -171,13 +155,4 @@ xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\Use
 
 </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\..\packages\RhinoCommon.6.32.20340.21001\build\net45\RhinoCommon.targets" Condition="Exists('..\..\packages\RhinoCommon.6.32.20340.21001\build\net45\RhinoCommon.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\RhinoCommon.6.32.20340.21001\build\net45\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\RhinoCommon.6.32.20340.21001\build\net45\RhinoCommon.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Grasshopper.6.32.20340.21001\build\net45\Grasshopper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Grasshopper.6.32.20340.21001\build\net45\Grasshopper.targets'))" />
-  </Target>
-  <Import Project="..\..\packages\Grasshopper.6.32.20340.21001\build\net45\Grasshopper.targets" Condition="Exists('..\..\packages\Grasshopper.6.32.20340.21001\build\net45\Grasshopper.targets')" />
 </Project>
