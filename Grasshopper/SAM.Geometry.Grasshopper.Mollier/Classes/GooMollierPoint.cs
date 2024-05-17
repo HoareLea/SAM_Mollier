@@ -46,6 +46,11 @@ namespace SAM.Geometry.Grasshopper.Mollier
             return base.CastTo(ref target);
         }
 
+        public override bool CastFrom(object source)
+        {
+            return base.CastFrom(source);
+        }
+
         public override IGH_Goo Duplicate()
         {
             return new GooMollierPoint(Value);
