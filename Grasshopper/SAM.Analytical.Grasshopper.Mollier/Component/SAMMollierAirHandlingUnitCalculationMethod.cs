@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
         /// </summary>
         public SAMMollierAirHandlingUnitCalculationMethod()
           : base("SAMMollier.AirHandlingUnitCalculationMethod", "SAMMollier.AirHandlingUnitCalculationMethod",
-              "Select Air Handling Unit Calculation Method",
+              "Select Air Handling Unit Calculation Method \n *connect to SAMAnalytical.ShowDiagramSpace",
               "SAM", "Mollier")
         {
         }
