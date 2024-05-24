@@ -165,7 +165,7 @@ namespace SAM.Analytical.Mollier
                 //HEATING (FAN)
                 double dryBulbTemperature_Fan = start.DryBulbTemperature + Core.Mollier.Query.PickupTemperature(spf);
 
-                FanProcess fanProcess = Core.Mollier.Create.FanProcess(start, dryBulbTemperature_Fan);
+                FanProcess fanProcess = Core.Mollier.Create.FanProcess_ByDryBulbTemperature(start, dryBulbTemperature_Fan);
                 if (fanProcess != null && !fanProcess.Start.AlmostEqual(fanProcess.End))
                 {
                     mollierGroup_Winter.Add(fanProcess);

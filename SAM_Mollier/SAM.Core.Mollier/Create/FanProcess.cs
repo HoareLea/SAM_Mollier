@@ -12,6 +12,22 @@
             return new FanProcess(start, new MollierPoint(start.PickupTemperature(spf), start.HumidityRatio, start.Pressure));
         }
 
+        public static FanProcess FanProcess_ByDryBulbTemperature(this MollierPoint start, double dryBulbTemperature)
+        {
+            if (start == null || double.IsNaN(dryBulbTemperature))
+            {
+                return null;
+            }
+
+            HeatingProcess heatingProcess = HeatingProcess_ByTemperatureDifference(start, System.Math.Abs(start.DryBulbTemperature - dryBulbTemperature));
+            if(heatingProcess == null)
+            {
+                return null;
+            }
+
+            return new FanProcess(start, heatingProcess.End);
+        }
+
         /// <summary>
         /// 
         /// </summary>
