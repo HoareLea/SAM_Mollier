@@ -263,12 +263,12 @@ namespace SAM.Analytical.Mollier
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilFluidFlowTemperature, out double coolingCoilFluidFlowTemperature);
                 if (!double.IsNaN(coolingCoilContactFactor))
                 {
-                    double temperatureDifference = 0;
-                    if (supplyAirFlow == outsideSupplyAirFlow)
-                    {
-                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
-                        temperatureDifference = System.Math.Abs(undefinedProcess.Start.DryBulbTemperature - undefinedProcess.End.DryBulbTemperature);
-                    }
+                    //double temperatureDifference = 0;
+                    //if (supplyAirFlow == outsideSupplyAirFlow)
+                    //{
+                    //    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
+                    //    temperatureDifference = System.Math.Abs(undefinedProcess.Start.DryBulbTemperature - undefinedProcess.End.DryBulbTemperature);
+                    //}
 
                     //double dryBulbTemperature = summerSupplyTempearture - Query.PickupTemperature(summerSupplyTempearture, spf) - temperatureDifference;
 
@@ -341,7 +341,7 @@ namespace SAM.Analytical.Mollier
                     }
                 }
 
-                airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTemperature);
+                //airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTemperature);
 
                 //HEATING (FAN)
                 double dryBulbTemperature_Fan = start.DryBulbTemperature + Core.Mollier.Query.PickupTemperature(spf);
