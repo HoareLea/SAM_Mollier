@@ -263,16 +263,18 @@ namespace SAM.Analytical.Mollier
                 airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.CoolingCoilFluidFlowTemperature, out double coolingCoilFluidFlowTemperature);
                 if (!double.IsNaN(coolingCoilContactFactor))
                 {
-                    //double temperatureDifference = 0;
-                    //if (supplyAirFlow == outsideSupplyAirFlow)
-                    //{
-                    //    UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
-                    //    temperatureDifference = System.Math.Abs(undefinedProcess.Start.DryBulbTemperature - undefinedProcess.End.DryBulbTemperature);
-                    //}
+                    airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTemperature);
 
-                    //double dryBulbTemperature = summerSupplyTempearture - Query.PickupTemperature(summerSupplyTempearture, spf) - temperatureDifference;
+                    double temperatureDifference = 0;
+                    if (supplyAirFlow == outsideSupplyAirFlow)
+                    {
+                        UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
+                        temperatureDifference = System.Math.Abs(undefinedProcess.Start.DryBulbTemperature - undefinedProcess.End.DryBulbTemperature);
+                    }
 
-                    double dryBulbTemperature = !double.IsNaN(summerCoolingCoilOffTemperature) ? summerCoolingCoilOffTemperature : room_Summer.DewPointTemperature();
+                    double dryBulbTemperature = summerSupplyTemperature - Core.Mollier.Query.PickupTemperature(spf) - temperatureDifference;
+
+                    //double dryBulbTemperature = !double.IsNaN(summerCoolingCoilOffTemperature) ? summerCoolingCoilOffTemperature : room_Summer.DewPointTemperature();
 
                     CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess(start, dryBulbTemperature, coolingCoilContactFactor);
                     //CoolingProcess coolingProcess = Core.Mollier.Create.CoolingProcess_ByMediumAndDryBulbTemperature(start, coolingCoilFluidFlowTemperature, coolingCoilFluidReturnTemperature, dryBulbTemperature);
@@ -340,8 +342,6 @@ namespace SAM.Analytical.Mollier
                         }
                     }
                 }
-
-                //airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerSupplyTemperature, out double summerSupplyTemperature);
 
                 //HEATING (FAN)
                 double dryBulbTemperature_Fan = start.DryBulbTemperature + Core.Mollier.Query.PickupTemperature(spf);
