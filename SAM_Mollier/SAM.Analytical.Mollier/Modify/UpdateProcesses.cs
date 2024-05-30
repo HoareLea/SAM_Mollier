@@ -316,8 +316,13 @@ namespace SAM.Analytical.Mollier
                 //HEATING COIL SUMMER
                 if (airHandlingUnitResult.TryGetValue(AirHandlingUnitResultParameter.SummerHeatingCoil, out bool summerHeatingCoil) && summerHeatingCoil)
                 {
+                    //Pick up in tmperaeture from Room by cooling load
                     UndefinedProcess undefinedProcess = Core.Mollier.Create.UndefinedProcess(start, supplyAirFlow, summerSensibleLoad, summerLatentLoad);
                     double temperatureDifference = System.Math.Abs(undefinedProcess.Start.DryBulbTemperature - undefinedProcess.End.DryBulbTemperature);
+
+                    //TODO 2024-05-30 implement two methods
+                    // if FixedSupplyTemperature   dt = 15 - 9 - 1 = 5 we do not take into account room pick up used for OSA
+                    //temperatureDifference = summerSupplyTemperature - start.DryBulbTemperature - Core.Mollier.Query.PickupTemperature(spf);
 
                     temperatureDifference = summerSpaceTemperature - start.DryBulbTemperature - Core.Mollier.Query.PickupTemperature(spf) - temperatureDifference;
                     if(temperatureDifference > 0)
