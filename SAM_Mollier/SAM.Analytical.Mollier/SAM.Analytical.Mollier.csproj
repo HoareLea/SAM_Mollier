@@ -1,35 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0C3F9B06-7679-4E07-AF19-2023743C5B83}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Analytical.Mollier</RootNamespace>
-    <AssemblyName>SAM.Analytical.Mollier</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyTitle>SAM.Analytical.Mollier</AssemblyTitle>
+    <Product>SAM.Analytical.Mollier</Product>
+    <Copyright>Copyright ©  2022</Copyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\build\SAM.Analytical.Mollier.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SAM.Analytical, Version=1.0.8300.24985, Culture=neutral, processorArchitecture=MSIL">
@@ -51,53 +38,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SAM\build\SAM.Weather.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\AirHandlingUnitResult.cs" />
-    <Compile Include="Create\SimpleEquipment.cs" />
-    <Compile Include="Convert\ToSAM\Polygon2D.cs" />
-    <Compile Include="Create\AirHandlingUnit.cs" />
-    <Compile Include="Convert\ToSAM\Segment2D.cs" />
-    <Compile Include="Convert\ToSAM\Point2D.cs" />
-    <Compile Include="Create\AirHandlingUnitResult.cs" />
-    <Compile Include="Enums\AirHandlingUnitCalculationMethod.cs" />
-    <Compile Include="Enums\Parameter\SpaceParameter.cs" />
-    <Compile Include="Query\SensibleLoad.cs" />
-    <Compile Include="Query\LatentLoad.cs" />
-    <Compile Include="Query\SimpleEquipmentTypes.cs" />
-    <Compile Include="Query\SimpleEquipmentType.cs" />
-    <Compile Include="Query\TryGetInfiltrationGains.cs" />
-    <Compile Include="Query\ApparatusDewPoint.cs" />
-    <Compile Include="Query\SummerSpaceRelativeHumidity.cs" />
-    <Compile Include="Query\SummerSupplyFanTemperature.cs" />
-    <Compile Include="Query\SummerSupplyFanRelativeHumidity.cs" />
-    <Compile Include="Query\LinearEquation.cs" />
-    <Compile Include="Enums\Parameter\AirHandlingUnitResultParameter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\EvaporatingPoint.cs" />
-    <Compile Include="Query\ContactFactor.cs" />
-    <Compile Include="Modify\UpdateProcesses.cs" />
-    <Compile Include="Query\SaturatedAirPolynominalEquation.cs" />
-    <Compile Include="Query\Source.cs" />
+    <ProjectReference Include="..\SAM.Core.Mollier\SAM.Core.Mollier.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SAM.Core.Mollier\SAM.Core.Mollier.csproj">
-      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
-      <Name>SAM.Core.Mollier</Name>
-    </ProjectReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

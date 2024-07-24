@@ -1,27 +1,25 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SAM_Mollier", "SAM_Mollier", "{4FDEDAD6-FCEC-4426-9A3B-086BF3C99CC0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dynamo", "Dynamo", "{A81D37DE-E647-4EF9-84B4-478BFD860184}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Grasshopper", "Grasshopper", "{B365D5A7-F4F1-4C45-9565-5F6CFC1134A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core.Grasshopper.Mollier", "Grasshopper\SAM.Core.Grasshopper.Mollier\SAM.Core.Grasshopper.Mollier.csproj", "{EA20D57F-BB3E-447A-80A2-14C04BAA665F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core.Mollier", "SAM_Mollier\SAM.Core.Mollier\SAM.Core.Mollier.csproj", "{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Core.Mollier", "SAM_Mollier\SAM.Core.Mollier\SAM.Core.Mollier.csproj", "{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Mollier", "SAM_Mollier\SAM.Analytical.Mollier\SAM.Analytical.Mollier.csproj", "{0C3F9B06-7679-4E07-AF19-2023743C5B83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Analytical.Mollier", "SAM_Mollier\SAM.Analytical.Mollier\SAM.Analytical.Mollier.csproj", "{0C3F9B06-7679-4E07-AF19-2023743C5B83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Grasshopper.Mollier", "Grasshopper\SAM.Analytical.Grasshopper.Mollier\SAM.Analytical.Grasshopper.Mollier.csproj", "{BFE81D91-D95F-4644-9B0B-2970B95FF8ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Mollier", "SAM_Mollier\SAM.Weather.Mollier\SAM.Weather.Mollier.csproj", "{DE25EB52-8244-4052-90EE-71D9E9A0E773}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Weather.Mollier", "SAM_Mollier\SAM.Weather.Mollier\SAM.Weather.Mollier.csproj", "{DE25EB52-8244-4052-90EE-71D9E9A0E773}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Grasshopper.Mollier", "Grasshopper\SAM.Weather.Grasshopper.Mollier\SAM.Weather.Grasshopper.Mollier.csproj", "{87230A44-B9F2-4FB9-9069-47471C45870E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Geometry.Mollier", "SAM_Mollier\SAM.Geometry.Mollier\SAM.Geometry.Mollier.csproj", "{BB3AF31C-DD5A-40E5-A1C2-FA1C5B21DE93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Geometry.Mollier", "SAM_Mollier\SAM.Geometry.Mollier\SAM.Geometry.Mollier.csproj", "{BB3AF31C-DD5A-40E5-A1C2-FA1C5B21DE93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Geometry.Grasshopper.Mollier", "Grasshopper\SAM.Geometry.Grasshopper.Mollier\SAM.Geometry.Grasshopper.Mollier.csproj", "{18F89A09-CF2B-4806-84F3-FA89097DF0A6}"
 EndProject

@@ -1,196 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Core.Mollier</RootNamespace>
-    <AssemblyName>SAM.Core.Mollier</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyTitle>SAM</AssemblyTitle>
+    <Product>SAM</Product>
+    <Copyright>Copyright ©  2020</Copyright>
+    <AssemblyVersion>1.0.%2a</AssemblyVersion>
+    <FileVersion>1.0.%2a</FileVersion>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\build\SAM.Core.Mollier.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Convert\**" />
+    <Compile Remove="Modify\**" />
+    <EmbeddedResource Remove="Convert\**" />
+    <EmbeddedResource Remove="Modify\**" />
+    <None Remove="Convert\**" />
+    <None Remove="Modify\**" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="SAM.Core, Version=1.0.8301.22688, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SAM\build\SAM.Core.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\ConstantEnthalpyCurve.cs" />
-    <Compile Include="Classes\ConstantTemperatureCurve.cs" />
-    <Compile Include="Classes\ConstantValueCurve.cs" />
-    <Compile Include="Classes\FanProcess.cs" />
-    <Compile Include="Classes\MollierGroup.cs" />
-    <Compile Include="Classes\MollierCurve.cs" />
-    <Compile Include="Classes\MollierSensibleHeatRatioLine.cs" />
-    <Compile Include="Classes\MollierModel.cs" />
-    <Compile Include="Classes\MollierLine.cs" />
-    <Compile Include="Classes\RoomProcess.cs" />
-    <Compile Include="Classes\SpecificProcess.cs" />
-    <Compile Include="Classes\MollierRange.cs" />
-    <Compile Include="Classes\MollierSettings.cs" />
-    <Compile Include="Classes\MollierZone.cs" />
-    <Compile Include="Classes\SteamHumidificationProcess.cs" />
-    <Compile Include="Classes\IsotermicHumidificationProcess.cs" />
-    <Compile Include="Classes\CoolingProcess.cs" />
-    <Compile Include="Classes\AdiabaticHumidificationProcess.cs" />
-    <Compile Include="Classes\HumidificationProcess.cs" />
-    <Compile Include="Classes\UndefinedProcess.cs" />
-    <Compile Include="Classes\MixingProcess.cs" />
-    <Compile Include="Classes\HeatRecoveryProcess.cs" />
-    <Compile Include="Classes\MollierProcess.cs" />
-    <Compile Include="Classes\HeatingProcess.cs" />
-    <Compile Include="Classes\VisibilitySettings.cs" />
-    <Compile Include="Create\ConstantEnthalpyCurves.cs" />
-    <Compile Include="Create\ConstantTemperatureCurve.cs" />
-    <Compile Include="Create\ConstantTemperatureCurves.cs" />
-    <Compile Include="Create\FanProcess.cs" />
-    <Compile Include="Create\MollierRange.cs" />
-    <Compile Include="Create\HeatRecoveryProcess .cs" />
-    <Compile Include="Create\SteamHumidificationProcess.cs" />
-    <Compile Include="Create\IsotermicHumidificationProcess.cs" />
-    <Compile Include="Create\AdiabaticHumidificationProcess.cs" />
-    <Compile Include="Create\RoomProcess.cs" />
-    <Compile Include="Create\UndefinedProcess.cs" />
-    <Compile Include="Create\MixingProcess.cs" />
-    <Compile Include="Create\CoolingProcess.cs" />
-    <Compile Include="Create\MollierPoint.cs" />
-    <Compile Include="Create\HeatingProcess.cs" />
-    <Compile Include="Enums\ChartParameterType.cs" />
-    <Compile Include="Enums\MollierPointProperty.cs" />
-    <Compile Include="Enums\ChartDataType.cs" />
-    <Compile Include="Enums\Phase.cs" />
-    <Compile Include="Enums\MollierProcessType.cs" />
-    <Compile Include="Interfaces\IChartVisibilitySetting.cs" />
-    <Compile Include="Interfaces\IMollierGroupable.cs" />
-    <Compile Include="Interfaces\IMollierCurve.cs" />
-    <Compile Include="Interfaces\IMollierZone.cs" />
-    <Compile Include="Interfaces\IMollierObject.cs" />
-    <Compile Include="Interfaces\IMollierGroup.cs" />
-    <Compile Include="Interfaces\IMollierPoint.cs" />
-    <Compile Include="Interfaces\IMollierProcess.cs" />
-    <Compile Include="Enums\ChartType.cs" />
-    <Compile Include="Classes\MollierPoint.cs" />
-    <Compile Include="Interfaces\IUIMollierAppearance.cs" />
-    <Compile Include="Interfaces\IUIMollierObject.cs" />
-    <Compile Include="Interfaces\IUserVisibilitySetting.cs" />
-    <Compile Include="Interfaces\IVisibilitySetting.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\ChartParameterType.cs" />
-    <Compile Include="Query\EndByEfficiency.cs" />
-    <Compile Include="Query\Group.cs" />
-    <Compile Include="Query\Next.cs" />
-    <Compile Include="Query\LatentLoad.cs" />
-    <Compile Include="Query\PickupTemperature.cs" />
-    <Compile Include="Query\Pressures.cs" />
-    <Compile Include="Query\Sort.cs" />
-    <Compile Include="Query\AlmostEqual.cs" />
-    <Compile Include="Query\MollierProcesses.cs" />
-    <Compile Include="Query\MollierPoints.cs" />
-    <Compile Include="Query\Count.cs" />
-    <Compile Include="Query\Connected.cs" />
-    <Compile Include="Query\Intersections.cs" />
-    <Compile Include="Query\InRange.cs" />
-    <Compile Include="Query\Mid.cs" />
-    <Compile Include="Query\On.cs" />
-    <Compile Include="Query\Closest.cs" />
-    <Compile Include="Create\ConstantValueCurves.cs" />
-    <Compile Include="Create\ConstantValueCurve.cs" />
-    <Compile Include="Query\Intersection.cs" />
-    <Compile Include="Query\MoistureGainsMassFlow.cs" />
-    <Compile Include="Query\SaturationDiagramPoint.cs" />
-    <Compile Include="Query\MassFlow.cs" />
-    <Compile Include="Query\Epsilon.cs" />
-    <Compile Include="Query\SpecificHeat.cs" />
-    <Compile Include="Query\SensibleHeatRatio.cs" />
-    <Compile Include="Query\LogarithmicMeanTemperatureDifference.cs" />
-    <Compile Include="Query\VapourDensity.cs" />
-    <Compile Include="Query\SaturationDegree.cs" />
-    <Compile Include="Query\Efficiency.cs" />
-    <Compile Include="Query\ProcessMollierPoints.cs" />
-    <Compile Include="Query\ShortenLineByEndPoints.cs" />
-    <Compile Include="Query\Project.cs" />
-    <Compile Include="Query\DewPoint.cs" />
-    <Compile Include="Query\TemperatureDifference.cs" />
-    <Compile Include="Query\Distance.cs" />
-    <Compile Include="Query\ApparatusDewPoint.cs" />
-    <Compile Include="Query\Elevation.cs" />
-    <Compile Include="Query\SaturationHumidityRatio.cs" />
-    <Compile Include="Query\SaturationMollierPoint.cs" />
-    <Compile Include="Query\SaturationTemperature.cs" />
-    <Compile Include="Query\Duty.cs" />
-    <Compile Include="Query\TotalLoad.cs" />
-    <Compile Include="Query\SensibleLoad.cs" />
-    <Compile Include="Query\PrandtlNumber.cs" />
-    <Compile Include="Query\TemperatureConductivity.cs" />
-    <Compile Include="Query\KinematicViscosity.cs" />
-    <Compile Include="Query\PartialDryAirPressure.cs" />
-    <Compile Include="Query\DynamicViscosity.cs" />
-    <Compile Include="Query\Pressure.cs" />
-    <Compile Include="Query\ThermalConductivity.cs" />
-    <Compile Include="Query\SpecificVolume.cs" />
-    <Compile Include="Query\SpecificHeatCapacity.cs" />
-    <Compile Include="Query\DewPointTemperature.cs" />
-    <Compile Include="Query\WetBulbTemperature.cs" />
-    <Compile Include="Query\DryBulbTemperature.cs" />
-    <Compile Include="Query\Density.cs" />
-    <Compile Include="Query\Enthalpy.cs" />
-    <Compile Include="Query\DiagramTemperature.cs" />
-    <Compile Include="Query\RelativeHumidity.cs" />
-    <Compile Include="Query\HumidityRatio.cs" />
-    <Compile Include="Query\SaturationVapourPressure.cs" />
-    <Compile Include="Query\PartialVapourPressure.cs" />
-    <Compile Include="Variables\Default.cs" />
-    <Compile Include="Variables\Unit.cs" />
-    <Compile Include="Variables\Limit.cs" />
-    <Compile Include="Variables\Constant.cs" />
-    <Compile Include="Variables\Const20C.cs" />
-    <Compile Include="Variables\Zero.cs" />
-    <Compile Include="Variables\Standard.cs" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Convert\" />
-    <Folder Include="Modify\" />
+    <Compile Remove="Create\HeatRecoveryProcess.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NETStandard.Library">
-      <Version>2.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
