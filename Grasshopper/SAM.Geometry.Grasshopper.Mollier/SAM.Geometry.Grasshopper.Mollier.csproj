@@ -1,37 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{18F89A09-CF2B-4806-84F3-FA89097DF0A6}</ProjectGuid>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Geometry.Grasshopper.Mollier</RootNamespace>
-    <AssemblyName>SAM.Geometry.Grasshopper.Mollier</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+	  <Deterministic>false</Deterministic>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\build\SAM.Geometry.Grasshopper.Mollier.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SAM.Core, Version=1.0.8866.22088, Culture=neutral, processorArchitecture=MSIL">
@@ -45,115 +25,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SAM\build\SAM.Core.Rhino.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\GooMollierPoint.cs" />
-    <Compile Include="Classes\GooMollierProcess.cs" />
-    <Compile Include="Component\SAMMollierApparatusDewPoint.cs" />
-    <Compile Include="Component\SAMMollierDryAirMassFlowByMollierPoint.cs" />
-    <Compile Include="Component\SAMMollierHourlyValues.cs" />
-    <Compile Include="Component\SAMMollierLoadByProcess.cs" />
-    <Compile Include="Component\SAMMollierMollierPointsByPercentage.cs" />
-    <Compile Include="Component\SAMMollierPsychrometrics.cs" />
-    <Compile Include="Convert\ToRhino\Polyline.cs" />
-    <Compile Include="Create\MollierChartObject.cs" />
-    <Compile Include="Modify\BakeGeometry.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Query\BoundingBox.cs" />
-    <Compile Include="Query\Name.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\SAM_Mollier\SAM.Core.Mollier\SAM.Core.Mollier.csproj">
-      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
-      <Name>SAM.Core.Mollier</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM_Mollier\SAM.Geometry.Mollier\SAM.Geometry.Mollier.csproj">
-      <Project>{bb3af31c-dd5a-40e5-a1c2-fa1c5b21de93}</Project>
-      <Name>SAM.Geometry.Mollier</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAM.Core.Grasshopper.Mollier\SAM.Core.Grasshopper.Mollier.csproj">
-      <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
-      <Name>SAM.Core.Grasshopper.Mollier</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Filter24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\HL_Logo24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\HL_Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Explode.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Get.Filterpng.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Get.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_JSON.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Mollier.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Names.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Small.png" />
+    <ProjectReference Include="..\..\SAM_Mollier\SAM.Core.Mollier\SAM.Core.Mollier.csproj" />
+    <ProjectReference Include="..\..\SAM_Mollier\SAM.Geometry.Mollier\SAM.Geometry.Mollier.csproj" />
+    <ProjectReference Include="..\SAM.Core.Grasshopper.Mollier\SAM.Core.Grasshopper.Mollier.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grasshopper">
       <Version>6.32.20340.21001</Version>
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.2</Version>
+      <Version>13.0.3</Version>
     </PackageReference>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)\$(ProjectName).gha"
-
-set SAM_DIR=$(APPDATA)\SAM\
-if not exist "%25SAM_DIR%25" mkdir "%25SAM_DIR%25"
-
-copy "$(TargetDir)*.dll" "%25SAM_DIR%25"
-copy "%25SAM_DIR%25\$(ProjectName).dll" "%25SAM_DIR%25\$(ProjectName).gha"
-
-if Exist "$(SolutionDir)\files\Grasshopper\UserObjects" (
-xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\UserObjects\SAM" /Y/I/E/S
-)
-
-::erase "%25SAM_DIR%25$(ProjectName).dll"
-::erase "$(TargetPath)"
-
-
-</PostBuildEvent>
-  </PropertyGroup>
+  <PropertyGroup />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)\$(ProjectName).gha&quot;&#xD;&#xA;&#xD;&#xA;set SAM_DIR=$(APPDATA)\SAM\&#xD;&#xA;if not exist &quot;%25SAM_DIR%25&quot; mkdir &quot;%25SAM_DIR%25&quot;&#xD;&#xA;&#xD;&#xA;copy &quot;$(TargetDir)*.dll&quot; &quot;%25SAM_DIR%25&quot;&#xD;&#xA;copy &quot;%25SAM_DIR%25\$(ProjectName).dll&quot; &quot;%25SAM_DIR%25\$(ProjectName).gha&quot;&#xD;&#xA;&#xD;&#xA;::erase &quot;%25SAM_DIR%25$(ProjectName).dll&quot;&#xD;&#xA;::erase &quot;$(TargetPath)" />
+  </Target>
 </Project>
