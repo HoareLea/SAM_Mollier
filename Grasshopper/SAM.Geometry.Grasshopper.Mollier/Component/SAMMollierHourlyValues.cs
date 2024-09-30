@@ -31,7 +31,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMMollierHourlyValues()
-          : base("SAMMollier.HourlyValues", "SAMMollier.HourlyValues", "Gets hourly values by MollierPointProperty enum", "SAM", "Analytical")
+          : base("SAMMollier.HourlyValues", "SAMMollier.HourlyValues", "Gets hourly values by MollierPointProperty enum", "SAM", "Mollier")
         {
         }
 
