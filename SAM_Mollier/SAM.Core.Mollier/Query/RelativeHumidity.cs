@@ -5,7 +5,7 @@
         /// <summary>
         /// Calculates relative humidity from dry bulb temperature, humidity ratio and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <param name="clamp">Clamp value Relative Humidity to range 0 - 100</param>
@@ -23,7 +23,7 @@
 
             if(result > 100)
             {
-                return double.NaN;
+                return double.NaN;   //test
             }
 
             if(result < 0)
@@ -38,7 +38,7 @@
         /// <summary>
         /// Calculates relative humidity from dry bulb temperature and dew point temperature.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="dewPointTemperature">Dew Point Temperature [°C]</param>
         /// <param name="pressure">Pressure [Pa]</param>
         /// <returns>Relative Humidity (0 - 100) [%]</returns>
@@ -55,7 +55,7 @@
         /// <summary>
         /// Calculates relative humidity from dry bulb temperature, wet bulb temperature and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="wetBulbTemperature">Wet bulb temperature [°C]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Relative Humidity (0 - 100) [%]</returns>
