@@ -7,7 +7,7 @@ namespace SAM.Core.Mollier
         /// <summary>
         /// Calculates enthalpy from dry bulb temperature and humidity ratio.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Pressure [Pa]</param>
         /// <returns>Enthalpy [J/kg]</returns>
@@ -67,7 +67,7 @@ namespace SAM.Core.Mollier
         /// <summary>
         /// Calculates enthalpy from dry bulb temperature, relative humidity and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="relativeHumidity">Relative humidity [%]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Enthalpy [J/kg]</returns>
@@ -167,7 +167,7 @@ namespace SAM.Core.Mollier
         /// <summary>
         /// Calculates enthalpy of saturated steam from dry bulb temperature.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Enthalpy h" [kJ/kg]</returns>
         public static double Enthalpy_SaturatedSteam_ByTemperature(double dryBulbTemperature)

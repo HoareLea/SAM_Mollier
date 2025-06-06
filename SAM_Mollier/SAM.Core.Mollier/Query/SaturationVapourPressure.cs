@@ -7,7 +7,7 @@ namespace SAM.Core.Mollier
         /// <summary>
         /// Saturation Vapour Pressure [Pa] for given dry-bulb temperature (ps). Gluck (1.1 and 1.4) temerature range from -20 to 100
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <returns>Saturation Vapour Pressure [Pa]</returns>
         public static double SaturationVapourPressure(double dryBulbTemperature)
         {

@@ -21,7 +21,7 @@
         /// <summary>
         /// Calculates partial dry air pressure from dry bulb temperature, relative humidity and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="relativeHumidity">Relative humidity (0 - 100)[%]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Partial Dry Air Pressure [Pa]</returns>

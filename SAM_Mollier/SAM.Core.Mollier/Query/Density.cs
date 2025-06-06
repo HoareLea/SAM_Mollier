@@ -5,7 +5,7 @@
         /// <summary>
         /// Calculates moist air density (ρ) from dry bulb temperature, relative humidity and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="relativeHumidity">Relative humidity (0 - 100) [%]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Moist Air Density ρ [kg moist air/m3]</returns>
@@ -38,7 +38,7 @@
         /// <summary>
         /// Calculates moist air density from dry bulb temperature, humidity ratio and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Moist Air Density ρ [kg_MoistAir/m3]</returns>

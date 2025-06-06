@@ -5,7 +5,7 @@
         /// <summary>
         /// Calculates humidity ratio from dry bulb temperature, relative humidity and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="relativeHumidity">Relative humidity (0 - 100)[%]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Humidity Ratio [kg_waterVapor/kg_dryAir]</returns>
@@ -60,7 +60,7 @@
         /// <summary>
         /// Calculates humidity ratio from dry bulb temperature and enthalpy.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="enthalpy">Moist air Enthalpy[J / kg]</param>
         /// <returns>Humidity Ratio [kg_waterVapor/kg_dryAir]</returns>
         public static double HumidityRatio_ByEnthalpy(double dryBulbTemperature, double enthalpy)
@@ -89,7 +89,7 @@
         /// <summary>
         /// Calculates humidity ratio from dry bulb temperature and enthalpy.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="wetBulbTemperature">Wet Bulb Temperature [°C]</param>
         /// <param name="pressure">Pressure [Pa]</param>
         /// <returns>Humidity Ratio [kg_waterVapor/kg_dryAir]</returns>
