@@ -48,5 +48,57 @@ namespace SAM.Core.Mollier
 
             return SaturationVapourPressure(mollierPoint.DryBulbTemperature);
         }
+
+        /// <summary>
+        /// Saturation Vapour Pressure [Pa] for given dry-bulb temperature (ps).
+        /// - Uses Glück (1991) for T ≤ 0°C
+        /// - Uses IAPWS-IF97 Region 4 (Wagner & Pruß, 1993) for T > 0°C
+        /// </summary>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
+        /// <returns>Saturation Vapour Pressure [Pa]</returns>
+        public static double SaturationVapourPressure_IAPWS(double dryBulbTemperature)
+        {
+            if (double.IsNaN(dryBulbTemperature))
+                return double.NaN;
+
+            if (dryBulbTemperature <= 0.0)
+            {
+                // Glück (1991), Equation 1.1 (T ≤ 0°C)
+                return 611 * Math.Exp(
+                    -4.909965e-4 +
+                    8.183197e-2 * dryBulbTemperature +
+                    -5.552967e-4 * Math.Pow(dryBulbTemperature, 2) +
+                    -2.228376e-5 * Math.Pow(dryBulbTemperature, 3) +
+                    -6.211808e-7 * Math.Pow(dryBulbTemperature, 4));
+            }
+            else
+            {
+                // IAPWS-IF97 Region 4 (Wagner & Pruß, 1993)
+                double T = dryBulbTemperature + 273.15; // K
+
+                double[] n = new double[]
+                {
+                    0.11670521452767e4,
+                    -0.72421316703206e6,
+                    -0.17073846940092e2,
+                    0.12020824702470e5,
+                    -0.32325550322333e7,
+                    0.14915108613530e2,
+                    -0.48232657361591e4,
+                    0.40511340542057e6,
+                    -0.23855557567849,
+                    0.65017534844798e3
+                };
+
+                double theta = T + n[8] / (T - n[9]);
+                double A = theta * theta + n[0] * theta + n[1];
+                double B = n[2] * theta * theta + n[3] * theta + n[4];
+                double C = n[5] * theta * theta + n[6] * theta + n[7];
+                double p = Math.Pow((2 * C) / (-B + Math.Sqrt(B * B - 4 * A * C)), 4); // MPa
+
+                return p * 1e6; // Pa
+            }
+        }
+
     }
 }
