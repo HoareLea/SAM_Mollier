@@ -265,8 +265,16 @@ namespace SAM.Geometry.Grasshopper.Mollier
                     enthalpy *= 1000;
                     if (numberOfConnected == 2 || double.IsNaN(humidityRatio))
                     {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                        return;
+                        if(!double.IsNaN(enthalpy) && !double.IsNaN(dryBulbTemperature))
+                        {
+                            humidityRatio = Core.Mollier.Query.HumidityRatio_ByEnthalpy(dryBulbTemperature, enthalpy);
+                        }
+
+                        if (numberOfConnected == 2 || double.IsNaN(humidityRatio))
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                            return;
+                        }
                     }
                     numberOfConnected++;
                 }
