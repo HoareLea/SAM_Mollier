@@ -17,7 +17,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.12";
+        public override string LatestComponentVersion => "1.0.13";
 
         /// <summary>
         /// Provides an Icon for the component.
