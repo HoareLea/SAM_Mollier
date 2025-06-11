@@ -71,7 +71,7 @@ namespace SAM.Core.Mollier
         /// <param name="relativeHumidity">Relative humidity [%]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Enthalpy [J/kg]</returns>
-        public static double Enthalpy_ByRelativeHumidity(double dryBulbTemperature, double relativeHumidity, double pressure)
+        public static double Enthalpy_ByRelativeHumidity(double dryBulbTemperature, double relativeHumidity, double pressure, bool allowRH100 = false)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
             {
@@ -86,7 +86,7 @@ namespace SAM.Core.Mollier
 
             if(dryBulbTemperature < 100)
             {
-                double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                double humidityRatio = HumidityRatio(dryBulbTemperature, relativeHumidity, pressure, allowRH100);
                 if(!double.IsNaN(humidityRatio))
                 {
                     return Enthalpy(dryBulbTemperature, humidityRatio, pressure);

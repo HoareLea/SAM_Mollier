@@ -10,7 +10,7 @@
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <param name="clamp">Clamp value Relative Humidity to range 0 - 100</param>
         /// <returns>Relative Humidity (0 - 100) [%]</returns>
-        public static double RelativeHumidity(double dryBulbTemperature, double humidityRatio, double pressure)
+        public static double RelativeHumidity(double dryBulbTemperature, double humidityRatio, double pressure, bool allowRH100 = false)
         {
             if(double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
             {
@@ -21,7 +21,7 @@
 
             double result = (humidityRatio * pressure / (0.6222 + humidityRatio)) / SaturationVapourPressure(dryBulbTemperature) * 100;
 
-            if(result > 100)
+            if(result > 100 && !allowRH100)
             {
                 return double.NaN;   //test
             }

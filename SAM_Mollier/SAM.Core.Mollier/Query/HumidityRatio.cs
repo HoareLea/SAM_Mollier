@@ -9,7 +9,7 @@
         /// <param name="relativeHumidity">Relative humidity (0 - 100)[%]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Humidity Ratio [kg_waterVapor/kg_dryAir]</returns>
-        public static double HumidityRatio(double dryBulbTemperature, double relativeHumidity, double pressure)
+        public static double HumidityRatio(double dryBulbTemperature, double relativeHumidity, double pressure, bool allowRH100 = false)
         {
             if (double.IsNaN(relativeHumidity) || relativeHumidity > 100 || relativeHumidity < 0 || double.IsNaN(dryBulbTemperature) || double.IsNaN(pressure))
             {
@@ -27,14 +27,14 @@
 
             double result = (0.622 * relativeHumidity_Factor) / ((pressure / saturationVapourPressure) - relativeHumidity_Factor);
 
-            double relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+            double relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, allowRH100);
 
             double factor = 0.1;
             
             while (result > 0 && (double.IsNaN(relativeHumidity_Temp) || relativeHumidity_Temp > relativeHumidity))
             {
                 result -= result * factor;
-                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+                relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, allowRH100);
             }
 
             for(int i = 0; i < 3; i++)
@@ -44,13 +44,13 @@
                 while (!double.IsNaN(relativeHumidity_Temp) && relativeHumidity_Temp < relativeHumidity)
                 {
                     result += result * factor;
-                    relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+                    relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, allowRH100);
                 }
 
                 while (result > 0 && (double.IsNaN(relativeHumidity_Temp) || relativeHumidity_Temp > relativeHumidity))
                 {
                     result -= result * factor;
-                    relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure);
+                    relativeHumidity_Temp = RelativeHumidity(dryBulbTemperature, result, pressure, allowRH100);
                 }
             }
 
