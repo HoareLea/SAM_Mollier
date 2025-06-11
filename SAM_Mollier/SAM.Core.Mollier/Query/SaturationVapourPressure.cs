@@ -16,6 +16,40 @@ namespace SAM.Core.Mollier
                 return double.NaN;
             }
 
+            // Calculate Saturation Vapor Pressure over ice [Pa] for dry-bulb temperatures below -20°C
+            // using the Goff–Gratch equation (1946, revised 1957).
+            // This method is valid for sub-zero temperatures down to about -50°C or lower,
+            // and is accurate to within ~0.1% near 0 °C. It is widely trusted in meteorology for vapor pressure estimation over ice.
+            //
+            // References:
+            // - https://en.wikipedia.org/wiki/Saturation_vapour_pressure#Goff%E2%80%93Gratch_equation
+            // - https://patarnott.com/atms360/pdf_atms360/class2017/VaporPressureIce_SupercooledH20_Murphy.pdf
+            //
+            // Parameters:
+            // dryBulbTemperature: Temperature in degrees Celsius (°C)
+            //
+            // Returns:
+            // Saturation vapor pressure in Pascals (Pa)
+            //
+            // Valid for temperatures T < -20°C
+            if (dryBulbTemperature < -20.0)
+            {
+                double T = dryBulbTemperature + 273.15; // Convert °C to Kelvin (K)
+                double T0 = 273.16;                      // Triple point temperature of water (K)
+                double e0 = 6.1173;                      // Saturation vapor pressure at triple point (hPa)
+
+                // Compute the base-10 logarithm of saturation vapor pressure using Goff-Gratch equation for ice
+                double log10_e =
+                    -9.09718 * (T0 / T - 1.0) -
+                    3.56654 * Math.Log10(T0 / T) +
+                    0.876793 * (1.0 - T / T0) +
+                    Math.Log10(e0);
+
+                double e_hPa = Math.Pow(10.0, log10_e);  // Convert log10 value back to linear scale (hPa)
+                return e_hPa * 100.0;                     // Convert from hPa to Pa and return
+            }
+
+
             if (dryBulbTemperature < 0.01) //from -20C to 0.01C max 0.00% (Gluck 1.1)
             {
                 return 611 * Math.Exp(-4.909965e-4 + 8.183197e-2 * dryBulbTemperature - 5.552967e-4 * Math.Pow(dryBulbTemperature, 2) - 2.228376e-5 * Math.Pow(dryBulbTemperature, 3) - 6.211808e-7 * Math.Pow(dryBulbTemperature, 4)); 
@@ -51,7 +85,7 @@ namespace SAM.Core.Mollier
 
         /// <summary>
         /// Saturation Vapour Pressure [Pa] for given dry-bulb temperature (ps).
-        /// - Uses Glück (1991) for T ≤ 0°C
+        /// - Uses Glück (1991) for T ≤ 0°C was replaced with IAPWS-2011 Sublimation Curve for T < 0°C
         /// - Uses IAPWS-IF97 Region 4 (Wagner & Pruß, 1993) for T > 0°C
         /// </summary>
         /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
@@ -64,12 +98,41 @@ namespace SAM.Core.Mollier
             if (dryBulbTemperature <= 0.0)
             {
                 // Glück (1991), Equation 1.1 (T ≤ 0°C)
-                return 611 * Math.Exp(
-                    -4.909965e-4 +
-                    8.183197e-2 * dryBulbTemperature +
-                    -5.552967e-4 * Math.Pow(dryBulbTemperature, 2) +
-                    -2.228376e-5 * Math.Pow(dryBulbTemperature, 3) +
-                    -6.211808e-7 * Math.Pow(dryBulbTemperature, 4));
+                //return 611 * Math.Exp(
+                //    -4.909965e-4 +
+                //    8.183197e-2 * dryBulbTemperature +
+                //    -5.552967e-4 * Math.Pow(dryBulbTemperature, 2) +
+                //    -2.228376e-5 * Math.Pow(dryBulbTemperature, 3) +
+                //    -6.211808e-7 * Math.Pow(dryBulbTemperature, 4));
+
+                //WIP as IAPWS-2011 Sublimation Curve does not work as expected
+
+                // IAPWS-2011 Sublimation Curve
+                // From the IAPWS Release on the Pressure along the Sublimation Curve of Ordinary Water Substance (2011).
+                // Applicable between 130 K (–143.15 °C) and 273.16 K (0.01 °C).
+                double T = dryBulbTemperature + 273.15;
+
+                // IAPWS-2011 Sublimation Curve
+                double T_t = 273.16; // Triple point temperature [K]
+                double p_t = 611.657; // Triple point pressure [Pa]
+                double theta = T / T_t;
+
+                double[] a = new double[]
+                {
+                    -13.928169, 34.707823, -6.733134,
+                    0.424554, -0.00848089, 0.000085294
+                };
+
+                double[] b = new double[] { 1, 1.5, 2, 2.5, 3, 3.5 };
+
+                double sum_ln_p = 0.0;
+                for (int i = 0; i < a.Length; i++)
+                {
+                    sum_ln_p += a[i] * Math.Pow(1 - theta, b[i]);
+                }
+
+                double p = p_t * Math.Exp(sum_ln_p);
+                return p;
             }
             else
             {
