@@ -323,7 +323,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
             else if(!double.IsNaN(dryBulbTemperature) && !double.IsNaN(humidityRatio))
             {
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
-                relativeHumidity = mollierPoint_Temp.RelativeHumidity;
+                relativeHumidity = Core.Mollier.Query.RelativeHumidity(mollierPoint_Temp.DryBulbTemperature, mollierPoint_Temp.HumidityRatio, pressure, allowRH100);
             }
             else if(!double.IsNaN(dryBulbTemperature) && !double.IsNaN(relativeHumidity))
             {
@@ -334,11 +334,11 @@ namespace SAM.Geometry.Grasshopper.Mollier
             {
                 humidityRatio = Core.Mollier.Query.HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
-                relativeHumidity = mollierPoint_Temp.RelativeHumidity;
+                relativeHumidity = Core.Mollier.Query.RelativeHumidity(dryBulbTemperature, humidityRatio, pressure, allowRH100);
             }
             else if (!double.IsNaN(humidityRatio) && !double.IsNaN(relativeHumidity))
             {
-                dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature_ByHumidityRatio(humidityRatio, relativeHumidity, pressure);
+                dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature_ByHumidityRatio(humidityRatio, relativeHumidity, pressure, allowRH100);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
             }
             else if(!double.IsNaN(humidityRatio) && !double.IsNaN(wetBulbTemperature))
@@ -360,7 +360,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
                 relativeHumidity = mollierPoint_Temp.RelativeHumidity;
             }
 
-            wetBulbTemperature = mollierPoint_Temp.WetBulbTemperature();
+            wetBulbTemperature = Core.Mollier.Query.WetBulbTemperature_ByHumidityRatio(mollierPoint_Temp.DryBulbTemperature, mollierPoint_Temp.HumidityRatio, pressure, allowRH100);
             dewPointTemperature = mollierPoint_Temp.DewPointTemperature();
             degreeSaturation = mollierPoint_Temp.SaturationDegree();
             saturationHumidityRatio = mollierPoint_Temp.SaturationHumidityRatio();
