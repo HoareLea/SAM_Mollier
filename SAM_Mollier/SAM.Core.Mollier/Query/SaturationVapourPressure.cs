@@ -105,34 +105,33 @@ namespace SAM.Core.Mollier
                 //    -2.228376e-5 * Math.Pow(dryBulbTemperature, 3) +
                 //    -6.211808e-7 * Math.Pow(dryBulbTemperature, 4));
 
-                //WIP as IAPWS-2011 Sublimation Curve does not work as expected
+                //WIP as IAPWS-2011 Sublimation Curve does not work as expected-----
 
                 // IAPWS-2011 Sublimation Curve
                 // From the IAPWS Release on the Pressure along the Sublimation Curve of Ordinary Water Substance (2011).
-                // Applicable between 130 K (–143.15 °C) and 273.16 K (0.01 °C).
-                double T = dryBulbTemperature + 273.15;
 
-                // IAPWS-2011 Sublimation Curve
-                double T_t = 273.16; // Triple point temperature [K]
-                double p_t = 611.657; // Triple point pressure [Pa]
-                double theta = T / T_t;
+                // Corrected implementation using the official IAPWS-2011 sublimation curve
+                // Valid between 130 K (–143.15°C) and 273.16 K (0.01°C)
+                double T = dryBulbTemperature + 273.15; // Temperature in Kelvin
 
-                double[] a = new double[]
-                {
-                    -13.928169, 34.707823, -6.733134,
-                    0.424554, -0.00848089, 0.000085294
-                };
+                const double T_t = 273.16; // Triple point temperature [K]
+                const double p_t = 611.657; // Triple point pressure [Pa]
 
-                double[] b = new double[] { 1, 1.5, 2, 2.5, 3, 3.5 };
+                // IAPWS-2011 sublimation equation coefficients
+                const double a1 = -13.928169;
+                const double a2 = 34.707823;
+                const double a3 = -6.733134;
 
-                double sum_ln_p = 0.0;
-                for (int i = 0; i < a.Length; i++)
-                {
-                    sum_ln_p += a[i] * Math.Pow(1 - theta, b[i]);
-                }
+                // IAPWS-2011 sublimation equation implementation
+                var theta = T / T_t;
+                double ln_p = (a1 * (1 - Math.Pow(theta, -1.5))) +
+                              (a2 * (1 - Math.Pow(theta, -1.25))) +
+                              (a3 * (1 - Math.Pow(theta, -0.5)));
 
-                double p = p_t * Math.Exp(sum_ln_p);
+                double p = p_t * Math.Exp(ln_p);
+
                 return p;
+
             }
             else
             {
