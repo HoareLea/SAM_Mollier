@@ -7,7 +7,7 @@ namespace SAM.Core.Mollier
         /// <summary>
         /// Calculates saturation temperature (relative humidity 100%) from dry bulb temperature, relative humidity and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Saturation Temperature (for relative humidity 100%)[°C]</returns>
         public static double SaturationTemperature(double dryBulbTemperature, double pressure)

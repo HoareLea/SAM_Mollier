@@ -105,14 +105,14 @@ namespace SAM.Core.Mollier
         /// <param name="relativeHumidity">Relative humidity [%]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Dry-bulb temperature [°C]</returns>
-        public static double DryBulbTemperature_ByHumidityRatio(double humidityRatio, double relativeHumidity, double pressure)
+        public static double DryBulbTemperature_ByHumidityRatio(double humidityRatio, double relativeHumidity, double pressure, bool allowRH100 = false)
         {
             if (double.IsNaN(humidityRatio) || double.IsNaN(relativeHumidity) || double.IsNaN(pressure))
             {
                 return double.NaN;
             }
 
-            return Core.Query.Calculate_ByMaxStep((double x) => HumidityRatio(x, relativeHumidity, pressure) * 1000, humidityRatio * 1000, -50, 50, 100, Tolerance.Distance);
+            return Core.Query.Calculate_ByMaxStep((double x) => HumidityRatio(x, relativeHumidity, pressure, allowRH100) * 1000, humidityRatio * 1000, -50, 50, 100, Tolerance.Distance);
 
 
             //OPTION 1

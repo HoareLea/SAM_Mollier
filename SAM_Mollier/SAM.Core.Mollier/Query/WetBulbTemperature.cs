@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        public static double WetBulbTemperature_ByHumidityRatio(double dryBulbTemperature, double humidityRatio, double pressure)
+        public static double WetBulbTemperature_ByHumidityRatio(double dryBulbTemperature, double humidityRatio, double pressure, bool allowRH100 = false)
         {
             if (double.IsNaN(dryBulbTemperature) || double.IsNaN(humidityRatio) || double.IsNaN(pressure))
             {
@@ -20,19 +20,19 @@
                 return dryBulbTemperature;
             }
 
-            double relativeHumidity = RelativeHumidity(dryBulbTemperature, humidityRatio, pressure);
+            double relativeHumidity = RelativeHumidity(dryBulbTemperature, humidityRatio, pressure, allowRH100);
             if(double.IsNaN(relativeHumidity))
             {
                 return double.NaN;
             }
 
-            double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure);
+            double enthalpy = Enthalpy_ByRelativeHumidity(dryBulbTemperature, relativeHumidity, pressure, allowRH100);
             if (double.IsNaN(enthalpy))
             {
                 return double.NaN;
             }
 
-            return Core.Query.Calculate_ByMaxStep((double x) => Enthalpy_ByRelativeHumidity(x, 100, pressure), enthalpy, -20, 50);
+            return Core.Query.Calculate_ByMaxStep((double x) => Enthalpy_ByRelativeHumidity(x, 100, pressure, allowRH100), enthalpy, -20, 50);
         }
 
         public static double WetBulbTemperature(double dryBulbTemperature, double relativeHumidity, double pressure)

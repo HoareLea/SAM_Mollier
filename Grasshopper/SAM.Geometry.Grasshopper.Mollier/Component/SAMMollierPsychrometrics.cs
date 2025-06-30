@@ -17,7 +17,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.12";
+        public override string LatestComponentVersion => "1.0.13";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,6 +48,12 @@ namespace SAM.Geometry.Grasshopper.Mollier
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevation_", NickName = "_elevation_", Description = "Elevation [m]", Access = GH_ParamAccess.item, Optional = true };
                 //param_Number.SetPersistentData(double.NaN);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = null;
+
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_allowRH100_", NickName = "_allowRH100_", Description = "Set to True to allow RH input greater than 100% (supersaturation)", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -265,20 +271,41 @@ namespace SAM.Geometry.Grasshopper.Mollier
                     enthalpy *= 1000;
                     if (numberOfConnected == 2 || double.IsNaN(humidityRatio))
                     {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                        return;
+                        if(!double.IsNaN(enthalpy) && !double.IsNaN(dryBulbTemperature))
+                        {
+                            humidityRatio = Core.Mollier.Query.HumidityRatio_ByEnthalpy(dryBulbTemperature, enthalpy);
+                        }
+
+                        if (numberOfConnected == 2 || double.IsNaN(humidityRatio))
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                            return;
+                        }
                     }
                     numberOfConnected++;
                 }
             }
 
+            //TODO: Add code here
+            bool allowRH100 = false;
+            index = Params.IndexOfInputParam("_allowRH100_");
+            if (index != -1)
+            {
+                bool allowRH100_Temp = false;
+                if (dataAccess.GetData(index, ref allowRH100_Temp))
+                {
+                    allowRH100 = allowRH100_Temp;
+                }
+            }
 
-            //checking if all data are correct
+
+                //checking if all data are correct
             if (numberOfConnected != 2)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid data, there should be connected mollier point or dew point or 2 of the other inputs");
                 return;
             }
+
             //calculate other variables by input
             if(mollierPoint != null)
             {
@@ -290,28 +317,28 @@ namespace SAM.Geometry.Grasshopper.Mollier
             {
                 dryBulbTemperature = dewPointTemperature;
                 relativeHumidity = 100;
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure, allowRH100);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
             }
             else if(!double.IsNaN(dryBulbTemperature) && !double.IsNaN(humidityRatio))
             {
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
-                relativeHumidity = mollierPoint_Temp.RelativeHumidity;
+                relativeHumidity = Core.Mollier.Query.RelativeHumidity(mollierPoint_Temp.DryBulbTemperature, mollierPoint_Temp.HumidityRatio, pressure, allowRH100);
             }
             else if(!double.IsNaN(dryBulbTemperature) && !double.IsNaN(relativeHumidity))
             {
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure, allowRH100);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
             }
             else if(!double.IsNaN(dryBulbTemperature) && !double.IsNaN(wetBulbTemperature))
             {
                 humidityRatio = Core.Mollier.Query.HumidityRatio_ByWetBulbTemperature(dryBulbTemperature, wetBulbTemperature, pressure);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
-                relativeHumidity = mollierPoint_Temp.RelativeHumidity;
+                relativeHumidity = Core.Mollier.Query.RelativeHumidity(dryBulbTemperature, humidityRatio, pressure, allowRH100);
             }
             else if (!double.IsNaN(humidityRatio) && !double.IsNaN(relativeHumidity))
             {
-                dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature_ByHumidityRatio(humidityRatio, relativeHumidity, pressure);
+                dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature_ByHumidityRatio(humidityRatio, relativeHumidity, pressure, allowRH100);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
             }
             else if(!double.IsNaN(humidityRatio) && !double.IsNaN(wetBulbTemperature))
@@ -323,7 +350,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
             else if(!double.IsNaN(relativeHumidity) && !double.IsNaN(wetBulbTemperature))
             {
                 dryBulbTemperature = Core.Mollier.Query.DryBulbTemperature_ByWetBulbTemperature(wetBulbTemperature, relativeHumidity, pressure);
-                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure);
+                humidityRatio = Core.Mollier.Query.HumidityRatio(dryBulbTemperature, relativeHumidity, pressure, allowRH100);
                 mollierPoint_Temp = new MollierPoint(dryBulbTemperature, humidityRatio, pressure);
             }
             else if (!double.IsNaN(enthalpy) && !double.IsNaN(humidityRatio))
@@ -333,7 +360,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
                 relativeHumidity = mollierPoint_Temp.RelativeHumidity;
             }
 
-            wetBulbTemperature = mollierPoint_Temp.WetBulbTemperature();
+            wetBulbTemperature = Core.Mollier.Query.WetBulbTemperature_ByHumidityRatio(mollierPoint_Temp.DryBulbTemperature, mollierPoint_Temp.HumidityRatio, pressure, allowRH100);
             dewPointTemperature = mollierPoint_Temp.DewPointTemperature();
             degreeSaturation = mollierPoint_Temp.SaturationDegree();
             saturationHumidityRatio = mollierPoint_Temp.SaturationHumidityRatio();
@@ -359,7 +386,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
             relativeHumidity = Core.Query.Round(relativeHumidity, 0.1);
 
             //TEST START
-            double diagramTemperature = SAM.Core.Mollier.Query.DiagramTemperature(mollierPoint_Temp);
+            double diagramTemperature = Core.Mollier.Query.DiagramTemperature(mollierPoint_Temp);
             //TEST END
 
             index = Params.IndexOfOutputParam("mollierPoint");

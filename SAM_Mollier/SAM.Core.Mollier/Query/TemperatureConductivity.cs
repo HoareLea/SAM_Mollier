@@ -5,7 +5,7 @@
         /// <summary>
         /// Calculates temperature conductivity (Thermal diffusivity) from dry bulb temperature, relative humidity and pressure.
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Pressure [Pa]</param>
         /// <param name="tolerance">Tolerance</param>

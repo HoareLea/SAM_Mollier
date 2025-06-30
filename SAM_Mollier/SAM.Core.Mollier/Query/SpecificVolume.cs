@@ -5,7 +5,7 @@
         /// <summary>
         /// Calculates specific volume for dry air from dry bulb temperature, relative humidity and pressure v[m³/kg_dryAir].
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <param name="pressure">Atmospheric pressure [Pa]</param>
         /// <returns>Dry Air Specific Volume v [m³/kg_dryAir]</returns>

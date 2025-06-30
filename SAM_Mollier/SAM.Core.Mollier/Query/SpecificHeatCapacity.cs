@@ -20,7 +20,7 @@
         /// <summary>
         /// Specific Heat Capacity of Air
         /// </summary>
-        /// <param name="dryBulbTemperature">Dry bulb temperature [°C]</param>
+        /// <param name="dryBulbTemperature">Dry Bulb Temperature [°C] — measured by a standard thermometer, unaffected by moisture (not wet-bulb or dew point).</param>
         /// <param name="humidityRatio">Humidity Ratio [kg_waterVapor/kg_dryAir]</param>
         /// <returns>Specific Heat Capacity of Air [kJ/kgK]</returns>
         public static double SpecificHeatCapacity_Air(double dryBulbTemperature, double humidityRatio)
