@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public class MollierPoint : IMollierPoint
@@ -28,9 +27,9 @@ namespace SAM.Core.Mollier
             this.pressure = pressure;
         }
 
-        public MollierPoint(JObject jObject)
+        public MollierPoint(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
         ///// <summary>
@@ -142,16 +141,16 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
             if(jObject == null)
             {
                 return false;
             }
 
-            dryBulbTemperature = jObject.ContainsKey("DryBulbTemperature") ? jObject.Value<double>("DryBulbTemperature") : double.NaN;
-            humidityRatio = jObject.ContainsKey("HumidityRatio") ? jObject.Value<double>("HumidityRatio") : double.NaN;
-            pressure = jObject.ContainsKey("Pressure") ? jObject.Value<double>("Pressure") : double.NaN;
+            dryBulbTemperature = jObject.ContainsKey("DryBulbTemperature") ? jObject["DryBulbTemperature"]?.GetValue<double>() ?? default(double) : double.NaN;
+            humidityRatio = jObject.ContainsKey("HumidityRatio") ? jObject["HumidityRatio"]?.GetValue<double>() ?? default(double) : double.NaN;
+            pressure = jObject.ContainsKey("Pressure") ? jObject["Pressure"]?.GetValue<double>() ?? default(double) : double.NaN;
 
             return true;
         }
@@ -161,9 +160,9 @@ namespace SAM.Core.Mollier
             return !double.IsNaN(dryBulbTemperature) && !double.IsNaN(humidityRatio) && !double.IsNaN(pressure) && !double.IsInfinity(dryBulbTemperature) && !double.IsInfinity(humidityRatio) && !double.IsInfinity(pressure);
         }
 
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject jObject = new JObject();
+            JsonObject jObject = new JsonObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if(!double.IsNaN(dryBulbTemperature))

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public class IsothermalHumidificationProcess : HumidificationProcess
@@ -12,7 +11,7 @@ namespace SAM.Core.Mollier
 
         }
 
-        public IsothermalHumidificationProcess(JObject jObject)
+        public IsothermalHumidificationProcess(JsonObject jObject)
             :base(jObject)
         {
 

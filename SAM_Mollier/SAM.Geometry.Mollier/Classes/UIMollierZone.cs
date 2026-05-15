@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json.Nodes;
 using SAM.Core;
 using SAM.Core.Mollier;
 using System.Drawing;
@@ -45,10 +45,10 @@ namespace SAM.Geometry.Mollier
             this.uIMollierAppearance = uIMollierAppearance?.Clone();
         }
 
-        public UIMollierZone(JObject jObject)
+        public UIMollierZone(JsonObject jObject)
             : base(jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
         public IUIMollierAppearance UIMollierAppearance
@@ -72,16 +72,16 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public bool FromJsonObject(JsonObject jObject)
         {
-            if (jObject == null || !base.FromJObject(jObject))
+            if (jObject == null || !base.FromJsonObject(jObject))
             {
                 return false;
             }
 
             if (jObject.ContainsKey("UIMollierAppearance"))
             {
-                uIMollierAppearance = new UIMollierAppearance(jObject.Value<JObject>("UIMollierAppearance"));
+                uIMollierAppearance = new UIMollierAppearance(jObject["UIMollierAppearance"] as JsonObject);
             }
 
             if(jObject.ContainsKey("Guid"))
@@ -92,9 +92,9 @@ namespace SAM.Geometry.Mollier
             return true;
         }
 
-        public JObject ToJObject()
+        public JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
 
             if (result == null)
             {
@@ -103,7 +103,7 @@ namespace SAM.Geometry.Mollier
 
             if (uIMollierAppearance != null)
             {
-                result.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());
+                result.Add("UIMollierAppearance", uIMollierAppearance.ToJsonObject());
             }
 
             if(guid != System.Guid.Empty)

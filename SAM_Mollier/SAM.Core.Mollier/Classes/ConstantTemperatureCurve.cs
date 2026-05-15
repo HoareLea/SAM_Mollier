@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json.Nodes;
 using System.Collections.Generic;
 
 namespace SAM.Core.Mollier
@@ -28,7 +28,7 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public ConstantTemperatureCurve(JObject jObject)
+        public ConstantTemperatureCurve(JsonObject jObject)
             : base(jObject)
         {
 
@@ -42,9 +42,9 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
-            bool result = FromJObject(jObject);
+            bool result = FromJsonObject(jObject);
             if(!result)
             {
                 return result;
@@ -52,15 +52,15 @@ namespace SAM.Core.Mollier
 
             if (jObject.ContainsKey("Phase"))
             {
-                phase = Core.Query.Enum<Phase>(jObject.Value<string>("Phase"));
+                phase = Core.Query.Enum<Phase>(jObject["Phase"]?.GetValue<string>() ?? null);
             }
 
             return result;
         }
 
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return result;

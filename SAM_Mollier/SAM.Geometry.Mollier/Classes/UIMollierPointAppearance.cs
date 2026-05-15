@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json.Nodes;
 using SAM.Core;
 using System.Drawing;
 
@@ -66,14 +66,14 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public UIMollierPointAppearance(JObject jObject)
+        public UIMollierPointAppearance(JsonObject jObject)
             : base(jObject)
         {
         }
 
-        public override bool FromJObject(JObject jObject)
+        public override bool FromJsonObject(JsonObject jObject)
         {
-            bool result = base.FromJObject(jObject);
+            bool result = base.FromJsonObject(jObject);
             if (!result)
             {
                 return result;
@@ -81,7 +81,7 @@ namespace SAM.Geometry.Mollier
 
             if (jObject.ContainsKey("BorderColor"))
             {
-                JObject jObject_Color = jObject.Value<JObject>("BorderColor");
+                JsonObject jObject_Color = jObject["BorderColor"] as JsonObject;
                 if (jObject_Color != null)
                 {
                     SAMColor sAMColor = new SAMColor(jObject_Color);
@@ -94,15 +94,15 @@ namespace SAM.Geometry.Mollier
 
             if (jObject.ContainsKey("BorderSize"))
             {
-                BorderSize = jObject.Value<int>("BorderSize");
+                BorderSize = jObject["BorderSize"]?.GetValue<int>() ?? default(int);
             }
 
             return true;
         }
         
-        public override JObject ToJObject()
+        public override JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return result;
@@ -110,7 +110,7 @@ namespace SAM.Geometry.Mollier
 
             if (BorderColor != Color.Empty)
             {
-                result.Add("BorderColor", (new SAMColor(BorderColor)).ToJObject());
+                result.Add("BorderColor", (new SAMColor(BorderColor)).ToJsonObject());
             }
 
             result.Add("BorderSize", BorderSize);

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public class FanProcess : HeatingProcess
@@ -10,7 +9,7 @@ namespace SAM.Core.Mollier
 
         }
 
-        public FanProcess(JObject jObject)
+        public FanProcess(JsonObject jObject)
             :base(jObject)
         {
 

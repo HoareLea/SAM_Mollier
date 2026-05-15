@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json.Nodes;
 using SAM.Core.Mollier;
 
 namespace SAM.Core.Grasshopper.Mollier
@@ -18,9 +18,9 @@ namespace SAM.Core.Grasshopper.Mollier
             this.z = z;
         }
 
-        public MollierChartObject(JObject jObject)
+        public MollierChartObject(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
         public MollierChartObject(MollierChartObject mollierChartObject)
@@ -65,7 +65,7 @@ namespace SAM.Core.Grasshopper.Mollier
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public bool FromJsonObject(JsonObject jObject)
         {
             if (jObject == null)
             {
@@ -74,30 +74,30 @@ namespace SAM.Core.Grasshopper.Mollier
 
             if (jObject.ContainsKey("UIMollierObject"))
             {
-                uIMollierObject = Core.Query.IJSAMObject< IUIMollierObject >(jObject.Value<JObject>("UIMollierObject"));
+                uIMollierObject = Core.Query.IJSAMObject< IUIMollierObject >(jObject["UIMollierObject"] as JsonObject);
             }
 
             if (jObject.ContainsKey("ChartType"))
             {
-                chartType = Core.Query.Enum<ChartType>(jObject.Value<string>("ChartType"));
+                chartType = Core.Query.Enum<ChartType>(jObject["ChartType"]?.GetValue<string>() ?? null);
             }
 
             if (jObject.ContainsKey("Z"))
             {
-                z = jObject.Value<double>("Z");
+                z = jObject["Z"]?.GetValue<double>() ?? default(double);
             }
 
             return true;
         }
         
-        public JObject ToJObject()
+        public JsonObject ToJsonObject()
         {
-            JObject jObject = new JObject();
+            JsonObject jObject = new JsonObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if(uIMollierObject != null)
             {
-                jObject.Add("UIMollierObject", uIMollierObject.ToJObject());
+                jObject.Add("UIMollierObject", uIMollierObject.ToJsonObject());
             }
 
             jObject.Add("ChartType", chartType.ToString());

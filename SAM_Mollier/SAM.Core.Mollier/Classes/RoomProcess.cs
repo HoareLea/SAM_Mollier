@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public class RoomProcess : SpecificProcess
@@ -12,7 +11,7 @@ namespace SAM.Core.Mollier
 
         }
 
-        public RoomProcess(JObject jObject)
+        public RoomProcess(JsonObject jObject)
             : base(jObject)
         {
 

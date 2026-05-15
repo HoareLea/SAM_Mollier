@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public class CoolingProcess : MollierProcess
@@ -13,7 +12,7 @@ namespace SAM.Core.Mollier
             this.efficiency = efficiency;
         }
 
-        public CoolingProcess(JObject jObject)
+        public CoolingProcess(JsonObject jObject)
             :base(jObject)
         {
 
@@ -91,24 +90,24 @@ namespace SAM.Core.Mollier
         //    //return downPoint;
         //}
 
-        public override bool FromJObject(JObject jObject)
+        public override bool FromJsonObject(JsonObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if(!base.FromJsonObject(jObject))
             {
                 return false;
             }
 
             if(jObject.ContainsKey("Efficiency"))
             {
-                efficiency = jObject.Value<double>("Efficiency");
+                efficiency = jObject["Efficiency"]?.GetValue<double>() ?? default(double);
             }
 
             return true;
         }
 
-        public override JObject ToJObject()
+        public override JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return result;

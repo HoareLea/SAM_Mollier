@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json.Nodes;
 using SAM.Core;
 using SAM.Core.Mollier;
 using System.Drawing;
@@ -75,10 +75,10 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public UIMollierPoint(JObject jObject)
+        public UIMollierPoint(JsonObject jObject)
             : base(jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
         public UIMollierPoint(UIMollierProcess uIMollierProcess, ProcessReferenceType processReferenceType)
@@ -95,16 +95,16 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
-            if (jObject == null || !base.FromJObject(jObject))
+            if (jObject == null || !base.FromJsonObject(jObject))
             {
                 return false;
             }
 
             if (jObject.ContainsKey("UIMollierPointAppearance"))
             {
-                uIMollierPointAppearance = new UIMollierPointAppearance(jObject.Value<JObject>("UIMollierPointAppearance"));
+                uIMollierPointAppearance = new UIMollierPointAppearance(jObject["UIMollierPointAppearance"] as JsonObject);
             }
 
             if (jObject.ContainsKey("Guid"))
@@ -115,9 +115,9 @@ namespace SAM.Geometry.Mollier
             return true;
         }
         
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if (result == null)
             {
                 return null;
@@ -125,7 +125,7 @@ namespace SAM.Geometry.Mollier
 
             if (uIMollierPointAppearance != null)
             {
-                result.Add("UIMollierPointAppearance", uIMollierPointAppearance.ToJObject());
+                result.Add("UIMollierPointAppearance", uIMollierPointAppearance.ToJsonObject());
             }
 
             if (guid != System.Guid.Empty)

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
 
@@ -14,7 +13,7 @@ namespace SAM.Core.Mollier
 
         }
 
-        public SteamHumidificationProcess(JObject jObject)
+        public SteamHumidificationProcess(JsonObject jObject)
             :base(jObject)
         {
 

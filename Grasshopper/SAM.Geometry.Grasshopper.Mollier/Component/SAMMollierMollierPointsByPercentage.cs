@@ -3,7 +3,7 @@ using SAM.Geometry.Grasshopper.Mollier.Properties;
 using System;
 using System.Collections.Generic;
 using SAM.Core.Mollier;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using System.Linq;
 using SAM.Core.Grasshopper;
 using SAM.Core;

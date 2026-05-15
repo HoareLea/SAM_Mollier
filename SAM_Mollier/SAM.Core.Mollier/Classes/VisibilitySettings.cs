@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json.Nodes;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -26,12 +26,12 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public VisibilitySettings(JObject jObject)
+        public VisibilitySettings(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
-        public bool FromJObject(JObject jObject)
+        public bool FromJsonObject(JsonObject jObject)
         {
             if (jObject == null)
             {
@@ -42,19 +42,29 @@ namespace SAM.Core.Mollier
             if (jObject.ContainsKey("Templates"))
             {
                 dictionary = new Dictionary<string, List<IVisibilitySetting>>();
-                JArray jArray = jObject.Value<JArray>("Templates");
-                foreach (JObject jObject_Temp in jArray)
+                JsonArray jArray = jObject["Templates"] as JsonArray;
+                foreach (JsonNode jsonNode_Temp in jArray)
                 {
+                    if (!(jsonNode_Temp is JsonObject jObject_Temp))
+                    {
+                        continue;
+                    }
+
                     if (!jObject_Temp.ContainsKey("TemplateName") || !jObject_Temp.ContainsKey("VisibilitySettings"))
                     {
                         continue;
                     }
 
-                    string templateName = jObject_Temp.Value<string>("TemplateName");
-                    JArray jArray_VisibilitySettings = jObject_Temp.Value<JArray>("VisibilitySettings");
+                    string templateName = jObject_Temp["TemplateName"]?.GetValue<string>() ?? null;
+                    JsonArray jArray_VisibilitySettings = jObject_Temp["VisibilitySettings"] as JsonArray;
 
-                    foreach (JObject jObject_VisibilitySetting in jArray_VisibilitySettings)
+                    foreach (JsonNode jsonNode_VisibilitySetting in jArray_VisibilitySettings)
                     {
+                        if (!(jsonNode_VisibilitySetting is JsonObject jObject_VisibilitySetting))
+                        {
+                            continue;
+                        }
+
                         if (!dictionary.TryGetValue(templateName, out List<IVisibilitySetting> visibilitySettings))
                         {
                             visibilitySettings = new List<IVisibilitySetting>();
@@ -69,25 +79,25 @@ namespace SAM.Core.Mollier
             return true;
         }
 
-        public JObject ToJObject()
+        public JsonObject ToJsonObject()
         {
-            JObject result = new JObject();
+            JsonObject result = new JsonObject();
 
             if (dictionary != null)
             {
-                JArray jArray = new JArray();
+                JsonArray jArray = new JsonArray();
                 foreach (KeyValuePair<string, List<IVisibilitySetting>> keyValuePair in dictionary)
                 {
-                    JObject jObject_Template = new JObject();
+                    JsonObject jObject_Template = new JsonObject();
 
 
                     string templateName = keyValuePair.Key;
                     jObject_Template.Add("TemplateName", templateName);
 
-                    JArray jArray_VisibilitySettings = new JArray();
+                    JsonArray jArray_VisibilitySettings = new JsonArray();
                     foreach (IVisibilitySetting visibilitySetting in keyValuePair.Value)
                     {
-                        jArray_VisibilitySettings.Add(visibilitySetting.ToJObject());
+                        jArray_VisibilitySettings.Add(visibilitySetting.ToJsonObject());
                     }
 
                     jObject_Template.Add("VisibilitySettings", jArray_VisibilitySettings);

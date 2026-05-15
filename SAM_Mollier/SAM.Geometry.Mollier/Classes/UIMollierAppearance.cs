@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json.Nodes;
 using SAM.Core;
 using SAM.Core.Mollier;
 using System.Drawing;
@@ -54,9 +54,9 @@ namespace SAM.Geometry.Mollier
             Color = color;
         }
 
-        public UIMollierAppearance(JObject jObject)
+        public UIMollierAppearance(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
         public string Label
@@ -79,7 +79,7 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
             if (jObject == null)
             {
@@ -88,7 +88,7 @@ namespace SAM.Geometry.Mollier
             
             if (jObject.ContainsKey("Color"))
             {
-                JObject jObject_Color = jObject.Value<JObject>("Color");
+                JsonObject jObject_Color = jObject["Color"] as JsonObject;
                 if (jObject_Color != null)
                 {
                     SAMColor sAMColor = new SAMColor(jObject_Color);
@@ -101,35 +101,35 @@ namespace SAM.Geometry.Mollier
 
             if (jObject.ContainsKey("UIMollierLabelAppearance"))
             {
-                UIMollierLabelAppearance = new UIMollierLabelAppearance(jObject.Value<JObject>("UIMollierLabelAppearance"));
+                UIMollierLabelAppearance = new UIMollierLabelAppearance(jObject["UIMollierLabelAppearance"] as JsonObject);
             }
 
             if (jObject.ContainsKey("Visible"))
             {
-                Visible = jObject.Value<bool>("Visible");
+                Visible = jObject["Visible"]?.GetValue<bool>() ?? default(bool);
             }
 
             if (jObject.ContainsKey("Size"))
             {
-                Size = jObject.Value<int>("Size");
+                Size = jObject["Size"]?.GetValue<int>() ?? default(int);
             }
 
             return true;
         }
         
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject jObject = new JObject();
+            JsonObject jObject = new JsonObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if (Color != Color.Empty)
             {
-                jObject.Add("Color", (new SAMColor(Color)).ToJObject());
+                jObject.Add("Color", (new SAMColor(Color)).ToJsonObject());
             }
 
             if (UIMollierLabelAppearance != null)
             {
-                jObject.Add("UIMollierLabelAppearance", UIMollierLabelAppearance.ToJObject());
+                jObject.Add("UIMollierLabelAppearance", UIMollierLabelAppearance.ToJsonObject());
             }
 
             jObject.Add("Visible", Visible);

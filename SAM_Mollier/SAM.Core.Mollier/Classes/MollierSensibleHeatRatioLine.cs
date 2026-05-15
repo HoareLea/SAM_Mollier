@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public class MollierSensibleHeatRatioLine : MollierLine
@@ -31,9 +30,9 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
-            bool result = base.FromJObject(jObject);
+            bool result = base.FromJsonObject(jObject);
             if (!result)
             {
                 return false;
@@ -41,15 +40,15 @@ namespace SAM.Core.Mollier
 
             if(jObject.ContainsKey("SensibleHeatRatio"))
             {
-                sensibleHeatRatio = jObject.Value<double>(sensibleHeatRatio);
+                sensibleHeatRatio = jObject["SensibleHeatRatio"]?.GetValue<double>() ?? default(double);
             }
 
             return result;
         }
 
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return result;
