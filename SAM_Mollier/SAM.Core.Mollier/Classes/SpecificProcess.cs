@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public abstract class SpecificProcess : MollierProcess
@@ -10,7 +11,7 @@ namespace SAM.Core.Mollier
 
         }
 
-        public SpecificProcess(JObject jObject)
+        public SpecificProcess(JsonObject jObject)
             : base(jObject)
         {
 
@@ -21,9 +22,9 @@ namespace SAM.Core.Mollier
         {
 
         }
-        public override bool FromJObject(JObject jObject)
+        public override bool FromJsonObject(JsonObject jObject)
         {
-            if (!base.FromJObject(jObject))
+            if (!base.FromJsonObject(jObject))
             {
                 return false;
             }
@@ -31,9 +32,9 @@ namespace SAM.Core.Mollier
             return true;
         }
 
-        public override JObject ToJObject()
+        public override JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if (result == null)
             {
                 return result;

@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 using SAM.Core.Mollier;
 using System.Drawing;
 
@@ -29,7 +31,7 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public UICoolingProcess(JObject jObject) 
+        public UICoolingProcess(JsonObject jObject) 
             : base(jObject)
         {
         }
@@ -42,24 +44,24 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public bool FromJsonObject(JsonObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if(!base.FromJsonObject(jObject))
             {
                 return false;
             }
 
             if(jObject.ContainsKey("Realistic"))
             {
-                realistic = jObject.Value<bool>("Realistic");
+                realistic = jObject["Realistic"]?.GetValue<bool>() ?? default(bool);
             }
 
             return true;
         }
         
-        public JObject ToJObject()
+        public JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return result;

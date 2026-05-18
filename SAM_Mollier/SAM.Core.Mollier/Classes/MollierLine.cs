@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public abstract class MollierLine : MollierCurve
@@ -16,9 +17,9 @@ namespace SAM.Core.Mollier
 
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
-            bool result = base.FromJObject(jObject);
+            bool result = base.FromJsonObject(jObject);
             if (!result)
             {
                 return false;
@@ -27,9 +28,9 @@ namespace SAM.Core.Mollier
             return result;
         }
 
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return result;

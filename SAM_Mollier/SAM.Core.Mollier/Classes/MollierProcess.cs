@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public abstract class MollierProcess : MollierCurve, IMollierProcess
@@ -16,7 +17,7 @@ namespace SAM.Core.Mollier
 
         }
 
-        public MollierProcess(JObject jObject)
+        public MollierProcess(JsonObject jObject)
             :base(jObject)
         {
 
@@ -35,9 +36,9 @@ namespace SAM.Core.Mollier
             mollierPoints[1] = new MollierPoint(Start.DryBulbTemperature - (dryBulbTemperatureDifference * factor), Start.HumidityRatio - (humidityRatioDifference * factor), Start.Pressure);
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
-            bool result = base.FromJObject(jObject);
+            bool result = base.FromJsonObject(jObject);
             if (!result)
             {
                 return false;
@@ -46,9 +47,9 @@ namespace SAM.Core.Mollier
             return result;
         }
 
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return result;

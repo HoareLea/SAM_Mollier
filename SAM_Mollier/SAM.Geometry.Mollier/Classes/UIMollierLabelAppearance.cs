@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 using SAM.Core;
 using SAM.Core.Mollier;
 using System.Drawing;
@@ -76,12 +78,12 @@ namespace SAM.Geometry.Mollier
             Color = color;
         }
 
-        public UIMollierLabelAppearance(JObject jObject)
+        public UIMollierLabelAppearance(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
             if (jObject == null)
             {
@@ -90,7 +92,7 @@ namespace SAM.Geometry.Mollier
             
             if (jObject.ContainsKey("Color"))
             {
-                JObject jObject_Color = jObject.Value<JObject>("Color");
+                JsonObject jObject_Color = jObject["Color"] as JsonObject;
                 if (jObject_Color != null)
                 {
                     SAMColor sAMColor = new SAMColor(jObject_Color);
@@ -103,35 +105,35 @@ namespace SAM.Geometry.Mollier
 
             if (jObject.ContainsKey("Text"))
             {
-                Text = jObject.Value<string>("Text");
+                Text = jObject["Text"]?.GetValue<string>() ?? null;
             }
 
             if (jObject.ContainsKey("Visible"))
             {
-                Visible = jObject.Value<bool>("Visible");
+                Visible = jObject["Visible"]?.GetValue<bool>() ?? default(bool);
             }
 
             if (jObject.ContainsKey("Size"))
             {
-                Size = jObject.Value<int>("Size");
+                Size = jObject["Size"]?.GetValue<int>() ?? default(int);
             }
 
             if (jObject.ContainsKey("Vector2D"))
             {
-                Vector2D = new Vector2D(jObject.Value<JObject>("Vector2D"));
+                Vector2D = new Vector2D(jObject["Vector2D"] as JsonObject);
             }
 
             return true;
         }
         
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject jObject = new JObject();
+            JsonObject jObject = new JsonObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if (Color != Color.Empty)
             {
-                jObject.Add("Color", (new SAMColor(Color)).ToJObject());
+                jObject.Add("Color", (new SAMColor(Color)).ToJsonObject());
             }
 
             if (Text != null)
@@ -145,7 +147,7 @@ namespace SAM.Geometry.Mollier
 
             if (Vector2D != null)
             {
-                jObject.Add("Vector2D", Vector2D.ToJObject());
+                jObject.Add("Vector2D", Vector2D.ToJsonObject());
             }
 
             return jObject;

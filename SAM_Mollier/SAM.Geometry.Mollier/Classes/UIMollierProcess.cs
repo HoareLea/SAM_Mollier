@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 using SAM.Core;
 using SAM.Core.Mollier;
 using System.Drawing;
@@ -79,15 +81,15 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public UIMollierProcess(JObject jObject)
+        public UIMollierProcess(JsonObject jObject)
             :base(jObject)
         {
 
         }
 
-        public override bool FromJObject(JObject jObject)
+        public override bool FromJsonObject(JsonObject jObject)
         {
-            bool result = base.FromJObject(jObject);
+            bool result = base.FromJsonObject(jObject);
             if (!result)
             {
                 return false;
@@ -95,20 +97,20 @@ namespace SAM.Geometry.Mollier
 
             if (jObject.ContainsKey("UIMollierPointAppearance_Start"))
             {
-                uIMollierPointAppearance_Start = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierPointAppearance_Start")) as UIMollierPointAppearance;
+                uIMollierPointAppearance_Start = Core.Query.IJSAMObject(jObject["UIMollierPointAppearance_Start"] as JsonObject) as UIMollierPointAppearance;
             }
 
             if (jObject.ContainsKey("UIMollierPointAppearance_End"))
             {
-                uIMollierPointAppearance_End = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierPointAppearance_End")) as UIMollierPointAppearance;
+                uIMollierPointAppearance_End = Core.Query.IJSAMObject(jObject["UIMollierPointAppearance_End"] as JsonObject) as UIMollierPointAppearance;
             }
 
             return true;
         }
         
-        public override JObject ToJObject()
+        public override JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return null;
@@ -116,12 +118,12 @@ namespace SAM.Geometry.Mollier
 
             if (uIMollierPointAppearance_Start != null)
             {
-                result.Add("UIMollierPointAppearance_Start", uIMollierPointAppearance_Start.ToJObject());
+                result.Add("UIMollierPointAppearance_Start", uIMollierPointAppearance_Start.ToJsonObject());
             }
 
             if (uIMollierPointAppearance_End != null)
             {
-                result.Add("UIMollierPointAppearance_End", uIMollierPointAppearance_End.ToJObject());
+                result.Add("UIMollierPointAppearance_End", uIMollierPointAppearance_End.ToJsonObject());
             }
 
             return result;

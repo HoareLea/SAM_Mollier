@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public class MollierSettings : IJSAMObject
@@ -61,84 +62,84 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public MollierSettings(JObject jObject)
+        public MollierSettings(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
-        public bool FromJObject(JObject jObject)
+        public bool FromJsonObject(JsonObject jObject)
         {
             if (jObject.ContainsKey("ChartType"))
             {
-                ChartType = Core.Query.Enum<ChartType>(jObject.Value<string>("ChartType"));
+                ChartType = Core.Query.Enum<ChartType>(jObject["ChartType"]?.GetValue<string>() ?? null);
             }
 
             if (jObject.ContainsKey("Pressure"))
             {
-                Pressure = jObject.Value<double>("Pressure");
+                Pressure = jObject["Pressure"]?.GetValue<double>() ?? default(double);
             }
 
             if (jObject.ContainsKey("MollierRange"))
             {
-                MollierRange = new MollierRange(jObject.Value<JObject>("MollierRange"));
+                MollierRange = new MollierRange(jObject["MollierRange"] as JsonObject);
             }
 
             if (jObject.ContainsKey("HumidityRatio_Interval"))
             {
-                HumidityRatio_Interval = jObject.Value<double>("HumidityRatio_Interval");
+                HumidityRatio_Interval = jObject["HumidityRatio_Interval"]?.GetValue<double>() ?? default(double);
             }
 
             if (jObject.ContainsKey("DryBulbTemperature_Interval"))
             {
-                DryBulbTemperature_Interval = jObject.Value<double>("DryBulbTemperature_Interval");
+                DryBulbTemperature_Interval = jObject["DryBulbTemperature_Interval"]?.GetValue<double>() ?? default(double);
             }
 
             if (jObject.ContainsKey("DensityRange"))
             {
-                DensityRange = new Range<double>(jObject.Value<JObject>("DensityRange"));
+                DensityRange = new Range<double>(jObject["DensityRange"] as JsonObject);
             }
 
             if (jObject.ContainsKey("Density_Interval"))
             {
-                Density_Interval = jObject.Value<double>("Density_Interval");
+                Density_Interval = jObject["Density_Interval"]?.GetValue<double>() ?? default(double);
             }
 
             if (jObject.ContainsKey("EnthalpyRange"))
             {
-                EnthalpyRange = new Range<double>(jObject.Value<JObject>("EnthalpyRange"));
+                EnthalpyRange = new Range<double>(jObject["EnthalpyRange"] as JsonObject);
             }
 
             if (jObject.ContainsKey("Enthalpy_Interval"))
             {
-                Enthalpy_Interval = jObject.Value<double>("Enthalpy_Interval");
+                Enthalpy_Interval = jObject["Enthalpy_Interval"]?.GetValue<double>() ?? default(double);
             }
 
             if (jObject.ContainsKey("SpecificVolumeRange"))
             {
-                SpecificVolumeRange = new Range<double>(jObject.Value<JObject>("SpecificVolumeRange"));
+                SpecificVolumeRange = new Range<double>(jObject["SpecificVolumeRange"] as JsonObject);
             }
 
             if (jObject.ContainsKey("SpecificVolume_Interval"))
             {
-                SpecificVolume_Interval = jObject.Value<double>("SpecificVolume_Interval");
+                SpecificVolume_Interval = jObject["SpecificVolume_Interval"]?.GetValue<double>() ?? default(double);
             }
 
             if (jObject.ContainsKey("WetBulbTemperatureRange"))
             {
-                WetBulbTemperatureRange = new Range<double>(jObject.Value<JObject>("WetBulbTemperatureRange"));
+                WetBulbTemperatureRange = new Range<double>(jObject["WetBulbTemperatureRange"] as JsonObject);
             }
 
             if (jObject.ContainsKey("WetBulbTemperature_Interval"))
             {
-                WetBulbTemperature_Interval = jObject.Value<double>("WetBulbTemperature_Interval");
+                WetBulbTemperature_Interval = jObject["WetBulbTemperature_Interval"]?.GetValue<double>() ?? default(double);
             }
 
             return true;
         }
 
-        public JObject ToJObject()
+        public JsonObject ToJsonObject()
         {
-            JObject result = new JObject();
+            JsonObject result = new JsonObject();
             result.Add("_type", Core.Query.FullTypeName(this));
 
             result.Add("ChartType", ChartType.ToString());
@@ -150,7 +151,7 @@ namespace SAM.Core.Mollier
 
             if(MollierRange != null)
             {
-                result.Add("MollierRange", MollierRange.ToJObject());
+                result.Add("MollierRange", MollierRange.ToJsonObject());
             }
 
             if (!double.IsNaN(HumidityRatio_Interval))
@@ -165,7 +166,7 @@ namespace SAM.Core.Mollier
 
             if (DensityRange != null)
             {
-                result.Add("DensityRange", DensityRange.ToJObject());
+                result.Add("DensityRange", DensityRange.ToJsonObject());
             }
 
             if (!double.IsNaN(Density_Interval))
@@ -175,7 +176,7 @@ namespace SAM.Core.Mollier
 
             if (EnthalpyRange != null)
             {
-                result.Add("EnthalpyRange", EnthalpyRange.ToJObject());
+                result.Add("EnthalpyRange", EnthalpyRange.ToJsonObject());
             }
 
             if (!double.IsNaN(Enthalpy_Interval))
@@ -185,7 +186,7 @@ namespace SAM.Core.Mollier
 
             if (SpecificVolumeRange != null)
             {
-                result.Add("SpecificVolumeRange", SpecificVolumeRange.ToJObject());
+                result.Add("SpecificVolumeRange", SpecificVolumeRange.ToJsonObject());
             }
 
             if (!double.IsNaN(SpecificVolume_Interval))
@@ -195,7 +196,7 @@ namespace SAM.Core.Mollier
 
             if (WetBulbTemperatureRange != null)
             {
-                result.Add("WetBulbTemperatureRange", WetBulbTemperatureRange.ToJObject());
+                result.Add("WetBulbTemperatureRange", WetBulbTemperatureRange.ToJsonObject());
             }
 
             if (!double.IsNaN(WetBulbTemperature_Interval))

@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 using System.Collections.Generic;
 
 namespace SAM.Core.Mollier
@@ -52,9 +54,9 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public MollierCurve(JObject jObject)
+        public MollierCurve(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
         public MollierPoint Start
@@ -91,7 +93,7 @@ namespace SAM.Core.Mollier
             }
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
             if (jObject == null)
             {
@@ -100,12 +102,17 @@ namespace SAM.Core.Mollier
 
             if(jObject.ContainsKey("MollierPoints"))
             {
-                JArray jArray = jObject.Value<JArray>("MollierPoints");
+                JsonArray jArray = jObject["MollierPoints"] as JsonArray;
                 if(jArray != null)
                 {
                     mollierPoints = new List<MollierPoint>();
-                    foreach(JObject jObject_MollierPoint in jArray)
+                    foreach(JsonNode jsonNode_MollierPoint in jArray)
                     {
+                        if (!(jsonNode_MollierPoint is JsonObject jObject_MollierPoint))
+                        {
+                            continue;
+                        }
+
                         mollierPoints.Add(new MollierPoint(jObject_MollierPoint));
                     }
                 }
@@ -114,14 +121,14 @@ namespace SAM.Core.Mollier
             return true;
         }
 
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject jObject = new JObject();
+            JsonObject jObject = new JsonObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if(mollierPoints != null)
             {
-                JArray jArray = new JArray();
+                JsonArray jArray = new JsonArray();
                 foreach(MollierPoint mollierPoint in mollierPoints)
                 {
                     if(mollierPoint == null)
@@ -129,7 +136,7 @@ namespace SAM.Core.Mollier
                         continue;
                     }
 
-                    jArray.Add(mollierPoint.ToJObject());
+                    jArray.Add(mollierPoint.ToJsonObject());
                 }
 
                 jObject.Add("MollierPoints", jArray);

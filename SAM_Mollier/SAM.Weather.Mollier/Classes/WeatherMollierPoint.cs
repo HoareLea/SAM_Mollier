@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 using SAM.Core.Mollier;
 using System;
 
@@ -23,7 +25,7 @@ namespace SAM.Weather.Mollier
             }
         }
 
-        public WeatherMollierPoint(JObject jObject)
+        public WeatherMollierPoint(JsonObject jObject)
             : base(jObject)
         {
 
@@ -37,9 +39,9 @@ namespace SAM.Weather.Mollier
             }
         }
 
-        public override JObject ToJObject()
+        public override JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             if(result == null)
             {
                 return null;
@@ -50,16 +52,16 @@ namespace SAM.Weather.Mollier
             return result;
         }
 
-        public override bool FromJObject(JObject jObject)
+        public override bool FromJsonObject(JsonObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if(!base.FromJsonObject(jObject))
             {
                 return false;
             }
 
             if(jObject.ContainsKey("DateTime"))
             {
-                dateTime = jObject.Value<DateTime>("DateTime");
+                dateTime = jObject["DateTime"]?.GetValue<DateTime>() ?? default(DateTime);
             }
 
             return true;

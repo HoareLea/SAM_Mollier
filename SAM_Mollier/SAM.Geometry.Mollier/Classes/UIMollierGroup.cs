@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 using SAM.Core.Mollier;
 using System.Drawing;
 
@@ -61,16 +63,16 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public override bool FromJObject(JObject jObject)
+        public override bool FromJsonObject(JsonObject jObject)
         {
-            if(jObject == null || !base.FromJObject(jObject))
+            if(jObject == null || !base.FromJsonObject(jObject))
             {
                 return false;
             }
 
             if (jObject.ContainsKey("UIMollierAppearance"))
             {
-                uIMollierAppearance = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierAppearance")) as UIMollierAppearance;
+                uIMollierAppearance = Core.Query.IJSAMObject(jObject["UIMollierAppearance"] as JsonObject) as UIMollierAppearance;
             }
 
             if (jObject.ContainsKey("Guid"))
@@ -81,9 +83,9 @@ namespace SAM.Geometry.Mollier
             return true;
         }
 
-        public override JObject ToJObject()
+        public override JsonObject ToJsonObject()
         {
-            JObject result = base.ToJObject();
+            JsonObject result = base.ToJsonObject();
             
             if(result == null)
             {
@@ -92,7 +94,7 @@ namespace SAM.Geometry.Mollier
 
             if (uIMollierAppearance != null)
             {
-                result.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());
+                result.Add("UIMollierAppearance", uIMollierAppearance.ToJsonObject());
             }
 
             if (guid != System.Guid.Empty)

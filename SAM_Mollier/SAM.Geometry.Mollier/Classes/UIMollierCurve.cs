@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 using SAM.Core;
 using SAM.Core.Mollier;
 using System.Collections.Generic;
@@ -98,9 +100,9 @@ namespace SAM.Geometry.Mollier
             this.uIMollierAppearance = uIMollierAppearance?.Clone();
         }
 
-        public UIMollierCurve(JObject jObject)
+        public UIMollierCurve(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
         public System.Guid Guid
@@ -111,7 +113,7 @@ namespace SAM.Geometry.Mollier
             }
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
             if (jObject == null)
             {
@@ -120,12 +122,12 @@ namespace SAM.Geometry.Mollier
 
             if (jObject.ContainsKey("MollierCurve"))
             {
-                mollierCurve = Core.Query.IJSAMObject(jObject.Value<JObject>("MollierCurve")) as MollierCurve;
+                mollierCurve = Core.Query.IJSAMObject(jObject["MollierCurve"] as JsonObject) as MollierCurve;
             }
 
             if (jObject.ContainsKey("UIMollierAppearance"))
             {
-                uIMollierAppearance = Core.Query.IJSAMObject(jObject.Value<JObject>("UIMollierAppearance")) as UIMollierAppearance;
+                uIMollierAppearance = Core.Query.IJSAMObject(jObject["UIMollierAppearance"] as JsonObject) as UIMollierAppearance;
             }
 
             if (jObject.ContainsKey("Guid"))
@@ -136,19 +138,19 @@ namespace SAM.Geometry.Mollier
             return true;
         }
         
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject result = new JObject();
+            JsonObject result = new JsonObject();
             result.Add("_type", Core.Query.FullTypeName(this));
 
             if (mollierCurve != null)
             {
-                result.Add("MollierCurve", mollierCurve.ToJObject());
+                result.Add("MollierCurve", mollierCurve.ToJsonObject());
             }
 
             if (uIMollierAppearance != null)
             {
-                result.Add("UIMollierAppearance", uIMollierAppearance.ToJObject());
+                result.Add("UIMollierAppearance", uIMollierAppearance.ToJsonObject());
             }
 
             if (guid != System.Guid.Empty)
