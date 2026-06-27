@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,9 +30,9 @@ namespace SAM.Core.Mollier
             }
         }
         
-        public MollierGroup(JObject jObject)
+        public MollierGroup(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
 
@@ -203,7 +205,7 @@ namespace SAM.Core.Mollier
         }
 
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
             if(jObject == null)
             {
@@ -212,21 +214,21 @@ namespace SAM.Core.Mollier
 
             if(jObject.ContainsKey("Name"))
             {
-                Name = jObject.Value<string>("Name");
+                Name = jObject["Name"]?.GetValue<string>() ?? null;
             }
 
             if(jObject.ContainsKey("Objects"))
             {
-                List<IMollierGroupable> mollierGroupables =  Core.Create.IJSAMObjects<IMollierGroupable>(jObject.Value<JArray>("Objects"));
+                List<IMollierGroupable> mollierGroupables =  Core.Create.IJSAMObjects<IMollierGroupable>(jObject["Objects"] as JsonArray);
                 mollierGroupables?.ForEach(x => Add(x));
             }
 
             return true;
         }
         
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject jObject = new JObject();
+            JsonObject jObject = new JsonObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
             if(Name != null)
@@ -234,10 +236,10 @@ namespace SAM.Core.Mollier
                 jObject.Add("Name", Name);
             }
 
-            JArray jArray = new JArray();
+            JsonArray jArray = new JsonArray();
             foreach (IMollierGroupable mollierGroupable in this)
             {
-                jArray.Add(mollierGroupable.ToJObject());
+                jArray.Add(mollierGroupable.ToJsonObject());
             }
 
             jObject.Add("Objects", jArray);

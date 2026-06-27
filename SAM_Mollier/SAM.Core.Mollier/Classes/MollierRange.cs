@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+using System.Text.Json.Nodes;
 namespace SAM.Core.Mollier
 {
     public class MollierRange : IJSAMObject
@@ -19,9 +20,9 @@ namespace SAM.Core.Mollier
             humidityRatioRange = mollierRange?.humidityRatioRange == null ? null : new Range<double>(mollierRange.humidityRatioRange);
         }
         
-        public MollierRange(JObject jObject)
+        public MollierRange(JsonObject jObject)
         {
-            FromJObject(jObject);
+            FromJsonObject(jObject);
         }
 
         public double DryBulbTemperature_Max
@@ -77,7 +78,7 @@ namespace SAM.Core.Mollier
             return dryBulbTemperatureRange != null && humidityRatioRange != null && !double.IsNaN(dryBulbTemperatureRange.Max) && !double.IsNaN(dryBulbTemperatureRange.Min) && !double.IsNaN(humidityRatioRange.Max) && !double.IsNaN(humidityRatioRange.Min);
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public virtual bool FromJsonObject(JsonObject jObject)
         {
             if(jObject == null)
             {
@@ -86,30 +87,30 @@ namespace SAM.Core.Mollier
 
             if (jObject.ContainsKey("DryBulbTemperatureRange"))
             {
-                dryBulbTemperatureRange = new Range<double>(jObject.Value<JObject>("DryBulbTemperatureRange"));
+                dryBulbTemperatureRange = new Range<double>(jObject["DryBulbTemperatureRange"] as JsonObject);
             }
 
             if (jObject.ContainsKey("HumidityRatioRange"))
             {
-                humidityRatioRange = new Range<double>(jObject.Value<JObject>("HumidityRatioRange"));
+                humidityRatioRange = new Range<double>(jObject["HumidityRatioRange"] as JsonObject);
             }
 
             return true;
         }
 
-        public virtual JObject ToJObject()
+        public virtual JsonObject ToJsonObject()
         {
-            JObject jObject = new JObject();
+            JsonObject jObject = new JsonObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
             
             if(dryBulbTemperatureRange != null)
             {
-                jObject.Add("DryBulbTemperatureRange", dryBulbTemperatureRange.ToJObject());
+                jObject.Add("DryBulbTemperatureRange", dryBulbTemperatureRange.ToJsonObject());
             }
 
             if (humidityRatioRange != null)
             {
-                jObject.Add("HumidityRatioRange", humidityRatioRange.ToJObject());
+                jObject.Add("HumidityRatioRange", humidityRatioRange.ToJsonObject());
             }
 
             return jObject;
