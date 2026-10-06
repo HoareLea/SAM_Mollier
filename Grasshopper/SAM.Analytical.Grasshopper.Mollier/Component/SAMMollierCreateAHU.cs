@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Mollier.Properties;
 using System;
 using System.Collections.Generic;
@@ -33,8 +36,8 @@ namespace SAM.Analytical.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "supplyMollierProcesses_", NickName = "supplyMollierProcesses_", Description = "SAM Mollier Processes for Supply", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "extractMollierProcesses_", NickName = "extractMollierProcesses_", Description = "SAM Mollier Processes for Extract", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "supplyMollierProcesses_", NickName = "supplyMollierProcesses_", Description = "Ordered supply-side chain of Mollier processes; each is mapped to the matching equipment and added to the AHU in order.", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierProcessParam() { Name = "extractMollierProcesses_", NickName = "extractMollierProcesses_", Description = "Ordered extract-side chain of Mollier processes; each is mapped to the matching equipment on the extract path.", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -44,7 +47,7 @@ namespace SAM.Analytical.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAirHandlingUnitParam() { Name = "airHandlingUnit", NickName = "airHandlingUnit", Description = "SAM Analytical AirHandlingUnit", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAirHandlingUnitParam() { Name = "airHandlingUnit", NickName = "airHandlingUnit", Description = "The assembled SAM.Analytical AirHandlingUnit.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -54,7 +57,11 @@ namespace SAM.Analytical.Grasshopper.Mollier
         /// </summary>
         public SAMMollierCreateAHU()
           : base("SAMMollier.CreateAHU", "SAMMollier.CreateAHU",
-              "Create Air Handlin Unit",
+              "Assembles an AirHandlingUnit from chains of Mollier processes.\n" +
+              "\n" +
+              "Each supply (and optional extract) process is mapped to the matching equipment and added to the\n" +
+              "AHU in order. This builds the older SAM.Analytical AirHandlingUnit model; for a connected,\n" +
+              "simulatable SAM_Systems energy centre use SAMSystems.CreateEnergyCentreByMollier instead.",
               "SAM", "Mollier")
         {
         }

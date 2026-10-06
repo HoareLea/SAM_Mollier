@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Mollier.Properties;
 using System;
 using System.Collections.Generic;
@@ -57,7 +60,7 @@ namespace SAM.Core.Grasshopper.Mollier
         /// </summary>
         public SAMMollierMassFlowRate()
           : base("SAMMollier.MassFlowRate", "SAMMollier.MassFlowRate",
-              "Calculates mass flor rate from valumetric flow rate and density.",
+              "Calculates mass flow rate [kg/s] from a volumetric flow rate and a density.",
               "SAM", "Mollier")
         {
         }

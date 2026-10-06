@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Geometry.Grasshopper.Mollier.Properties;
 using System;
 using System.Collections.Generic;
@@ -31,8 +34,8 @@ namespace SAM.Geometry.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "Start Mollier Point", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_end", NickName = "_end", Description = "End Mollier Point", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_start", NickName = "_start", Description = "On-coil (entering) air state of the cooling process.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_end", NickName = "_end", Description = "Off-coil (leaving) air state of the cooling process.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -42,8 +45,8 @@ namespace SAM.Geometry.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "apparatusDewPoint", NickName = "apparatusDewPoint", Description = "Apparatus Dew Point", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "efficiency", NickName = "efficiency", Description = "Efficiency [%]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "apparatusDewPoint", NickName = "apparatusDewPoint", Description = "The Apparatus Dew Point (ADP): the saturation state the coil surface tends toward, found by extending the on-coil to off-coil line onto the saturation curve.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "efficiency", NickName = "efficiency", Description = "Coil contact factor (0-1) = distance(start, end) / distance(start, ADP). It is the complement of the bypass factor; 1 means the air fully reaches the ADP (no bypass).", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -53,7 +56,12 @@ namespace SAM.Geometry.Grasshopper.Mollier
         /// </summary>
         public SAMMollierApparatusDewPoint()
           : base("SAMMollier.ApparatusDewPoint", "SAMMollier.ApparatusDewPoint",
-              "Calculates apparatus dew point (ADP)",
+              "Calculates the Apparatus Dew Point (ADP) of a cooling process from its on-coil and off-coil air\n" +
+              "states, and the coil contact factor.\n" +
+              "\n" +
+              "The ADP is where the line from the entering (start) to leaving (end) state meets the saturation\n" +
+              "curve - the effective coil surface state. The contact factor (0-1) is the complement of the coil\n" +
+              "bypass factor.",
               "SAM", "Mollier")
         {
         }

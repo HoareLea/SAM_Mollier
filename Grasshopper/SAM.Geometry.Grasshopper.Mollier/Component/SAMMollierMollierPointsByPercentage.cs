@@ -36,38 +36,38 @@ namespace SAM.Geometry.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_mollierPoints", NickName = "_mollierPoints", Description = "Mollier Points", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_mollierPoints", NickName = "_mollierPoints", Description = "The set of Mollier points to analyse (e.g. an annual hourly series).", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String @string = null;
 
-                @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_mollierPointProperty_", NickName = "_mollierPointProperty_", Description = "MollierPointProperty Enum", Access = GH_ParamAccess.item, Optional = true };
+                @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_mollierPointProperty_", NickName = "_mollierPointProperty_", Description = "Which psychrometric property to evaluate (e.g. DryBulbTemperature, Enthalpy, HumidityRatio). Use the SAMMollier.MollierPointProperty picker.\n\nDefaults to DryBulbTemperature.", Access = GH_ParamAccess.item, Optional = true };
                 @string.SetPersistentData(MollierPointProperty.DryBulbTemperature.ToString());
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number @number;
 
-                @number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_percentage_", NickName = "_percentage_", Description = "Percentage [0 - 100]", Access = GH_ParamAccess.item, Optional = true };
+                @number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_percentage_", NickName = "_percentage_", Description = "Percentile [0 - 100] used to pick the threshold value.\n\nWith _average_ = false this is the percentile rank within the sorted property values (e.g. 98.5 picks the value exceeded by only 1.5% of points). With _average_ = true it is the fraction between the minimum and maximum.\n\nDefaults to 98.5.", Access = GH_ParamAccess.item, Optional = true };
                 @number.SetPersistentData(98.5);
                 result.Add(new GH_SAMParam(@number, ParamVisibility.Binding));
 
-                @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_numberComparisonType_", NickName = "_numberComparisonType_", Description = "NumberComparisonType Enum", Access = GH_ParamAccess.item, Optional = true };
+                @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_numberComparisonType_", NickName = "_numberComparisonType_", Description = "How each point's property is compared with the threshold to split the points into In/Out (e.g. GreaterOrEquals, LessOrEquals).\n\nDefaults to GreaterOrEquals.", Access = GH_ParamAccess.item, Optional = true };
                 @string.SetPersistentData(NumberComparisonType.GreaterOrEquals.ToString());
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean;
 
-                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_average_", NickName = "_average_", Description = "Average", Access = GH_ParamAccess.item, Optional = true };
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_average_", NickName = "_average_", Description = "When true, the threshold value is min + (max - min) * percentage/100 (linear interpolation between the extremes) instead of the percentile of the sorted values.\n\nDefaults to false.", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
 
-                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_unique_", NickName = "_unique_", Description = "Unique", Access = GH_ParamAccess.item, Optional = true };
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_unique_", NickName = "_unique_", Description = "When true, duplicate property values are removed before taking the percentile, so repeated values count only once. Ignored when _average_ is true.\n\nDefaults to false.", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
 
-                @number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minValue_", NickName = "minValue_", Description = "Minimal Value", Access = GH_ParamAccess.item, Optional = true };
+                @number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minValue_", NickName = "minValue_", Description = "Optional lower cut-off: points whose property value is below this are discarded before the threshold is computed (in the property's own units).", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(@number, ParamVisibility.Binding));
 
-                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run", Access = GH_ParamAccess.item, Optional = true };
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Set to true to run the calculation.\n\nDefaults to false.", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
@@ -80,9 +80,9 @@ namespace SAM.Geometry.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "value", NickName = "value", Description = "value", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierPoints_In", NickName = "mollierPoints_In", Description = "SAM Mollier Points", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierPoints_Out", NickName = "mollierPoints_Out", Description = "SAM Mollier Points", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "value", NickName = "value", Description = "The computed threshold value of the chosen property (in that property's units).", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierPoints_In", NickName = "mollierPoints_In", Description = "The input points whose property satisfies the comparison against the threshold value.", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "mollierPoints_Out", NickName = "mollierPoints_Out", Description = "The remaining input points that do not satisfy the comparison.", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -92,7 +92,12 @@ namespace SAM.Geometry.Grasshopper.Mollier
         /// </summary>
         public SAMMollierMollierPointsByPercentage()
           : base("SAMMollier.MollierPointsByPercentage", "SAMMollier.MollierPointsByPercentage",
-              "Calculates MollierPoints By Percentage",
+              "Finds a percentile/threshold value of a chosen psychrometric property across a set of Mollier\n" +
+              "points, then splits the points by that threshold.\n" +
+              "\n" +
+              "Typical use: from an annual hourly series, find (say) the 98.5th-percentile dry-bulb temperature\n" +
+              "for sizing, and separate the hours at or above it from the rest. The threshold can be taken as a\n" +
+              "percentile of the sorted values or as a linear fraction between the min and max (_average_).",
               "SAM", "Mollier")
         {
         }

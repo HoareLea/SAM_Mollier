@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Mollier.Properties;
 using System;
 using System.Collections.Generic;
@@ -30,11 +33,11 @@ namespace SAM.Core.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                GooMollierObjectParam gooMollierObjectParam = new GooMollierObjectParam() { Name = "_mollierObjects", NickName = "_mollierObjects", Description = "Mollier Objects", Access = GH_ParamAccess.list, Optional = false };
+                GooMollierObjectParam gooMollierObjectParam = new GooMollierObjectParam() { Name = "_mollierObjects", NickName = "_mollierObjects", Description = "The Mollier objects to gather into the group (points, processes and/or nested groups). Copies are taken, so the originals are not modified.", Access = GH_ParamAccess.list, Optional = false };
                 gooMollierObjectParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(gooMollierObjectParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Group Name", Access = GH_ParamAccess.item, Optional = true };
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Name for the created Mollier group.\n\nDefaults to \"New Group\".", Access = GH_ParamAccess.item, Optional = true };
                 param_String.SetPersistentData("New Group");
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Voluntary));
 
@@ -49,7 +52,7 @@ namespace SAM.Core.Grasshopper.Mollier
 
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                result.Add(new GH_SAMParam(new GooMollierGroupParam() { Name = "mollierGroup", NickName = "mollierGroup", Description = "Mollier Group", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierGroupParam() { Name = "mollierGroup", NickName = "mollierGroup", Description = "The created MollierGroup containing the supplied objects, e.g. for feeding the Mollier-to-Systems bridge or for display.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }

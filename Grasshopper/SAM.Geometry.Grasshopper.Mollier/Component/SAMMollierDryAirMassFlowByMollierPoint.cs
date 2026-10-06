@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Geometry.Grasshopper.Mollier.Properties;
 using SAM.Core.Mollier;
 using System;
@@ -33,7 +36,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "massFlow_", NickName = "massFlow_", Description = "Mass Flow [kg/s]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "volumetricFlowRate_", NickName = "volumetricFlowRate_", Description = "Volumetric Flow Rate [m3/s]", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_mollierPoint", NickName = "_mollierPoint", Description = "MollierPoint", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooMollierPointParam() { Name = "_mollierPoint", NickName = "_mollierPoint", Description = "The air state used to convert the flow into a dry-air mass flow (supplies density and humidity ratio).", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -43,7 +46,7 @@ namespace SAM.Geometry.Grasshopper.Mollier
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dryAirMassFlow", NickName = "dryAirMassFlow", Description = "dryAirMassFlow [kg/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dryAirMassFlow", NickName = "dryAirMassFlow", Description = "Dry-air mass flow [kg/s].", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -54,7 +57,8 @@ namespace SAM.Geometry.Grasshopper.Mollier
         /// </summary>
         public SAMMollierDryAirMassFlowByMollierPoint()
           : base("SAMMollier.DryAirMassFlowByMollierPoint", "SAMMollier.DryAirMassFlowByMollierPoint",
-              "Dry Air Mass Flow [kg/s]",
+              "Calculates the dry-air mass flow [kg/s] from either a total mass flow or a volumetric flow rate,\n" +
+              "together with an air state (MollierPoint) that supplies the density and humidity ratio.",
               "SAM", "Mollier")
         {
         }
